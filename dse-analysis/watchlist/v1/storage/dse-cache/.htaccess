@@ -1,0 +1,4 @@
+Options -Indexes
+<FilesMatch "\.(html|json)$">
+  Require all denied
+</FilesMatch>

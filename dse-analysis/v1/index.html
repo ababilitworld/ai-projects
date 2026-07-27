@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DSE Watch List Manager</title>
+<style>
+:root{--dwl-bg:#eef3f8;--dwl-card:#fff;--dwl-ink:#172033;--dwl-muted:#64748b;--dwl-line:#dbe4ee;--dwl-main:#087f75;--dwl-main2:#0f766e;--dwl-blue:#2563eb;--dwl-red:#dc2626;--dwl-shadow:0 15px 40px rgba(15,23,42,.10)}
+*{box-sizing:border-box} body{margin:0;font-family:Inter,system-ui,sans-serif;color:var(--dwl-ink);background:var(--dwl-bg)}
+button,input,select,textarea{font:inherit} button{cursor:pointer}
+.dwl-app{width:min(1500px,calc(100% - 24px));margin:18px auto}
+.dwl-head{padding:25px;border-radius:22px;color:#fff;background:linear-gradient(135deg,#0f172a,#087f75 58%,#2563eb);box-shadow:var(--dwl-shadow)}
+.dwl-head h1{margin:0 0 7px;font-size:clamp(1.7rem,4vw,2.8rem)} .dwl-head p{margin:0;opacity:.84}
+.dwl-grid{display:grid;grid-template-columns:290px minmax(0,1fr);gap:18px;margin-top:18px}
+.dwl-card{background:var(--dwl-card);border:1px solid var(--dwl-line);border-radius:18px;box-shadow:var(--dwl-shadow)}
+.dwl-side{padding:17px;align-self:start;position:sticky;top:12px}
+.dwl-title-row,.dwl-toolbar,.dwl-section-head{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.dwl-btn{border:0;border-radius:10px;padding:10px 14px;font-weight:800} .dwl-btn-main{background:var(--dwl-main);color:white}
+.dwl-btn-soft{background:#edf2f7;color:var(--dwl-ink)} .dwl-btn-red{background:var(--dwl-red);color:#fff} .dwl-btn-blue{background:var(--dwl-blue);color:#fff}
+.dwl-lists{display:grid;gap:8px;margin-top:14px} .dwl-list{display:grid;grid-template-columns:1fr auto;gap:7px;padding:10px;border:1px solid var(--dwl-line);border-radius:12px}
+.dwl-list.active{background:#ccfbf1;border-color:var(--dwl-main)} .dwl-list-name{border:0;background:none;text-align:left;font-weight:850;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.dwl-actions{display:flex;gap:5px} .dwl-icon{width:36px;height:36px;padding:0}
+.dwl-main{display:grid;gap:18px} .dwl-toolbar{padding:15px;flex-wrap:wrap} .dwl-input,.dwl-select{min-height:43px;border:1px solid var(--dwl-line);border-radius:10px;padding:9px 11px;background:#fff}
+.dwl-search{flex:1;min-width:220px} .dwl-panels{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.dwl-panel{padding:17px;min-width:0} .dwl-section-head h2{margin:0;font-size:1.15rem} .dwl-small{color:var(--dwl-muted);font-size:.84rem}
+.dwl-master{display:grid;gap:7px;margin-top:13px;max-height:560px;overflow:auto;padding-right:4px}
+.dwl-stock{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px;padding:10px 11px;border:1px solid var(--dwl-line);border-radius:11px}
+.dwl-code{font-weight:900;color:#115e59} .dwl-stock.added{opacity:.55;background:#f8fafc} .dwl-watch{display:grid;gap:8px;margin-top:13px}
+.dwl-watch-item{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;padding:11px;border:1px solid var(--dwl-line);border-radius:11px}
+.dwl-empty{padding:35px 10px;text-align:center;color:var(--dwl-muted)} .dwl-modal{position:fixed;inset:0;z-index:50;display:none;place-items:center;padding:15px;background:rgba(15,23,42,.66)}
+.dwl-modal.open{display:grid} .dwl-dialog{width:min(480px,100%);background:#fff;padding:20px;border-radius:18px} .dwl-dialog h2{margin-top:0}
+.dwl-form{display:grid;gap:13px} .dwl-form label{font-weight:800} .dwl-form-actions{display:flex;justify-content:flex-end;gap:9px}
+.dwl-toast{position:fixed;right:18px;top:18px;z-index:100;padding:13px 16px;border-radius:10px;color:#fff;background:#15803d;box-shadow:var(--dwl-shadow)}
+@media(max-width:950px){.dwl-grid{grid-template-columns:1fr}.dwl-side{position:static}.dwl-panels{grid-template-columns:1fr}}
+@media(max-width:560px){.dwl-app{width:calc(100% - 12px);margin:6px auto}.dwl-toolbar{align-items:stretch;flex-direction:column}.dwl-search{width:100%}}
+</style>
+</head>
+<body>
+<div class="dwl-app">
+<header class="dwl-head"><h1>DSE Watch List Manager</h1><p>Create watch lists and add trading codes only from the searchable mother list.</p></header>
+<div class="dwl-grid">
+<aside class="dwl-card dwl-side">
+ <div class="dwl-title-row"><div><strong>My Watch Lists</strong><div class="dwl-small" id="listCount"></div></div><button class="dwl-btn dwl-btn-main dwl-icon" id="newList">+</button></div>
+ <div class="dwl-lists" id="lists"></div>
+</aside>
+<main class="dwl-main">
+<section class="dwl-card dwl-toolbar">
+ <input class="dwl-input dwl-search" id="masterSearch" type="search" placeholder="Search DSE trading code...">
+ <select class="dwl-select" id="sort"><option value="az">A–Z</option><option value="za">Z–A</option></select>
+ <button class="dwl-btn dwl-btn-soft" id="exportBtn">Export</button>
+ <button class="dwl-btn dwl-btn-soft" id="importBtn">Import</button>
+ <input type="file" id="importFile" accept=".json,application/json" hidden>
+</section>
+<div class="dwl-panels">
+<section class="dwl-card dwl-panel">
+ <div class="dwl-section-head"><div><h2>Mother Trading-Code List</h2><div class="dwl-small"><span id="motherCount"></span> securities available</div></div></div>
+ <div class="dwl-master" id="mother"></div>
+</section>
+<section class="dwl-card dwl-panel">
+ <div class="dwl-section-head"><div><h2 id="activeTitle">Watch List</h2><div class="dwl-small"><span id="watchCount">0</span> selected codes</div></div></div>
+ <div class="dwl-watch" id="watch"></div>
+</section>
+</div>
+</main>
+</div>
+</div>
+
+<div class="dwl-modal" id="listModal">
+<div class="dwl-dialog">
+<h2 id="modalTitle">Create Watch List</h2>
+<form class="dwl-form" id="listForm">
+<label>Watch-list name</label>
+<input class="dwl-input" id="listName" maxlength="60" required placeholder="Example: Breakout Candidates">
+<div class="dwl-form-actions"><button class="dwl-btn dwl-btn-soft" type="button" id="cancelModal">Cancel</button><button class="dwl-btn dwl-btn-main" type="submit">Save</button></div>
+</form>
+</div>
+</div>
+
+<script>
+"use strict";
+class IdFactory {
+ static create() {
+   if (window.crypto && typeof window.crypto.randomUUID === "function") return window.crypto.randomUUID();
+   return "dwl-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2,11);
+ }
+}
+class Store {
+ static key="dse-watchlists-v2";
+ load() {
+  try {
+   const parsed=JSON.parse(localStorage.getItem(Store.key));
+   if(parsed && Array.isArray(parsed.lists) && parsed.lists.length) return parsed;
+  } catch(e){console.warn(e)}
+  const id=IdFactory.create();
+  return {activeId:id,lists:[{id,name:"My DSE Watch List",codes:[]}]};
+ }
+ save(state){localStorage.setItem(Store.key,JSON.stringify(state))}
+}
+class WatchListApp {
+ constructor() {
+  this.master=['1JANATAMF', 'ABBANK', 'ACFL', 'ACI', 'ACIFORMULA', 'ACMELAB', 'ACMEPL', 'ACTIVEFINE', 'ADNTEL', 'ADVENT', 'AFCAGRO', 'AFTABAUTO', 'AGNISYSL', 'AGRANINS', 'AIBL1STIMF', 'AIL', 'ALARABANK', 'ALIF', 'ALLTEX', 'AMANFEED', 'AMBEEPHA', 'AMCL(PRAN)', 'ANLIMAYARN', 'ANWARGALV', 'AOL', 'APEXFOODS', 'APEXFOOT', 'APEXSPINN', 'APEXTANRY', 'APOLOISPAT', 'ARAMIT', 'ARAMITCEM', 'ARGONDENIM', 'ASIAINS', 'ASIAPACINS', 'ASIATICLAB', 'ATLASBANG', 'AZIZPIPES', 'BANGAS', 'BANKASIA', 'BARKAPOWER', 'BATASHOE', 'BATBC', 'BAYLEASING', 'BBS', 'BBSCABLES', 'BDAUTOCA', 'BDCOM', 'BDFINANCE', 'BDLAMPS', 'BDTHAI', 'BDTHAIFOOD', 'BDWELDING', 'BEACHHATCH', 'BEACONPHAR', 'BENGALWTL', 'BERGERPBL', 'BESTHLDNG', 'BEXGSUKUK', 'BEXIMCO', 'BGIC', 'BIFC', 'BNICL', 'BPML', 'BPPL', 'BRACBANK', 'BSC', 'BSCPLC', 'BSRMLTD', 'BSRMSTEEL', 'BXPHARMA', 'CAPMIBBLMF', 'CENTRALINS', 'CENTRALPHL', 'CITYBANK', 'CITYGENINS', 'CLICL', 'CNATEX', 'CONFIDCEM', 'CONTININS', 'COPPERTECH', 'CROWNCEM', 'CRYSTALINS', 'CVOPRL', 'DACCADYE', 'DAFODILCOM', 'DBH', 'DELTALIFE', 'DELTASPINN', 'DESCO', 'DESHBANDHU', 'DGIC', 'DHAKABANK', 'DHAKAINS', 'DOMINAGE', 'DOREENPWR', 'DSHGARME', 'DSSL', 'DULAMIACOT', 'DUTCHBANGL', 'EASTERNINS', 'EASTLAND', 'EASTRNLUB', 'EBL', 'ECABLES', 'EGEN', 'EHL', 'EIL', 'EMERALDOIL', 'ENVOYTEX', 'EPGL', 'ESQUIRENIT', 'ETL', 'EXIMBANK', 'FAMILYTEX', 'FARCHEM', 'FAREASTFIN', 'FAREASTLIF', 'FASFIN', 'FEDERALINS', 'FEKDIL', 'FINEFOODS', 'FIRSTFIN', 'FIRSTSBANK', 'FORTUNE', 'FUWANGCER', 'FUWANGFOOD', 'GBBPOWER', 'GEMINISEA', 'GENEXIL', 'GENNEXT', 'GHAIL', 'GHCL', 'GIB', 'GLOBALINS', 'GOLDENSON', 'GP', 'GPHISPAT', 'GQBALLPEN', 'GREENDELT', 'GSPFIN', 'HAKKANIPUL', 'HAMI', 'HEIDELBCEM', 'HFL', 'HRTEX', 'HWAWELLTEX', 'IBNSINA', 'IBP', 'ICB', 'ICBIBANK', 'ICICL', 'IDLC', 'IFADAUTOS', 'IFIC', 'IFILISLMF', 'ILFSL', 'INDEXAGRO', 'INTECH', 'IPDC', 'ISLAMIBANK', 'ISLAMICFIN', 'ISLAMIINS', 'ISNLTD', 'ITC', 'JAMUNABANK', 'JAMUNAOIL', 'JANATAINS', 'JHRML', 'JMISMDL', 'JUTESPINN', 'KARNAPHULI', 'KAY_QUE', 'KBPPWBIL', 'KDSALTD', 'KEYACOSMET', 'KOHINOOR', 'KPCL', 'KPPL', 'KTL', 'LANKABAFIN', 'LEGACYFOOT', 'LHB', 'LIBRAINFU', 'LINDEBD', 'LOVELLO', 'MAGURAPLEX', 'MAKSONSPIN', 'MALEKSPIN', 'MARICO', 'MATINSPINN', 'MEGCONMILK', 'MEGHNACEM', 'MEGHNAINS', 'MEGHNALIFE', 'MEGHNAPET', 'MERCANBANK', 'MERCINS', 'METROSPIN', 'MHSML', 'MIDASFIN', 'MIDLANDBNK', 'MIRACLEIND', 'MIRAKHTER', 'MITHUNKNIT', 'MJLBD', 'MLDYEING', 'MONNOAGML', 'MONNOCERA', 'MONNOFABR', 'MONOSPOOL', 'MPETROLEUM', 'MTB', 'NAHEEACP', 'NATLIFEINS', 'NAVANACNG', 'NAVANAPHAR', 'NBL', 'NCCBANK', 'NEWLINE', 'NFML', 'NHFIL', 'NITOLINS', 'NORTHERN', 'NORTHRNINS', 'NPOLYMER', 'NRBBANK', 'NRBCBANK', 'NTC', 'NTLTUBES', 'NURANI', 'OAL', 'OIMEX', 'OLYMPIC', 'ONEBANKPLC', 'ORIONINFU', 'ORIONPHARM', 'PADMALIFE', 'PADMAOIL', 'PARAMOUNT', 'PDL', 'PENINSULA', 'PEOPLESINS', 'PHARMAID', 'PHENIXINS', 'PHOENIXFIN', 'PIONEERINS', 'PLFSL', 'POPULARLIF', 'POWERGRID', 'PRAGATIINS', 'PRAGATILIF', 'PREMIERBAN', 'PREMIERCEM', 'PREMIERLEA', 'PRIMEBANK', 'PRIMEFIN', 'PRIMEINSUR', 'PRIMELIFE', 'PRIMETEX', 'PROGRESLIF', 'PROVATIINS', 'PTL', 'PUBALIBANK', 'PURABIGEN', 'QUASEMIND', 'QUEENSOUTH', 'RAHIMAFOOD', 'RAHIMTEXT', 'RAKCERAMIC', 'RANFOUNDRY', 'RDFOOD', 'RECKITTBEN', 'REGENTTEX', 'RELIANCINS', 'RENATA', 'RENWICKJA', 'REPUBLIC', 'RINGSHINE', 'ROBI', 'RSRMSTEEL', 'RUNNERAUTO', 'RUPALIBANK', 'RUPALIINS', 'RUPALILIFE', 'SAFKOSPINN', 'SAIFPOWER', 'SAIHAMCOT', 'SAIHAMTEX', 'SALAMCRST', 'SALVO', 'SAMATALETH', 'SAMORITA', 'SANDHANINS', 'SAPORTL', 'SBACBANK', 'SEAPEARL', 'SEMLIBBLSF', 'SHAHJABANK', 'SHARPIND', 'SHASHADNIM', 'SHEPHERD', 'SHURWID', 'SHYAMPSUG', 'SIBL', 'SICL', 'SILCOPHL', 'SILVAPHL', 'SIMTEX', 'SINGERBD', 'SINOBANGLA', 'SIPLC', 'SKTRIMS', 'SONALIANSH', 'SONALIPAPR', 'SONARBAINS', 'SONARGAON', 'SOUTHEASTB', 'SPCERAMICS', 'SPCL', 'SQUARETEXT', 'SQURPHARMA', 'SSSTEEL', 'STANCERAM', 'STANDBANKL', 'STYLECRAFT', 'SUMITPOWER', 'SUNLIFEINS', 'TAKAFULINS', 'TALLUSPIN', 'TAMIJTEX', 'TECHNODRUG', 'TILIL', 'TITASGAS', 'TOSRIFA', 'TRUSTBANK', 'TUNGHAI', 'UCB', 'UNILEVERCL', 'UNIONBANK', 'UNIONCAP', 'UNIONINS', 'UNIQUEHRL', 'UNITEDFIN', 'UNITEDINS', 'UPGDCL', 'USMANIAGL', 'UTTARABANK', 'UTTARAFIN', 'VFSTDL', 'WALTONHIL', 'WATACHEM', 'WMSHIPYARD', 'YPL', 'ZAHEENSPIN', 'ZAHINTEX', 'ZEALBANGLA'];
+  this.store=new Store();
+  this.state=this.store.load();
+  this.editingId=null;
+  this.search="";
+  this.sort="az";
+  this.el={
+   lists:document.querySelector("#lists"),mother:document.querySelector("#mother"),watch:document.querySelector("#watch"),
+   masterSearch:document.querySelector("#masterSearch"),sort:document.querySelector("#sort"),newList:document.querySelector("#newList"),
+   modal:document.querySelector("#listModal"),form:document.querySelector("#listForm"),name:document.querySelector("#listName"),
+   modalTitle:document.querySelector("#modalTitle"),cancel:document.querySelector("#cancelModal"),activeTitle:document.querySelector("#activeTitle"),
+   motherCount:document.querySelector("#motherCount"),watchCount:document.querySelector("#watchCount"),listCount:document.querySelector("#listCount"),
+   exportBtn:document.querySelector("#exportBtn"),importBtn:document.querySelector("#importBtn"),importFile:document.querySelector("#importFile")
+  };
+ }
+ init() {
+  this.bind(); this.render();
+ }
+ bind() {
+  this.el.newList.addEventListener("click",()=>this.openModal());
+  this.el.cancel.addEventListener("click",()=>this.closeModal());
+  this.el.modal.addEventListener("click",e=>{if(e.target===this.el.modal)this.closeModal()});
+  this.el.form.addEventListener("submit",e=>this.saveList(e));
+  this.el.masterSearch.addEventListener("input",e=>{this.search=e.target.value.trim().toUpperCase();this.renderMother()});
+  this.el.sort.addEventListener("change",e=>{this.sort=e.target.value;this.renderMother()});
+  this.el.exportBtn.addEventListener("click",()=>this.exportData());
+  this.el.importBtn.addEventListener("click",()=>this.el.importFile.click());
+  this.el.importFile.addEventListener("change",e=>this.importData(e));
+ }
+ active(){return this.state.lists.find(x=>x.id===this.state.activeId) || this.state.lists[0]}
+ persist(){this.store.save(this.state)}
+ render(){this.renderLists();this.renderMother();this.renderWatch()}
+ renderLists() {
+  this.el.listCount.textContent=this.state.lists.length+" list"+(this.state.lists.length===1?"":"s");
+  this.el.lists.innerHTML=this.state.lists.map(l=>`
+   <div class="dwl-list ${l.id===this.state.activeId?"active":""}">
+    <button class="dwl-list-name" data-act="select" data-id="${l.id}">${this.escape(l.name)}<div class="dwl-small">${l.codes.length} codes</div></button>
+    <div class="dwl-actions">
+     <button class="dwl-btn dwl-btn-soft dwl-icon" data-act="edit" data-id="${l.id}">✎</button>
+     <button class="dwl-btn dwl-btn-soft dwl-icon" data-act="delete" data-id="${l.id}">🗑</button>
+    </div>
+   </div>`).join("");
+  this.el.lists.querySelectorAll("[data-act]").forEach(b=>b.addEventListener("click",()=>this.listAction(b.dataset.act,b.dataset.id)));
+ }
+ renderMother() {
+  const active=this.active();
+  let items=this.master.filter(c=>c.includes(this.search));
+  items.sort((a,b)=>this.sort==="za"?b.localeCompare(a):a.localeCompare(b));
+  this.el.motherCount.textContent=this.master.length;
+  this.el.mother.innerHTML=items.map(code=>{
+   const added=active.codes.includes(code);
+   return `<div class="dwl-stock ${added?"added":""}"><span class="dwl-code">${this.escape(code)}</span>
+   <button class="dwl-btn ${added?"dwl-btn-soft":"dwl-btn-main"}" data-code="${this.escape(code)}" ${added?"disabled":""}>${added?"Added":"+ Add"}</button></div>`;
+  }).join("") || `<div class="dwl-empty">No matching trading code.</div>`;
+  this.el.mother.querySelectorAll("[data-code]").forEach(b=>b.addEventListener("click",()=>this.addCode(b.dataset.code)));
+ }
+ renderWatch() {
+  const active=this.active();
+  this.el.activeTitle.textContent=active.name;
+  this.el.watchCount.textContent=active.codes.length;
+  const items=[...active.codes].sort();
+  this.el.watch.innerHTML=items.length?items.map(code=>`
+   <div class="dwl-watch-item"><span class="dwl-code">${this.escape(code)}</span>
+   <button class="dwl-btn dwl-btn-red" data-remove="${this.escape(code)}">Remove</button></div>`).join("")
+   :`<div class="dwl-empty">Select codes from the mother list.</div>`;
+  this.el.watch.querySelectorAll("[data-remove]").forEach(b=>b.addEventListener("click",()=>this.removeCode(b.dataset.remove)));
+ }
+ listAction(action,id) {
+  const list=this.state.lists.find(x=>x.id===id); if(!list)return;
+  if(action==="select"){this.state.activeId=id;this.persist();this.render();return}
+  if(action==="edit"){this.openModal(list);return}
+  if(action==="delete"){
+   if(this.state.lists.length===1){this.toast("At least one watch list must remain.",true);return}
+   if(!confirm(`Delete "${list.name}"?`))return;
+   this.state.lists=this.state.lists.filter(x=>x.id!==id);
+   if(this.state.activeId===id)this.state.activeId=this.state.lists[0].id;
+   this.persist();this.render();this.toast("Watch list deleted.");
+  }
+ }
+ openModal(list=null) {
+  this.editingId=list?.id||null;
+  this.el.modalTitle.textContent=list?"Edit Watch List":"Create Watch List";
+  this.el.name.value=list?.name||"";
+  this.el.modal.classList.add("open");
+  setTimeout(()=>this.el.name.focus(),50);
+ }
+ closeModal(){this.el.modal.classList.remove("open");this.el.form.reset();this.editingId=null}
+ saveList(e) {
+  e.preventDefault();
+  const name=this.el.name.value.trim();
+  if(!name)return;
+  const duplicate=this.state.lists.some(x=>x.id!==this.editingId && x.name.toLowerCase()===name.toLowerCase());
+  if(duplicate){this.toast("This watch-list name already exists.",true);return}
+  if(this.editingId){
+   const list=this.state.lists.find(x=>x.id===this.editingId); if(list)list.name=name;
+  } else {
+   const id=IdFactory.create();
+   this.state.lists.push({id,name,codes:[]});
+   this.state.activeId=id;
+  }
+  this.persist();this.closeModal();this.render();this.toast("Watch list saved.");
+ }
+ addCode(code) {
+  const active=this.active();
+  if(!active.codes.includes(code))active.codes.push(code);
+  this.persist();this.renderMother();this.renderWatch();this.renderLists();
+ }
+ removeCode(code) {
+  const active=this.active();active.codes=active.codes.filter(c=>c!==code);
+  this.persist();this.renderMother();this.renderWatch();this.renderLists();
+ }
+ exportData() {
+  const blob=new Blob([JSON.stringify(this.state,null,2)],{type:"application/json"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="dse-watchlists.json";a.click();URL.revokeObjectURL(a.href);
+ }
+ async importData(e) {
+  const file=e.target.files[0];if(!file)return;
+  try {
+   const data=JSON.parse(await file.text());
+   if(!data || !Array.isArray(data.lists) || !data.lists.length)throw new Error();
+   this.state=data;
+   if(!this.state.activeId)this.state.activeId=this.state.lists[0].id;
+   this.persist();this.render();this.toast("Watch lists imported.");
+  } catch(err){this.toast("Invalid watch-list JSON file.",true)}
+  e.target.value="";
+ }
+ toast(message,error=false) {
+  const old=document.querySelector(".dwl-toast");if(old)old.remove();
+  const el=document.createElement("div");el.className="dwl-toast";if(error)el.style.background="#dc2626";el.textContent=message;document.body.appendChild(el);setTimeout(()=>el.remove(),2800);
+ }
+ escape(v){const d=document.createElement("div");d.textContent=String(v);return d.innerHTML}
+}
+document.addEventListener("DOMContentLoaded",()=>new WatchListApp().init());
+</script>
+</body>
+</html>
