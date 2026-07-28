@@ -65,6 +65,26 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
 
+      - name: Diagnose FTP connection
+        shell: bash
+        env:
+          FTP_SERVER: ${{ secrets.SECRET_FTP_SERVER }}
+        run: |
+          set -e
+
+          echo "IPv4 address:"
+          getent ahostsv4 "$FTP_SERVER" || true
+
+          echo "Testing TCP port 21:"
+          nc -4 -vz -w 15 "$FTP_SERVER" 21
+
+          echo "Testing explicit FTPS:"
+          timeout 20 openssl s_client \
+            -connect "${FTP_SERVER}:21" \
+            -starttls ftp \
+            -servername "${FTP_SERVER}" \
+            -brief
+
       - name: Deploy production website
         uses: SamKirkland/FTP-Deploy-Action@v4.4.0
         with:
