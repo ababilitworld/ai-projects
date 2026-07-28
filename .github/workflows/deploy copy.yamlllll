@@ -28,6 +28,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
 
+      - name: Validate Composer configuration
+        run: composer validate --strict
+
+      - name: Install production dependencies
+        run: |
+          composer install \
+            --no-dev \
+            --prefer-dist \
+            --no-interaction \
+            --no-progress \
+            --classmap-authoritative
+
       - name: Deploy development website
         uses: SamKirkland/FTP-Deploy-Action@v4.4.0
         with:
@@ -64,6 +76,18 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
+
+      - name: Validate Composer configuration
+        run: composer validate --strict
+
+      - name: Install optimized production dependencies
+        run: |
+          composer install \
+            --no-dev \
+            --prefer-dist \
+            --no-interaction \
+            --no-progress \
+            --classmap-authoritative
 
       - name: Deploy production website
         uses: SamKirkland/FTP-Deploy-Action@v4.4.0
