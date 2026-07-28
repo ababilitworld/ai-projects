@@ -306,3 +306,152 @@ V11.8 Portfolio mother-code connection fix
 - Supports motherCodes stored as an array or object.
 - Keeps active-list, all-watch-list and downloaded-history codes as fallbacks.
 - Replaces the misleading 'Import mother trading codes first' message.
+
+
+V11.9: Responsive upper-right Terminal Menu added; button groups consolidated while preserving original actions and styling.
+
+
+V11.10 full-width Terminal Menu fix
+-----------------------------------
+- Terminal Menu now opens as a full-screen, full-width panel.
+- Submenus render in responsive multi-column cards.
+- All submenu groups are expanded by default.
+- Added a prominent always-visible Close button.
+- Improved mobile layout with one-column submenu items.
+- Fixed submenu ordering and viewport overflow.
+- Header remains visible while scrolling menu content.
+
+
+V11.11 stable Terminal Menu and workspace-click fix
+---------------------------------------------------
+- Replaced transparent menu background with an opaque high-contrast surface.
+- Menu launcher remains fixed at the upper-right corner while open or closed.
+- Added a permanently visible close control while the menu is open.
+- Corrected submenu collapse using both the hidden attribute and collapsed class.
+- Removed the recursive body-wide MutationObserver.
+- Restricted menu collection to the main control deck and original top toolbar.
+- Trading Workspace tabs, chart controls, report controls and portfolio controls
+  are no longer captured, hidden or rebuilt by the menu.
+- Original command listeners and proxy behavior are preserved.
+
+
+V11.12 DSE Trading Code terminology and shared search
+-----------------------------------------------------
+- Replaced user-facing Mother Trading Code List wording with DSE Trading Code List.
+- Added Search Trading Code inside the Watch List Workspace.
+- Search filters both the complete DSE Trading Code List and active watch list.
+- Added live match counts and a Clear button.
+- Existing top search and Watch List search remain synchronized.
+- Responsive desktop and mobile search layout.
+
+
+V11.13 shared search and menu cleanup
+-------------------------------------
+- Moved Search Trading Code above both DSE Trading Code List and Active Watch List.
+- Search still filters both lists simultaneously.
+- Removed duplicate Terminal Menu items using normalized visible labels.
+- Excluded redundant mobile command copies from the generated menu.
+- Replaced remaining user-facing Mother terminology with DSE terminology.
+
+
+V11.14 premium theme-aware Trading Code search
+-----------------------------------------------
+- Search is placed directly under the Trading Code Workspace heading.
+- Search appearance inherits the currently selected terminal theme.
+- Added themed gradients, borders, glow, focus state and matching-row highlights.
+- Added responsive desktop, tablet and mobile layouts.
+- Added '/' keyboard shortcut to focus Search Trading Code.
+
+
+V11.16 corrected workspace placement and Download Center
+---------------------------------------------------------
+- Rebuilt from v11.14 to preserve the prior working functionality.
+- Search is now the first real row inside #marketWorkspace, so it belongs to
+  the Trading-code Workspace collapsible body and collapses with it.
+- Empty search explicitly displays all DSE and active-watch-list codes.
+- Search input is reset safely on application initialization.
+- Added null/array safeguards to DSE and active-list rendering.
+- Consolidated import, sync, archive, 3M download, chart viewing, data preview,
+  backup, and restore actions into one responsive Download Center.
+- Original application buttons and event handlers remain the source of truth.
+
+
+V11.17 Terminal Menu theme selection
+------------------------------------
+- Restored Theme Selection in the Terminal Menu.
+- Theme Selection opens the existing #v10ThemeQuick control.
+- Existing workspace search, code filtering, Download Center, charts, and
+  terminal functionality remain unchanged.
+- Theme option is grouped under Appearance where supported.
+
+
+V11.18 reliable Theme Selection
+-------------------------------
+- Added Theme Selection to the actual original toolbar scanned by Terminal Menu.
+- Terminal Menu now classifies it under Appearance.
+- Generated Theme Selection opens the existing theme picker directly.
+- Preserved the working search, code visibility, Download Center and all prior functionality.
+
+
+V11.20 Terminal Menu restoration
+--------------------------------
+- Restored the intact grouped Terminal Menu implementation from v11.18.
+- Preserved all original menu groups and their actions.
+- Added a dedicated Appearance group.
+- Theme Selection is explicitly assigned to Appearance, not Trading Workspace.
+- Every Terminal Menu group starts collapsed by default.
+- Removed the old visible header button-group/control-deck interface.
+- Preserved the working Trading-code Workspace search, default code display,
+  Download Center, charts, watch lists, and other v11.18 functionality.
+
+
+V11.21 Theme Selection opening fix
+----------------------------------
+- Theme Selection now opens from the Appearance menu group.
+- Uses native select.showPicker() where supported.
+- Added a responsive custom theme-selection dialog as a reliable fallback.
+- Theme choices are read directly from #v10ThemeQuick, so existing theme options
+  and the original theme change handler remain the source of truth.
+- Preserved restored Terminal Menu groups, collapsed defaults, hidden header
+  button groups, workspace search, Download Center and other functionality.
+
+
+V11.22 definitive Theme Selection fix
+-------------------------------------
+- Theme Selection now directly opens the custom theme dialog.
+- Removed dependence on the hidden native theme selector UI.
+- Removed the propagation-dependent fallback path.
+- Existing theme options and original change handler remain in use.
+
+
+V11.24 Terminal Menu close and Theme modal accessibility
+--------------------------------------------------------
+- Uses only the Terminal Menu's native closeMenu() routine.
+- Does not hide or remove the Terminal Menu container or launcher.
+- Waits for the menu close transition before opening Theme Selection.
+- Closed menu panel/backdrop release pointer events.
+- Theme dialog is mounted at the highest layer and remains fully clickable.
+- Added keyboard focus, Escape-to-close, and focus return to Terminal Menu.
+
+
+V11.25 complete theme surfaces and watch-list tooltips
+------------------------------------------------------
+- Extended active theme variables across legacy cards, panels, workspaces,
+  forms, tables, lists, tabs, chips, drawers, dialogs, charts and menus.
+- Removed remaining visually inconsistent fixed surfaces through a shared
+  theme bridge.
+- Every detected watch-list item now receives a hover/focus tooltip.
+- Tooltip displays watch-list name and current number of trading codes.
+- Dynamic watch-list updates are detected through MutationObserver.
+- Tooltip remains keyboard accessible through focus.
+
+
+V11.26 Watch Lists card tooltip correction
+------------------------------------------
+- Tooltips now target only the Watch Lists card whose subtitle is
+  "Manage stock groups".
+- Each available watch-list entry shows its watch-list name and current
+  number of trading codes.
+- Removed broad tooltip detection from individual trading-code rows/items.
+- Tooltip supports mouse hover, native title fallback, and keyboard focus.
+- Dynamically created/updated watch lists are refreshed automatically.

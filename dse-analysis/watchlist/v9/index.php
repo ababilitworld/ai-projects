@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Ababil DSE Market Intelligence Terminal v11.8</title>
+<title>Ababil DSE Market Intelligence Terminal v11.26</title>
 <style>
 :root{--bg:#edf3f8;--card:#fff;--ink:#172033;--muted:#64748b;--line:#dce5ee;--primary:#087f75;--blue:#2563eb;--red:#dc2626;--green:#15803d;--orange:#d97706;--shadow:0 15px 40px rgba(15,23,42,.1)}
 *{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,sans-serif;color:var(--ink);background:var(--bg)}
@@ -1577,6 +1577,1663 @@ canvas[class*="chart" i]{
  color:var(--v116-chart-axis)!important;
 }
 
+
+/* V11.9 responsive upper-right terminal menu */
+.v119-terminal-menu{position:fixed;top:14px;right:14px;z-index:2147483600}
+.v119-menu-toggle{display:inline-flex;align-items:center;gap:8px;min-height:42px!important;padding:9px 14px!important;border-radius:14px!important;box-shadow:0 12px 34px rgba(0,0,0,.22);backdrop-filter:blur(14px)}
+.v119-menu-toggle .dots{display:grid;grid-template-columns:repeat(2,5px);gap:3px}
+.v119-menu-toggle .dots i{width:5px;height:5px;border-radius:2px;background:currentColor}
+.v119-menu-panel{position:absolute;top:50px;right:0;width:min(340px,calc(100vw - 28px));max-height:min(76vh,720px);overflow:auto;padding:10px;border:1px solid var(--v10-line,rgba(148,163,184,.35));border-radius:18px;background:linear-gradient(155deg,color-mix(in srgb,var(--v10-panel-solid,#111827) 96%,transparent),color-mix(in srgb,var(--v10-card,#1f2937) 96%,transparent));backdrop-filter:blur(18px);box-shadow:0 24px 72px rgba(0,0,0,.42);opacity:0;visibility:hidden;transform:translateY(-8px) scale(.98);transform-origin:top right;transition:.18s ease}
+.v119-terminal-menu.open .v119-menu-panel{opacity:1;visibility:visible;transform:none}
+.v119-menu-head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 8px 10px;border-bottom:1px solid var(--v10-line,rgba(148,163,184,.25));margin-bottom:8px}
+.v119-menu-head small{display:block;color:var(--v10-muted,#94a3b8);margin-top:2px}
+.v119-menu-close{width:32px!important;min-width:32px!important;height:32px!important;min-height:32px!important;padding:0!important}
+.v119-menu-groups{display:grid;gap:9px}
+.v119-menu-group{border:1px solid var(--v10-line,rgba(148,163,184,.25));border-radius:14px;overflow:hidden;background:color-mix(in srgb,var(--v10-card,#1f2937) 82%,transparent)}
+.v119-menu-group-title{display:flex;align-items:center;gap:8px;width:100%;padding:10px 12px;border:0;background:transparent;color:inherit;cursor:pointer;text-align:left;font:inherit;font-weight:800}
+.v119-menu-group-title:hover{background:color-mix(in srgb,var(--v10-primary,#2563eb) 8%,transparent)}
+.v119-menu-group-title .count{margin-left:auto;color:var(--v10-muted,#94a3b8);font-size:.65rem}
+.v119-menu-group-body{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px;padding:0 9px 9px}
+.v119-menu-group.collapsed .v119-menu-group-body{display:none}
+.v119-menu-action{width:100%!important;min-width:0!important;min-height:38px!important;padding:8px 9px!important;justify-content:flex-start!important;text-align:left!important;white-space:normal!important;border-radius:10px!important}
+.v119-menu-backdrop{position:fixed;inset:0;z-index:2147483599;background:rgba(15,23,42,.28);backdrop-filter:blur(2px);opacity:0;visibility:hidden;transition:.18s ease}
+.v119-menu-backdrop.open{opacity:1;visibility:visible}
+.v119-menu-source-hidden{display:none!important}
+body.v119-menu-open{overflow:hidden}
+@media(max-width:720px){
+ .v119-terminal-menu{top:8px;right:8px}
+ .v119-menu-toggle .label{display:none}
+ .v119-menu-panel{position:fixed;top:auto;right:8px;left:8px;bottom:8px;width:auto;max-height:78vh;transform-origin:bottom center}
+ .v119-menu-group-body{grid-template-columns:1fr}
+}
+
+
+/* =========================================================
+   V11.10 — FULL-WIDTH TERMINAL MENU FIX
+   ========================================================= */
+.v119-terminal-menu{
+ position:fixed!important;
+ inset:0!important;
+ top:0!important;
+ right:0!important;
+ width:100%!important;
+ height:0!important;
+ z-index:2147483600!important;
+ pointer-events:none!important;
+}
+
+.v119-menu-toggle{
+ position:fixed!important;
+ top:14px!important;
+ right:14px!important;
+ z-index:2147483602!important;
+ pointer-events:auto!important;
+}
+
+.v119-menu-panel{
+ position:fixed!important;
+ inset:0!important;
+ top:0!important;
+ right:0!important;
+ left:0!important;
+ bottom:0!important;
+ width:100vw!important;
+ height:100vh!important;
+ max-width:none!important;
+ max-height:none!important;
+ overflow:hidden!important;
+ padding:0!important;
+ border:0!important;
+ border-radius:0!important;
+ transform:translateY(-16px)!important;
+ transform-origin:top center!important;
+ display:flex!important;
+ flex-direction:column!important;
+ background:
+  linear-gradient(155deg,
+   color-mix(in srgb,var(--v10-panel-solid,#111827) 98%,transparent),
+   color-mix(in srgb,var(--v10-card,#1f2937) 98%,transparent))!important;
+ pointer-events:auto!important;
+}
+
+.v119-terminal-menu.open .v119-menu-panel{
+ transform:none!important;
+}
+
+.v119-menu-head{
+ position:sticky!important;
+ top:0!important;
+ z-index:4!important;
+ flex:0 0 auto!important;
+ margin:0!important;
+ padding:16px 22px!important;
+ min-height:68px!important;
+ border-bottom:1px solid var(--v10-line,rgba(148,163,184,.25))!important;
+ background:color-mix(in srgb,var(--v10-panel-solid,#111827) 96%,transparent)!important;
+ backdrop-filter:blur(18px)!important;
+}
+
+.v119-menu-head strong{
+ font-size:1.05rem!important;
+}
+
+.v119-menu-head small{
+ font-size:.74rem!important;
+}
+
+.v119-menu-close{
+ display:inline-grid!important;
+ place-items:center!important;
+ position:relative!important;
+ z-index:5!important;
+ width:42px!important;
+ min-width:42px!important;
+ height:42px!important;
+ min-height:42px!important;
+ padding:0!important;
+ border-radius:12px!important;
+ font-size:1.05rem!important;
+ box-shadow:0 8px 24px rgba(0,0,0,.22)!important;
+}
+
+.v119-menu-groups{
+ flex:1 1 auto!important;
+ min-height:0!important;
+ overflow:auto!important;
+ display:grid!important;
+ grid-template-columns:repeat(auto-fit,minmax(280px,1fr))!important;
+ align-content:start!important;
+ gap:14px!important;
+ padding:18px 22px 28px!important;
+}
+
+.v119-menu-group{
+ display:block!important;
+ min-width:0!important;
+ overflow:visible!important;
+ border-radius:16px!important;
+}
+
+.v119-menu-group-title{
+ position:sticky!important;
+ top:0!important;
+ z-index:2!important;
+ min-height:44px!important;
+ background:color-mix(in srgb,var(--v10-card,#1f2937) 96%,transparent)!important;
+ border-bottom:1px solid var(--v10-line,rgba(148,163,184,.22))!important;
+}
+
+.v119-menu-group-body{
+ display:grid!important;
+ grid-template-columns:repeat(2,minmax(0,1fr))!important;
+ gap:8px!important;
+ padding:10px!important;
+ max-height:none!important;
+ overflow:visible!important;
+}
+
+.v119-menu-group.collapsed .v119-menu-group-body{
+ display:none!important;
+}
+
+.v119-menu-panel .v119-menu-action{
+ display:flex!important;
+ align-items:center!important;
+ width:100%!important;
+ min-width:0!important;
+ min-height:42px!important;
+ padding:9px 10px!important;
+ overflow:visible!important;
+ opacity:1!important;
+ visibility:visible!important;
+ transform:none!important;
+}
+
+.v119-menu-backdrop{
+ display:none!important;
+}
+
+body.v119-menu-open{
+ overflow:hidden!important;
+}
+
+body.v119-menu-open .v119-menu-toggle{
+ display:none!important;
+}
+
+@media(max-width:900px){
+ .v119-menu-groups{
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+ }
+}
+
+@media(max-width:640px){
+ .v119-menu-toggle{
+  top:8px!important;
+  right:8px!important;
+ }
+ .v119-menu-panel{
+  border-radius:0!important;
+ }
+ .v119-menu-head{
+  padding:12px 14px!important;
+  min-height:60px!important;
+ }
+ .v119-menu-groups{
+  grid-template-columns:1fr!important;
+  gap:10px!important;
+  padding:12px 12px 20px!important;
+ }
+ .v119-menu-group-body{
+  grid-template-columns:1fr!important;
+ }
+ .v119-menu-close{
+  width:40px!important;
+  min-width:40px!important;
+  height:40px!important;
+  min-height:40px!important;
+ }
+}
+
+
+/* =========================================================
+   V11.11 — STABLE OPAQUE TERMINAL MENU
+   ========================================================= */
+
+/* Keep the launcher permanently visible in the upper-right corner. */
+.v119-terminal-menu{
+ position:fixed!important;
+ inset:0!important;
+ width:0!important;
+ height:0!important;
+ z-index:2147483600!important;
+ pointer-events:none!important;
+}
+
+.v119-menu-toggle{
+ position:fixed!important;
+ top:12px!important;
+ right:12px!important;
+ z-index:2147483605!important;
+ display:inline-flex!important;
+ pointer-events:auto!important;
+ opacity:1!important;
+ visibility:visible!important;
+ transform:none!important;
+}
+
+/* The launcher remains visible even while the menu is open. */
+body.v119-menu-open .v119-menu-toggle{
+ display:inline-flex!important;
+}
+
+/* Use a solid, high-contrast background instead of transparent glass. */
+.v119-menu-panel{
+ position:fixed!important;
+ inset:0!important;
+ width:100vw!important;
+ height:100dvh!important;
+ max-width:none!important;
+ max-height:none!important;
+ padding:0!important;
+ overflow:hidden!important;
+ border:0!important;
+ border-radius:0!important;
+ background:#0b1220!important;
+ background-image:
+  radial-gradient(circle at 15% 0%,rgba(37,99,235,.18),transparent 30%),
+  radial-gradient(circle at 85% 10%,rgba(14,165,233,.12),transparent 28%)!important;
+ color:#e5edf8!important;
+ opacity:0!important;
+ visibility:hidden!important;
+ transform:translateY(-12px)!important;
+ pointer-events:none!important;
+ display:flex!important;
+ flex-direction:column!important;
+ transition:opacity .18s ease,transform .18s ease,visibility .18s ease!important;
+}
+
+.v119-terminal-menu.open .v119-menu-panel{
+ opacity:1!important;
+ visibility:visible!important;
+ transform:none!important;
+ pointer-events:auto!important;
+}
+
+/* Dark header remains readable and does not overlap the fixed launcher. */
+.v119-menu-head{
+ position:relative!important;
+ top:auto!important;
+ z-index:3!important;
+ flex:0 0 auto!important;
+ min-height:72px!important;
+ margin:0!important;
+ padding:15px 82px 15px 20px!important;
+ border-bottom:1px solid #263449!important;
+ background:#101a2b!important;
+ color:#f8fafc!important;
+ backdrop-filter:none!important;
+}
+
+.v119-menu-head strong{
+ color:#f8fafc!important;
+ font-size:1.08rem!important;
+}
+
+.v119-menu-head small{
+ color:#aebdd0!important;
+}
+
+/* Dedicated close button stays clearly visible below/left of launcher. */
+.v119-menu-close{
+ position:fixed!important;
+ top:14px!important;
+ right:66px!important;
+ z-index:2147483606!important;
+ display:none!important;
+ place-items:center!important;
+ width:42px!important;
+ min-width:42px!important;
+ height:42px!important;
+ min-height:42px!important;
+ padding:0!important;
+ border:1px solid #52657e!important;
+ border-radius:12px!important;
+ background:#18263a!important;
+ color:#fff!important;
+ box-shadow:0 10px 28px rgba(0,0,0,.35)!important;
+ pointer-events:auto!important;
+}
+
+.v119-terminal-menu.open .v119-menu-close{
+ display:grid!important;
+}
+
+/* The scrollable area is opaque and spacious. */
+.v119-menu-groups{
+ flex:1 1 auto!important;
+ min-height:0!important;
+ overflow-y:auto!important;
+ overflow-x:hidden!important;
+ display:grid!important;
+ grid-template-columns:repeat(auto-fit,minmax(290px,1fr))!important;
+ align-content:start!important;
+ gap:14px!important;
+ padding:18px 20px 32px!important;
+ background:#0b1220!important;
+}
+
+/* Menu cards and submenu items use strong separation. */
+.v119-menu-group{
+ display:block!important;
+ min-width:0!important;
+ overflow:hidden!important;
+ border:1px solid #2a3a50!important;
+ border-radius:16px!important;
+ background:#121d2e!important;
+ box-shadow:0 10px 26px rgba(0,0,0,.18)!important;
+}
+
+.v119-menu-group-title{
+ position:relative!important;
+ top:auto!important;
+ z-index:1!important;
+ display:flex!important;
+ align-items:center!important;
+ width:100%!important;
+ min-height:48px!important;
+ padding:11px 13px!important;
+ border:0!important;
+ border-bottom:1px solid #2a3a50!important;
+ background:#172438!important;
+ color:#f3f7fc!important;
+ cursor:pointer!important;
+}
+
+.v119-menu-group-title:hover{
+ background:#1d2d45!important;
+}
+
+.v119-menu-group-title .count{
+ margin-left:auto!important;
+ color:#aebdd0!important;
+}
+
+.v119-menu-group-title .v1111-caret{
+ margin-left:4px!important;
+ transition:transform .16s ease!important;
+}
+
+.v119-menu-group.collapsed .v119-menu-group-title .v1111-caret{
+ transform:rotate(-90deg)!important;
+}
+
+/* Collapse is enforced through the hidden attribute and class fallback. */
+.v119-menu-group-body{
+ display:grid!important;
+ grid-template-columns:repeat(2,minmax(0,1fr))!important;
+ gap:8px!important;
+ padding:10px!important;
+ background:#121d2e!important;
+}
+
+.v119-menu-group-body[hidden],
+.v119-menu-group.collapsed .v119-menu-group-body{
+ display:none!important;
+}
+
+.v119-menu-panel .v119-menu-action{
+ display:flex!important;
+ align-items:center!important;
+ justify-content:flex-start!important;
+ width:100%!important;
+ min-width:0!important;
+ min-height:42px!important;
+ padding:9px 10px!important;
+ border:1px solid #30425a!important;
+ border-radius:10px!important;
+ background:#18263a!important;
+ color:#ecf3fb!important;
+ opacity:1!important;
+ visibility:visible!important;
+ white-space:normal!important;
+ text-align:left!important;
+ pointer-events:auto!important;
+}
+
+.v119-menu-panel .v119-menu-action:hover{
+ background:#21334d!important;
+ border-color:#527096!important;
+}
+
+/* Real modal backdrop prevents visual confusion with the terminal underneath. */
+.v119-menu-backdrop{
+ position:fixed!important;
+ inset:0!important;
+ z-index:2147483599!important;
+ display:block!important;
+ background:rgba(2,6,14,.88)!important;
+ opacity:0!important;
+ visibility:hidden!important;
+ pointer-events:none!important;
+ transition:opacity .18s ease,visibility .18s ease!important;
+}
+
+.v119-menu-backdrop.open{
+ opacity:1!important;
+ visibility:visible!important;
+ pointer-events:auto!important;
+}
+
+body.v119-menu-open{
+ overflow:hidden!important;
+}
+
+/* Only designated source command controls are hidden, never Trading Workspace controls. */
+.v119-menu-source-hidden{
+ display:none!important;
+}
+
+@media(max-width:820px){
+ .v119-menu-groups{
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+ }
+}
+
+@media(max-width:620px){
+ .v119-menu-toggle{
+  top:8px!important;
+  right:8px!important;
+ }
+ .v119-menu-close{
+  top:8px!important;
+  right:58px!important;
+  width:40px!important;
+  min-width:40px!important;
+  height:40px!important;
+  min-height:40px!important;
+ }
+ .v119-menu-head{
+  min-height:62px!important;
+  padding:12px 108px 12px 13px!important;
+ }
+ .v119-menu-groups{
+  grid-template-columns:1fr!important;
+  gap:10px!important;
+  padding:12px 10px 22px!important;
+ }
+ .v119-menu-group-body{
+  grid-template-columns:1fr!important;
+ }
+}
+
+
+/* V11.12 Watch List workspace trading-code search */
+.v1112-watch-search{
+ display:grid;
+ grid-template-columns:minmax(180px,.75fr) minmax(280px,1.25fr);
+ gap:10px 14px;
+ align-items:end;
+ padding:12px 14px;
+ border-top:1px solid var(--line,rgba(148,163,184,.25));
+ border-bottom:1px solid var(--line,rgba(148,163,184,.25));
+ background:color-mix(in srgb,var(--card,#111827) 94%,transparent);
+}
+.v1112-watch-search-copy{display:grid;gap:3px}
+.v1112-watch-search-copy label{font-weight:800}
+.v1112-watch-search-copy small,
+.v1112-watch-search-status{color:var(--muted,#94a3b8);font-size:.72rem;line-height:1.35}
+.v1112-watch-search-controls{display:flex;gap:8px;min-width:0}
+.v1112-watch-search-controls .input{flex:1 1 auto;width:100%;min-width:0}
+.v1112-watch-search-status{grid-column:1/-1;min-height:1em}
+.v1112-search-match{
+ box-shadow:inset 3px 0 0 var(--primary,#2563eb);
+ background:color-mix(in srgb,var(--primary,#2563eb) 7%,transparent);
+}
+@media(max-width:720px){
+ .v1112-watch-search{grid-template-columns:1fr;padding:10px}
+ .v1112-watch-search-status{grid-column:auto}
+}
+@media(max-width:430px){
+ .v1112-watch-search-controls{display:grid;grid-template-columns:1fr auto}
+}
+
+
+/* V11.13 shared search above DSE and active watch-list panels */
+.v1113-shared-code-search-panel{
+ margin-bottom:16px;
+ overflow:hidden;
+}
+.v1113-shared-code-search-panel .v1112-watch-search{
+ border:0;
+ border-radius:inherit;
+}
+@media(max-width:720px){
+ .v1113-shared-code-search-panel{margin-bottom:12px}
+}
+
+
+/* =========================================================
+   V11.14 — THEME-AWARE PREMIUM TRADING-CODE SEARCH
+   ========================================================= */
+.v1113-shared-code-search-panel{
+ display:none!important;
+}
+
+.v1114-trading-code-workspace-search{
+ margin:0 0 16px;
+}
+
+.v1114-workspace-label{
+ display:flex;
+ align-items:flex-end;
+ justify-content:space-between;
+ margin-bottom:10px;
+}
+
+.v1114-workspace-kicker,
+.v1114-search-kicker{
+ display:block;
+ margin-bottom:3px;
+ color:var(--v10-primary,var(--primary,#2563eb));
+ font-size:.64rem;
+ font-weight:900;
+ letter-spacing:.14em;
+ text-transform:uppercase;
+}
+
+.v1114-workspace-label h2{
+ margin:0;
+}
+
+.v1114-code-search-shell{
+ position:relative;
+ display:grid;
+ grid-template-columns:auto minmax(190px,.65fr) minmax(300px,1.35fr) auto;
+ grid-template-areas:
+  "orb copy field clear"
+  "orb status status status";
+ gap:9px 14px;
+ align-items:center;
+ overflow:hidden;
+ padding:16px;
+ border:1px solid var(--v10-line,var(--line,rgba(148,163,184,.30)));
+ border-radius:20px;
+ background:
+  linear-gradient(
+   135deg,
+   color-mix(in srgb,var(--v10-card,var(--card,#111827)) 96%,transparent),
+   color-mix(in srgb,var(--v10-panel-solid,var(--panel,#0f172a)) 94%,transparent)
+  );
+ color:var(--v10-text,var(--text,#e5edf8));
+ box-shadow:
+  0 18px 42px color-mix(in srgb,var(--v10-shadow,rgba(0,0,0,.32)) 80%,transparent),
+  inset 0 1px 0 color-mix(in srgb,#fff 10%,transparent);
+ isolation:isolate;
+}
+
+.v1114-code-search-shell::before{
+ content:"";
+ position:absolute;
+ inset:-1px;
+ z-index:-2;
+ border-radius:inherit;
+ background:
+  radial-gradient(
+   circle at 12% 10%,
+   color-mix(in srgb,var(--v10-primary,var(--primary,#2563eb)) 28%,transparent),
+   transparent 32%
+  ),
+  radial-gradient(
+   circle at 88% 100%,
+   color-mix(in srgb,var(--v10-accent,var(--accent,#06b6d4)) 20%,transparent),
+   transparent 34%
+  );
+ pointer-events:none;
+}
+
+.v1114-code-search-shell::after{
+ content:"";
+ position:absolute;
+ top:0;
+ left:9%;
+ right:9%;
+ height:1px;
+ background:linear-gradient(
+  90deg,
+  transparent,
+  color-mix(in srgb,var(--v10-primary,var(--primary,#2563eb)) 78%,#fff),
+  transparent
+ );
+ opacity:.85;
+ pointer-events:none;
+}
+
+.v1114-search-orb{
+ grid-area:orb;
+ display:grid;
+ place-items:center;
+ width:54px;
+ height:54px;
+ border:1px solid color-mix(in srgb,var(--v10-primary,var(--primary,#2563eb)) 44%,var(--v10-line,var(--line,#334155)));
+ border-radius:17px;
+ background:
+  linear-gradient(
+   145deg,
+   color-mix(in srgb,var(--v10-primary,var(--primary,#2563eb)) 24%,var(--v10-card,var(--card,#111827))),
+   color-mix(in srgb,var(--v10-card,var(--card,#111827)) 96%,transparent)
+  );
+ color:var(--v10-primary,var(--primary,#60a5fa));
+ font-size:1.75rem;
+ font-weight:900;
+ box-shadow:
+  0 10px 28px color-mix(in srgb,var(--v10-primary,var(--primary,#2563eb)) 22%,transparent),
+  inset 0 1px 0 rgba(255,255,255,.11);
+}
+
+.v1114-search-copy{
+ grid-area:copy;
+ min-width:0;
+}
+
+.v1114-search-copy label{
+ display:block;
+ color:var(--v10-text,var(--text,#f8fafc));
+ font-size:1rem;
+ font-weight:900;
+ letter-spacing:-.01em;
+}
+
+.v1114-search-copy small{
+ display:block;
+ margin-top:3px;
+ color:var(--v10-muted,var(--muted,#94a3b8));
+ font-size:.72rem;
+ line-height:1.35;
+}
+
+.v1114-search-field-wrap{
+ grid-area:field;
+ position:relative;
+ min-width:0;
+}
+
+.v1114-search-icon{
+ position:absolute;
+ left:14px;
+ top:50%;
+ z-index:2;
+ transform:translateY(-50%);
+ color:var(--v10-primary,var(--primary,#60a5fa));
+ font-size:1.15rem;
+ pointer-events:none;
+}
+
+.v1114-search-input{
+ width:100%!important;
+ min-height:50px!important;
+ padding:11px 46px 11px 42px!important;
+ border:1px solid color-mix(in srgb,var(--v10-line,var(--line,#334155)) 90%,transparent)!important;
+ border-radius:15px!important;
+ outline:0!important;
+ background:
+  color-mix(in srgb,var(--v10-input,var(--v10-panel-solid,var(--panel,#0f172a))) 96%,transparent)!important;
+ color:var(--v10-text,var(--text,#f8fafc))!important;
+ font-size:.92rem!important;
+ font-weight:750!important;
+ box-shadow:
+  inset 0 1px 0 rgba(255,255,255,.04),
+  0 8px 22px rgba(0,0,0,.12)!important;
+ transition:
+  border-color .18s ease,
+  box-shadow .18s ease,
+  transform .18s ease,
+  background .18s ease!important;
+}
+
+.v1114-search-input::placeholder{
+ color:color-mix(in srgb,var(--v10-muted,var(--muted,#94a3b8)) 84%,transparent);
+ font-weight:600;
+}
+
+.v1114-search-input:hover{
+ border-color:color-mix(in srgb,var(--v10-primary,var(--primary,#2563eb)) 52%,var(--v10-line,var(--line,#334155)))!important;
+}
+
+.v1114-search-input:focus{
+ border-color:var(--v10-primary,var(--primary,#2563eb))!important;
+ background:color-mix(in srgb,var(--v10-card,var(--card,#111827)) 97%,transparent)!important;
+ box-shadow:
+  0 0 0 4px color-mix(in srgb,var(--v10-primary,var(--primary,#2563eb)) 18%,transparent),
+  0 14px 34px color-mix(in srgb,var(--v10-primary,var(--primary,#2563eb)) 16%,transparent)!important;
+ transform:translateY(-1px);
+}
+
+.v1114-search-key{
+ position:absolute;
+ right:12px;
+ top:50%;
+ transform:translateY(-50%);
+ min-width:25px;
+ padding:3px 7px;
+ border:1px solid var(--v10-line,var(--line,#334155));
+ border-bottom-width:2px;
+ border-radius:7px;
+ background:color-mix(in srgb,var(--v10-card,var(--card,#111827)) 90%,transparent);
+ color:var(--v10-muted,var(--muted,#94a3b8));
+ font:700 .7rem/1 system-ui,sans-serif;
+ text-align:center;
+ pointer-events:none;
+}
+
+.v1114-search-clear{
+ grid-area:clear;
+ min-height:48px!important;
+ padding-inline:17px!important;
+ border-radius:14px!important;
+}
+
+.v1114-watch-search-status{
+ grid-area:status;
+ min-height:18px;
+ color:var(--v10-muted,var(--muted,#94a3b8));
+ font-size:.72rem;
+ font-weight:650;
+}
+
+.v1112-search-match{
+ border-color:color-mix(in srgb,var(--v10-primary,var(--primary,#2563eb)) 46%,var(--v10-line,var(--line,#334155)))!important;
+ box-shadow:
+  inset 3px 0 0 var(--v10-primary,var(--primary,#2563eb)),
+  0 8px 22px color-mix(in srgb,var(--v10-primary,var(--primary,#2563eb)) 8%,transparent)!important;
+ background:
+  linear-gradient(
+   90deg,
+   color-mix(in srgb,var(--v10-primary,var(--primary,#2563eb)) 11%,transparent),
+   transparent 42%
+  )!important;
+}
+
+@media(max-width:940px){
+ .v1114-code-search-shell{
+  grid-template-columns:auto minmax(0,1fr) auto;
+  grid-template-areas:
+   "orb copy clear"
+   "field field field"
+   "status status status";
+ }
+}
+
+@media(max-width:620px){
+ .v1114-code-search-shell{
+  grid-template-columns:auto minmax(0,1fr);
+  grid-template-areas:
+   "orb copy"
+   "field field"
+   "clear clear"
+   "status status";
+  padding:13px;
+  border-radius:17px;
+ }
+ .v1114-search-orb{
+  width:46px;
+  height:46px;
+  border-radius:14px;
+  font-size:1.45rem;
+ }
+ .v1114-search-clear{
+  width:100%!important;
+ }
+}
+
+@media(max-width:420px){
+ .v1114-search-copy small{
+  font-size:.68rem;
+ }
+ .v1114-search-input{
+  min-height:48px!important;
+  padding-right:40px!important;
+ }
+}
+
+
+/* =========================================================
+   V11.16 — CORRECT COLLAPSIBLE SEARCH + COMPLETE DOWNLOAD CENTER
+   ========================================================= */
+
+/* Search is an actual first child/row of #marketWorkspace. */
+#marketWorkspace > .v1116-search-first-row{
+ grid-column:1/-1!important;
+ width:100%!important;
+ min-width:0!important;
+ order:-1000!important;
+ margin:0!important;
+}
+
+#marketWorkspace > .v1116-search-first-row .v1114-code-search-shell{
+ width:100%!important;
+ margin:0!important;
+}
+
+/* Remove styling intended for the former external wrapper. */
+.v1114-trading-code-workspace-search{
+ display:none!important;
+}
+
+/* Complete Download Center */
+.v1116-download-workspace{
+ display:grid;
+ gap:14px;
+ min-width:0;
+}
+
+.v1116-download-actions{
+ position:relative;
+ overflow:hidden;
+ padding:16px;
+ border:1px solid var(--v10-line,var(--line,#dce5ee));
+ border-radius:19px;
+ background:
+  linear-gradient(
+   145deg,
+   color-mix(in srgb,var(--v10-card,var(--card,#fff)) 97%,transparent),
+   color-mix(in srgb,var(--v10-panel-solid,var(--card,#fff)) 93%,transparent)
+  );
+ box-shadow:
+  0 16px 40px color-mix(in srgb,var(--v10-shadow,rgba(15,23,42,.14)) 78%,transparent),
+  inset 0 1px 0 rgba(255,255,255,.10);
+}
+
+.v1116-download-actions::before{
+ content:"";
+ position:absolute;
+ inset:0;
+ pointer-events:none;
+ background:
+  radial-gradient(circle at 5% 0%,
+   color-mix(in srgb,var(--v10-primary,var(--primary,#087f75)) 18%,transparent),
+   transparent 32%),
+  radial-gradient(circle at 100% 100%,
+   color-mix(in srgb,var(--v10-accent,var(--blue,#2563eb)) 14%,transparent),
+   transparent 34%);
+}
+
+.v1116-download-intro{
+ position:relative;
+ z-index:1;
+ margin-bottom:13px;
+}
+
+.v1116-download-kicker{
+ display:block;
+ margin-bottom:3px;
+ color:var(--v10-primary,var(--primary,#087f75));
+ font-size:.64rem;
+ font-weight:950;
+ letter-spacing:.15em;
+}
+
+.v1116-download-intro h3{
+ margin:0;
+ color:var(--v10-text,var(--ink,#172033));
+ font-size:1.12rem;
+}
+
+.v1116-download-intro p{
+ margin:4px 0 0;
+ color:var(--v10-muted,var(--muted,#64748b));
+ font-size:.76rem;
+}
+
+.v1116-download-action-grid{
+ position:relative;
+ z-index:1;
+ display:grid;
+ grid-template-columns:repeat(4,minmax(0,1fr));
+ gap:10px;
+}
+
+.v1116-action-card{
+ display:grid;
+ grid-template-columns:auto minmax(0,1fr);
+ gap:10px;
+ align-items:center;
+ min-width:0;
+ min-height:78px;
+ padding:11px;
+ border:1px solid var(--v10-line,var(--line,#dce5ee));
+ border-radius:14px;
+ background:color-mix(in srgb,var(--v10-card,var(--card,#fff)) 94%,transparent);
+ color:var(--v10-text,var(--ink,#172033));
+ text-align:left;
+ box-shadow:0 8px 20px rgba(0,0,0,.07);
+ transition:transform .17s ease,border-color .17s ease,box-shadow .17s ease,background .17s ease;
+}
+
+.v1116-action-card:hover{
+ transform:translateY(-2px);
+ border-color:color-mix(in srgb,var(--v10-primary,var(--primary,#087f75)) 55%,var(--v10-line,var(--line,#dce5ee)));
+ background:color-mix(in srgb,var(--v10-primary,var(--primary,#087f75)) 8%,var(--v10-card,var(--card,#fff)));
+ box-shadow:0 13px 28px color-mix(in srgb,var(--v10-primary,var(--primary,#087f75)) 14%,transparent);
+}
+
+.v1116-action-icon{
+ display:grid;
+ place-items:center;
+ width:42px;
+ height:42px;
+ padding:3px;
+ border:1px solid color-mix(in srgb,var(--v10-primary,var(--primary,#087f75)) 38%,var(--v10-line,var(--line,#dce5ee)));
+ border-radius:12px;
+ background:linear-gradient(
+  145deg,
+  color-mix(in srgb,var(--v10-primary,var(--primary,#087f75)) 19%,var(--v10-card,var(--card,#fff))),
+  color-mix(in srgb,var(--v10-card,var(--card,#fff)) 96%,transparent)
+ );
+ color:var(--v10-primary,var(--primary,#087f75));
+ font-size:.68rem;
+ font-weight:950;
+}
+
+.v1116-action-card strong{
+ display:block;
+ overflow:hidden;
+ color:inherit;
+ font-size:.79rem;
+ line-height:1.25;
+ text-overflow:ellipsis;
+}
+
+.v1116-action-card small{
+ display:block;
+ margin-top:3px;
+ color:var(--v10-muted,var(--muted,#64748b));
+ font-size:.66rem;
+ line-height:1.3;
+}
+
+/* Status card is integrated below actions, not isolated elsewhere. */
+.v1116-download-workspace #downloadStatusCard{
+ margin:0!important;
+ width:100%!important;
+}
+
+@media(max-width:1180px){
+ .v1116-download-action-grid{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+ }
+}
+
+@media(max-width:650px){
+ #marketWorkspace > .v1116-search-first-row{
+  margin-bottom:0!important;
+ }
+ .v1116-download-actions{
+  padding:12px;
+  border-radius:16px;
+ }
+ .v1116-download-action-grid{
+  grid-template-columns:1fr;
+  gap:8px;
+ }
+ .v1116-action-card{
+  min-height:68px;
+ }
+}
+
+
+/* =========================================================
+   V11.17 — THEME SELECTION IN TERMINAL MENU
+   ========================================================= */
+.v1117-terminal-menu-only{
+ position:absolute!important;
+ width:1px!important;
+ height:1px!important;
+ margin:-1px!important;
+ padding:0!important;
+ overflow:hidden!important;
+ clip:rect(0 0 0 0)!important;
+ clip-path:inset(50%)!important;
+ white-space:nowrap!important;
+ border:0!important;
+}
+
+/* Generated menu clones/proxies must remain visible. */
+#v119TerminalMenu .v1117-terminal-menu-only,
+.v119-terminal-menu .v1117-terminal-menu-only,
+.v111-terminal-menu .v1117-terminal-menu-only{
+ position:static!important;
+ width:auto!important;
+ height:auto!important;
+ margin:0!important;
+ padding:inherit!important;
+ overflow:visible!important;
+ clip:auto!important;
+ clip-path:none!important;
+ white-space:normal!important;
+ border:inherit!important;
+}
+
+
+/* V11.18 reliable Theme Selection item */
+#v119TerminalMenu .v119-menu-action[aria-label="Theme Selection"],
+#v119TerminalMenu .v119-menu-action[title="Choose terminal theme"]{
+ position:relative;
+ display:flex!important;
+ align-items:center!important;
+ justify-content:flex-start!important;
+ width:100%!important;
+ min-height:48px!important;
+ padding:10px 12px 10px 44px!important;
+ border-color:color-mix(in srgb,var(--v10-primary,var(--primary,#2563eb)) 48%,var(--v10-line,var(--line,#334155)))!important;
+ background:linear-gradient(
+  135deg,
+  color-mix(in srgb,var(--v10-primary,var(--primary,#2563eb)) 15%,var(--v10-card,var(--card,#111827))),
+  color-mix(in srgb,var(--v10-card,var(--card,#111827)) 96%,transparent)
+ )!important;
+ color:var(--v10-text,var(--text,#f8fafc))!important;
+ font-weight:850!important;
+ text-align:left!important;
+}
+#v119TerminalMenu .v119-menu-action[aria-label="Theme Selection"]::before,
+#v119TerminalMenu .v119-menu-action[title="Choose terminal theme"]::before{
+ content:"◐";
+ position:absolute;
+ left:12px;
+ top:50%;
+ display:grid;
+ place-items:center;
+ width:25px;
+ height:25px;
+ transform:translateY(-50%);
+ border-radius:8px;
+ background:color-mix(in srgb,var(--v10-primary,var(--primary,#2563eb)) 20%,transparent);
+ color:var(--v10-primary,var(--primary,#60a5fa));
+}
+
+
+/* =========================================================
+   V11.20 — RESTORED GROUPED TERMINAL MENU
+   ========================================================= */
+
+/* Keep source commands in the DOM for menu cloning, but remove the old
+   header button-group interface from the visible terminal. */
+.v10-control-deck,
+section.card.toolbar.v10-original-toolbar{
+ display:none!important;
+}
+
+/* Every menu section starts collapsed. */
+#v119TerminalMenu .v119-menu-group.collapsed .v119-menu-group-body,
+#v119TerminalMenu .v119-menu-group-body[hidden]{
+ display:none!important;
+}
+
+#v119TerminalMenu .v119-menu-group-title[aria-expanded="false"] .v1111-caret{
+ transform:rotate(-90deg);
+}
+
+#v119TerminalMenu .v119-menu-group-title[aria-expanded="true"] .v1111-caret{
+ transform:rotate(0deg);
+}
+
+#v119TerminalMenu .v1111-caret{
+ transition:transform .18s ease;
+}
+
+/* Give Appearance a clear, dedicated visual identity. */
+#v119TerminalMenu [data-menu-group="Appearance"]{
+ border-color:color-mix(
+  in srgb,
+  var(--v10-primary,var(--primary,#2563eb)) 42%,
+  var(--v10-line,var(--line,#334155))
+ )!important;
+}
+
+#v119TerminalMenu [data-menu-group="Appearance"] > .v119-menu-group-title{
+ background:linear-gradient(
+  135deg,
+  color-mix(in srgb,var(--v10-primary,var(--primary,#2563eb)) 13%,var(--v10-card,var(--card,#111827))),
+  color-mix(in srgb,var(--v10-card,var(--card,#111827)) 97%,transparent)
+ )!important;
+}
+
+
+/* =========================================================
+   V11.21 — RELIABLE THEME PICKER
+   ========================================================= */
+.v1124-theme-dialog[hidden]{
+ display:none!important;
+}
+
+.v1124-theme-dialog{
+ position:fixed;
+ inset:0;
+ z-index:2147483000;
+ display:grid;
+ place-items:center;
+ padding:18px;
+}
+
+.v1124-theme-dialog-backdrop{
+ position:absolute;
+ inset:0;
+ background:rgba(2,6,23,.72);
+ backdrop-filter:blur(8px);
+}
+
+.v1124-theme-dialog-panel{
+ position:relative;
+ z-index:1;
+ width:min(760px,100%);
+ max-height:min(82vh,760px);
+ overflow:auto;
+ border:1px solid var(--v10-line,var(--line,#334155));
+ border-radius:22px;
+ background:
+  linear-gradient(
+   145deg,
+   color-mix(in srgb,var(--v10-card,var(--card,#111827)) 98%,transparent),
+   color-mix(in srgb,var(--v10-panel-solid,var(--panel,#0f172a)) 96%,transparent)
+  );
+ box-shadow:0 28px 80px rgba(0,0,0,.45);
+ color:var(--v10-text,var(--text,#f8fafc));
+}
+
+.v1124-theme-dialog-header{
+ position:sticky;
+ top:0;
+ z-index:2;
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:14px;
+ padding:17px 18px;
+ border-bottom:1px solid var(--v10-line,var(--line,#334155));
+ background:color-mix(in srgb,var(--v10-card,var(--card,#111827)) 96%,transparent);
+ backdrop-filter:blur(16px);
+}
+
+.v1124-theme-dialog-header span{
+ display:block;
+ margin-bottom:3px;
+ color:var(--v10-primary,var(--primary,#60a5fa));
+ font-size:.62rem;
+ font-weight:950;
+ letter-spacing:.16em;
+}
+
+.v1124-theme-dialog-header h3{
+ margin:0;
+ font-size:1.08rem;
+}
+
+.v1124-theme-dialog-close{
+ display:grid;
+ place-items:center;
+ width:38px;
+ height:38px;
+ border:1px solid var(--v10-line,var(--line,#334155));
+ border-radius:11px;
+ background:var(--v10-card,var(--card,#111827));
+ color:var(--v10-text,var(--text,#f8fafc));
+ font-size:1.3rem;
+ cursor:pointer;
+}
+
+.v1124-theme-options{
+ display:grid;
+ grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:11px;
+ padding:16px;
+}
+
+.v1124-theme-option{
+ display:grid;
+ grid-template-columns:auto minmax(0,1fr);
+ align-items:center;
+ gap:12px;
+ min-height:78px;
+ padding:12px;
+ border:1px solid var(--v10-line,var(--line,#334155));
+ border-radius:15px;
+ background:color-mix(in srgb,var(--v10-card,var(--card,#111827)) 96%,transparent);
+ color:var(--v10-text,var(--text,#f8fafc));
+ text-align:left;
+ cursor:pointer;
+ transition:.18s ease;
+}
+
+.v1124-theme-option:hover,
+.v1124-theme-option.active{
+ transform:translateY(-1px);
+ border-color:var(--v10-primary,var(--primary,#60a5fa));
+ box-shadow:0 12px 28px color-mix(in srgb,var(--v10-primary,var(--primary,#60a5fa)) 15%,transparent);
+}
+
+.v1124-theme-option strong,
+.v1124-theme-option small{
+ display:block;
+}
+
+.v1124-theme-option strong{
+ font-size:.82rem;
+}
+
+.v1124-theme-option small{
+ margin-top:4px;
+ color:var(--v10-muted,var(--muted,#94a3b8));
+ font-size:.67rem;
+}
+
+.v1124-theme-preview{
+ display:flex;
+ gap:3px;
+ align-items:flex-end;
+ justify-content:center;
+ width:50px;
+ height:45px;
+ padding:8px;
+ border-radius:12px;
+ background:linear-gradient(
+  145deg,
+  color-mix(in srgb,var(--v10-primary,var(--primary,#60a5fa)) 20%,var(--v10-card,var(--card,#111827))),
+  var(--v10-card,var(--card,#111827))
+ );
+}
+
+.v1124-theme-preview i{
+ display:block;
+ width:8px;
+ border-radius:4px;
+ background:var(--v10-primary,var(--primary,#60a5fa));
+}
+
+.v1124-theme-preview i:nth-child(1){height:15px}
+.v1124-theme-preview i:nth-child(2){height:27px}
+.v1124-theme-preview i:nth-child(3){height:20px}
+
+@media(max-width:620px){
+ .v1124-theme-options{
+  grid-template-columns:1fr;
+  padding:12px;
+ }
+ .v1124-theme-dialog{
+  padding:10px;
+ }
+}
+
+
+/* V11.22 direct Theme Selection dialog fix */
+.v1124-theme-dialog{
+ z-index:2147483647!important;
+ pointer-events:auto!important;
+}
+.v1124-theme-dialog-panel,
+.v1124-theme-dialog-backdrop{
+ pointer-events:auto!important;
+}
+
+
+/* =========================================================
+   V11.24 — NATIVE MENU CLOSE + ACCESSIBLE THEME MODAL
+   ========================================================= */
+
+/* Closed menu panel and backdrop must release all pointer interaction,
+   while the Terminal Menu launcher remains visible. */
+#v119TerminalMenu:not(.open) .v119-menu-panel{
+ pointer-events:none!important;
+ visibility:hidden!important;
+ opacity:0!important;
+}
+
+#v119MenuBackdrop:not(.open){
+ pointer-events:none!important;
+ visibility:hidden!important;
+ opacity:0!important;
+}
+
+/* Theme dialog sits above every terminal layer and accepts interaction. */
+.v1124-theme-dialog{
+ position:fixed!important;
+ inset:0!important;
+ z-index:2147483647!important;
+ display:grid!important;
+ place-items:center!important;
+ pointer-events:auto!important;
+ isolation:isolate!important;
+}
+
+.v1124-theme-dialog[hidden]{
+ display:none!important;
+}
+
+.v1124-theme-dialog-backdrop{
+ z-index:0!important;
+ pointer-events:auto!important;
+}
+
+.v1124-theme-dialog-panel{
+ position:relative!important;
+ z-index:1!important;
+ pointer-events:auto!important;
+}
+
+.v1124-theme-option,
+.v1124-theme-dialog-close{
+ pointer-events:auto!important;
+}
+
+body.v1124-theme-dialog-open{
+ overflow:hidden;
+}
+
+
+/* =========================================================
+   V11.25 — COMPLETE THEME SURFACE BRIDGE
+   ========================================================= */
+
+:root{
+ --v1125-surface:var(--v10-card,var(--card,#111827));
+ --v1125-surface-2:var(--v10-panel-solid,var(--panel,#0f172a));
+ --v1125-surface-soft:color-mix(
+  in srgb,
+  var(--v10-card,var(--card,#111827)) 92%,
+  var(--v10-primary,var(--primary,#60a5fa)) 8%
+ );
+ --v1125-border:var(--v10-line,var(--line,#334155));
+ --v1125-text:var(--v10-text,var(--text,#f8fafc));
+ --v1125-muted:var(--v10-muted,var(--muted,#94a3b8));
+ --v1125-accent:var(--v10-primary,var(--primary,#60a5fa));
+ --v1125-shadow:0 16px 40px color-mix(
+  in srgb,
+  var(--v10-primary,var(--primary,#60a5fa)) 10%,
+  rgba(0,0,0,.34)
+ );
+}
+
+/* Main application surfaces */
+body,
+.app,
+.shell,
+.dashboard,
+.dashboard-shell,
+.terminal-shell,
+main,
+.main-content,
+.content-area{
+ color:var(--v1125-text);
+}
+
+.card,
+.panel,
+.widget,
+.workspace,
+.workspace-panel,
+.market-workspace,
+.watchlist-workspace,
+.watch-list-workspace,
+.report-card,
+.chart-card,
+.stat-card,
+.metric-card,
+.summary-card,
+.table-card,
+.modal-content,
+.dialog-content,
+.drawer-content,
+.dropdown-menu,
+.popover,
+.menu-panel,
+.v119-menu-panel,
+.v119-menu-group,
+.v10-card{
+ border-color:var(--v1125-border)!important;
+ background:var(--v1125-surface)!important;
+ color:var(--v1125-text)!important;
+ box-shadow:var(--v1125-shadow);
+}
+
+/* Secondary/inner surfaces */
+.card-header,
+.card-footer,
+.panel-header,
+.panel-footer,
+.workspace-header,
+.workspace-footer,
+.table-toolbar,
+.form-section,
+.control-section,
+.chart-toolbar,
+.watchlist-header,
+.watch-list-header,
+.v119-menu-group-title,
+.v119-menu-group-body,
+details,
+summary{
+ border-color:var(--v1125-border)!important;
+ background:var(--v1125-surface-soft)!important;
+ color:var(--v1125-text)!important;
+}
+
+/* Form controls */
+input,
+select,
+textarea,
+button,
+.btn,
+.button,
+.control,
+.form-control,
+.form-select,
+.search-input,
+.filter-input{
+ border-color:var(--v1125-border)!important;
+ color:var(--v1125-text)!important;
+}
+
+input,
+select,
+textarea,
+.form-control,
+.form-select,
+.search-input,
+.filter-input{
+ background:var(--v1125-surface-2)!important;
+}
+
+input::placeholder,
+textarea::placeholder{
+ color:var(--v1125-muted)!important;
+ opacity:.9;
+}
+
+button:not(.danger):not(.btn-danger),
+.btn:not(.danger):not(.btn-danger),
+.button:not(.danger):not(.btn-danger){
+ background:color-mix(
+  in srgb,
+  var(--v1125-surface) 84%,
+  var(--v1125-accent) 16%
+ )!important;
+}
+
+/* Tables and lists */
+table,
+thead,
+tbody,
+tfoot,
+tr,
+th,
+td,
+.data-table,
+.watchlist-table,
+.watch-list-table{
+ border-color:var(--v1125-border)!important;
+ color:var(--v1125-text)!important;
+}
+
+thead,
+th{
+ background:var(--v1125-surface-soft)!important;
+}
+
+tbody tr,
+.list-item,
+.watchlist-item,
+.watch-list-item,
+.code-item,
+.symbol-item{
+ background:var(--v1125-surface)!important;
+ color:var(--v1125-text)!important;
+ border-color:var(--v1125-border)!important;
+}
+
+tbody tr:hover,
+.list-item:hover,
+.watchlist-item:hover,
+.watch-list-item:hover,
+.code-item:hover,
+.symbol-item:hover{
+ background:color-mix(
+  in srgb,
+  var(--v1125-surface) 78%,
+  var(--v1125-accent) 22%
+ )!important;
+}
+
+/* Text hierarchy */
+.muted,
+.text-muted,
+.subtext,
+.helper,
+.hint,
+small,
+.meta,
+.secondary-text{
+ color:var(--v1125-muted)!important;
+}
+
+a,
+.link,
+.accent,
+.active,
+.is-active{
+ color:var(--v1125-accent);
+}
+
+/* Chips, badges and tabs */
+.badge,
+.chip,
+.tag,
+.pill,
+.tab,
+.nav-tab,
+.status-badge{
+ border-color:var(--v1125-border)!important;
+ background:var(--v1125-surface-soft)!important;
+ color:var(--v1125-text)!important;
+}
+
+.tab.active,
+.nav-tab.active,
+.chip.active,
+.badge.active{
+ border-color:var(--v1125-accent)!important;
+ color:var(--v1125-accent)!important;
+}
+
+/* Modals, drawers and overlays */
+.modal,
+.dialog,
+.drawer,
+.offcanvas{
+ color:var(--v1125-text)!important;
+}
+
+.modal-backdrop,
+.dialog-backdrop,
+.drawer-backdrop,
+.overlay{
+ background:color-mix(in srgb,var(--v1125-surface-2) 72%,transparent)!important;
+}
+
+/* Charts and canvases should be visually integrated even though their
+   drawing colors remain controlled by their own chart renderer. */
+canvas,
+.chart-container,
+.chart-area,
+.chart-panel{
+ border-color:var(--v1125-border)!important;
+ background:var(--v1125-surface-2)!important;
+}
+
+/* =========================================================
+   V11.25 — WATCH-LIST TOOLTIP
+   ========================================================= */
+[data-v1126-watch-tooltip]{
+ position:relative!important;
+}
+
+[data-v1126-watch-tooltip]::before,
+[data-v1126-watch-tooltip]::after{
+ position:absolute;
+ left:50%;
+ z-index:2147483000;
+ pointer-events:none;
+ opacity:0;
+ visibility:hidden;
+ transition:opacity .16s ease,transform .16s ease,visibility .16s ease;
+}
+
+[data-v1126-watch-tooltip]::before{
+ content:attr(data-v1126-watch-tooltip);
+ bottom:calc(100% + 10px);
+ transform:translate(-50%,6px);
+ width:max-content;
+ max-width:min(300px,80vw);
+ padding:8px 10px;
+ border:1px solid var(--v1125-border);
+ border-radius:9px;
+ background:var(--v1125-surface-2);
+ color:var(--v1125-text);
+ box-shadow:0 14px 32px rgba(0,0,0,.34);
+ font-size:.72rem;
+ font-weight:800;
+ line-height:1.35;
+ text-align:center;
+ white-space:normal;
+}
+
+[data-v1126-watch-tooltip]::after{
+ content:"";
+ bottom:calc(100% + 4px);
+ transform:translate(-50%,6px);
+ border:6px solid transparent;
+ border-top-color:var(--v1125-border);
+}
+
+[data-v1126-watch-tooltip]:hover::before,
+[data-v1126-watch-tooltip]:hover::after,
+[data-v1126-watch-tooltip]:focus-visible::before,
+[data-v1126-watch-tooltip]:focus-visible::after,
+[data-v1126-watch-tooltip]:focus-within::before,
+[data-v1126-watch-tooltip]:focus-within::after{
+ opacity:1;
+ visibility:visible;
+ transform:translate(-50%,0);
+}
+
+
+/* V11.26 — tooltips only for Watch Lists > Manage stock groups */
+[data-v1126-watch-lists-section="true"] [data-v1126-watch-tooltip]{
+ cursor:help;
+}
+
+[data-v1126-watch-lists-section="true"] [data-v1126-watch-tooltip]:hover{
+ border-color:var(--v1125-accent)!important;
+}
+
 </style>
 
 <script>
@@ -1595,7 +3252,7 @@ try{
   <span>Mobile market workspace</span>
  </div>
  <div class="v105-top-actions">
-  <button class="btn soft v105-icon-btn" type="button" id="v11TerminalBtn" title="Trading terminal">⌁</button>
+<button class="btn soft v105-icon-btn" type="button" id="v11TerminalBtn" title="Trading terminal">⌁</button>
   
   <button class="btn soft v105-icon-btn" type="button" id="v105CommandBtn" title="Command palette">⌘</button>
   <button class="btn soft v105-icon-btn" type="button" id="v105NotifyBtn" title="Notifications">♢<span class="v105-count" id="v105NotifyCount">0</span></button>
@@ -1620,7 +3277,7 @@ try{
    <div class="v10-menu-panel">
     <button type="button" data-proxy="dse3mUpdate">Download 3 months & view charts</button>
     <button type="button" data-proxy="archiveImport">Custom archive range</button>
-    <button type="button" data-proxy="motherImport">Import mother codes</button>
+    <button type="button" data-proxy="motherImport">Import DSE trading codes</button>
     <button type="button" data-proxy="quickMotherSync">Sync AmarStock codes</button>
    </div>
   </div>
@@ -1916,7 +3573,7 @@ try{
 <div class="app">
 <header><div><h1>DSE Watch List Dashboard</h1><p>Premium DSE market intelligence workspace with watch lists, archive sync, OHLC storage and interactive charts.</p></div><div class="badge"><strong id="lastArchive">Never</strong><span>Last archive import</span></div></header>
 <section class="stats" id="overviewWorkspace">
- <div class="card stat"><label>Mother Codes</label><strong id="sMother">0</strong></div>
+ <div class="card stat"><label>DSE Trading Codes</label><strong id="sMother">0</strong></div>
  <div class="card stat"><label>Watch Lists</label><strong id="sLists">0</strong></div>
  <div class="card stat"><label>Historical Symbols</label><strong id="sHistory">0</strong></div>
  <div class="card stat"><label>OHLC Records</label><strong id="sRecords">0</strong></div>
@@ -1929,7 +3586,50 @@ try{
  <div class="row"><h3>Activity</h3><button class="btn soft" id="clearActivity">Clear</button></div><div class="activity" id="activity"></div>
 </aside>
 <main class="main">
-<section class="card" id="downloadStatusCard" data-v10-workspace="downloadWorkspace" style="display:none;margin-bottom:14px">
+<section id="downloadWorkspace" class="v1116-download-workspace">
+ <div class="v1116-download-actions">
+  <div class="v1116-download-intro">
+   <span class="v1116-download-kicker">DATA OPERATIONS</span>
+   <h3>Download & Data Center</h3>
+   <p>Import, synchronize, download, inspect, back up, and restore terminal data.</p>
+  </div>
+
+  <div class="v1116-download-action-grid">
+   <button class="v1116-action-card" type="button" data-v1116-action="motherImport">
+    <span class="v1116-action-icon">DSE</span>
+    <span><strong>Import DSE Codes</strong><small>Import or replace the complete trading-code directory</small></span>
+   </button>
+   <button class="v1116-action-card" type="button" data-v1116-action="quickMotherSync">
+    <span class="v1116-action-icon">↻</span>
+    <span><strong>Sync DSE Codes</strong><small>Refresh the latest available DSE code list</small></span>
+   </button>
+   <button class="v1116-action-card" type="button" data-v1116-action="archiveImport">
+    <span class="v1116-action-icon">OHLC</span>
+    <span><strong>Import OHLC Archive</strong><small>Load historical market records from files, text, or URL</small></span>
+   </button>
+   <button class="v1116-action-card" type="button" data-v1116-action="dse3mUpdate">
+    <span class="v1116-action-icon">3M</span>
+    <span><strong>Download DSE 3M</strong><small>Download active watch-list history and open charts</small></span>
+   </button>
+   <button class="v1116-action-card" type="button" data-v1116-action="viewListCharts">
+    <span class="v1116-action-icon">▥</span>
+    <span><strong>View Saved Charts</strong><small>Open saved three-month charts for the active list</small></span>
+   </button>
+   <button class="v1116-action-card" type="button" data-v1116-action="viewDownloadedData">
+    <span class="v1116-action-icon">⌗</span>
+    <span><strong>View Downloaded Data</strong><small>Inspect stored OHLC records in a data table</small></span>
+   </button>
+   <button class="v1116-action-card" type="button" data-v1116-action="exportBtn">
+    <span class="v1116-action-icon">⇩</span>
+    <span><strong>Backup Dashboard</strong><small>Export watch lists, codes, history, and settings</small></span>
+   </button>
+   <button class="v1116-action-card" type="button" data-v1116-action="importBtn">
+    <span class="v1116-action-icon">⇧</span>
+    <span><strong>Restore Dashboard</strong><small>Restore a previously exported dashboard backup</small></span>
+   </button>
+  </div>
+ </div>
+ <section class="card" id="downloadStatusCard" data-v10-workspace="downloadWorkspace" style="display:none;margin-bottom:14px">
  <div class="row" style="align-items:center;gap:12px">
   <div style="flex:1;min-width:220px">
    <div style="display:flex;justify-content:space-between;gap:12px;align-items:center">
@@ -1944,11 +3644,21 @@ try{
   <button class="btn soft" type="button" id="hideDownloadStatus">Hide</button>
  </div>
 </section>
+</section>
 
 <section class="card toolbar v10-original-toolbar">
+ <button
+  type="button"
+  id="v1118ThemeMenuAction"
+  class="btn soft"
+  aria-label="Theme Selection"
+  title="Choose terminal theme">
+  Theme Selection
+ </button>
+
  <input class="input search" id="search" placeholder="Search trading codes...">
- <button class="btn primary" id="motherImport">Import Mother Codes</button>
- <button class="btn blue" id="quickMotherSync">Sync AmarStock Codes</button>
+ <button class="btn primary" id="motherImport">Import DSE Trading Codes</button>
+ <button class="btn blue" id="quickMotherSync">Sync DSE Trading Codes</button>
  <button class="btn blue" id="archiveImport">Import OHLC Archive</button>
  <button class="btn primary" id="dse3mUpdate">Download DSE 3M & View Charts</button>
  <button class="btn primary" id="viewListCharts">View Saved 3M Charts</button>
@@ -1959,8 +3669,39 @@ try{
  <input type="file" id="dashboardFile" accept=".json" hidden>
 </section>
 <div class="panels" id="marketWorkspace">
- <section class="card panel"><div class="head"><div><h2>Mother Trading-Code List</h2><span class="small" id="motherMeta">Import the mother list first.</span></div></div><div class="scroll" id="mother"></div></section>
- <section class="card panel"><div class="head"><div><h2 id="watchTitle">Watch List</h2><span class="small" id="watchMeta"></span></div><div class="actions"><button class="btn blue" id="dse3mUpdate2">Download DSE 3M</button><button class="btn primary" id="viewListCharts2">View Saved 3M Charts</button></div></div><div class="scroll" id="watch"></div></section>
+ <div class="v1116-search-first-row">
+  <div class="v1114-code-search-shell">
+ <div class="v1114-search-orb" aria-hidden="true">⌕</div>
+ <div class="v1114-search-copy">
+  <span class="v1114-search-kicker">DSE MARKET DIRECTORY</span>
+  <label for="watchCodeSearch">Search Trading Code</label>
+  <small>Instantly filter the DSE Trading Code List and Active Watch List</small>
+ </div>
+ <div class="v1114-search-field-wrap">
+  <span class="v1114-search-icon" aria-hidden="true">⌕</span>
+  <input class="input v1114-search-input" id="watchCodeSearch" type="search"
+         autocomplete="off" spellcheck="false"
+         placeholder="Search ROBI, ALIF, SUMITPOWER…">
+  <kbd class="v1114-search-key">/</kbd>
+ </div>
+ <button class="btn soft v1114-search-clear" id="clearWatchCodeSearch" type="button">
+  Clear
+ </button>
+ <div class="v1114-watch-search-status" id="watchCodeSearchStatus"></div>
+</div>
+ </div>
+
+ <section class="card panel">
+  <div class="head"><div><h2>DSE Trading Code List</h2><span class="small" id="motherMeta">Import the DSE trading-code list first.</span></div></div>
+  <div class="scroll" id="mother"></div>
+ </section>
+ <section class="card panel">
+  <div class="head">
+   <div><h2 id="watchTitle">Active Watch List</h2><span class="small" id="watchMeta"></span></div>
+   <div class="actions"><button class="btn blue" id="dse3mUpdate2">Download DSE 3M</button><button class="btn primary" id="viewListCharts2">View Saved 3M Charts</button></div>
+  </div>
+  <div class="scroll" id="watch"></div>
+ </section>
 </div>
 </main>
 </div>
@@ -1971,7 +3712,7 @@ try{
 
 <div class="modal" id="motherModal"><div class="dialog">
  <div class="modal-head">
-  <div><h2>Import Mother Trading Codes</h2><div class="small">Import the complete listed-security directory from DSE data</div></div>
+  <div><h2>Import DSE Trading Codes</h2><div class="small">Import the complete listed-security directory from DSE data</div></div>
   <button class="btn soft icon" data-close="motherModal">×</button>
  </div>
  <div class="tabs" data-tab-group="mother">
@@ -1982,7 +3723,7 @@ try{
 
  <div class="tab-panel active" data-mother-panel="url">
   <div class="field">
-   <label>Public mother-list source</label>
+   <label>Public DSE-list source</label>
    <select class="select" style="width:100%" id="motherSourceSelect">
     <option value="https://staticv2.amarstock.com/latest-share-price">AmarStock Latest Share Price</option>
     <option value="https://www.dsebd.org/latest_share_price_scroll_l.php">DSE Latest Share Price</option>
@@ -2000,7 +3741,7 @@ try{
    </label>
   </div>
   <div class="note" style="margin-top:9px">
-   The dashboard first tries a direct browser request. Website CORS rules may block it even though the page opens normally. Your permanent watch lists are never replaced or deleted by mother-list synchronization.
+   The dashboard first tries a direct browser request. Website CORS rules may block it even though the page opens normally. Your permanent watch lists are never replaced or deleted by DSE-list synchronization.
   </div>
   <div class="form-actions">
    <button class="btn soft" type="button" id="openMotherSource">Open Source Page</button>
@@ -2030,7 +3771,7 @@ try{
  <div id="motherResult" class="note" style="display:none;margin-top:11px"></div>
  <div class="form-actions" id="motherCommitArea" style="display:none">
   <button class="btn soft" type="button" id="mergeMother">Merge Codes</button>
-  <button class="btn primary" type="button" id="replaceMother">Replace Mother List</button>
+  <button class="btn primary" type="button" id="replaceMother">Replace DSE Trading Code List</button>
  </div>
 </div></div>
 
@@ -2167,8 +3908,19 @@ class CandleChart{
 }
 class App{
  constructor(){this.store=new Store();this.s=this.store.load();this.editId=null;this.pending={};this.pendingMother=[];this.pendingMotherSource="";this.currentCode=null;this.searchTerm=""}
- init(){["lastArchive","sMother","sLists","sHistory","sRecords","lists","activity","newList","clearActivity","search","motherImport","quickMotherSync","saveStatus","motherModal","motherSourceSelect","motherUrl","autoMotherSync","openMotherSource","fetchMother","motherFiles","parseMotherFiles","motherPaste","parseMotherPaste","motherResult","motherCommitArea","mergeMother","replaceMother","archiveImport","dse3mUpdate","dse3mUpdate2","viewListCharts","viewListCharts2","downloadStatusCard","downloadStatusTitle","downloadStatusPercent","downloadStatusBar","downloadStatusText","hideDownloadStatus","viewDownloadedData","exportBtn","importBtn","dashboardFile","mother","motherMeta","watch","watchTitle","watchMeta","listModal","listModalTitle","listForm","listName","archiveModal","dseStartDate","dseEndDate","fetchDseRange","downloadDseCsv","ohlcFiles","parseFiles","pasteOhlc","parsePaste","archiveUrl","urlCode","fetchUrl","parseResult","commitArea","mergeHistory","replaceHistory","chartModal","chartTitle","chartSubtitle","chartRange","downloadChart","chartCanvas","chartInfo","galleryModal","galleryTitle","gallery","dataModal","dataSummary","dataTable","toasts"].forEach(id=>this[id]=document.getElementById(id));this.bind();this.setDefaultDseDates();this.render();setTimeout(()=>this.maybeAutoSync(),500)}
- bind(){this.newList.onclick=()=>this.openList();this.listForm.onsubmit=e=>this.saveList(e);this.clearActivity.onclick=()=>{this.s.activity=[];this.persist();this.renderActivity()};this.search.oninput=e=>{this.searchTerm=e.target.value.trim().toUpperCase();this.renderMother();this.renderWatch()};this.motherImport.onclick=()=>{this.autoMotherSync.checked=this.s.autoMotherSync!==false;this.open("motherModal")};
+ init(){["lastArchive","sMother","sLists","sHistory","sRecords","lists","activity","newList","clearActivity","search","motherImport","quickMotherSync","saveStatus","motherModal","motherSourceSelect","motherUrl","autoMotherSync","openMotherSource","fetchMother","motherFiles","parseMotherFiles","motherPaste","parseMotherPaste","motherResult","motherCommitArea","mergeMother","replaceMother","archiveImport","dse3mUpdate","dse3mUpdate2","viewListCharts","viewListCharts2","downloadStatusCard","downloadStatusTitle","downloadStatusPercent","downloadStatusBar","downloadStatusText","hideDownloadStatus","viewDownloadedData","exportBtn","importBtn","dashboardFile","mother","motherMeta","watch","watchTitle","watchMeta","watchCodeSearch","clearWatchCodeSearch","watchCodeSearchStatus","listModal","listModalTitle","listForm","listName","archiveModal","dseStartDate","dseEndDate","fetchDseRange","downloadDseCsv","ohlcFiles","parseFiles","pasteOhlc","parsePaste","archiveUrl","urlCode","fetchUrl","parseResult","commitArea","mergeHistory","replaceHistory","chartModal","chartTitle","chartSubtitle","chartRange","downloadChart","chartCanvas","chartInfo","galleryModal","galleryTitle","gallery","dataModal","dataSummary","dataTable","toasts"].forEach(id=>this[id]=document.getElementById(id));this.bind();
+ this.searchTerm="";
+ if(this.search)this.search.value="";
+ if(this.watchCodeSearch)this.watchCodeSearch.value="";
+ this.setDefaultDseDates();
+ this.render();
+ setTimeout(()=>this.maybeAutoSync(),500)}
+ bind(){this.newList.onclick=()=>this.openList();this.listForm.onsubmit=e=>this.saveList(e);this.clearActivity.onclick=()=>{this.s.activity=[];this.persist();this.renderActivity()};this.search.oninput=e=>this.setTradingCodeSearch(e.target.value);
+this.watchCodeSearch.oninput=e=>this.setTradingCodeSearch(e.target.value);
+this.clearWatchCodeSearch.onclick=()=>{
+ this.setTradingCodeSearch("");
+ this.watchCodeSearch.focus();
+};this.motherImport.onclick=()=>{this.autoMotherSync.checked=this.s.autoMotherSync!==false;this.open("motherModal")};
 this.quickMotherSync.onclick=()=>this.fetchMotherCodes(true);
 this.motherSourceSelect.onchange=()=>{if(this.motherSourceSelect.value!=="custom")this.motherUrl.value=this.motherSourceSelect.value};
 this.autoMotherSync.onchange=()=>{this.s.autoMotherSync=this.autoMotherSync.checked;this.persist()};
@@ -2208,8 +3960,68 @@ document.querySelectorAll("[data-mother-tab]").forEach(b=>b.onclick=()=>this.mot
   setTimeout(()=>this.updatePremiumDashboard(),0);this.renderStats();this.renderLists();this.renderMother();this.renderWatch();this.renderActivity()}
  renderStats(){const rc=Object.values(this.s.history).reduce((n,a)=>n+a.length,0);this.sMother.textContent=this.s.motherCodes.length;this.sLists.textContent=this.s.watchLists.length;this.sHistory.textContent=Object.keys(this.s.history).length;this.sRecords.textContent=rc.toLocaleString();this.lastArchive.textContent=this.s.lastArchive?new Date(this.s.lastArchive).toLocaleString():"Never"}
  renderLists(){this.lists.innerHTML=this.s.watchLists.map(l=>`<div class="list ${l.id===this.s.activeId?"active":""}"><button class="select-list" data-la="select" data-id="${l.id}"><span class="list-name">${this.esc(l.name)}</span><span class="small">${l.codes.length} codes</span></button><div class="actions"><button class="btn blue icon" title="View all 3M charts" data-la="charts" data-id="${l.id}">▥</button><button class="btn soft icon" data-la="edit" data-id="${l.id}">✎</button><button class="btn soft icon" data-la="delete" data-id="${l.id}">🗑</button></div></div>`).join("");this.lists.querySelectorAll("[data-la]").forEach(b=>b.onclick=()=>this.listAction(b.dataset.la,b.dataset.id))}
- renderMother(){const a=this.active(),arr=this.s.motherCodes.filter(c=>c.includes(this.searchTerm));this.motherMeta.textContent=`${arr.length} of ${this.s.motherCodes.length} codes${this.s.motherSource?" • "+this.s.motherSource:""}`;this.mother.innerHTML=arr.length?arr.map(c=>`<div class="code-row"><div><span class="code">${c}</span><span class="meta">${this.s.history[c]?.length||0} OHLC records</span></div><div class="actions">${this.s.history[c]?.length?`<button class="btn blue" data-chart="${c}">3M Chart</button>`:""}<button class="btn ${a.codes.includes(c)?"soft":"primary"}" data-add="${c}" ${a.codes.includes(c)?"disabled":""}>${a.codes.includes(c)?"Added":"+ Add"}</button></div></div>`).join(""):`<div class="empty">No mother codes. Import codes or OHLC archive data.</div>`;this.mother.querySelectorAll("[data-add]").forEach(b=>b.onclick=()=>this.add(b.dataset.add));this.mother.querySelectorAll("[data-chart]").forEach(b=>b.onclick=()=>this.openChart(b.dataset.chart))}
- renderWatch(){const a=this.active(),arr=a.codes.filter(c=>c.includes(this.searchTerm));this.watchTitle.textContent=a.name;this.watchMeta.textContent=`${arr.length} of ${a.codes.length} codes`;this.watch.innerHTML=arr.length?arr.map(c=>`<div class="code-row"><div><span class="code">${c}</span><span class="meta">${this.s.history[c]?.length||0} OHLC records</span></div><div class="actions"><button class="btn blue" data-chart="${c}" ${this.s.history[c]?.length?"":"disabled"}>3M Chart</button><button class="btn red" data-remove="${c}">Remove</button></div></div>`).join(""):`<div class="empty">Add trading codes from the mother list.</div>`;this.watch.querySelectorAll("[data-chart]").forEach(b=>b.onclick=()=>this.openChart(b.dataset.chart));this.watch.querySelectorAll("[data-remove]").forEach(b=>b.onclick=()=>this.remove(b.dataset.remove))}
+ setTradingCodeSearch(value){
+  const normalized=String(value??"").trim().toUpperCase();
+  this.searchTerm=normalized;
+
+  if(this.search&&this.search.value!==normalized)this.search.value=normalized;
+  if(this.watchCodeSearch&&this.watchCodeSearch.value!==normalized)this.watchCodeSearch.value=normalized;
+
+  this.renderMother();
+  this.renderWatch();
+ }
+ updateTradingCodeSearchStatus(dseMatches,watchMatches,totalDse,totalWatch){
+  if(!this.watchCodeSearchStatus)return;
+  this.watchCodeSearchStatus.textContent=this.searchTerm
+   ?`${dseMatches} DSE match${dseMatches===1?"":"es"} • ${watchMatches} active watch-list match${watchMatches===1?"":"es"} for “${this.searchTerm}”`
+   :`Showing all ${totalDse} DSE codes and ${totalWatch} active watch-list codes`;
+ }
+ renderMother(){
+  const active=this.active()||{codes:[]};
+  const activeCodes=Array.isArray(active.codes)?active.codes:[];
+  const all=Array.isArray(this.s.motherCodes)?this.s.motherCodes:[];
+  const arr=this.searchTerm?all.filter(code=>String(code).toUpperCase().includes(this.searchTerm)):[...all];
+
+  this.motherMeta.textContent=`${arr.length} of ${all.length} codes${this.s.motherSource?" • "+this.s.motherSource:""}`;
+  this.mother.innerHTML=arr.length
+   ?arr.map(code=>`<div class="code-row${this.searchTerm?" v1112-search-match":""}">
+      <div><span class="code">${code}</span><span class="meta">${this.s.history[code]?.length||0} OHLC records</span></div>
+      <div class="actions">
+       ${this.s.history[code]?.length?`<button class="btn blue" data-chart="${code}">3M Chart</button>`:""}
+       <button class="btn ${activeCodes.includes(code)?"soft":"primary"}" data-add="${code}" ${activeCodes.includes(code)?"disabled":""}>${activeCodes.includes(code)?"Added":"+ Add"}</button>
+      </div>
+     </div>`).join("")
+   :`<div class="empty">${this.searchTerm?`No DSE trading code matches “${this.esc(this.searchTerm)}”.`:"No DSE trading codes. Import DSE codes or OHLC archive data."}</div>`;
+
+  this.mother.querySelectorAll("[data-add]").forEach(button=>button.onclick=()=>this.add(button.dataset.add));
+  this.mother.querySelectorAll("[data-chart]").forEach(button=>button.onclick=()=>this.openChart(button.dataset.chart));
+
+  const watchMatches=activeCodes.filter(code=>String(code).toUpperCase().includes(this.searchTerm)).length;
+  this.updateTradingCodeSearchStatus(arr.length,watchMatches,all.length,activeCodes.length);
+ }
+ renderWatch(){
+  const active=this.active();
+  const activeCodes=Array.isArray(active?.codes)?active.codes:[];
+  const arr=this.searchTerm?activeCodes.filter(code=>String(code).toUpperCase().includes(this.searchTerm)):[...activeCodes];
+
+  this.watchTitle.textContent=active.name;
+  this.watchMeta.textContent=`${arr.length} of ${activeCodes.length} codes`;
+  this.watch.innerHTML=arr.length
+   ?arr.map(code=>`<div class="code-row${this.searchTerm?" v1112-search-match":""}">
+      <div><span class="code">${code}</span><span class="meta">${this.s.history[code]?.length||0} OHLC records</span></div>
+      <div class="actions">
+       <button class="btn blue" data-chart="${code}" ${this.s.history[code]?.length?"":"disabled"}>3M Chart</button>
+       <button class="btn red" data-remove="${code}">Remove</button>
+      </div>
+     </div>`).join("")
+   :`<div class="empty">${this.searchTerm?`No active watch-list code matches “${this.esc(this.searchTerm)}”.`:"Add trading codes from the DSE Trading Code List."}</div>`;
+
+  this.watch.querySelectorAll("[data-chart]").forEach(button=>button.onclick=()=>this.openChart(button.dataset.chart));
+  this.watch.querySelectorAll("[data-remove]").forEach(button=>button.onclick=()=>this.remove(button.dataset.remove));
+
+  const dseMatches=this.s.motherCodes.filter(code=>code.includes(this.searchTerm)).length;
+  this.updateTradingCodeSearchStatus(dseMatches,arr.length,this.s.motherCodes.length,activeCodes.length);
+ }
  renderActivity(){this.activity.innerHTML=this.s.activity.length?this.s.activity.slice(0,8).map(x=>`<div><strong>${this.esc(x.m)}</strong><span>${new Date(x.at).toLocaleString()}</span></div>`).join(""):`<span class="small">No activity.</span>`}
  listAction(act,id){const l=this.s.watchLists.find(x=>x.id===id);if(!l)return;if(act==="select"){this.s.activeId=id;this.persist();this.render()}else if(act==="charts"){this.s.activeId=id;this.persist();this.render();this.openGallery()}else if(act==="edit")this.openList(l);else if(act==="delete"){if(this.s.watchLists.length===1)return this.toast("At least one list must remain.",true);if(confirm(`Delete "${l.name}"?`)){this.s.watchLists=this.s.watchLists.filter(x=>x.id!==id);if(this.s.activeId===id)this.s.activeId=this.s.watchLists[0].id;this.log(`Deleted watch list ${l.name}`);this.persist();this.render()}}}
  openList(l=null){this.editId=l?.id||null;this.listModalTitle.textContent=l?"Edit Watch List":"Create Watch List";this.listName.value=l?.name||"";this.open("listModal")}
@@ -2239,7 +4051,7 @@ document.querySelectorAll("[data-mother-tab]").forEach(b=>b.onclick=()=>this.mot
     if(codes.length<50)throw new Error("Only "+codes.length+" codes detected");
     this.prepareMother(codes,`${attempt.name}: ${url}`);
     this.commitMother(false,true);
-    if(!silent)this.toast(`Synced ${codes.length} mother codes.`);
+    if(!silent)this.toast(`Synced ${codes.length} DSE trading codes.`);
     return true
    }catch(e){lastError=e.message||String(e)}
   }
@@ -2260,7 +4072,7 @@ document.querySelectorAll("[data-mother-tab]").forEach(b=>b.onclick=()=>this.mot
   this.motherUrl.value="https://staticv2.amarstock.com/latest-share-price";
   const ok=await this.fetchMotherCodes(true);
   this.motherUrl.value=oldUrl;
-  if(ok)this.toast("Daily AmarStock mother list synchronized.")
+  if(ok)this.toast("Daily DSE trading-code list synchronized.")
  }
  async readMotherFiles(){
   const files=[...this.motherFiles.files];
@@ -2274,7 +4086,7 @@ document.querySelectorAll("[data-mother-tab]").forEach(b=>b.onclick=()=>this.mot
   this.pendingMotherSource=source;
   this.motherResult.style.display="block";
   this.motherResult.textContent=this.pendingMother.length
-   ?`Found ${this.pendingMother.length} unique trading codes. Merge them or replace the current mother list.`
+   ?`Found ${this.pendingMother.length} unique trading codes. Merge them or replace the current DSE Trading Code List.`
    :"No valid trading codes were detected.";
   this.motherCommitArea.style.display=this.pendingMother.length?"flex":"none"
  }
@@ -2283,9 +4095,9 @@ document.querySelectorAll("[data-mother-tab]").forEach(b=>b.onclick=()=>this.mot
   this.s.motherCodes=replace?[...this.pendingMother]:[...new Set([...this.s.motherCodes,...this.pendingMother])].sort();
   this.s.motherSource=this.pendingMotherSource;
   this.s.lastMotherImport=new Date().toISOString();
-  this.log(`${replace?"Replaced":"Merged"} mother list with ${this.pendingMother.length} codes`);
+  this.log(`${replace?"Replaced":"Merged"} DSE Trading Code List with ${this.pendingMother.length} codes`);
   this.persist();if(!silent)this.close("motherModal");this.render();
-  if(!silent)this.toast(`Mother list saved with ${this.s.motherCodes.length} codes.`)
+  if(!silent)this.toast(`DSE Trading Code List saved with ${this.s.motherCodes.length} codes.`)
  }
  showDownloadStatus(title,text,percent=0,state="working"){
   this.downloadStatusCard.style.display="block";
@@ -2614,7 +4426,7 @@ document.addEventListener("DOMContentLoaded",()=>{
  // Scroll helpers
  function scrollToTarget(name){
   let target=document.getElementById(name);
-  if(name==="downloadWorkspace")target=document.getElementById("downloadStatusCard")||document.querySelector(".v10-original-toolbar");
+  if(name==="downloadWorkspace")target=document.getElementById("downloadWorkspace")||document.getElementById("downloadStatusCard");
   target?.scrollIntoView({behavior:"smooth",block:"start"});
  }
  document.querySelectorAll("[data-v10-scroll]").forEach(button=>{
@@ -2623,6 +4435,17 @@ document.addEventListener("DOMContentLoaded",()=>{
    menus.forEach(menu=>menu.classList.remove("open"));
   });
  });
+
+ // Download Center action cards invoke the original application controls.
+ document.querySelectorAll("[data-v1116-action]").forEach(button=>{
+  button.addEventListener("click",event=>{
+   event.preventDefault();
+   const target=document.getElementById(button.dataset.v1116Action);
+   if(!target||target===button)return;
+   target.click();
+  });
+ });
+
 
  // Collapsible workspace builder
  const collapseState=safeRead(COLLAPSE_KEY,{});
@@ -2669,12 +4492,12 @@ document.addEventListener("DOMContentLoaded",()=>{
   "welcome","Terminal summary","Application identity and last archive import",false
  );
  makeCollapsible(
-  document.getElementById("downloadStatusCard"),
-  "download","Download center","Live archive progress, completion and errors",true
+  document.getElementById("downloadWorkspace"),
+  "download","Download center","All imports, synchronization, downloads, previews and backups",true
  );
  makeCollapsible(
   document.getElementById("marketWorkspace"),
-  "market","Trading-code workspace","Mother directory and active watch-list securities",true
+  "market","Trading-code workspace","DSE directory and active watch-list securities",true
  );
 
  // Individual watch-list and mother panels become collapsible too.
@@ -2683,8 +4506,8 @@ document.addEventListener("DOMContentLoaded",()=>{
   makeCollapsible(
    panel,
    index===0?"mother-panel":"watch-panel",
-   index===0?"Mother trading-code directory":"Active watch list",
-   index===0?"Browse the complete security directory":"Operate selected securities and charts",
+   index===0?"DSE trading-code directory":"Active watch list",
+   index===0?"Browse the complete DSE trading-code directory":"Operate selected securities and charts",
    true
   );
  });
@@ -3224,7 +5047,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   }
  });
 
- // Public refresh hook used after importing or synchronizing mother codes.
+ // Public refresh hook used after importing or synchronizing DSE trading codes.
  window.AbabilPortfolioCodes={
   refresh:fillSelects,
   getAll:codes
@@ -4634,6 +6457,698 @@ document.addEventListener("DOMContentLoaded",()=>{
  };
 });
 
+
+document.addEventListener("DOMContentLoaded",()=>{
+ const menu=document.getElementById("v119TerminalMenu");
+ const groups=document.getElementById("v119MenuGroups");
+ const toggle=document.getElementById("v119MenuToggle");
+ const closeBtn=document.getElementById("v119MenuClose");
+ const backdrop=document.getElementById("v119MenuBackdrop");
+
+ if(!menu||!groups||!toggle||!closeBtn||!backdrop)return;
+
+ const groupMap=[
+  ["theme selection","Appearance"],
+  ["theme","Appearance"],
+  ["appearance","Appearance"],
+  ["palette","Appearance"],
+  ["download","Data & Downloads"],
+  ["archive","Data & Downloads"],
+  ["import","Import & Storage"],
+  ["sync","Import & Storage"],
+  ["backup","Import & Storage"],
+  ["restore","Import & Storage"],
+  ["watch","Watch Lists"],
+  ["list","Watch Lists"],
+  ["chart","Charts & Analysis"],
+  ["indicator","Charts & Analysis"],
+  ["compare","Charts & Analysis"],
+  ["terminal","Trading Workspace"],
+  ["portfolio","Trading Workspace"],
+  ["report","Reports & Export"],
+  ["export","Reports & Export"],
+  ["print","Reports & Export"],
+  ["workspace","Workspaces"],
+  ["command","Utilities"],
+  ["notification","Utilities"],
+  ["clear","Maintenance"],
+  ["reset","Maintenance"],
+  ["delete","Maintenance"]
+ ];
+
+ const order=[
+  "Data & Downloads",
+  "Import & Storage",
+  "Watch Lists",
+  "Charts & Analysis",
+  "Trading Workspace",
+  "Reports & Export",
+  "Workspaces",
+  "Appearance",
+  "Utilities",
+  "Maintenance",
+  "General"
+ ];
+
+ function textOf(el){
+  return String(
+   el.textContent||
+   el.value||
+   el.getAttribute("aria-label")||
+   el.title||
+   ""
+  ).replace(/\s+/g," ").trim();
+ }
+
+ function classify(el){
+  const label=textOf(el).toLowerCase();
+  const aria=String(el.getAttribute("aria-label")||"").toLowerCase();
+
+  if(
+   label.includes("theme selection")||
+   aria.includes("theme selection")||
+   el.id==="v1118ThemeMenuAction"
+  ){
+   return "Appearance";
+  }
+
+  const haystack=[
+   el.id,
+   el.className,
+   el.name,
+   el.title,
+   el.getAttribute("aria-label"),
+   textOf(el)
+  ].filter(Boolean).join(" ").toLowerCase();
+
+  for(const [needle,groupLabel] of groupMap){
+   if(haystack.includes(needle))return groupLabel;
+  }
+  return "General";
+ }
+
+ /*
+  * Important: only collect commands from the main control deck and the
+  * original top toolbar. Never scan Trading Workspace cards, tabs or forms.
+  */
+ function sourceActions(){
+  const selectors=[
+   ".v10-control-deck .v10-menu-panel > button",
+   ".v10-control-deck > .v105-top-actions > button",
+   ".v10-original-toolbar > button",
+   ".v10-original-toolbar > a.btn"
+  ];
+
+  const found=[...document.querySelectorAll(selectors.join(","))];
+  const unique=[];
+  const seen=new Set();
+
+  for(const el of found){
+   if(!(el instanceof HTMLElement))continue;
+   if(el.closest("#v119TerminalMenu"))continue;
+
+   const label=textOf(el);
+   if(!label||/^(×|✕|close)$/i.test(label))continue;
+
+   const normalizedLabel=label
+    .toUpperCase()
+    .replace(/MOTHER/g,"DSE")
+    .replace(/[^A-Z0-9]+/g," ")
+    .trim();
+
+   const key=`LABEL:${normalizedLabel}`;
+
+   if(seen.has(key))continue;
+   seen.add(key);
+   unique.push(el);
+  }
+
+  return unique;
+ }
+
+ function activateSource(source){
+  /*
+   * Native click is intentionally dispatched on the original control so all
+   * existing listeners, proxy handlers and workspace switching remain intact.
+   */
+  source.dispatchEvent(new MouseEvent("click",{
+   bubbles:true,
+   cancelable:true,
+   view:window
+  }));
+ }
+
+ function cloneAction(source){
+  const clone=source.cloneNode(true);
+  clone.removeAttribute("id");
+  clone.querySelectorAll("[id]").forEach(node=>node.removeAttribute("id"));
+  clone.classList.add("v119-menu-action");
+  clone.classList.remove("active","open","selected");
+
+  if(clone.tagName==="INPUT"){
+   clone.type="button";
+  }else if(clone.tagName==="BUTTON"){
+   clone.type="button";
+  }
+
+  clone.addEventListener("click",event=>{
+   event.preventDefault();
+   event.stopPropagation();
+
+   const isThemeSelection=
+    source.id==="v1118ThemeMenuAction"||
+    source.getAttribute("aria-label")==="Theme Selection"||
+    /^\s*Theme Selection\s*$/i.test(textOf(source));
+
+   if(isThemeSelection){
+    /*
+     * Close only the opened menu panel through its native state handler.
+     * Do not hide the Terminal Menu container—the launcher must remain
+     * visible and reusable.
+     */
+    closeMenu(false);
+
+    /*
+     * Wait until the panel/backdrop close transition has released pointer
+     * interaction, then open the Theme dialog.
+     */
+    window.setTimeout(()=>{
+     window.dispatchEvent(new CustomEvent("v1124-open-theme-dialog"));
+    },220);
+
+    return;
+   }
+
+   closeMenu(false);
+   requestAnimationFrame(()=>activateSource(source));
+  });
+
+  return clone;
+ }
+
+ function createGroup(name,items,index){
+  const section=document.createElement("section");
+  section.className="v119-menu-group";
+  section.dataset.menuGroup=name;
+
+  const heading=document.createElement("button");
+  heading.type="button";
+  heading.className="v119-menu-group-title";
+  heading.setAttribute("aria-expanded","false");
+
+  const body=document.createElement("div");
+  body.className="v119-menu-group-body";
+  body.hidden=true;
+
+  section.classList.add("collapsed");
+
+  heading.innerHTML=`
+   <span>${name}</span>
+   <span class="count">${items.length}</span>
+   <span class="v1111-caret" aria-hidden="true">▼</span>
+  `;
+
+  items.forEach(item=>body.appendChild(cloneAction(item)));
+
+  heading.addEventListener("click",event=>{
+   event.preventDefault();
+   event.stopPropagation();
+
+   const willOpen=body.hidden;
+   body.hidden=!willOpen;
+   section.classList.toggle("collapsed",!willOpen);
+   heading.setAttribute("aria-expanded",willOpen?"true":"false");
+  });
+
+  section.append(heading,body);
+  return section;
+ }
+
+ function rebuild(){
+  const actions=sourceActions();
+  const grouped=new Map();
+
+  actions.forEach(action=>{
+   const group=classify(action);
+   if(!grouped.has(group))grouped.set(group,[]);
+   grouped.get(group).push(action);
+  });
+
+  groups.replaceChildren();
+
+  [...grouped.entries()]
+   .sort((a,b)=>{
+    const ai=order.indexOf(a[0]);
+    const bi=order.indexOf(b[0]);
+    return (ai<0?999:ai)-(bi<0?999:bi);
+   })
+   .forEach(([name,items],index)=>{
+    groups.appendChild(createGroup(name,items,index));
+   });
+
+  if(!groups.children.length){
+   const empty=document.createElement("div");
+   empty.className="v119-menu-empty";
+   empty.textContent="No terminal commands are currently available.";
+   groups.appendChild(empty);
+  }
+
+  /*
+   * Hide only the duplicate top-level command controls. Workspace buttons,
+   * report buttons, chart controls, tabs and portfolio controls remain intact.
+   */
+  document.querySelectorAll(".v10-control-deck").forEach(el=>{
+   el.classList.add("v119-menu-source-hidden");
+  });
+
+  document.querySelectorAll(".v10-original-toolbar > button,.v10-original-toolbar > a.btn").forEach(el=>{
+   el.classList.add("v119-menu-source-hidden");
+  });
+ }
+
+ function openMenu(){
+  menu.classList.add("open");
+  backdrop.classList.add("open");
+  document.body.classList.add("v119-menu-open");
+  toggle.setAttribute("aria-expanded","true");
+  toggle.setAttribute("aria-label","Close terminal menu");
+  const label=toggle.querySelector(".label");
+  if(label)label.textContent="Close Menu";
+  groups.scrollTop=0;
+ }
+
+ function closeMenu(returnFocus=true){
+  menu.classList.remove("open");
+  backdrop.classList.remove("open");
+  document.body.classList.remove("v119-menu-open");
+  toggle.setAttribute("aria-expanded","false");
+  toggle.setAttribute("aria-label","Open terminal menu");
+  const label=toggle.querySelector(".label");
+  if(label)label.textContent="Terminal Menu";
+  if(returnFocus)setTimeout(()=>toggle.focus(),20);
+ }
+
+ toggle.addEventListener("click",event=>{
+  event.preventDefault();
+  event.stopPropagation();
+  menu.classList.contains("open")?closeMenu():openMenu();
+ });
+
+ closeBtn.addEventListener("click",event=>{
+  event.preventDefault();
+  event.stopPropagation();
+  closeMenu();
+ });
+
+ backdrop.addEventListener("click",()=>closeMenu());
+
+ document.addEventListener("keydown",event=>{
+  if(event.key==="Escape"&&menu.classList.contains("open")){
+   event.preventDefault();
+   closeMenu();
+  }
+ });
+
+ /*
+  * No body-wide MutationObserver is used here. The former observer rebuilt
+  * the menu in response to its own DOM changes and interfered with clicks.
+  */
+ rebuild();
+ setTimeout(rebuild,700);
+
+ window.AbabilTerminalMenu={
+  open:openMenu,
+  close:closeMenu,
+  rebuild
+ };
+});
+
+document.addEventListener("keydown",event=>{
+ if(event.key!=="/"||event.ctrlKey||event.metaKey||event.altKey)return;
+ const target=event.target;
+ if(target instanceof HTMLInputElement||
+    target instanceof HTMLTextAreaElement||
+    target?.isContentEditable)return;
+
+ const input=document.getElementById("watchCodeSearch");
+ if(!input)return;
+ event.preventDefault();
+ input.focus();
+ input.select();
+});
+
+
+
+
+
+
+(function(){
+ const THEME_CONTROL_ID="v10ThemeQuick";
+
+ function ensureThemeDialog(){
+  let dialog=document.getElementById("v1124ThemeDialog");
+  if(dialog)return dialog;
+
+  dialog=document.createElement("div");
+  dialog.id="v1124ThemeDialog";
+  dialog.className="v1124-theme-dialog";
+  dialog.hidden=true;
+  dialog.innerHTML=`
+   <div class="v1124-theme-dialog-backdrop" data-v1124-close-theme></div>
+   <section class="v1124-theme-dialog-panel" role="dialog" aria-modal="true" aria-labelledby="v1124ThemeDialogTitle">
+    <header class="v1124-theme-dialog-header">
+     <div>
+      <span>APPEARANCE</span>
+      <h3 id="v1124ThemeDialogTitle">Choose Terminal Theme</h3>
+     </div>
+     <button type="button" class="v1124-theme-dialog-close" data-v1124-close-theme aria-label="Close">×</button>
+    </header>
+    <div class="v1124-theme-options"></div>
+   </section>
+  `;
+
+  document.body.appendChild(dialog);
+
+  dialog.addEventListener("click",event=>{
+   if(event.target.closest("[data-v1124-close-theme]")){
+    closeThemeDialog();
+   }
+  });
+
+  return dialog;
+ }
+
+ function openThemeDialog(){
+  const control=document.getElementById(THEME_CONTROL_ID);
+  if(!control)return;
+
+  const dialog=ensureThemeDialog();
+  const optionsHost=dialog.querySelector(".v1124-theme-options");
+  optionsHost.innerHTML="";
+
+  [...control.options].forEach(option=>{
+   const button=document.createElement("button");
+   button.type="button";
+   button.className="v1124-theme-option";
+   button.dataset.themeValue=option.value;
+   button.classList.toggle("active",option.value===control.value);
+   button.innerHTML=`
+    <span class="v1124-theme-preview" aria-hidden="true">
+     <i></i><i></i><i></i>
+    </span>
+    <span>
+     <strong>${option.textContent.trim()}</strong>
+     <small>${option.value===control.value?"Currently active":"Apply this theme"}</small>
+    </span>
+   `;
+
+   button.addEventListener("click",()=>{
+    control.value=option.value;
+    control.dispatchEvent(new Event("change",{bubbles:true}));
+    control.dispatchEvent(new Event("input",{bubbles:true}));
+
+    optionsHost.querySelectorAll(".v1124-theme-option").forEach(item=>{
+     const active=item.dataset.themeValue===control.value;
+     item.classList.toggle("active",active);
+     const small=item.querySelector("small");
+     if(small)small.textContent=active?"Currently active":"Apply this theme";
+    });
+
+    setTimeout(closeThemeDialog,180);
+   });
+
+   optionsHost.appendChild(button);
+  });
+
+  dialog.hidden=false;
+  dialog.setAttribute("aria-hidden","false");
+  document.body.classList.add("v1124-theme-dialog-open");
+
+  requestAnimationFrame(()=>{
+   const activeButton=
+    dialog.querySelector(".v1124-theme-option.active")||
+    dialog.querySelector(".v1124-theme-option")||
+    dialog.querySelector(".v1124-theme-dialog-close");
+
+   if(activeButton)activeButton.focus({preventScroll:true});
+  });
+ }
+
+ function closeThemeDialog(){
+  const dialog=document.getElementById("v1124ThemeDialog");
+  if(!dialog)return;
+
+  dialog.hidden=true;
+  dialog.setAttribute("aria-hidden","true");
+  document.body.classList.remove("v1124-theme-dialog-open");
+
+  const menuToggle=document.getElementById("v119MenuToggle");
+  if(menuToggle){
+   window.setTimeout(()=>menuToggle.focus({preventScroll:true}),20);
+  }
+ }
+
+ window.addEventListener("v1124-open-theme-dialog",openThemeDialog);
+
+ document.addEventListener("keydown",event=>{
+  const dialog=document.getElementById("v1124ThemeDialog");
+  if(event.key==="Escape"&&dialog&&!dialog.hidden){
+   event.preventDefault();
+   closeThemeDialog();
+  }
+ });
+
+
+})();
+
+
+
+
+
+(function(){
+ const TOOLTIP_ATTR="data-v1126-watch-tooltip";
+
+ function normalizedText(node){
+  return String(node?.textContent||"").replace(/\s+/g," ").trim();
+ }
+
+ function findWatchListsSection(){
+  const headings=[...document.querySelectorAll(
+   "h1,h2,h3,h4,h5,h6,.card-title,.panel-title,.section-title,strong"
+  )];
+
+  const title=headings.find(node=>
+   /^watch lists$/i.test(normalizedText(node))
+  );
+
+  if(!title)return null;
+
+  const section=title.closest(
+   "section,.card,.panel,.widget,.workspace,.workspace-panel,.watchlist-workspace,.watch-list-workspace"
+  );
+
+  if(!section)return null;
+
+  const sectionText=normalizedText(section);
+  return /manage stock groups/i.test(sectionText)?section:null;
+ }
+
+ function findWatchListContainer(section){
+  const explicit=section.querySelector(
+   "#watchLists,#watchListContainer,#watchlistContainer,"+
+   ".watch-lists,.watchlists,.watch-list-list,.watchlist-list,"+
+   ".watch-list-grid,.watchlist-grid,[data-watch-lists],[data-watchlists]"
+  );
+  if(explicit)return explicit;
+
+  const candidates=[...section.querySelectorAll(
+   ".list,.grid,.items,.tabs,.button-group,.watch-list-items,.watchlist-items,ul,ol"
+  )];
+
+  return candidates.find(node=>node.children.length>0)||section;
+ }
+
+ function isActionControl(element){
+  const text=normalizedText(element).toLowerCase();
+  return /^(add|create|new|delete|remove|rename|edit|save|cancel|manage)(\s|$)/i.test(text);
+ }
+
+ function getWatchListEntries(section,container){
+  const explicit=[...container.querySelectorAll(
+   "[data-watchlist-name],[data-watch-list-name],"+
+   "[data-watchlist-id],[data-watch-list-id],"+
+   ".watchlist-item,.watch-list-item,.watchlist-card,.watch-list-card,"+
+   ".watchlist-tab,.watch-list-tab,.watchlist-button,.watch-list-button"
+  )];
+
+  if(explicit.length){
+   return explicit.filter(item=>!isActionControl(item));
+  }
+
+  // Direct children are the safest fallback in this specific card.
+  return [...container.children].filter(item=>{
+   if(!(item instanceof HTMLElement))return false;
+   if(isActionControl(item))return false;
+   if(item.matches("script,style,template,form"))return false;
+   return normalizedText(item).length>0;
+  });
+ }
+
+ function getWatchListName(entry){
+  const dataName=
+   entry.dataset.watchlistName||
+   entry.dataset.watchListName||
+   entry.getAttribute("data-name");
+
+  if(dataName)return String(dataName).trim();
+
+  const named=entry.querySelector(
+   "[data-watchlist-title],[data-watch-list-title],"+
+   ".watchlist-name,.watch-list-name,.name,.title,strong,b"
+  );
+
+  if(named)return normalizedText(named);
+
+  return normalizedText(entry)
+   .replace(/\b\d+\s*(?:trading\s*)?(?:codes?|symbols?|stocks?|items?)\b.*$/i,"")
+   .replace(/[×⋮…]+$/,"")
+   .trim();
+ }
+
+ function parseCount(value){
+  const number=parseInt(String(value??"").trim(),10);
+  return Number.isFinite(number)?number:null;
+ }
+
+ function getWatchListCount(entry){
+  const dataCount=[
+   entry.dataset.tradingCodeCount,
+   entry.dataset.codeCount,
+   entry.dataset.watchlistCount,
+   entry.dataset.watchListCount,
+   entry.getAttribute("data-trading-code-count"),
+   entry.getAttribute("data-code-count")
+  ].map(parseCount).find(value=>value!==null);
+
+  if(dataCount!==undefined)return dataCount;
+
+  const countNode=entry.querySelector(
+   "[data-trading-code-count],[data-code-count],"+
+   ".trading-code-count,.code-count,.watchlist-count,.watch-list-count,.count,.badge"
+  );
+
+  if(countNode){
+   const match=normalizedText(countNode).match(/\d+/);
+   if(match)return parseInt(match[0],10);
+  }
+
+  const textCount=normalizedText(entry).match(
+   /(\d+)\s*(?:trading\s*)?(?:codes?|symbols?|stocks?|items?)/i
+  );
+  if(textCount)return parseInt(textCount[1],10);
+
+  // Count code chips/rows only inside this watch-list entry.
+  const codeElements=[...entry.querySelectorAll(
+   "[data-trading-code],[data-code],[data-symbol],"+
+   ".trading-code,.stock-code,.symbol-code,.code-chip,.watch-code"
+  )];
+
+  if(codeElements.length){
+   const values=codeElements.map(node=>
+    node.dataset.tradingCode||
+    node.dataset.code||
+    node.dataset.symbol||
+    normalizedText(node)
+   ).map(value=>String(value).trim().toUpperCase()).filter(Boolean);
+
+   return new Set(values).size;
+  }
+
+  // Some cards link to an external array/list using an ID.
+  const watchId=
+   entry.dataset.watchlistId||
+   entry.dataset.watchListId||
+   entry.getAttribute("data-id");
+
+  if(watchId){
+   const linked=document.querySelector(
+    `[data-watchlist-codes="${CSS.escape(watchId)}"],`+
+    `[data-watch-list-codes="${CSS.escape(watchId)}"]`
+   );
+   if(linked){
+    const linkedCodes=linked.querySelectorAll(
+     "[data-trading-code],[data-code],[data-symbol],.trading-code,.stock-code,.code-chip"
+    );
+    if(linkedCodes.length)return linkedCodes.length;
+   }
+  }
+
+  return 0;
+ }
+
+ function enhance(){
+  const section=findWatchListsSection();
+  if(!section)return;
+
+  section.dataset.v1126WatchListsSection="true";
+
+  const container=findWatchListContainer(section);
+  const entries=getWatchListEntries(section,container);
+
+  entries.forEach(entry=>{
+   const name=getWatchListName(entry);
+   if(!name)return;
+
+   const count=getWatchListCount(entry);
+   const noun=count===1?"trading code":"trading codes";
+   const tooltip=`${name} • ${count} ${noun}`;
+
+   entry.setAttribute(TOOLTIP_ATTR,tooltip);
+   entry.setAttribute("title",tooltip);
+
+   if(
+    !entry.hasAttribute("tabindex")&&
+    !entry.matches("a,button,input,select,textarea,[tabindex]")
+   ){
+    entry.tabIndex=0;
+   }
+
+   entry.setAttribute("aria-label",tooltip);
+  });
+ }
+
+ let timer=0;
+ function schedule(){
+  clearTimeout(timer);
+  timer=setTimeout(enhance,80);
+ }
+
+ if(document.readyState==="loading"){
+  document.addEventListener("DOMContentLoaded",enhance,{once:true});
+ }else{
+  enhance();
+ }
+
+ new MutationObserver(schedule).observe(document.documentElement,{
+  subtree:true,
+  childList:true,
+  characterData:true,
+  attributes:true,
+  attributeFilter:[
+   "data-watchlist-name",
+   "data-watch-list-name",
+   "data-watchlist-id",
+   "data-watch-list-id",
+   "data-trading-code-count",
+   "data-code-count"
+  ]
+ });
+
+ window.addEventListener("watchlist-updated",schedule);
+ window.addEventListener("watch-list-updated",schedule);
+ window.addEventListener("storage",schedule);
+})();
+
 </script>
 
 <div class="v105-command" id="v105CommandPalette" aria-hidden="true">
@@ -4757,5 +7272,21 @@ document.addEventListener("DOMContentLoaded",()=>{
  </div>
 </div>
 <div class="v115-watch-tooltip-arrow" id="v115WatchTooltipArrow"></div>
+
+<div class="v119-menu-backdrop" id="v119MenuBackdrop"></div>
+<div class="v119-terminal-menu" id="v119TerminalMenu">
+ <button class="btn primary v119-menu-toggle" id="v119MenuToggle" type="button" aria-expanded="false">
+  <span class="dots"><i></i><i></i><i></i><i></i></span>
+  <span class="label">Terminal Menu</span>
+  <span>▼</span>
+ </button>
+ <div class="v119-menu-panel" id="v119MenuPanel">
+  <div class="v119-menu-head">
+   <div><strong>Terminal Menu</strong><small>Grouped terminal actions and appearance settings</small></div>
+   <button class="btn soft v119-menu-close" id="v119MenuClose" type="button" aria-label="Close terminal menu" title="Close menu">✕</button>
+  </div>
+  <div class="v119-menu-groups" id="v119MenuGroups"></div>
+ </div>
+</div>
 </body>
 </html>
