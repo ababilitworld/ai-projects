@@ -33,12 +33,12 @@ jobs:
 
       - name: Install production dependencies
         run: |
-          composer install \
-            --no-dev \
-            --prefer-dist \
-            --no-interaction \
-            --no-progress \
-            --optimize-autoloader
+          # composer install \
+          #   --no-dev \
+          #   --prefer-dist \
+          #   --no-interaction \
+          #   --no-progress \
+          #   --classmap-authoritative
 
       - name: Deploy development website
         uses: SamKirkland/FTP-Deploy-Action@v4.4.0
@@ -82,12 +82,12 @@ jobs:
 
       - name: Install optimized production dependencies
         run: |
-          composer install \
-            --no-dev \
-            --prefer-dist \
-            --no-interaction \
-            --no-progress \
-            --classmap-authoritative
+          # composer install \
+          #   --no-dev \
+          #   --prefer-dist \
+          #   --no-interaction \
+          #   --no-progress \
+          #   --classmap-authoritative
 
       - name: Deploy production website
         uses: SamKirkland/FTP-Deploy-Action@v4.4.0
