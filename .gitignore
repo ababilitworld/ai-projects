@@ -1,0 +1,16 @@
+/.idea/
+/.vscode/
+/node_modules/
+/vendor/
+
+.env
+.env.*
+!.env.example
+
+*.log
+/phpunit.xml
+/auth.json
+/composer.phar
+
+.DS_Store
+Thumbs.db
