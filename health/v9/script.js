@@ -8,6 +8,7 @@
   const status = document.getElementById('layoutStatus');
   const pageCount = document.getElementById('pageCount');
   let userZoom = 1;
+  let resizeTimer = 0;
 
   const pageRules = {
     a0: '@page{size:A0 portrait;margin:0}',
@@ -22,11 +23,30 @@
     const n = page.querySelector('.folio-number');
     if (n) n.textContent = `পৃষ্ঠা ${i + 1} / ${pages.length}`;
   });
-  pageCount.textContent = `${pages.length} পৃষ্ঠা`;
+  if (pageCount) pageCount.textContent = `${pages.length} পৃষ্ঠা`;
+
+  function updateResponsivePreview() {
+    if (window.matchMedia('print').matches) return;
+
+    const isPhoneOrTablet = window.innerWidth <= 900;
+    if (!isPhoneOrTablet) {
+      body.style.removeProperty('--preview-scale');
+      return;
+    }
+
+    const paperWidthsMm = { a0: 841, a4: 210, a5: 148 };
+    const selected = body.dataset.paper || 'a4';
+    const paperWidthMm = paperWidthsMm[selected] || 210;
+    const availableWidth = Math.max(240, window.innerWidth - 16);
+    const cssPixelsPerMm = 96 / 25.4;
+    const previewScale = availableWidth / (paperWidthMm * cssPixelsPerMm);
+    body.style.setProperty('--preview-scale', String(previewScale));
+  }
 
   function applyZoom() {
+    updateResponsivePreview();
     book.style.transform = `scale(${userZoom})`;
-    book.style.marginBottom = `${Math.max(50, (userZoom - 1) * book.offsetHeight + 50)}px`;
+    book.style.marginBottom = `${Math.max(34, (userZoom - 1) * book.offsetHeight + 34)}px`;
     zoomLabel.textContent = `${Math.round(userZoom * 100)}%`;
   }
 
@@ -36,11 +56,9 @@
       if (el.scrollHeight > el.clientHeight + 2 || el.scrollWidth > el.clientWidth + 2) overflowing.push(i + 1);
     });
     if (overflowing.length) {
-      status.textContent = `⚠ Content overflow: page ${overflowing.join(', ')}`;
-      status.className = 'layout-bad';
+      if (status) { status.textContent = `⚠ Content overflow: page ${overflowing.join(', ')}`; status.className = 'layout-bad'; }
     } else {
-      status.textContent = '✓ সব পৃষ্ঠার content সম্পূর্ণ দৃশ্যমান';
-      status.className = 'layout-ok';
+      if (status) { status.textContent = '✓ সব পৃষ্ঠার content সম্পূর্ণ দৃশ্যমান'; status.className = 'layout-ok'; }
     }
   }
 
@@ -51,6 +69,7 @@
     dynamic.textContent = pageRules[size];
     localStorage.setItem('heart-routine-paper', size);
     userZoom = 1;
+    updateResponsivePreview();
     applyZoom();
     requestAnimationFrame(validateLayout);
   }
@@ -59,10 +78,63 @@
   document.getElementById('zoomIn').addEventListener('click', () => { userZoom = Math.min(2.2, userZoom + .1); applyZoom(); });
   document.getElementById('zoomOut').addEventListener('click', () => { userZoom = Math.max(.35, userZoom - .1); applyZoom(); });
   document.getElementById('resetZoom').addEventListener('click', () => { userZoom = 1; applyZoom(); });
-  document.getElementById('printBtn').addEventListener('click', () => window.print());
-  window.addEventListener('beforeprint', () => { dynamic.textContent = pageRules[body.dataset.paper] || pageRules.a4; });
-  window.addEventListener('load', validateLayout);
-  window.addEventListener('resize', validateLayout);
+  document.getElementById('printBtn').addEventListener('click', () => {
+    dynamic.textContent = pageRules[body.dataset.paper] || pageRules.a4;
+    document.documentElement.classList.add('print-preparing');
+    document.getElementById('appHeader')?.classList.remove('controls-open');
+    document.getElementById('exerciseMenu')?.classList.remove('is-open');
+    book.style.transform = 'none';
+    book.style.marginBottom = '0';
+    window.print();
+  });
+
+  const terminalPrintSelectors = '#terminalLauncher,#terminalDock,#terminalDockBackdrop,#terminalModalShell,#jpgPanel';
+  function suppressTerminalForOutput() {
+    document.querySelectorAll(terminalPrintSelectors).forEach(element => {
+      element.dataset.outputDisplay = element.style.display || '';
+      element.style.setProperty('display', 'none', 'important');
+      element.style.setProperty('visibility', 'hidden', 'important');
+      element.style.setProperty('opacity', '0', 'important');
+    });
+  }
+  function restoreTerminalAfterOutput() {
+    document.querySelectorAll(terminalPrintSelectors).forEach(element => {
+      element.style.removeProperty('display');
+      element.style.removeProperty('visibility');
+      element.style.removeProperty('opacity');
+      delete element.dataset.outputDisplay;
+    });
+  }
+
+  window.addEventListener('beforeprint', () => {
+    dynamic.textContent = pageRules[body.dataset.paper] || pageRules.a4;
+    document.documentElement.classList.add('print-preparing');
+    suppressTerminalForOutput();
+    book.style.transform = 'none';
+    book.style.marginBottom = '0';
+  });
+
+  window.addEventListener('afterprint', () => {
+    document.documentElement.classList.remove('print-preparing');
+    restoreTerminalAfterOutput();
+    applyZoom();
+  });
+
+  window.addEventListener('load', () => {
+    updateResponsivePreview();
+    applyZoom();
+    validateLayout();
+  });
+
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = window.setTimeout(() => {
+      if (window.innerWidth <= 900 && userZoom < 1) userZoom = 1;
+      updateResponsivePreview();
+      applyZoom();
+      validateLayout();
+    }, 80);
+  });
 
 
   // ---------------- SINGLE A0 COMPOSITE DSLR JPG EXPORT ----------------
@@ -193,8 +265,14 @@
       imageTimeout: 30000,
       removeContainer: true,
       onclone: clonedDoc => {
+        clonedDoc.querySelectorAll(
+          '#terminalLauncher,#terminalDock,#terminalDockBackdrop,#terminalModalShell,#jpgPanel,#legacyControlBridge,' +
+          '.terminal-launcher,.terminal-dock,.terminal-dock-backdrop,.terminal-modal-shell,.terminal-modal,.terminal-modal-backdrop,.no-print'
+        ).forEach(element => element.remove());
+
         const clonedStage = clonedDoc.getElementById('a0CompositeStage');
         if (clonedStage) {
+          clonedStage.querySelectorAll('.no-print,.terminal-launcher,.terminal-dock,.terminal-modal').forEach(element => element.remove());
           clonedStage.style.position = 'absolute';
           clonedStage.style.left = '0';
           clonedStage.style.top = '0';
@@ -232,6 +310,7 @@
     const quality = Number(jpgQuality.value || .98);
     downloadJpg.disabled = true;
     document.body.classList.add('is-exporting');
+    suppressTerminalForOutput();
     exportBar.style.width = '2%';
 
     try {
@@ -245,9 +324,134 @@
     } finally {
       downloadJpg.disabled = false;
       document.body.classList.remove('is-exporting');
+      restoreTerminalAfterOutput();
     }
   });
 
 
   setPaper(localStorage.getItem('heart-routine-paper') || 'a4');
 })();
+
+
+// V9 responsive sticky header interactions.
+(() => {
+  const appHeader = document.getElementById('appHeader');
+  const menuToggle = document.getElementById('headerMenuToggle');
+  const controls = document.getElementById('headerControls');
+  const exerciseMenu = document.getElementById('exerciseMenu');
+  const exerciseToggle = document.getElementById('exerciseMenuToggle');
+  const progressBar = document.getElementById('headerProgressBar');
+  const menuBackdrop = document.getElementById('headerMenuBackdrop');
+
+  if (!appHeader) return;
+
+  const setControlsOpen = (open) => {
+    appHeader.classList.toggle('controls-open', open);
+    menuToggle?.setAttribute('aria-expanded', String(open));
+    document.body.classList.toggle('mobile-tools-open', open && window.innerWidth <= 720);
+  };
+
+  const setExerciseOpen = (open) => {
+    exerciseMenu?.classList.toggle('is-open', open);
+    exerciseToggle?.setAttribute('aria-expanded', String(open));
+  };
+
+  menuToggle?.addEventListener('click', (event) => {
+    event.stopPropagation();
+    setControlsOpen(!appHeader.classList.contains('controls-open'));
+  });
+
+  menuBackdrop?.addEventListener('click', () => {
+    setExerciseOpen(false);
+    setControlsOpen(false);
+  });
+
+  exerciseToggle?.addEventListener('click', (event) => {
+    event.stopPropagation();
+    setExerciseOpen(!exerciseMenu.classList.contains('is-open'));
+  });
+
+  document.addEventListener('click', (event) => {
+    if (controls && !appHeader.contains(event.target)) setControlsOpen(false);
+    if (exerciseMenu && !exerciseMenu.contains(event.target)) setExerciseOpen(false);
+  });
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key !== 'Escape') return;
+    setExerciseOpen(false);
+    setControlsOpen(false);
+    menuToggle?.focus();
+  });
+
+  const updateHeaderState = () => {
+    document.body.classList.toggle('header-scrolled', window.scrollY > 24);
+    const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+    const progress = scrollable > 0 ? Math.min(100, (window.scrollY / scrollable) * 100) : 0;
+    if (progressBar) progressBar.style.width = `${progress}%`;
+  };
+
+  window.addEventListener('scroll', updateHeaderState, { passive: true });
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > 1180) setControlsOpen(false);
+    if (window.innerWidth > 720) document.body.classList.remove('mobile-tools-open');
+  });
+  updateHeaderState();
+})();
+
+
+
+// V99.5 rebuilt floating terminal, grouped command modals and appearance themes.
+(() => {
+  const root = document.documentElement;
+  const launcher = document.getElementById('terminalLauncher');
+  const dock = document.getElementById('terminalDock');
+  const dockBackdrop = document.getElementById('terminalDockBackdrop');
+  const dockClose = document.getElementById('terminalDockClose');
+  const shell = document.getElementById('terminalModalShell');
+  const modalBackdrop = document.getElementById('terminalModalBackdrop');
+  const activeThemeLabel = document.getElementById('terminalActiveTheme');
+  if (!launcher || !dock || !shell) return;
+
+  const themes = {'dark-glass':'Dark Glass','classic-light':'Classic Light',sapphire:'Sapphire',emerald:'Emerald','royal-purple':'Royal Purple','carbon-oled':'Carbon OLED',crimson:'Crimson',coffee:'Coffee',aurora:'Aurora'};
+  let lastFocus = launcher;
+  const pages = () => [...document.querySelectorAll('.paper-page')];
+
+  function setDock(open){ dock.classList.toggle('open',open); dockBackdrop?.classList.toggle('open',open); launcher.setAttribute('aria-expanded',String(open)); dock.setAttribute('aria-hidden',String(!open)); document.body.classList.toggle('terminal-ui-open',open || shell.classList.contains('open')); if(open) dockClose?.focus(); }
+  function closeModal(){ const open=shell.querySelector('.terminal-modal:not([hidden])'); if(open) open.hidden=true; shell.classList.remove('open'); shell.setAttribute('aria-hidden','true'); document.body.classList.toggle('terminal-ui-open',dock.classList.contains('open')); lastFocus?.focus?.(); }
+  function openModal(id){ const modal=document.getElementById(id); if(!modal)return; lastFocus=document.activeElement; shell.querySelectorAll('.terminal-modal').forEach(m=>m.hidden=true); modal.hidden=false; shell.classList.add('open'); shell.setAttribute('aria-hidden','false'); setDock(false); requestAnimationFrame(()=>modal.querySelector('button,[href],input,select')?.focus()); }
+  function clickId(id){ document.getElementById(id)?.click(); }
+  function syncZoom(){ const value=document.getElementById('zoomLabel')?.textContent || '100%'; const out=document.getElementById('terminalZoomLabel'); if(out)out.textContent=value; }
+  function syncPaper(){ const value=document.getElementById('paperSize')?.value || document.body.dataset.paper || 'a4'; document.querySelectorAll('[data-paper-command]').forEach(b=>b.classList.toggle('active',b.dataset.paperCommand===value)); }
+  function applyTheme(value,persist=true){ const selected=themes[value]?value:'dark-glass'; root.dataset.theme=selected; root.style.colorScheme=selected==='classic-light'?'light':'dark'; document.querySelectorAll('[data-theme-value]').forEach(b=>{const on=b.dataset.themeValue===selected;b.classList.toggle('active',on);b.setAttribute('aria-pressed',String(on));}); if(activeThemeLabel)activeThemeLabel.textContent=`${themes[selected]} active`; if(persist)localStorage.setItem('heart-routine-theme',selected); }
+  function nearestPageIndex(){ const y=window.scrollY+window.innerHeight*.35; let best=0,dist=Infinity; pages().forEach((p,i)=>{const d=Math.abs(p.offsetTop-y);if(d<dist){dist=d;best=i;}});return best; }
+  function goPage(delta){ const list=pages(); if(!list.length)return; const i=Math.max(0,Math.min(list.length-1,nearestPageIndex()+delta)); list[i].scrollIntoView({behavior:'smooth',block:'start'}); }
+
+  launcher.addEventListener('click',()=>setDock(!dock.classList.contains('open'))); dockClose?.addEventListener('click',()=>setDock(false)); dockBackdrop?.addEventListener('click',()=>setDock(false));
+  document.querySelectorAll('[data-open-terminal-modal]').forEach(b=>b.addEventListener('click',()=>openModal(b.dataset.openTerminalModal)));
+  document.querySelectorAll('[data-close-terminal-modal]').forEach(b=>b.addEventListener('click',closeModal)); modalBackdrop?.addEventListener('click',closeModal);
+  document.querySelectorAll('[data-theme-value]').forEach(b=>b.addEventListener('click',()=>applyTheme(b.dataset.themeValue)));
+  document.querySelectorAll('[data-paper-command]').forEach(b=>b.addEventListener('click',()=>{const s=document.getElementById('paperSize');if(s){s.value=b.dataset.paperCommand;s.dispatchEvent(new Event('change',{bubbles:true}));}syncPaper();}));
+  shell.addEventListener('click',e=>{const pageButton=e.target.closest('[data-page-index]');if(pageButton){const list=pages();const index=Number(pageButton.dataset.pageIndex);if(Number.isInteger(index)&&list[index]){closeModal();setTimeout(()=>list[index].scrollIntoView({behavior:'smooth',block:'start'}),80);}return;}const b=e.target.closest('[data-command]');if(!b)return;const c=b.dataset.command;if(c==='print'){closeModal();setTimeout(()=>clickId('printBtn'),80);}if(c==='image'){closeModal();setTimeout(()=>clickId('jpgBtn'),80);}if(c==='top')window.scrollTo({top:0,behavior:'smooth'});if(c==='bottom')window.scrollTo({top:document.documentElement.scrollHeight,behavior:'smooth'});if(c==='zoom-in'){clickId('zoomIn');setTimeout(syncZoom,0);}if(c==='zoom-out'){clickId('zoomOut');setTimeout(syncZoom,0);}if(c==='zoom-reset'){clickId('resetZoom');setTimeout(syncZoom,0);}if(c==='previous')goPage(-1);if(c==='next')goPage(1);});
+  document.getElementById('terminalFocusMode')?.addEventListener('change',e=>document.body.classList.toggle('terminal-focus-mode',e.target.checked));
+  document.getElementById('terminalCompactHeader')?.addEventListener('change',e=>document.body.classList.toggle('terminal-compact-header',e.target.checked));
+  document.getElementById('terminalFullscreen')?.addEventListener('change',async e=>{try{if(e.target.checked&&!document.fullscreenElement)await document.documentElement.requestFullscreen();else if(!e.target.checked&&document.fullscreenElement)await document.exitFullscreen();}catch(err){e.target.checked=!!document.fullscreenElement;}});
+  document.addEventListener('fullscreenchange',()=>{const c=document.getElementById('terminalFullscreen');if(c)c.checked=!!document.fullscreenElement;});
+  document.addEventListener('keydown',e=>{if(e.key!=='Escape')return;if(shell.classList.contains('open'))closeModal();else if(dock.classList.contains('open')){setDock(false);launcher.focus();}});
+  window.addEventListener('beforeprint',()=>{setDock(false);closeModal();});
+  document.getElementById('paperSize')?.addEventListener('change',syncPaper); document.getElementById('zoomIn')?.addEventListener('click',()=>setTimeout(syncZoom,0)); document.getElementById('zoomOut')?.addEventListener('click',()=>setTimeout(syncZoom,0)); document.getElementById('resetZoom')?.addEventListener('click',()=>setTimeout(syncZoom,0));
+  applyTheme(localStorage.getItem('heart-routine-theme')||'dark-glass',false); syncPaper(); syncZoom();
+})();
+
+
+// V99.6 emergency terminal visibility guard.
+document.addEventListener('DOMContentLoaded', function () {
+  var launcher = document.getElementById('terminalLauncher');
+  if (!launcher) return;
+  launcher.hidden = false;
+  launcher.removeAttribute('hidden');
+  launcher.style.setProperty('display','flex','important');
+  launcher.style.setProperty('visibility','visible','important');
+  launcher.style.setProperty('opacity','1','important');
+  launcher.style.setProperty('z-index','2147483647','important');
+  launcher.setAttribute('title','Open Action, Navigation, Interaction and Appearance terminal');
+});

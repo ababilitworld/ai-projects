@@ -26,3 +26,11 @@ A0 SUPER DSLR JPG EXPORT
 5. 300 DPI-তে অনেক RAM দরকার; export fail হলে 240 DPI ব্যবহার করুন।
 6. প্রতিটি page আলাদা high-quality JPG হিসেবে download হবে।
 7. Browser download permission চাইলে Allow multiple downloads দিন।
+
+
+V9 Header Upgrade:
+- Interactive sticky command header
+- Responsive mobile tools panel
+- Exercise dropdown with relative links
+- Scroll progress indicator
+- Larger touch targets and keyboard support
