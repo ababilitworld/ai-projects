@@ -737,6 +737,106 @@ header h1{font-size:1.55rem!important}
 .v11-tab.active{
  color:#fff!important;background:linear-gradient(135deg,var(--v10-primary),var(--v10-primary-2))!important;
 }
+
+/* V11.21 — hierarchical Trading Workspace navigation */
+.v11-workspace-menu{
+ align-items:flex-start;
+ overflow:visible;
+ flex-wrap:wrap;
+ gap:8px;
+}
+.v11-menu-primary,
+.v11-menu-group > summary{
+ display:inline-flex;
+ align-items:center;
+ gap:8px;
+ min-height:42px;
+ padding:8px 13px;
+ border:1px solid transparent;
+ border-radius:12px;
+ color:var(--v10-muted);
+ background:transparent;
+ font-weight:800;
+ cursor:pointer;
+ list-style:none;
+ user-select:none;
+ transition:background .18s ease,border-color .18s ease,color .18s ease,transform .18s ease;
+}
+.v11-menu-group > summary::-webkit-details-marker{display:none}
+.v11-menu-group > summary:hover,
+.v11-menu-primary:hover{
+ color:var(--v10-text)!important;
+ border-color:var(--v10-line)!important;
+ background:color-mix(in srgb,var(--v10-primary) 8%,var(--v10-card))!important;
+}
+.v11-menu-icon{
+ display:grid;
+ width:22px;
+ height:22px;
+ place-items:center;
+ border-radius:7px;
+ color:var(--v10-primary);
+ background:color-mix(in srgb,var(--v10-primary) 12%,transparent);
+ font-size:.78rem;
+ line-height:1;
+}
+.v11-menu-chevron{margin-left:3px;transition:transform .18s ease}
+.v11-menu-group[open] > summary .v11-menu-chevron{transform:rotate(180deg)}
+.v11-menu-group{
+ position:relative;
+ flex:0 0 auto;
+}
+.v11-menu-group.active-group > summary{
+ color:var(--v10-text);
+ border-color:color-mix(in srgb,var(--v10-primary) 44%,var(--v10-line));
+ background:color-mix(in srgb,var(--v10-primary) 10%,var(--v10-card));
+}
+.v11-submenu{
+ position:absolute;
+ z-index:80;
+ top:calc(100% + 8px);
+ left:0;
+ display:grid;
+ min-width:190px;
+ gap:5px;
+ padding:7px;
+ border:1px solid var(--v10-line);
+ border-radius:14px;
+ background:var(--v10-panel);
+ box-shadow:var(--v10-shadow);
+}
+.v11-submenu .v11-tab{
+ width:100%!important;
+ min-height:38px!important;
+ padding:8px 11px!important;
+ border-radius:10px!important;
+ text-align:left;
+}
+.v11-menu-primary.active{
+ color:#fff!important;
+ border-color:transparent!important;
+ background:linear-gradient(135deg,var(--v10-primary),var(--v10-primary-2))!important;
+}
+.v11-menu-primary.active .v11-menu-icon{
+ color:#fff;
+ background:rgba(255,255,255,.16);
+}
+@media(max-width:640px){
+ .v11-workspace-menu{display:grid;grid-template-columns:1fr;overflow:visible}
+ .v11-menu-primary,.v11-menu-group,.v11-menu-group > summary{width:100%}
+ .v11-menu-group > summary{justify-content:flex-start}
+ .v11-menu-chevron{margin-left:auto}
+ .v11-submenu{position:static;margin-top:6px;min-width:0;box-shadow:none;background:color-mix(in srgb,var(--v10-card) 82%,transparent)}
+}
+/* V11.22 — modal-first Trading navigation */
+#aitPsaTradingModal .v11-workspace-menu{display:none!important}
+#aitPsaTradingModal .v11-shell{margin:0}
+.ait-psa-trading-launcher-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.ait-psa-trading-tool-grid{grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+.ait-psa-trading-tool-grid .ait-psa-terminal-command{min-height:150px}
+@media(max-width:760px){
+ .ait-psa-trading-launcher-grid{grid-template-columns:1fr}
+}
 .v11-workspace{display:none}
 .v11-workspace.active{display:block}
 .v11-grid{display:grid;grid-template-columns:1fr;gap:12px}
@@ -4431,15 +4531,38 @@ svg[data-chart] {
 </div>
 
 <section class="v11-shell" id="v11Terminal">
- <nav class="v11-tabs" aria-label="Trading terminal workspaces">
-  <button class="v11-tab active" type="button" data-v11-tab="charts">Charts</button>
-  <button class="v11-tab" type="button" data-v11-tab="indicators">Indicators</button>
-  <button class="v11-tab" type="button" data-v11-tab="comparison">Comparison</button>
-  <button class="v11-tab" type="button" data-v11-tab="portfolio">Portfolio</button>
-  <button class="v11-tab" type="button" data-v11-tab="vpa">VPA</button>
-  <button class="v11-tab" type="button" data-v11-tab="potential">AIT Potential</button>
-  <button class="v11-tab" type="button" data-v11-tab="explorer">Explorer</button>
-  <button class="v11-tab" type="button" data-v11-tab="reports">Reports</button>
+ <nav class="v11-tabs v11-workspace-menu" aria-label="Trading terminal workspaces">
+  <button class="v11-tab v11-menu-primary" type="button" data-v11-tab="portfolio">
+   <span class="v11-menu-icon" aria-hidden="true">◫</span>
+   <span>Portfolio</span>
+  </button>
+
+  <details class="v11-menu-group" data-v11-group="report" open>
+   <summary>
+    <span class="v11-menu-icon" aria-hidden="true">▥</span>
+    <span>Report</span>
+    <span class="v11-menu-chevron" aria-hidden="true">⌄</span>
+   </summary>
+   <div class="v11-submenu">
+    <button class="v11-tab active" type="button" data-v11-tab="charts">Charts</button>
+    <button class="v11-tab" type="button" data-v11-tab="reports">Report</button>
+    <button class="v11-tab" type="button" data-v11-tab="explorer">Explorer</button>
+   </div>
+  </details>
+
+  <details class="v11-menu-group" data-v11-group="scanner">
+   <summary>
+    <span class="v11-menu-icon" aria-hidden="true">⌁</span>
+    <span>Scanner</span>
+    <span class="v11-menu-chevron" aria-hidden="true">⌄</span>
+   </summary>
+   <div class="v11-submenu">
+    <button class="v11-tab" type="button" data-v11-tab="indicators">Indicators</button>
+    <button class="v11-tab" type="button" data-v11-tab="vpa">VPA</button>
+    <button class="v11-tab" type="button" data-v11-tab="potential">AIT Potential</button>
+    <button class="v11-tab" type="button" data-v11-tab="comparison">Comparison</button>
+   </div>
+  </details>
  </nav>
 
  <section class="v11-workspace active" data-v11-workspace="charts">
@@ -6159,8 +6282,20 @@ document.addEventListener("DOMContentLoaded",()=>{
  const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]));
 
  function selectTab(name){
+  const available=tabs.map(t=>t.dataset.v11Tab);
+  if(!available.includes(name))name="charts";
   tabs.forEach(t=>t.classList.toggle("active",t.dataset.v11Tab===name));
   workspaces.forEach(w=>w.classList.toggle("active",w.dataset.v11Workspace===name));
+
+  const reportTabs=["charts","reports","explorer"];
+  const scannerTabs=["indicators","vpa","potential","comparison"];
+  document.querySelectorAll("[data-v11-group]").forEach(group=>{
+   const groupName=group.dataset.v11Group;
+   const isActive=(groupName==="report"&&reportTabs.includes(name))||(groupName==="scanner"&&scannerTabs.includes(name));
+   group.classList.toggle("active-group",isActive);
+   if(isActive)group.open=true;
+  });
+
   try{localStorage.setItem(ACTIVE_TAB_KEY,JSON.stringify(name))}catch{}
   document.getElementById("v11Terminal")?.scrollIntoView({behavior:"smooth",block:"start"});
   if(name==="explorer")renderExplorer();
@@ -8662,7 +8797,11 @@ document.addEventListener("keydown",event=>{
  <section class="ait-psa-terminal-modal" id="aitPsaWorkspaceModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">TERMINAL GROUP</span><h2>▦ Workspace</h2><p>Open a full-width workspace terminal.</p></div><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" id="aitPsaOpenDownload" data-ait-psa-open="aitPsaDownloadModal" type="button"><span>⇩</span><b>Download Center</b><small>Archive, import, sync and download operations.</small></button><button class="ait-psa-terminal-command" id="aitPsaOpenWatchlist" data-ait-psa-open="aitPsaWatchlistModal" type="button"><span>★</span><b>Watch List</b><small>Manage watch lists and DSE trading codes.</small></button><button class="ait-psa-terminal-command" id="aitPsaOpenTrading" data-ait-psa-open="aitPsaTradingModal" type="button"><span>▥</span><b>Trading</b><small>Open the complete trading workspace.</small></button></div></div></section>
  <section class="ait-psa-terminal-modal ait-psa-workspace-modal" id="aitPsaDownloadModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">WORKSPACE TERMINAL</span><h2>⇩ Download Center</h2><p>Archive, import, synchronization and download management.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaWorkspaceModal" type="button">← Workspace</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body ait-psa-workspace-host" id="aitPsaDownloadHost"></div></section>
  <section class="ait-psa-terminal-modal ait-psa-workspace-modal" id="aitPsaWatchlistModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">WORKSPACE TERMINAL</span><h2>★ Watch List</h2><p>Manage stock groups, trading codes and chart access.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaWorkspaceModal" type="button">← Workspace</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body ait-psa-workspace-host" id="aitPsaWatchlistHost"></div></section>
- <section class="ait-psa-terminal-modal ait-psa-workspace-modal" id="aitPsaTradingModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">WORKSPACE TERMINAL</span><h2>▥ Trading</h2><p>Complete trading terminal and analysis workspace.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaWorkspaceModal" type="button">← Workspace</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body ait-psa-workspace-host" id="aitPsaTradingHost"></div></section>
+ <section class="ait-psa-terminal-modal" id="aitPsaTradingLauncherModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">TRADING WORKSPACE</span><h2>▥ Trading</h2><p>Choose a trading workspace category.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaWorkspaceModal" type="button">← Workspace</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid ait-psa-trading-launcher-grid"><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaPortfolioMenuModal" type="button"><span>◫</span><b>Portfolio</b><small>Positions, quantities, cost, value and profit or loss.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaReportMenuModal" type="button"><span>▥</span><b>Report</b><small>Charts, generated reports and historical data explorer.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaScannerMenuModal" type="button"><span>⌁</span><b>Scanner</b><small>Indicators, VPA, AIT Potential and comparison analysis.</small></button></div></div></section>
+ <section class="ait-psa-terminal-modal" id="aitPsaPortfolioMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">TRADING CATEGORY</span><h2>◫ Portfolio</h2><p>Select the portfolio workspace.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaTradingLauncherModal" type="button">← Trading</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid ait-psa-trading-tool-grid"><button class="ait-psa-terminal-command" data-ait-trading-tab="portfolio" data-ait-trading-group="portfolio" type="button"><span>◫</span><b>Portfolio Manager</b><small>Manage holdings and review current portfolio performance.</small></button></div></div></section>
+ <section class="ait-psa-terminal-modal" id="aitPsaReportMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">TRADING CATEGORY</span><h2>▥ Report</h2><p>Select a reporting and exploration workspace.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaTradingLauncherModal" type="button">← Trading</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid ait-psa-trading-tool-grid"><button class="ait-psa-terminal-command" data-ait-trading-tab="charts" data-ait-trading-group="report" type="button"><span>▥</span><b>Charts</b><small>Open the multi-chart analysis workspace.</small></button><button class="ait-psa-terminal-command" data-ait-trading-tab="reports" data-ait-trading-group="report" type="button"><span>≡</span><b>Report</b><small>Generate portfolio, scanner and comparison reports.</small></button><button class="ait-psa-terminal-command" data-ait-trading-tab="explorer" data-ait-trading-group="report" type="button"><span>⌕</span><b>Explorer</b><small>Explore saved OHLC history and local market data.</small></button></div></div></section>
+ <section class="ait-psa-terminal-modal" id="aitPsaScannerMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">TRADING CATEGORY</span><h2>⌁ Scanner</h2><p>Select a market scanning workspace.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaTradingLauncherModal" type="button">← Trading</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid ait-psa-trading-tool-grid"><button class="ait-psa-terminal-command" data-ait-trading-tab="indicators" data-ait-trading-group="scanner" type="button"><span>∿</span><b>Indicators</b><small>Scan SMA, RSI, momentum and technical signals.</small></button><button class="ait-psa-terminal-command" data-ait-trading-tab="vpa" data-ait-trading-group="scanner" type="button"><span>▥</span><b>VPA</b><small>Analyze volume, price spread and effort versus result.</small></button><button class="ait-psa-terminal-command" data-ait-trading-tab="potential" data-ait-trading-group="scanner" type="button"><span>◆</span><b>AIT Potential</b><small>Rank combined technical and VPA opportunities.</small></button><button class="ait-psa-terminal-command" data-ait-trading-tab="comparison" data-ait-trading-group="scanner" type="button"><span>⇄</span><b>Comparison</b><small>Compare return, volatility, volume and momentum.</small></button></div></div></section>
+ <section class="ait-psa-terminal-modal ait-psa-workspace-modal" id="aitPsaTradingModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow" id="aitPsaTradingEyebrow">TRADING TOOL</span><h2 id="aitPsaTradingTitle">▥ Trading</h2><p id="aitPsaTradingDescription">Selected trading workspace.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" id="aitPsaTradingBack" type="button">← Trading</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body ait-psa-workspace-host" id="aitPsaTradingHost"></div></section>
 </div>
 
 <div class="v119-menu-backdrop" id="v119MenuBackdrop"></div>
@@ -8706,7 +8845,11 @@ document.addEventListener('DOMContentLoaded', () => {
     aitPsaWorkspaceModal: 'Workspace',
     aitPsaDownloadModal: 'Download Center',
     aitPsaWatchlistModal: 'Watch List',
-    aitPsaTradingModal: 'Trading'
+    aitPsaTradingLauncherModal: 'Trading',
+    aitPsaPortfolioMenuModal: 'Portfolio',
+    aitPsaReportMenuModal: 'Report',
+    aitPsaScannerMenuModal: 'Scanner',
+    aitPsaTradingModal: 'Trading Tool'
   };
 
   const syncBodyLock = () => body.classList.toggle(
@@ -8799,7 +8942,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ['aitPsaBackToAppearance', 'aitPsaAppearanceModal'],
     ['aitPsaOpenDownload', 'aitPsaDownloadModal'],
     ['aitPsaOpenWatchlist', 'aitPsaWatchlistModal'],
-    ['aitPsaOpenTrading', 'aitPsaTradingModal']
+    ['aitPsaOpenTrading', 'aitPsaTradingLauncherModal']
   ].forEach(([buttonId, modalId]) => bindModalRoute(buttonId, modalId));
 
   // Dedicated Theme terminal. It does not depend on the old hidden menu or proxy clicks.
@@ -8853,9 +8996,57 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  const tradingToolDefinitions = {
+    portfolio: ['◫ Portfolio', 'Portfolio holdings and performance workspace.'],
+    charts: ['▥ Charts', 'Multi-chart analysis workspace.'],
+    reports: ['≡ Report', 'Generated trading and scanner reports.'],
+    explorer: ['⌕ Explorer', 'Saved OHLC history and local data explorer.'],
+    indicators: ['∿ Indicators', 'Technical indicator scanner.'],
+    vpa: ['▥ VPA', 'Volume price analysis scanner.'],
+    potential: ['◆ AIT Potential', 'Combined opportunity ranking workspace.'],
+    comparison: ['⇄ Comparison', 'Relative performance comparison workspace.']
+  };
+  const tradingGroupModal = {
+    portfolio: 'aitPsaPortfolioMenuModal',
+    report: 'aitPsaReportMenuModal',
+    scanner: 'aitPsaScannerMenuModal'
+  };
+  let activeTradingGroup = 'report';
+
+  const openTradingTool = (tabName, groupName) => {
+    activeTradingGroup = groupName || 'report';
+    const definition = tradingToolDefinitions[tabName] || ['▥ Trading', 'Selected trading workspace.'];
+    const title = document.getElementById('aitPsaTradingTitle');
+    const description = document.getElementById('aitPsaTradingDescription');
+    const eyebrow = document.getElementById('aitPsaTradingEyebrow');
+    const back = document.getElementById('aitPsaTradingBack');
+    if (title) title.textContent = definition[0];
+    if (description) description.textContent = definition[1];
+    if (eyebrow) eyebrow.textContent = `${activeTradingGroup.toUpperCase()} TOOL`;
+    if (back) back.textContent = `← ${activeTradingGroup.charAt(0).toUpperCase()+activeTradingGroup.slice(1)}`;
+
+    const tabButton = document.querySelector(`[data-v11-tab="${CSS.escape(tabName)}"]`);
+    tabButton?.click();
+    openModal('aitPsaTradingModal');
+    requestAnimationFrame(() => window.dispatchEvent(new Event('resize')));
+    recordTerminalActivity(`${definition[0].replace(/^[^A-Za-z]+/, '')} opened`, `${activeTradingGroup} trading tool opened`);
+  };
+
+  document.getElementById('aitPsaTradingBack')?.addEventListener('click', () => {
+    openModal(tradingGroupModal[activeTradingGroup] || 'aitPsaTradingLauncherModal');
+  });
+
   document.addEventListener('click', async (event) => {
     const dockClose = event.target.closest('#aitPsaTerminalDockClose');
     if (dockClose) { setDock(false); return; }
+
+    const tradingTool = event.target.closest('[data-ait-trading-tab]');
+    if (tradingTool) {
+      event.preventDefault();
+      event.stopPropagation();
+      openTradingTool(tradingTool.dataset.aitTradingTab, tradingTool.dataset.aitTradingGroup);
+      return;
+    }
 
     const group = event.target.closest('[data-ait-psa-open]');
     if (group) {
