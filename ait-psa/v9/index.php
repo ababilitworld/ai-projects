@@ -887,7 +887,7 @@ header h1{font-size:1.55rem!important}
 .v11-signal{
  display:inline-flex;padding:5px 8px;border-radius:999px;font-size:.72rem;font-weight:900
 }
-.v11-signal.buy{background:color-mix(in srgb,var(--v10-success) 14%,transparent);color:var(--v10-success)}
+.v11-signal.buy,.v11-signal.strong-buy{background:color-mix(in srgb,var(--v10-success) 14%,transparent);color:var(--v10-success)}
 .v11-signal.watch{background:color-mix(in srgb,var(--v10-warning) 14%,transparent);color:var(--v10-warning)}
 .v11-signal.avoid{background:color-mix(in srgb,var(--v10-danger) 14%,transparent);color:var(--v10-danger)}
 
@@ -897,6 +897,25 @@ header h1{font-size:1.55rem!important}
 .v11-strength-fill{display:block;height:100%;width:var(--v11-strength,0%);border-radius:inherit;background:linear-gradient(90deg,var(--v10-danger),var(--v10-warning),var(--v10-success))}
 .v11-strength-value{min-width:34px;font-size:.74rem;font-weight:900;color:var(--v10-text)}
 .v11-potential-table{min-width:850px}
+
+/* V11.27 — relative scanner header and structured scanner controls */
+.v11-scanner-card{overflow:visible}
+.v11-scanner-card>.v11-card-head{position:relative;top:auto;z-index:1;backdrop-filter:none;box-shadow:none}
+.v11-scanner-card .v11-card-body{overflow:visible}
+.v11-scanner-guideline{order:1;margin:0}
+.v11-scanner-guideline .v11-potential-guide strong{letter-spacing:.01em}
+.v11-scanner-guideline .v11-potential-guideline-grid{grid-template-columns:repeat(auto-fit,minmax(230px,1fr));align-items:stretch}
+.v11-scanner-control-row{order:2;display:flex;justify-content:flex-end;align-items:center;gap:8px;flex-wrap:wrap;margin:12px 0}
+.v11-scanner-control-row .v11-potential-actions{display:flex;justify-content:flex-end;align-items:center;gap:8px;flex-wrap:wrap;margin-left:auto;width:auto}
+.v11-scanner-control-row .btn{white-space:nowrap}
+.v11-scanner-table-region{min-width:0}
+.v11-table-scrollbar{height:16px;overflow-x:auto;overflow-y:hidden;margin:0 0 6px;border:1px solid var(--v10-line);border-radius:999px;background:color-mix(in srgb,var(--v10-card) 82%,transparent)}
+.v11-table-scrollbar>div{height:1px}
+.v11-scanner-table-wrap{max-height:min(58vh,620px);overflow:auto;position:relative}
+.v11-scanner-table-wrap .v11-table thead th{position:sticky;top:0;z-index:8;background:var(--v10-panel-solid);box-shadow:0 1px 0 var(--v10-line),0 8px 12px color-mix(in srgb,var(--v10-bg) 12%,transparent);white-space:nowrap}
+.v11-scanner-table-wrap .v11-table tbody tr:nth-child(even){background:color-mix(in srgb,var(--v10-card) 48%,transparent)}
+@media(max-width:760px){.v11-scanner-control-row,.v11-scanner-control-row .v11-potential-actions{width:100%;justify-content:flex-end}.v11-scanner-table-wrap{max-height:62vh}}
+
 
 .v11-potential-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}
 .v11-potential-chart-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
@@ -4570,10 +4589,12 @@ svg[data-chart] {
     <span class="v11-menu-chevron" aria-hidden="true">⌄</span>
    </summary>
    <div class="v11-submenu">
-    <button class="v11-tab" type="button" data-v11-tab="indicators">Indicators</button>
-    <button class="v11-tab" type="button" data-v11-tab="vpa">VPA</button>
-    <button class="v11-tab" type="button" data-v11-tab="potential">AIT Potential</button>
-    <button class="v11-tab" type="button" data-v11-tab="comparison">Comparison</button>
+    <button class="v11-tab" type="button" data-v11-tab="indicators">Technical Scanner</button>
+    <button class="v11-tab" type="button" data-v11-tab="vpa">Smart Money Scanner</button>
+    <button class="v11-tab" type="button" data-v11-tab="comparison">Relative Strength Scanner</button>
+    <button class="v11-tab" type="button" data-v11-tab="potential-composite">AIT Composite Screener</button>
+    <button class="v11-tab" type="button" data-v11-tab="potential">AIT Elite Screener</button>
+    <button class="v11-tab" type="button" data-v11-tab="potential-priority">AIT Signal Priority Screener</button>
    </div>
   </details>
  </nav>
@@ -4624,28 +4645,35 @@ svg[data-chart] {
  </section>
 
  <section class="v11-workspace" data-v11-workspace="indicators">
-  <div class="v11-grid two">
-   <article class="v11-card">
-    <div class="v11-card-head"><div><h3>Technical indicator scanner</h3><small>SMA, RSI, momentum and volume diagnostics</small></div><div class="v11-potential-actions"><button class="btn primary" id="v11RunScanner" type="button">Run scanner</button><button class="btn soft" id="v11ViewIndicatorCharts" type="button">View 3M Charts</button><button class="btn soft" id="v11ViewIndicatorCharts6" type="button">View 6M Charts</button></div></div>
-    <div class="v11-card-body">
-     <div class="v11-table-wrap"><table class="v11-table"><thead><tr><th>Code</th><th>Close</th><th>SMA20</th><th>SMA50</th><th>RSI14</th><th>Momentum</th><th>Signal</th></tr></thead><tbody id="v11IndicatorRows"></tbody></table></div>
-    </div>
-   </article>
-   <aside class="v11-card">
-    <div class="v11-card-head"><div><h3>Scanner guidance</h3><small>How signals are formed</small></div></div>
-    <div class="v11-card-body">
-     <div class="v11-chip-row"><span class="v11-chip">Close above SMA20</span><span class="v11-chip">SMA20 above SMA50</span><span class="v11-chip">RSI 45–70</span><span class="v11-chip">Positive momentum</span></div>
-     <div class="v11-note" style="margin-top:10px">These signals are mechanical summaries, not investment advice.</div>
-    </div>
-   </aside>
-  </div>
+  <article class="v11-card v11-scanner-card">
+   <div class="v11-card-head"><div><h3>Technical Scanner</h3><small>Trend, momentum, SMA, RSI and volume-based technical screening</small></div><div class="v11-potential-actions"><button class="btn primary" id="v11RunScanner" type="button">Run scanner</button><button class="btn soft" id="v11ViewIndicatorCharts" type="button">View 3M Charts</button><button class="btn soft" id="v11ViewIndicatorCharts6" type="button">View 6M Charts</button></div></div>
+   <div class="v11-card-body">
+    <section class="v11-potential-guideline v11-scanner-guideline"><div class="v11-potential-guideline-grid">
+     <div class="v11-potential-guide v11-potential-guide--formula"><strong>Technical Score</strong><span>Combines trend alignment, SMA structure, RSI condition, momentum and volume confirmation.</span></div>
+     <div class="v11-potential-guide v11-potential-guide--strongest"><strong>Strong Setup</strong><span>Prefer price above SMA20, SMA20 above SMA50, constructive RSI and positive momentum.</span></div>
+     <div class="v11-potential-guide v11-potential-guide--watch"><strong>Confirmation</strong><span>Verify breakout level, trading liquidity and follow-through before taking an entry.</span></div>
+     <div class="v11-potential-guide v11-potential-guide--avoid"><strong>Risk Filter</strong><span>A high score is weakened by thin volume, extended price or loss of nearby support.</span></div>
+    </div></section>
+    <section class="v11-potential-guideline v11-technical-formation" aria-label="Technical score formation method">
+     <div class="v11-potential-guideline-grid">
+      <div class="v11-potential-guide v11-potential-guide--formula"><strong>Technical Score Formation</strong><span>The score is formed from trend structure, momentum quality, RSI condition and volume confirmation.</span></div>
+      <div class="v11-potential-guide"><strong>Trend Structure</strong><span>Close above SMA20 and SMA20 above SMA50 receive stronger trend credit.</span></div>
+      <div class="v11-potential-guide"><strong>Momentum &amp; RSI</strong><span>Positive momentum and a constructive RSI zone strengthen the technical setup.</span></div>
+      <div class="v11-potential-guide"><strong>Volume Confirmation</strong><span>Healthy participation supports the move; weak volume reduces confidence in the score.</span></div>
+     </div>
+     <div class="v11-chip-row" style="margin-top:10px"><span class="v11-chip">Close above SMA20</span><span class="v11-chip">SMA20 above SMA50</span><span class="v11-chip">RSI 45–70</span><span class="v11-chip">Positive momentum</span></div>
+     <div class="v11-note" style="margin-top:10px">These signals are mechanical summaries and should be confirmed with liquidity, support, resistance and risk controls.</div>
+    </section>
+    <div class="v11-scanner-table-region"><div class="v11-table-scrollbar" aria-label="Horizontal table scrollbar"><div></div></div><div class="v11-table-wrap v11-scanner-table-wrap"><table class="v11-table"><thead><tr><th>Code</th><th>Close</th><th>SMA20</th><th>SMA50</th><th>RSI14</th><th>Momentum</th><th>Technical Score</th><th>Technical Signal</th></tr></thead><tbody id="v11IndicatorRows"></tbody></table></div></div>
+   </div>
+  </article>
  </section>
 
  <section class="v11-workspace" data-v11-workspace="comparison">
-  <article class="v11-card">
+  <article class="v11-card v11-scanner-card">
    <div class="v11-card-head">
-    <div><h3>Stock comparison</h3><small>Compare price, return, volatility and relative volume</small></div>
-    <button class="btn primary" type="button" id="v11RunComparison">Compare active list</button>
+    <div><h3>Relative Strength Scanner</h3><small>Cross-stock ranking by return, momentum, volume participation and volatility</small></div>
+    <div class="v11-potential-actions"><button class="btn primary" type="button" id="v11RunComparison">Rank active list</button><button class="btn soft" id="v11ViewComparisonCharts" type="button">View 3M Charts</button><button class="btn soft" id="v11ViewComparisonCharts6" type="button">View 6M Charts</button></div>
    </div>
    <div class="v11-card-body">
     <div class="v11-summary-grid">
@@ -4654,7 +4682,13 @@ svg[data-chart] {
      <div class="v11-summary"><span>Highest relative volume</span><strong id="v11HighRv">—</strong></div>
      <div class="v11-summary"><span>Strongest momentum</span><strong id="v11Momentum">—</strong></div>
     </div>
-    <div class="v11-table-wrap" style="margin-top:10px"><table class="v11-table"><thead><tr><th>Code</th><th>Last close</th><th>20D return</th><th>Volatility</th><th>Relative volume</th><th>Momentum</th></tr></thead><tbody id="v11ComparisonRows"></tbody></table></div>
+    <section class="v11-potential-guideline v11-scanner-guideline" style="margin-top:12px"><div class="v11-potential-guideline-grid">
+     <div class="v11-potential-guide v11-potential-guide--formula"><strong>Relative Formula</strong><span>30% 20-day return + 25% momentum + 20% relative volume + 25% lower-volatility rank.</span></div>
+     <div class="v11-potential-guide v11-potential-guide--strongest"><strong>Leader</strong><span>Ranks strongest peers inside the currently active watch list; it is not an independent buy signal.</span></div>
+     <div class="v11-potential-guide v11-potential-guide--watch"><strong>Use Case</strong><span>Use Relative Rank to choose between otherwise similar Technical and Smart Money candidates.</span></div>
+     <div class="v11-potential-guide v11-potential-guide--avoid"><strong>Important Limit</strong><span>A weak stock can rank well in a weak list, so always verify its absolute Primary Score.</span></div>
+    </div></section>
+    <div class="v11-scanner-table-region"><div class="v11-table-scrollbar" aria-label="Horizontal table scrollbar"><div></div></div><div class="v11-table-wrap v11-scanner-table-wrap"><table class="v11-table"><thead><tr><th>Rank</th><th>Code</th><th>Last close</th><th>20D return</th><th>Volatility</th><th>Relative volume</th><th>Momentum</th><th>Relative Score</th><th>Relative Position</th></tr></thead><tbody id="v11ComparisonRows"></tbody></table></div></div>
    </div>
   </article>
  </section>
@@ -4688,43 +4722,61 @@ svg[data-chart] {
  </section>
 
  <section class="v11-workspace" data-v11-workspace="vpa">
-  <article class="v11-card">
-   <div class="v11-card-head"><div><h3>VPA-style analysis workspace</h3><small>Effort-versus-result, spread, volume and trend scoring</small></div><div class="v11-potential-actions"><button class="btn primary" id="v11RunVpa" type="button">Analyze active list</button><button class="btn soft" id="v11ViewVpaCharts" type="button">View 3M Charts</button><button class="btn soft" id="v11ViewVpaCharts6" type="button">View 6M Charts</button></div></div>
+  <article class="v11-card v11-scanner-card">
+   <div class="v11-card-head"><div><h3>Smart Money Scanner</h3><small>VPA-based effort-versus-result, spread, volume and trend screening</small></div><div class="v11-potential-actions"><button class="btn primary" id="v11RunVpa" type="button">Analyze active list</button><button class="btn soft" id="v11ViewVpaCharts" type="button">View 3M Charts</button><button class="btn soft" id="v11ViewVpaCharts6" type="button">View 6M Charts</button></div></div>
    <div class="v11-card-body">
-    <div class="v11-table-wrap"><table class="v11-table"><thead><tr><th>Code</th><th>Score</th><th>Spread</th><th>Rel. volume</th><th>Trend</th><th>Effort/result</th><th>Classification</th></tr></thead><tbody id="v11VpaRows"></tbody></table></div>
-    <div class="v11-note" style="margin-top:10px">The VPA score is a transparent heuristic derived only from locally stored OHLCV data. It does not claim to identify institutional activity with certainty.</div>
+    <section class="v11-potential-guideline v11-scanner-guideline"><div class="v11-potential-guideline-grid">
+     <div class="v11-potential-guide v11-potential-guide--formula"><strong>Smart Money Score</strong><span>Summarizes price spread, relative volume, trend and effort-versus-result from local OHLCV history.</span></div>
+     <div class="v11-potential-guide v11-potential-guide--strongest"><strong>Accumulation Clues</strong><span>Look for constructive closes, expanding demand and efficient upward result without excessive volatility.</span></div>
+     <div class="v11-potential-guide v11-potential-guide--watch"><strong>Confirmation</strong><span>Confirm the VPA classification with support holding, improving relative volume and later price follow-through.</span></div>
+     <div class="v11-potential-guide v11-potential-guide--avoid"><strong>Interpret Carefully</strong><span>VPA is a heuristic; one high-volume bar does not prove institutional accumulation.</span></div>
+    </div></section>
+    <div class="v11-scanner-table-region"><div class="v11-table-scrollbar" aria-label="Horizontal table scrollbar"><div></div></div><div class="v11-table-wrap v11-scanner-table-wrap"><table class="v11-table"><thead><tr><th>Code</th><th>Smart Money Score</th><th>Spread</th><th>Rel. volume</th><th>Trend</th><th>Effort/result</th><th>Classification</th></tr></thead><tbody id="v11VpaRows"></tbody></table></div></div>
+   </div>
+  </article>
+ </section>
+
+ <section class="v11-workspace" data-v11-workspace="potential-composite">
+  <article class="v11-card v11-scanner-card">
+   <div class="v11-card-head"><div><h3>AIT Composite Screener</h3><small>Weighted multi-factor screening across technical, smart-money and relative-strength evidence</small></div><div class="v11-potential-actions"><button class="btn primary" id="v11RunComposite" type="button">Run composite screen</button><button class="btn soft" id="v11ViewCompositeCharts" type="button">View 3M Charts</button><button class="btn soft" id="v11ViewCompositeCharts6" type="button">View 6M Charts</button></div></div>
+   <div class="v11-card-body">
+    <section class="v11-potential-guideline"><div class="v11-potential-guideline-grid">
+     <div class="v11-potential-guide v11-potential-guide--formula"><strong>Composite Formula</strong><span>Combined Score = 40% Technical + 35% Smart Money + 25% Relative Strength.</span></div>
+     <div class="v11-potential-guide v11-potential-guide--strongest"><strong>Purpose</strong><span>Use when you want all three analytical layers to contribute directly to one score.</span></div>
+     <div class="v11-potential-guide v11-potential-guide--watch"><strong>Ranking</strong><span>Rows are ordered by Combined Score, then Smart Money and Technical confirmation.</span></div>
+     <div class="v11-potential-guide v11-potential-guide--avoid"><strong>Safeguard</strong><span>Weak Technical and Smart Money evidence cannot become Strong Buy from relative ranking alone.</span></div>
+    </div></section>
+    <div class="v11-scanner-table-region"><div class="v11-table-scrollbar" aria-label="Horizontal table scrollbar"><div></div></div><div class="v11-table-wrap v11-scanner-table-wrap"><table class="v11-table v11-potential-table"><thead><tr><th>Rank</th><th>Trading Code</th><th>LTP</th><th>Technical</th><th>Smart Money</th><th>Relative</th><th>Combined Score</th><th>Strength</th><th>Signal</th></tr></thead><tbody id="v11CompositeRows"></tbody></table></div></div>
    </div>
   </article>
  </section>
 
  <section class="v11-workspace" data-v11-workspace="potential">
-  <article class="v11-card">
-   <div class="v11-card-head">
-    <div><h3>AIT Potential</h3><small>Combined technical-indicator and VPA opportunity ranking</small></div>
-    <div class="v11-potential-actions">
-     <button class="btn primary" id="v11RunPotential" type="button">Calculate potential</button>
-     <button class="btn soft" id="v11ViewPotentialCharts" type="button">View 3M Charts</button><button class="btn soft" id="v11ViewPotentialCharts6" type="button">View 6M Charts</button>
-    </div>
-   </div>
+  <article class="v11-card v11-scanner-card">
+   <div class="v11-card-head"><div><h3>AIT Elite Screener</h3><small>Balanced 50/50 primary scoring with relative-strength tie-breaking</small></div><div class="v11-potential-actions"><button class="btn primary" id="v11RunPotential" type="button">Run elite screen</button><button class="btn soft" id="v11ViewPotentialCharts" type="button">View 3M Charts</button><button class="btn soft" id="v11ViewPotentialCharts6" type="button">View 6M Charts</button></div></div>
    <div class="v11-card-body">
-    <section class="v11-potential-guideline" aria-labelledby="v11PotentialGuidelineTitle">
-     <div class="v11-potential-guideline-head">
-      <div><h4 id="v11PotentialGuidelineTitle">Scanner Guideline</h4><p>Use the ranking as a shortlist, then verify price action, liquidity, support and risk before making a decision.</p></div>
-     </div>
-     <div class="v11-potential-guideline-grid">
-      <div class="v11-potential-guide v11-potential-guide--strongest"><strong>Strongest · 70–100</strong><span>Indicator trend and VPA behavior are jointly favorable. Look for confirmation above resistance or a controlled pullback.</span></div>
-      <div class="v11-potential-guide v11-potential-guide--watch"><strong>Watch · 50–69.99</strong><span>Mixed or developing setup. Keep on the watch list until price, volume and momentum provide clearer confirmation.</span></div>
-      <div class="v11-potential-guide v11-potential-guide--avoid"><strong>Avoid · Below 50</strong><span>Weak combined evidence or unfavorable structure. Avoid fresh entry unless the setup improves materially.</span></div>
-      <div class="v11-potential-guide v11-potential-guide--formula"><strong>Ranking Formula</strong><span>Combined score = 50% Indicator Score + 50% VPA Score. Rows are ordered from the highest score to the lowest.</span></div>
-     </div>
-    </section>
-    <div class="v11-table-wrap">
-     <table class="v11-table v11-potential-table">
-      <thead><tr><th>Trading Code</th><th>LTP</th><th>Indicator Score</th><th>VPA Score</th><th>Combined Score</th><th>Strength</th><th>Signal</th></tr></thead>
-      <tbody id="v11PotentialRows"></tbody>
-     </table>
-    </div>
-    <div class="v11-note" style="margin-top:10px">LTP is the latest locally stored closing price. Scores use locally stored OHLCV data only and are analytical guidance, not a guaranteed trading outcome.</div>
+    <section class="v11-potential-guideline" aria-labelledby="v11PotentialGuidelineTitle"><div class="v11-potential-guideline-head"><div><h4 id="v11PotentialGuidelineTitle">Elite Screening Guideline</h4><p>Use this as the balanced flagship shortlist, then verify price action, liquidity, support and risk.</p></div></div><div class="v11-potential-guideline-grid">
+     <div class="v11-potential-guide v11-potential-guide--strongest"><strong>Strong Buy · 75–100</strong><span>The balanced Primary Score is strong and both Technical and Smart Money scores confirm it.</span></div>
+     <div class="v11-potential-guide v11-potential-guide--watch"><strong>Buy / Watch · 48–74.99</strong><span>Buy begins at 62; 48–61.99 remains a developing Watch setup.</span></div>
+     <div class="v11-potential-guide v11-potential-guide--avoid"><strong>Avoid · Below 48</strong><span>Relative Strength cannot upgrade a weak Primary Signal.</span></div>
+     <div class="v11-potential-guide v11-potential-guide--formula"><strong>Elite Formula</strong><span>Primary Score = 50% Technical + 50% Smart Money. Relative Strength breaks ties within a 5-point Primary Score range.</span></div>
+    </div></section>
+    <div class="v11-scanner-table-region"><div class="v11-table-scrollbar" aria-label="Horizontal table scrollbar"><div></div></div><div class="v11-table-wrap v11-scanner-table-wrap"><table class="v11-table v11-potential-table"><thead><tr><th>Rank</th><th>Trading Code</th><th>LTP</th><th>Technical</th><th>Smart Money</th><th>Primary Score</th><th>Relative Rank</th><th>Strength</th><th>Signal</th></tr></thead><tbody id="v11PotentialRows"></tbody></table></div></div>
+   </div>
+  </article>
+ </section>
+
+ <section class="v11-workspace" data-v11-workspace="potential-priority">
+  <article class="v11-card v11-scanner-card">
+   <div class="v11-card-head"><div><h3>AIT Signal Priority Screener</h3><small>Signal-first screening that keeps every Strong Buy above Buy, Watch and Avoid</small></div><div class="v11-potential-actions"><button class="btn primary" id="v11RunPriority" type="button">Run priority screen</button><button class="btn soft" id="v11ViewPriorityCharts" type="button">View 3M Charts</button><button class="btn soft" id="v11ViewPriorityCharts6" type="button">View 6M Charts</button></div></div>
+   <div class="v11-card-body">
+    <section class="v11-potential-guideline"><div class="v11-potential-guideline-grid">
+     <div class="v11-potential-guide v11-potential-guide--strongest"><strong>First Priority</strong><span>Signal order: Strong Buy → Buy → Watch → Avoid.</span></div>
+     <div class="v11-potential-guide v11-potential-guide--formula"><strong>Primary Formula</strong><span>Primary Score = 50% Technical + 50% Smart Money.</span></div>
+     <div class="v11-potential-guide v11-potential-guide--watch"><strong>Within Each Signal</strong><span>Primary Score ranks first; Relative Strength breaks close ties within 5 points.</span></div>
+     <div class="v11-potential-guide v11-potential-guide--avoid"><strong>Stable Order</strong><span>Relative Strength can never move a Buy above a Strong Buy or upgrade the signal.</span></div>
+    </div></section>
+    <div class="v11-scanner-table-region"><div class="v11-table-scrollbar" aria-label="Horizontal table scrollbar"><div></div></div><div class="v11-table-wrap v11-scanner-table-wrap"><table class="v11-table v11-potential-table"><thead><tr><th>Overall Rank</th><th>Signal Rank</th><th>Trading Code</th><th>LTP</th><th>Technical</th><th>Smart Money</th><th>Primary Score</th><th>Relative Rank</th><th>Signal</th></tr></thead><tbody id="v11PriorityRows"></tbody></table></div></div>
    </div>
   </article>
  </section>
@@ -6482,13 +6534,13 @@ document.addEventListener("DOMContentLoaded",()=>{
    .map(indicatorData)
    .filter(x=>x.current!==null)
    .sort((a,b)=>
+    (b.indicatorScore-a.indicatorScore)||
     (b.strength-a.strength)||
-    (b.points-a.points)||
     ((b.momentum??-Infinity)-(a.momentum??-Infinity))||
     a.code.localeCompare(b.code)
    );
   const tbody=document.getElementById("v11IndicatorRows");
-  tbody.innerHTML=data.length?data.map(x=>`<tr><td>${esc(x.code)}</td><td>${fmt(x.current)}</td><td>${fmt(x.s20)}</td><td>${fmt(x.s50)}</td><td>${fmt(x.r14,1)}</td><td>${fmt(x.momentum,1)}%</td><td><span class="v11-signal ${x.signal.toLowerCase()}">${x.signal}</span></td></tr>`).join(""):'<tr><td colspan="7">No local data.</td></tr>';
+  tbody.innerHTML=data.length?data.map(x=>`<tr><td>${esc(x.code)}</td><td>${fmt(x.current)}</td><td>${fmt(x.s20)}</td><td>${fmt(x.s50)}</td><td>${fmt(x.r14,1)}</td><td>${fmt(x.momentum,1)}%</td><td><span class="v11-score">${fmt(x.indicatorScore,0)}</span></td><td><span class="v11-signal ${x.signal.toLowerCase()}">${x.signal}</span></td></tr>`).join(""):'<tr><td colspan="8">No local data.</td></tr>';
   return data;
  }
  document.getElementById("v11RunScanner")?.addEventListener("click",runScanner);
@@ -6505,9 +6557,28 @@ document.addEventListener("DOMContentLoaded",()=>{
   const momentum=closes.length>10?(closes.at(-1)/closes.at(-11)-1)*100:0;
   return {code,last:closes.at(-1),ret20,volatility,rv,momentum};
  }
- function runComparison(){
+ function comparisonDataset(){
   const data=codes().map(comparisonData).filter(Boolean);
-  document.getElementById("v11ComparisonRows").innerHTML=data.length?data.map(x=>`<tr><td>${esc(x.code)}</td><td>${fmt(x.last)}</td><td>${fmt(x.ret20,1)}%</td><td>${fmt(x.volatility,2)}%</td><td>${fmt(x.rv,2)}×</td><td>${fmt(x.momentum,1)}%</td></tr>`).join(""):'<tr><td colspan="6">No local data.</td></tr>';
+  const normalize=(value,key,inverse=false)=>{
+   const values=data.map(x=>Number(x[key])).filter(Number.isFinite),min=Math.min(...values),max=Math.max(...values);
+   if(!values.length||max===min)return 50;
+   const n=((value-min)/(max-min))*100;
+   return inverse?100-n:n;
+  };
+  return data.map(x=>{
+   const returnRank=normalize(x.ret20,"ret20");
+   const momentumRank=normalize(x.momentum,"momentum");
+   const volumeRank=normalize(Math.min(x.rv,3),"rv");
+   const stabilityRank=normalize(x.volatility,"volatility",true);
+   let score=Math.round((returnRank*.30+momentumRank*.25+volumeRank*.20+stabilityRank*.25)*10)/10;
+   if(x.ret20<0&&x.momentum<0)score=Math.min(score,44.9);
+   const relativeSignal=score>=75&&x.ret20>0&&x.momentum>0?"Leader":score>=60&&(x.ret20>0||x.momentum>0)?"Outperform":score>=45?"Neutral":"Laggard";
+   return {...x,score,signal:relativeSignal,relativeSignal,returnRank,momentumRank,volumeRank,stabilityRank};
+  }).sort((a,b)=>b.score-a.score||b.ret20-a.ret20||a.code.localeCompare(b.code));
+ }
+ function runComparison(){
+  const data=comparisonDataset();
+  document.getElementById("v11ComparisonRows").innerHTML=data.length?data.map((x,index)=>`<tr><td><strong>#${index+1}</strong></td><td><strong>${esc(x.code)}</strong></td><td>${fmt(x.last)}</td><td>${fmt(x.ret20,1)}%</td><td>${fmt(x.volatility,2)}%</td><td>${fmt(x.rv,2)}×</td><td>${fmt(x.momentum,1)}%</td><td><span class="v11-score">${fmt(x.score,1)}</span></td><td><span class="v11-signal ${x.relativeSignal.toLowerCase().replace(/\s+/g,"-")}">${x.relativeSignal}</span></td></tr>`).join(""):'<tr><td colspan="9">No local data.</td></tr>';
   const maxBy=(key,asc=false)=>data.length?[...data].sort((a,b)=>asc?a[key]-b[key]:b[key]-a[key])[0]:null;
   const best=maxBy("ret20"),low=maxBy("volatility",true),rv=maxBy("rv"),mom=maxBy("momentum");
   document.getElementById("v11BestReturn").textContent=best?`${best.code} ${fmt(best.ret20,1)}%`:"—";
@@ -6571,65 +6642,124 @@ document.addEventListener("DOMContentLoaded",()=>{
  }
  document.getElementById("v11RunVpa")?.addEventListener("click",runVpa);
 
- function potentialData(code){
+ function potentialData(code,comparisonMap=null){
   const indicator=indicatorData(code);
   const vpa=vpaData(code);
   if(indicator.current===null||!vpa)return null;
-
+  if(!comparisonMap)comparisonMap=new Map(comparisonDataset().map(x=>[x.code,x]));
+  const comparison=comparisonMap.get(code);
   const indicatorScore=indicator.indicatorScore;
   const vpaScore=vpa.score;
-  const combinedScore=Math.round(((indicatorScore+vpaScore)/2)*10)/10;
-  const signal=combinedScore>=70?"Strongest":combinedScore>=50?"Watch":"Avoid";
-
-  return {code,ltp:indicator.current,indicatorScore,vpaScore,combinedScore,signal};
+  const comparisonScore=comparison?comparison.score:50;
+  const comparisonSignal=comparison?.relativeSignal||"Neutral";
+  const primaryScore=Math.round(((indicatorScore*.50)+(vpaScore*.50))*10)/10;
+  const signal=primaryScore>=75&&indicatorScore>=60&&vpaScore>=60?"Strong Buy":primaryScore>=62?"Buy":primaryScore>=48?"Watch":"Avoid";
+  return {code,ltp:indicator.current,indicatorScore,vpaScore,comparisonScore,comparisonSignal,primaryScore,combinedScore:primaryScore,signal};
  }
-
+ function rankPotentialData(items){
+  const base=[...items].sort((a,b)=>(b.primaryScore-a.primaryScore)||(b.vpaScore-a.vpaScore)||(b.indicatorScore-a.indicatorScore)||a.code.localeCompare(b.code));
+  const ranked=[];
+  for(let i=0;i<base.length;){
+   const anchor=base[i].primaryScore;
+   let j=i+1;
+   while(j<base.length&&(anchor-base[j].primaryScore)<5)j++;
+   const group=base.slice(i,j).sort((a,b)=>(b.comparisonScore-a.comparisonScore)||(b.primaryScore-a.primaryScore)||(b.vpaScore-a.vpaScore)||(b.indicatorScore-a.indicatorScore)||a.code.localeCompare(b.code));
+   ranked.push(...group);
+   i=j;
+  }
+  return ranked.map((x,index)=>({...x,rank:index+1}));
+ }
+ function potentialDataset(){
+  const comparisonMap=new Map(comparisonDataset().map(x=>[x.code,x]));
+  return rankPotentialData(codes().map(code=>potentialData(code,comparisonMap)).filter(Boolean));
+ }
  function runPotential(){
   const tbody=document.getElementById("v11PotentialRows");
   if(!tbody)return [];
-
-  const data=codes()
-   .map(potentialData)
-   .filter(Boolean)
-   .sort((a,b)=>
-    (b.combinedScore-a.combinedScore)||
-    (b.vpaScore-a.vpaScore)||
-    (b.indicatorScore-a.indicatorScore)||
-    a.code.localeCompare(b.code)
-   );
-
+  const data=potentialDataset();
   tbody.innerHTML=data.length?data.map(x=>`<tr>
-   <td><strong>${esc(x.code)}</strong></td>
-   <td>${fmt(x.ltp,2)}</td>
+   <td><strong>#${x.rank}</strong></td><td><strong>${esc(x.code)}</strong></td><td>${fmt(x.ltp,2)}</td>
    <td><span class="v11-score">${fmt(x.indicatorScore,0)}</span></td>
    <td><span class="v11-score">${fmt(x.vpaScore,0)}</span></td>
-   <td><span class="v11-score">${fmt(x.combinedScore,1)}</span></td>
-   <td><div class="v11-strength" aria-label="Strength ${fmt(x.combinedScore,1)} percent"><span class="v11-strength-track"><span class="v11-strength-fill" style="--v11-strength:${Math.max(0,Math.min(100,x.combinedScore))}%"></span></span><span class="v11-strength-value">${fmt(x.combinedScore,1)}%</span></div></td>
-   <td><span class="v11-signal ${x.signal.toLowerCase()}">${x.signal}</span></td>
-  </tr>`).join(""):'<tr><td colspan="7">No sufficient local data for combined analysis.</td></tr>';
-
+   <td><span class="v11-score">${fmt(x.primaryScore,1)}</span></td>
+   <td><span class="v11-score">${fmt(x.comparisonScore,1)}</span><small style="display:block">${esc(x.comparisonSignal)}</small></td>
+   <td><div class="v11-strength" aria-label="Strength ${fmt(x.primaryScore,1)} percent"><span class="v11-strength-track"><span class="v11-strength-fill" style="--v11-strength:${Math.max(0,Math.min(100,x.primaryScore))}%"></span></span><span class="v11-strength-value">${fmt(x.primaryScore,1)}%</span></div></td>
+   <td><span class="v11-signal ${x.signal.toLowerCase().replace(/\s+/g,"-")}">${x.signal}</span></td>
+  </tr>`).join(""):'<tr><td colspan="9">No sufficient local data for primary analysis.</td></tr>';
   return data;
  }
  document.getElementById("v11RunPotential")?.addEventListener("click",runPotential);
 
+ function compositeDataset(){
+  const comparisonMap=new Map(comparisonDataset().map(x=>[x.code,x]));
+  return codes().map(code=>{
+   const item=potentialData(code,comparisonMap); if(!item)return null;
+   const combinedScore=Math.round((item.indicatorScore*.40+item.vpaScore*.35+item.comparisonScore*.25)*10)/10;
+   const signal=combinedScore>=75&&item.indicatorScore>=60&&item.vpaScore>=60?"Strong Buy":combinedScore>=62?"Buy":combinedScore>=48?"Watch":"Avoid";
+   return {...item,combinedScore,signal};
+  }).filter(Boolean).sort((a,b)=>(b.combinedScore-a.combinedScore)||(b.vpaScore-a.vpaScore)||(b.indicatorScore-a.indicatorScore)||a.code.localeCompare(b.code)).map((x,index)=>({...x,rank:index+1}));
+ }
+ function priorityDataset(){
+  const priority={"Strong Buy":4,"Buy":3,"Watch":2,"Avoid":1};
+  const source=potentialDataset();
+  const groups=new Map();
+  source.forEach(x=>{if(!groups.has(x.signal))groups.set(x.signal,[]);groups.get(x.signal).push(x);});
+  const output=[];
+  ["Strong Buy","Buy","Watch","Avoid"].forEach(signal=>{
+   const group=groups.get(signal)||[];
+   group.sort((a,b)=>(b.primaryScore-a.primaryScore)||(b.comparisonScore-a.comparisonScore)||(b.vpaScore-a.vpaScore)||(b.indicatorScore-a.indicatorScore)||a.code.localeCompare(b.code));
+   // Relative Strength only reorders close Primary Scores inside the same signal group.
+   const ranked=[];
+   for(let i=0;i<group.length;){
+    const anchor=group[i].primaryScore;let j=i+1;
+    while(j<group.length&&(anchor-group[j].primaryScore)<5)j++;
+    ranked.push(...group.slice(i,j).sort((a,b)=>(b.comparisonScore-a.comparisonScore)||(b.primaryScore-a.primaryScore)||a.code.localeCompare(b.code)));
+    i=j;
+   }
+   ranked.forEach((x,index)=>output.push({...x,signalRank:index+1,signalPriority:priority[signal]}));
+  });
+  return output.map((x,index)=>({...x,rank:index+1}));
+ }
+ function renderPotentialRows(tbodyId,data,mode){
+  const tbody=document.getElementById(tbodyId);if(!tbody)return data;
+  if(mode==="priority"){
+   tbody.innerHTML=data.length?data.map(x=>`<tr><td><strong>#${x.rank}</strong></td><td><strong>${esc(x.signal)} #${x.signalRank}</strong></td><td><strong>${esc(x.code)}</strong></td><td>${fmt(x.ltp,2)}</td><td><span class="v11-score">${fmt(x.indicatorScore,0)}</span></td><td><span class="v11-score">${fmt(x.vpaScore,0)}</span></td><td><span class="v11-score">${fmt(x.primaryScore,1)}</span></td><td><span class="v11-score">${fmt(x.comparisonScore,1)}</span><small style="display:block">${esc(x.comparisonSignal)}</small></td><td><span class="v11-signal ${x.signal.toLowerCase().replace(/\s+/g,"-")}">${x.signal}</span></td></tr>`).join(""):'<tr><td colspan="9">No sufficient local data.</td></tr>';
+  }else{
+   tbody.innerHTML=data.length?data.map(x=>`<tr><td><strong>#${x.rank}</strong></td><td><strong>${esc(x.code)}</strong></td><td>${fmt(x.ltp,2)}</td><td><span class="v11-score">${fmt(x.indicatorScore,0)}</span></td><td><span class="v11-score">${fmt(x.vpaScore,0)}</span></td><td><span class="v11-score">${fmt(x.comparisonScore,1)}</span></td><td><span class="v11-score">${fmt(x.combinedScore,1)}</span></td><td><div class="v11-strength"><span class="v11-strength-track"><span class="v11-strength-fill" style="--v11-strength:${Math.max(0,Math.min(100,x.combinedScore))}%"></span></span><span class="v11-strength-value">${fmt(x.combinedScore,1)}%</span></div></td><td><span class="v11-signal ${x.signal.toLowerCase().replace(/\s+/g,"-")}">${x.signal}</span></td></tr>`).join(""):'<tr><td colspan="9">No sufficient local data.</td></tr>';
+  }
+  return data;
+ }
+ function runComposite(){return renderPotentialRows("v11CompositeRows",compositeDataset(),"composite");}
+ function runPriority(){return renderPotentialRows("v11PriorityRows",priorityDataset(),"priority");}
+ document.getElementById("v11RunComposite")?.addEventListener("click",runComposite);
+ document.getElementById("v11RunPriority")?.addEventListener("click",runPriority);
 
  function rankedChartData(mode){
   if(mode==="indicator"){
    return codes().map(indicatorData).filter(x=>x&&x.current!==null).map(x=>({
     code:x.code,ltp:x.current,score:Number(x.indicatorScore||0),signal:x.signal||"Avoid",
-    scoreLabel:"Indicator score"
+    scoreLabel:"Technical Score"
    })).sort((a,b)=>(b.score-a.score)||a.code.localeCompare(b.code));
   }
   if(mode==="vpa"){
    return codes().map(vpaData).filter(Boolean).map(x=>({
     code:x.code,ltp:last(rowsFor(x.code))?.close??null,score:Number(x.score||0),signal:x.cls||"Avoid",
-    scoreLabel:"VPA score"
+    scoreLabel:"Smart Money Score"
    })).sort((a,b)=>(b.score-a.score)||a.code.localeCompare(b.code));
   }
-  return codes().map(potentialData).filter(Boolean).map(x=>({
-   code:x.code,ltp:x.ltp,score:Number(x.combinedScore||0),signal:x.signal||"Avoid",
-   scoreLabel:"Combined score"
-  })).sort((a,b)=>(b.score-a.score)||a.code.localeCompare(b.code));
+  if(mode==="comparison"){
+   return comparisonDataset().map(x=>({code:x.code,ltp:x.close,score:Number(x.comparisonScore||0),signal:x.comparisonSignal||"Neutral",scoreLabel:"Relative Score",rank:x.rank}));
+  }
+  if(mode==="composite"){
+   return compositeDataset().map(x=>({code:x.code,ltp:x.ltp,score:Number(x.combinedScore||0),signal:x.signal||"Avoid",scoreLabel:"Combined Score",rank:x.rank}));
+  }
+  if(mode==="priority"){
+   return priorityDataset().map(x=>({code:x.code,ltp:x.ltp,score:Number(x.primaryScore||0),signal:x.signal||"Avoid",scoreLabel:"Primary Score",rank:x.rank}));
+  }
+  return potentialDataset().map(x=>({
+   code:x.code,ltp:x.ltp,score:Number(x.primaryScore||0),signal:x.signal||"Avoid",
+   scoreLabel:"Primary score",rank:x.rank,comparisonScore:x.comparisonScore
+  }));
  }
 
  function openRankedCharts(mode="potential",months=3){
@@ -6679,9 +6809,12 @@ document.addEventListener("DOMContentLoaded",()=>{
   if(modal.parentElement!==document.body)document.body.appendChild(modal);
 
   const config={
-   indicator:{title:`Indicator Scanner — Ranked ${period}M Charts`,description:"indicator score"},
-   vpa:{title:`VPA Scanner — Ranked ${period}M Charts`,description:"VPA score"},
-   potential:{title:`AIT Potential — Ranked ${period}M Charts`,description:"combined potential score"}
+   indicator:{title:`Technical Scanner — Ranked ${period}M Charts`,description:"Technical Score"},
+   vpa:{title:`Smart Money Scanner — Ranked ${period}M Charts`,description:"Smart Money Score"},
+   comparison:{title:`Relative Strength Scanner — Ranked ${period}M Charts`,description:"Relative Score"},
+   composite:{title:`AIT Composite Screener — Ranked ${period}M Charts`,description:"40/35/25 Combined Score"},
+   potential:{title:`AIT Elite Screener — Ranked ${period}M Charts`,description:"50/50 Technical–Smart Money Primary Score; Relative Strength breaks close ties"},
+   priority:{title:`AIT Signal Priority Screener — Ranked ${period}M Charts`,description:"signal-priority order, then Primary Score"}
   }[mode]||{title:`Ranked ${period}M Charts`,description:"score"};
   const data=rankedChartData(mode);
 
@@ -6745,6 +6878,56 @@ document.addEventListener("DOMContentLoaded",()=>{
  document.getElementById("v11ViewIndicatorCharts6")?.addEventListener("click",()=>openRankedCharts("indicator",6));
  document.getElementById("v11ViewVpaCharts")?.addEventListener("click",()=>openRankedCharts("vpa",3));
  document.getElementById("v11ViewVpaCharts6")?.addEventListener("click",()=>openRankedCharts("vpa",6));
+ document.getElementById("v11ViewComparisonCharts")?.addEventListener("click",()=>openRankedCharts("comparison",3));
+ document.getElementById("v11ViewComparisonCharts6")?.addEventListener("click",()=>openRankedCharts("comparison",6));
+ document.getElementById("v11ViewCompositeCharts")?.addEventListener("click",()=>openRankedCharts("composite",3));
+ document.getElementById("v11ViewCompositeCharts6")?.addEventListener("click",()=>openRankedCharts("composite",6));
+ document.getElementById("v11ViewPriorityCharts")?.addEventListener("click",()=>openRankedCharts("priority",3));
+ document.getElementById("v11ViewPriorityCharts6")?.addEventListener("click",()=>openRankedCharts("priority",6));
+
+ function syncScannerScrollbars(){
+  document.querySelectorAll(".v11-scanner-table-region").forEach(region=>{
+   const top=region.querySelector(".v11-table-scrollbar");
+   const wrap=region.querySelector(".v11-scanner-table-wrap");
+   const spacer=top?.firstElementChild;
+   const table=wrap?.querySelector("table");
+   if(!top||!wrap||!spacer||!table||top.dataset.synced)return;
+   top.dataset.synced="1";
+   const size=()=>{spacer.style.width=`${Math.max(table.scrollWidth,wrap.clientWidth)}px`;top.hidden=table.scrollWidth<=wrap.clientWidth+1;};
+   let lock=false;
+   top.addEventListener("scroll",()=>{if(lock)return;lock=true;wrap.scrollLeft=top.scrollLeft;requestAnimationFrame(()=>lock=false);});
+   wrap.addEventListener("scroll",()=>{if(lock)return;lock=true;top.scrollLeft=wrap.scrollLeft;requestAnimationFrame(()=>lock=false);});
+   new ResizeObserver(size).observe(table);new ResizeObserver(size).observe(wrap);size();
+  });
+ }
+ function arrangeScannerLayouts(){
+  document.querySelectorAll(".v11-scanner-card").forEach(card=>{
+   const head=card.querySelector(":scope > .v11-card-head");
+   const body=card.querySelector(":scope > .v11-card-body");
+   const actions=head?.querySelector(".v11-potential-actions");
+   const guideline=body?.querySelector(":scope > .v11-scanner-guideline, :scope > .v11-potential-guideline");
+   if(!body||!guideline)return;
+   guideline.classList.add("v11-scanner-guideline");
+   body.insertBefore(guideline,body.firstElementChild);
+   let row=body.querySelector(":scope > .v11-scanner-control-row");
+   if(!row){row=document.createElement("div");row.className="v11-scanner-control-row";guideline.insertAdjacentElement("afterend",row);}
+   if(actions){
+    const buttons=[...actions.querySelectorAll("button")];
+    const six=buttons.find(button=>/6M/i.test(button.textContent));
+    const three=buttons.find(button=>/3M/i.test(button.textContent));
+    const run=buttons.find(button=>button!==six&&button!==three);
+    if(six)six.textContent="6M Chart";
+    if(three)three.textContent="3M Chart";
+    if(run)run.textContent="Run Scanner";
+    [six,three,run].filter(Boolean).forEach(button=>actions.appendChild(button));
+    row.appendChild(actions);
+   }
+  });
+ }
+ arrangeScannerLayouts();
+ syncScannerScrollbars();
+ window.addEventListener("resize",syncScannerScrollbars);
+ document.querySelectorAll("[data-v11-tab]").forEach(button=>button.addEventListener("click",()=>setTimeout(syncScannerScrollbars,40)));
  document.getElementById("v11CloseRankedCharts")?.addEventListener("click",closeRankedCharts);
  document.getElementById("v11RankedChartModal")?.addEventListener("click",event=>{
   if(event.target===event.currentTarget)closeRankedCharts();
@@ -6782,7 +6965,7 @@ document.addEventListener("DOMContentLoaded",()=>{
    runScanner().forEach(x=>text+=`${x.code}: Close ${fmt(x.current)}, SMA20 ${fmt(x.s20)}, SMA50 ${fmt(x.s50)}, RSI ${fmt(x.r14,1)}, ${x.signal}\n`);
   }else if(type==="comparison"){
    text+="STOCK COMPARISON\n";
-   runComparison().forEach(x=>text+=`${x.code}: Return ${fmt(x.ret20,1)}%, Volatility ${fmt(x.volatility,2)}%, RV ${fmt(x.rv,2)}x\n`);
+   runComparison().forEach(x=>text+=`${x.code}: Score ${fmt(x.score,1)}, Signal ${x.signal}, Return ${fmt(x.ret20,1)}%, Volatility ${fmt(x.volatility,2)}%, RV ${fmt(x.rv,2)}x\n`);
   }else if(type==="portfolio"){
    text+="PORTFOLIO\n";
    portfolio.forEach(p=>{const lc=Number(last(rowsFor(p.code))?.close||0);text+=`${p.code}: Qty ${p.qty}, Buy ${fmt(p.buy)}, Last ${fmt(lc)}, P/L ${fmt(p.qty*(lc-p.buy))}\n`});
@@ -8828,10 +9011,10 @@ document.addEventListener("keydown",event=>{
  <section class="ait-psa-terminal-modal" id="aitPsaDataReportMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">DATA CENTER CATEGORY</span><h2>▥ Report</h2><p>Select a data review workspace.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaDataCenterLauncherModal" type="button">← Data Center</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" data-ait-data-action="viewListCharts" data-ait-data-group="report" type="button"><span>3M</span><b>Saved 3M Charts</b><small>Open saved three-month charts for the active list.</small></button><button class="ait-psa-terminal-command" data-ait-data-action="viewListCharts6" data-ait-data-group="report" type="button"><span>6M</span><b>Saved 6M Charts</b><small>Open saved six-month charts for the active list.</small></button><button class="ait-psa-terminal-command" data-ait-data-action="viewDownloadedData" data-ait-data-group="report" type="button"><span>⌗</span><b>Downloaded Data</b><small>Inspect stored OHLC records in a data table.</small></button><button class="ait-psa-terminal-command" data-ait-data-workspace="status" data-ait-data-group="report" type="button"><span>◉</span><b>Download Status</b><small>Open the Data Center workspace and current job status.</small></button></div></div></section>
  <section class="ait-psa-terminal-modal ait-psa-workspace-modal" id="aitPsaDownloadModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow" id="aitPsaDataCenterEyebrow">DATA CENTER TOOL</span><h2 id="aitPsaDataCenterTitle">⇩ Data Center</h2><p id="aitPsaDataCenterDescription">Selected data operation workspace.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" id="aitPsaDataCenterBack" type="button">← Data Center</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body ait-psa-workspace-host" id="aitPsaDownloadHost"></div></section>
  <section class="ait-psa-terminal-modal ait-psa-workspace-modal" id="aitPsaWatchlistModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">WORKSPACE TERMINAL</span><h2>★ Watch List</h2><p>Manage stock groups, trading codes and chart access.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaWorkspaceModal" type="button">← Workspace</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body ait-psa-workspace-host" id="aitPsaWatchlistHost"></div></section>
- <section class="ait-psa-terminal-modal" id="aitPsaTradingLauncherModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">TRADING WORKSPACE</span><h2>▥ Trading</h2><p>Choose a trading workspace category.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaWorkspaceModal" type="button">← Workspace</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid ait-psa-trading-launcher-grid"><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaPortfolioMenuModal" type="button"><span>◫</span><b>Portfolio</b><small>Positions, quantities, cost, value and profit or loss.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaReportMenuModal" type="button"><span>▥</span><b>Report</b><small>Charts, generated reports and historical data explorer.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaScannerMenuModal" type="button"><span>⌁</span><b>Scanner</b><small>Indicators, VPA, AIT Potential and comparison analysis.</small></button></div></div></section>
+ <section class="ait-psa-terminal-modal" id="aitPsaTradingLauncherModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">TRADING WORKSPACE</span><h2>▥ Trading</h2><p>Choose a trading workspace category.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaWorkspaceModal" type="button">← Workspace</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid ait-psa-trading-launcher-grid"><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaPortfolioMenuModal" type="button"><span>◫</span><b>Portfolio</b><small>Positions, quantities, cost, value and profit or loss.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaReportMenuModal" type="button"><span>▥</span><b>Report</b><small>Charts, generated reports and historical data explorer.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaScannerMenuModal" type="button"><span>⌁</span><b>Scanner</b><small>Technical, Smart Money, Relative Strength and three AIT screening models.</small></button></div></div></section>
  <section class="ait-psa-terminal-modal" id="aitPsaPortfolioMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">TRADING CATEGORY</span><h2>◫ Portfolio</h2><p>Select the portfolio workspace.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaTradingLauncherModal" type="button">← Trading</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid ait-psa-trading-tool-grid"><button class="ait-psa-terminal-command" data-ait-trading-tab="portfolio" data-ait-trading-group="portfolio" type="button"><span>◫</span><b>Portfolio Manager</b><small>Manage holdings and review current portfolio performance.</small></button></div></div></section>
  <section class="ait-psa-terminal-modal" id="aitPsaReportMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">TRADING CATEGORY</span><h2>▥ Report</h2><p>Select a reporting and exploration workspace.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaTradingLauncherModal" type="button">← Trading</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid ait-psa-trading-tool-grid"><button class="ait-psa-terminal-command" data-ait-trading-tab="charts" data-ait-trading-group="report" type="button"><span>▥</span><b>Charts</b><small>Open the multi-chart analysis workspace.</small></button><button class="ait-psa-terminal-command" data-ait-trading-tab="reports" data-ait-trading-group="report" type="button"><span>≡</span><b>Report</b><small>Generate portfolio, scanner and comparison reports.</small></button><button class="ait-psa-terminal-command" data-ait-trading-tab="explorer" data-ait-trading-group="report" type="button"><span>⌕</span><b>Explorer</b><small>Explore saved OHLC history and local market data.</small></button></div></div></section>
- <section class="ait-psa-terminal-modal" id="aitPsaScannerMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">TRADING CATEGORY</span><h2>⌁ Scanner</h2><p>Select a market scanning workspace.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaTradingLauncherModal" type="button">← Trading</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid ait-psa-trading-tool-grid"><button class="ait-psa-terminal-command" data-ait-trading-tab="indicators" data-ait-trading-group="scanner" type="button"><span>∿</span><b>Indicators</b><small>Scan SMA, RSI, momentum and technical signals.</small></button><button class="ait-psa-terminal-command" data-ait-trading-tab="vpa" data-ait-trading-group="scanner" type="button"><span>▥</span><b>VPA</b><small>Analyze volume, price spread and effort versus result.</small></button><button class="ait-psa-terminal-command" data-ait-trading-tab="potential" data-ait-trading-group="scanner" type="button"><span>◆</span><b>AIT Potential</b><small>Rank combined technical and VPA opportunities.</small></button><button class="ait-psa-terminal-command" data-ait-trading-tab="comparison" data-ait-trading-group="scanner" type="button"><span>⇄</span><b>Comparison</b><small>Compare return, volatility, volume and momentum.</small></button></div></div></section>
+ <section class="ait-psa-terminal-modal" id="aitPsaScannerMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">TRADING CATEGORY</span><h2>⌁ Scanner</h2><p>Select a market scanning workspace.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaTradingLauncherModal" type="button">← Trading</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid ait-psa-trading-tool-grid"><button class="ait-psa-terminal-command" data-ait-trading-tab="indicators" data-ait-trading-group="scanner" type="button"><span>∿</span><b>Technical Scanner</b><small>Screen trend, momentum, SMA, RSI and volume conditions.</small></button><button class="ait-psa-terminal-command" data-ait-trading-tab="vpa" data-ait-trading-group="scanner" type="button"><span>▥</span><b>Smart Money Scanner</b><small>Analyze VPA, volume, spread and effort versus result.</small></button><button class="ait-psa-terminal-command" data-ait-trading-tab="comparison" data-ait-trading-group="scanner" type="button"><span>⇄</span><b>Relative Strength Scanner</b><small>Rank active stocks against their peers without issuing buy signals.</small></button><button class="ait-psa-terminal-command" data-ait-trading-tab="potential-composite" data-ait-trading-group="scanner" type="button"><span>◇</span><b>AIT Composite Screener</b><small>40/35/25 weighted multi-factor score.</small></button><button class="ait-psa-terminal-command" data-ait-trading-tab="potential" data-ait-trading-group="scanner" type="button"><span>◆</span><b>AIT Elite Screener</b><small>Balanced 50/50 primary score with relative tie-breaking.</small></button><button class="ait-psa-terminal-command" data-ait-trading-tab="potential-priority" data-ait-trading-group="scanner" type="button"><span>★</span><b>AIT Signal Priority Screener</b><small>Signal-first ranking that keeps Strong Buy above Buy.</small></button></div></div></section>
  <section class="ait-psa-terminal-modal ait-psa-workspace-modal" id="aitPsaTradingModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow" id="aitPsaTradingEyebrow">TRADING TOOL</span><h2 id="aitPsaTradingTitle">▥ Trading</h2><p id="aitPsaTradingDescription">Selected trading workspace.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" id="aitPsaTradingBack" type="button">← Trading</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body ait-psa-workspace-host" id="aitPsaTradingHost"></div></section>
 </div>
 
@@ -9093,10 +9276,12 @@ document.addEventListener('DOMContentLoaded', () => {
     charts: ['▥ Charts', 'Multi-chart analysis workspace.'],
     reports: ['≡ Report', 'Generated trading and scanner reports.'],
     explorer: ['⌕ Explorer', 'Saved OHLC history and local data explorer.'],
-    indicators: ['∿ Indicators', 'Technical indicator scanner.'],
-    vpa: ['▥ VPA', 'Volume price analysis scanner.'],
-    potential: ['◆ AIT Potential', 'Combined opportunity ranking workspace.'],
-    comparison: ['⇄ Comparison', 'Relative performance comparison workspace.']
+    indicators: ['∿ Technical Scanner', 'Technical trend, momentum and volume screening.'],
+    vpa: ['▥ Smart Money Scanner', 'VPA-based volume and price-spread screening.'],
+    comparison: ['⇄ Relative Strength Scanner', 'Cross-stock relative ranking workspace.'],
+    'potential-composite': ['◇ AIT Composite Screener', '40/35/25 weighted multi-factor screening.'],
+    potential: ['◆ AIT Elite Screener', 'Balanced 50/50 primary scoring with relative tie-breaking.'],
+    'potential-priority': ['★ AIT Signal Priority Screener', 'Signal-first ranking with close-score relative tie-breaking.']
   };
   const tradingGroupModal = {
     portfolio: 'aitPsaPortfolioMenuModal',
