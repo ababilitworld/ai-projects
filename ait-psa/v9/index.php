@@ -9492,5 +9492,74 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 
+<style id="v10020-scanner-search-style">
+.v11-scanner-searchbar{position:relative;display:grid;grid-template-columns:auto minmax(190px,.65fr) minmax(300px,1.35fr) auto;grid-template-areas:"orb copy field clear" "orb status status status";gap:9px 14px;align-items:center;overflow:hidden;margin:12px 0 10px;padding:16px;border:1px solid var(--v10-line,var(--line,rgba(148,163,184,.30)));border-radius:20px;background:linear-gradient(135deg,color-mix(in srgb,var(--v10-card,var(--card,#111827)) 96%,transparent),color-mix(in srgb,var(--v10-panel-solid,var(--panel,#0f172a)) 94%,transparent));color:var(--v10-text,var(--text,#e5edf8));box-shadow:0 18px 42px color-mix(in srgb,var(--v10-shadow,rgba(0,0,0,.32)) 80%,transparent),inset 0 1px 0 color-mix(in srgb,#fff 10%,transparent);isolation:isolate}
+.v11-scanner-searchbar::before{content:"";position:absolute;inset:-1px;z-index:-2;border-radius:inherit;background:radial-gradient(circle at 12% 10%,color-mix(in srgb,var(--v10-primary,var(--primary,#2563eb)) 28%,transparent),transparent 32%),radial-gradient(circle at 88% 100%,color-mix(in srgb,var(--v10-accent,var(--accent,#06b6d4)) 20%,transparent),transparent 34%);pointer-events:none}
+.v11-scanner-searchbar::after{content:"";position:absolute;top:0;left:9%;right:9%;height:1px;background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--v10-primary,var(--primary,#2563eb)) 78%,#fff),transparent);opacity:.85;pointer-events:none}
+.v11-scanner-searchbar__orb{grid-area:orb;display:grid;place-items:center;width:54px;height:54px;border:1px solid color-mix(in srgb,var(--v10-primary,var(--primary,#2563eb)) 44%,var(--v10-line,var(--line,#334155)));border-radius:17px;background:linear-gradient(145deg,color-mix(in srgb,var(--v10-primary,var(--primary,#2563eb)) 24%,var(--v10-card,var(--card,#111827))),color-mix(in srgb,var(--v10-card,var(--card,#111827)) 96%,transparent));color:var(--v10-primary,var(--primary,#60a5fa));font-size:1.75rem;font-weight:900;box-shadow:0 10px 28px color-mix(in srgb,var(--v10-primary,var(--primary,#2563eb)) 22%,transparent),inset 0 1px 0 rgba(255,255,255,.11)}
+.v11-scanner-searchbar__copy{grid-area:copy;min-width:0}.v11-scanner-searchbar__copy label{display:block;color:var(--v10-text,var(--text,#f8fafc));font-size:1rem;font-weight:900;letter-spacing:-.01em}.v11-scanner-searchbar__copy small{display:block;margin-top:3px;color:var(--v10-muted,var(--muted,#94a3b8));font-size:.72rem;line-height:1.35}.v11-scanner-searchbar__kicker{display:block;margin-bottom:2px;color:var(--v10-primary,var(--primary,#60a5fa));font-size:.62rem;font-weight:900;letter-spacing:.13em;text-transform:uppercase}
+.v11-scanner-searchbar__field{grid-area:field;position:relative;min-width:0}.v11-scanner-searchbar__icon{position:absolute;left:14px;top:50%;z-index:2;transform:translateY(-50%);color:var(--v10-primary,var(--primary,#60a5fa));font-size:1.15rem;pointer-events:none}.v11-scanner-searchbar input{width:100%!important;min-height:50px!important;padding:11px 46px 11px 42px!important;border:1px solid color-mix(in srgb,var(--v10-line,var(--line,#334155)) 90%,transparent)!important;border-radius:15px!important;outline:0!important;background:color-mix(in srgb,var(--v10-input,var(--v10-panel-solid,var(--panel,#0f172a))) 96%,transparent)!important;color:var(--v10-text,var(--text,#f8fafc))!important;font-size:.92rem!important;font-weight:750!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 8px 22px rgba(0,0,0,.12)!important;transition:border-color .18s ease,box-shadow .18s ease,transform .18s ease,background .18s ease!important}.v11-scanner-searchbar input::placeholder{color:color-mix(in srgb,var(--v10-muted,var(--muted,#94a3b8)) 84%,transparent);font-weight:600}.v11-scanner-searchbar input:hover{border-color:color-mix(in srgb,var(--v10-primary,var(--primary,#2563eb)) 52%,var(--v10-line,var(--line,#334155)))!important}.v11-scanner-searchbar input:focus{border-color:var(--v10-primary,var(--primary,#2563eb))!important;background:color-mix(in srgb,var(--v10-card,var(--card,#111827)) 97%,transparent)!important;box-shadow:0 0 0 4px color-mix(in srgb,var(--v10-primary,var(--primary,#2563eb)) 18%,transparent),0 14px 34px color-mix(in srgb,var(--v10-primary,var(--primary,#2563eb)) 16%,transparent)!important;transform:translateY(-1px)}
+.v11-scanner-searchbar__key{position:absolute;right:12px;top:50%;transform:translateY(-50%);min-width:25px;padding:3px 7px;border:1px solid var(--v10-line,var(--line,#334155));border-bottom-width:2px;border-radius:7px;background:color-mix(in srgb,var(--v10-card,var(--card,#111827)) 90%,transparent);color:var(--v10-muted,var(--muted,#94a3b8));font:700 .7rem/1 system-ui,sans-serif;text-align:center;pointer-events:none}
+.v11-scanner-searchbar__clear{grid-area:clear;display:inline-flex!important;visibility:visible!important;align-items:center;justify-content:center;min-width:82px;min-height:48px!important;padding-inline:17px!important;border-radius:14px!important}.v11-scanner-searchbar__clear:disabled{display:inline-flex!important;visibility:visible!important;opacity:.55;cursor:not-allowed}.v11-scanner-searchbar__count{grid-area:status;min-height:18px;color:var(--v10-muted,var(--muted,#94a3b8));font-size:.72rem;font-weight:650}.v11-scanner-search-empty td{text-align:center;padding:20px!important;opacity:.7}
+@media(max-width:940px){.v11-scanner-searchbar{grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:"orb copy clear" "field field field" "status status status"}}
+@media(max-width:620px){.v11-scanner-searchbar{grid-template-columns:1fr auto;grid-template-areas:"copy copy" "field clear" "status status";padding:13px}.v11-scanner-searchbar__orb{display:none}.v11-scanner-searchbar__copy small{display:none}}
+@media(max-width:430px){.v11-scanner-searchbar{grid-template-columns:1fr;grid-template-areas:"copy" "field" "clear" "status"}.v11-scanner-searchbar__clear{width:100%}}
+</style>
+<script id="v10019-scanner-search-script">
+(()=>{
+ const normalize=value=>String(value||'').toUpperCase().replace(/\s+/g,' ').trim();
+ const setupCard=(card,index)=>{
+  if(!card||card.dataset.v10020SearchReady==='1')return;
+  const region=card.querySelector('.v11-scanner-table-region');
+  const tbody=region?.querySelector('tbody');
+  if(!region||!tbody)return;
+  card.dataset.v10020SearchReady='1';
+  const title=card.querySelector('.v11-card-head h3')?.textContent?.trim()||'Scanner';
+  const id=`v11ScannerSearch${index}`;
+  const bar=document.createElement('div');
+  bar.className='v11-scanner-searchbar';
+  bar.innerHTML=`<div class="v11-scanner-searchbar__orb" aria-hidden="true">⌕</div><div class="v11-scanner-searchbar__copy"><span class="v11-scanner-searchbar__kicker">SCANNER RESULTS</span><label for="${id}">Search Trading Code</label><small>Instantly filter ${title} ranked results</small></div><div class="v11-scanner-searchbar__field"><span class="v11-scanner-searchbar__icon" aria-hidden="true">⌕</span><input class="input" id="${id}" type="search" autocomplete="off" spellcheck="false" placeholder="Search ROBI, ALIF, SUMITPOWER…" aria-label="Search ${title} results"><kbd class="v11-scanner-searchbar__key">/</kbd></div><button class="btn soft v11-scanner-searchbar__clear" type="button">Clear</button><div class="v11-scanner-searchbar__count" aria-live="polite">0 shown</div>`;
+  region.before(bar);
+  const input=bar.querySelector('input');
+  const clear=bar.querySelector('button');
+  const count=bar.querySelector('.v11-scanner-searchbar__count');
+  const apply=()=>{
+   const q=normalize(input.value);
+   let total=0,shown=0;
+   tbody.querySelectorAll('tr').forEach(row=>{
+    if(row.classList.contains('v11-scanner-search-empty'))row.remove();
+   });
+   const rows=[...tbody.querySelectorAll('tr')];
+   rows.forEach(row=>{
+    const isMessage=row.children.length===1 && /no local data|no sufficient|no data/i.test(row.textContent||'');
+    if(isMessage){row.hidden=!!q;return;}
+    total++;
+    const match=!q||normalize(row.textContent).includes(q);
+    row.hidden=!match;
+    if(match)shown++;
+   });
+   if(q&&total>0&&shown===0){
+    const empty=document.createElement('tr');
+    empty.className='v11-scanner-search-empty';
+    const colspan=region.querySelector('thead tr')?.children.length||1;
+    empty.innerHTML=`<td colspan="${colspan}">No scanner result matches “${String(input.value).replace(/[<>&\"]/g,c=>({'<':'&lt;','>':'&gt;','&':'&amp;','"':'&quot;'}[c]))}”.</td>`;
+    tbody.appendChild(empty);
+   }
+   count.textContent=q?`${shown} of ${total} shown`:`${total} result${total===1?'':'s'}`;
+   clear.hidden=false;
+   clear.disabled=!input.value;
+   clear.setAttribute('aria-disabled', input.value ? 'false' : 'true');
+  };
+  input.addEventListener('input',apply);
+  clear.addEventListener('click',()=>{input.value='';apply();input.focus()});
+  new MutationObserver(()=>requestAnimationFrame(apply)).observe(tbody,{childList:true,subtree:false});
+  apply();
+ };
+ const init=()=>document.querySelectorAll('.v11-scanner-card').forEach(setupCard);
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+ new MutationObserver(init).observe(document.documentElement,{childList:true,subtree:true});
+})();
+</script>
+
 </body>
 </html>
