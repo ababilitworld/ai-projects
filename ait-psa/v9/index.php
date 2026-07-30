@@ -790,6 +790,193 @@ header h1{font-size:1.55rem!important}
 .v11-signal.buy{background:color-mix(in srgb,var(--v10-success) 14%,transparent);color:var(--v10-success)}
 .v11-signal.watch{background:color-mix(in srgb,var(--v10-warning) 14%,transparent);color:var(--v10-warning)}
 .v11-signal.avoid{background:color-mix(in srgb,var(--v10-danger) 14%,transparent);color:var(--v10-danger)}
+
+.v11-signal.strongest{background:color-mix(in srgb,var(--v10-success) 16%,transparent);color:var(--v10-success)}
+.v11-strength{display:flex;align-items:center;gap:8px;min-width:150px}
+.v11-strength-track{width:105px;height:8px;border-radius:999px;overflow:hidden;background:color-mix(in srgb,var(--v10-muted) 18%,transparent)}
+.v11-strength-fill{display:block;height:100%;width:var(--v11-strength,0%);border-radius:inherit;background:linear-gradient(90deg,var(--v10-danger),var(--v10-warning),var(--v10-success))}
+.v11-strength-value{min-width:34px;font-size:.74rem;font-weight:900;color:var(--v10-text)}
+.v11-potential-table{min-width:850px}
+
+.v11-potential-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+.v11-potential-chart-gallery{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.v11-potential-chart-card{padding:13px;border:1px solid var(--v10-line);border-radius:16px;background:var(--v10-card)}
+.v11-potential-chart-card-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:9px}
+.v11-potential-chart-identity{display:flex;align-items:center;gap:9px;min-width:0}
+.v11-potential-rank{display:grid;place-items:center;width:32px;height:32px;flex:0 0 32px;border-radius:10px;background:color-mix(in srgb,var(--v10-primary) 14%,transparent);color:var(--v10-primary);font-size:.75rem;font-weight:950}
+.v11-potential-chart-identity strong{display:block;font-size:.94rem}
+.v11-potential-chart-identity small{display:block;margin-top:2px;color:var(--v10-muted);font-size:.7rem}
+.v11-potential-chart-score{text-align:right}
+.v11-potential-chart-score strong{display:block;font-size:1rem}
+.v11-potential-chart-score small{display:block;color:var(--v10-muted);font-size:.68rem}
+.v11-potential-chart-box{height:260px;overflow:hidden;border:1px solid var(--v10-line);border-radius:13px;background:color-mix(in srgb,var(--v10-bg) 90%,black)}
+.v11-potential-chart-box canvas{width:100%;height:260px;display:block}
+.v11-potential-chart-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:9px;color:var(--v10-muted);font-size:.7rem}
+@media(max-width:820px){.v11-potential-chart-gallery{grid-template-columns:1fr}}
+@media(max-width:560px){.v11-potential-actions{width:100%;justify-content:stretch}.v11-potential-actions .btn{flex:1}.v11-potential-chart-box{height:225px}.v11-potential-chart-box canvas{height:225px}}
+
+/* V11 ranked charts — aligned with the Watch List 3M gallery */
+.v11-ranked-chart-modal .dialog{
+ width:min(1180px,calc(100vw - 28px));
+ background:var(--v10-bg);
+ border:1px solid var(--v10-line);
+ box-shadow:0 28px 80px rgba(2,6,23,.42);
+}
+.v11-ranked-chart-modal .modal-head{
+ position:sticky;
+ top:0;
+ z-index:8;
+ align-items:center;
+ padding:16px 18px;
+ margin:-1px -1px 16px;
+ border-radius:inherit;
+ border-bottom:1px solid color-mix(in srgb,var(--v10-primary) 28%,var(--v10-line));
+ background:color-mix(in srgb,var(--v10-card) 94%,var(--v10-primary) 6%);
+ box-shadow:0 8px 24px rgba(2,6,23,.12);
+ backdrop-filter:blur(16px);
+ -webkit-backdrop-filter:blur(16px);
+}
+.v11-ranked-chart-modal .modal-head>div{min-width:0}
+.v11-ranked-chart-modal .modal-head h2{
+ margin:0;
+ color:var(--v10-text);
+ font-size:clamp(1.05rem,2vw,1.35rem);
+ line-height:1.25;
+ letter-spacing:-.02em;
+ text-shadow:none;
+}
+.v11-ranked-chart-modal .modal-head .small{
+ display:block;
+ margin-top:5px;
+ color:var(--v10-muted);
+ font-size:.78rem;
+ line-height:1.45;
+}
+.v11-ranked-chart-modal .modal-head .icon{
+ flex:0 0 auto;
+ width:38px;
+ height:38px;
+ border-radius:12px;
+ color:var(--v10-text);
+ background:color-mix(in srgb,var(--v10-card) 84%,var(--v10-primary) 16%);
+ border:1px solid var(--v10-line);
+ font-size:1.35rem;
+ line-height:1;
+}
+.v11-ranked-chart-modal .modal-head .icon:hover{
+ border-color:var(--v10-primary);
+ transform:translateY(-1px);
+}
+.v11-ranked-chart-modal .v11-potential-chart-gallery{
+ display:grid;
+ grid-template-columns:repeat(2,minmax(0,1fr));
+ gap:14px;
+}
+.v11-ranked-chart-modal .mini-card.v11-ranked-mini-card{
+ min-width:0;
+ padding:14px;
+ border:1px solid var(--v10-line);
+ border-radius:16px;
+ background:var(--v10-card);
+ box-shadow:0 10px 28px rgba(2,6,23,.08);
+}
+.v11-ranked-chart-modal .mini-card.v11-ranked-mini-card:hover{
+ border-color:color-mix(in srgb,var(--v10-primary) 50%,var(--v10-line));
+ box-shadow:0 16px 34px rgba(2,6,23,.13);
+}
+.v11-ranked-chart-head{
+ display:flex;
+ align-items:center;
+ justify-content:space-between;
+ gap:12px;
+ margin-bottom:10px;
+}
+.v11-ranked-chart-title{
+ display:flex;
+ align-items:center;
+ gap:10px;
+ min-width:0;
+}
+.v11-ranked-chart-title h3{
+ margin:0;
+ color:var(--v10-text);
+ font-size:1rem;
+ line-height:1.25;
+ letter-spacing:.01em;
+}
+.v11-ranked-chart-title .small{
+ display:block;
+ margin-top:3px;
+ color:var(--v10-muted);
+ font-size:.72rem;
+}
+.v11-ranked-chart-meta{
+ display:flex;
+ flex-wrap:wrap;
+ align-items:center;
+ gap:7px;
+ margin-top:10px;
+ color:var(--v10-muted);
+ font-size:.72rem;
+ line-height:1.4;
+}
+.v11-ranked-chart-score-pill{
+ display:inline-flex;
+ align-items:center;
+ gap:5px;
+ padding:5px 8px;
+ border-radius:999px;
+ color:var(--v10-text);
+ background:color-mix(in srgb,var(--v10-primary) 12%,var(--v10-card));
+ border:1px solid color-mix(in srgb,var(--v10-primary) 28%,var(--v10-line));
+ font-weight:800;
+ white-space:nowrap;
+}
+.v11-ranked-chart-modal .chart-box.mini-chart{
+ height:280px;
+ overflow:hidden;
+ border:1px solid var(--v10-line);
+ border-radius:14px;
+ background:color-mix(in srgb,var(--v10-bg) 94%,var(--v10-card));
+}
+.v11-ranked-chart-modal .chart-box.mini-chart canvas{
+ width:100%;
+ height:280px;
+ display:block;
+}
+.v11-ranked-chart-modal .v11-signal{white-space:nowrap}
+@media(max-width:820px){
+ .v11-ranked-chart-modal .v11-potential-chart-gallery{grid-template-columns:1fr}
+}
+@media(max-width:560px){
+ .v11-ranked-chart-modal .dialog{width:100vw;max-height:100vh!important;border-radius:0}
+ .v11-ranked-chart-modal .modal-head{padding:13px 14px;margin:-1px -1px 12px}
+ .v11-ranked-chart-modal .mini-card.v11-ranked-mini-card{padding:11px;border-radius:13px}
+ .v11-ranked-chart-modal .chart-box.mini-chart,.v11-ranked-chart-modal .chart-box.mini-chart canvas{height:235px}
+ .v11-ranked-chart-head{align-items:flex-start}
+}
+
+.v11-ranked-chart-modal{z-index:2147483646!important}
+.v11-ranked-chart-modal.open{display:flex!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important}
+.v11-ranked-chart-modal>.dialog{max-height:calc(100vh - 28px);overflow:auto}
+body.v11-ranked-modal-open{overflow:hidden}
+
+
+.v11-potential-guideline{margin-bottom:14px;padding:14px;border:1px solid var(--v10-line);border-radius:16px;background:color-mix(in srgb,var(--v10-card) 78%,transparent)}
+.v11-potential-guideline-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:11px}
+.v11-potential-guideline-head h4{margin:0;font-size:1rem}
+.v11-potential-guideline-head p{margin:3px 0 0;font-size:.78rem;color:var(--v10-muted)}
+.v11-potential-guideline-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.v11-potential-guide{padding:11px;border:1px solid var(--v10-line);border-radius:13px;background:color-mix(in srgb,var(--v10-bg) 55%,transparent)}
+.v11-potential-guide strong{display:block;margin-bottom:4px;font-size:.82rem}
+.v11-potential-guide span{display:block;color:var(--v10-muted);font-size:.73rem;line-height:1.45}
+.v11-potential-guide--strongest{border-top:3px solid var(--v10-success)}
+.v11-potential-guide--watch{border-top:3px solid var(--v10-warning)}
+.v11-potential-guide--avoid{border-top:3px solid var(--v10-danger)}
+.v11-potential-guide--formula{border-top:3px solid var(--v10-primary)}
+@media(max-width:900px){.v11-potential-guideline-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:560px){.v11-potential-guideline-grid{grid-template-columns:1fr}.v11-potential-guideline-head{display:block}}
+
 .v11-summary-grid{
  display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px
 }
@@ -1484,6 +1671,9 @@ body.v112-chart-mode #v112ChartWorkspace{
  --v116-bear-dark:#b91c1c;
 }
 
+/* Apply the neutral chart palette only to real plot containers.
+   Do not use broad [id*=chart] or [class*=chart-] selectors here: those
+   also match the ranked gallery modal, its header, title and controls. */
 .chart-container,
 .chart-wrap,
 .chart-panel,
@@ -1492,10 +1682,14 @@ body.v112-chart-mode #v112ChartWorkspace{
 .chart-canvas-wrap,
 .modal .chart-container,
 .modal .chart-wrap,
-#chart,
-#charts,
-[id*="chart" i],
-[class*="chart-" i]{
+.modal .chart-panel,
+.modal .chart-box,
+.modal .chart-area,
+.modal .chart-canvas-wrap,
+canvas#chart,
+canvas#charts,
+svg#chart,
+svg#charts{
  background:var(--v116-chart-bg)!important;
  border-color:var(--v116-chart-border)!important;
 }
@@ -1505,19 +1699,27 @@ body.v112-chart-mode #v112ChartWorkspace{
 .chart-panel canvas,
 .chart-box canvas,
 .chart-area canvas,
-.modal canvas,
+.chart-canvas-wrap canvas,
+.modal .chart-container canvas,
+.modal .chart-wrap canvas,
+.modal .chart-panel canvas,
+.modal .chart-box canvas,
+.modal .chart-area canvas,
+.modal .chart-canvas-wrap canvas,
 canvas[id*="chart" i],
-canvas[class*="chart" i]{
+canvas[class~="chart"]{
  background:var(--v116-chart-plot)!important;
  border-radius:10px;
 }
 
-.chart-container svg,
-.chart-wrap svg,
-.chart-panel svg,
-.chart-box svg,
-.chart-area svg,
-.modal svg{
+/* SVG backgrounds are limited to SVGs inside an actual plot container.
+   This deliberately excludes modal header/close icons. */
+.chart-container > svg,
+.chart-wrap > svg,
+.chart-panel > svg,
+.chart-box > svg,
+.chart-area > svg,
+.chart-canvas-wrap > svg{
  background:var(--v116-chart-plot)!important;
 }
 
@@ -3245,6 +3447,93 @@ canvas,
 .v105-inline-ready{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border-radius:999px;border:1px solid rgba(34,197,94,.28);background:rgba(34,197,94,.10);font-size:.78rem;font-weight:800;color:#16a34a;white-space:nowrap}
 .v105-inline-ready i{width:8px;height:8px;border-radius:999px;background:#22c55e;box-shadow:0 0 0 4px rgba(34,197,94,.12)}
 @media(max-width:640px){.v9-brand-heading,.v105-brand-line{gap:8px}.v9-brand-heading .v9-state,.v105-inline-ready{font-size:.72rem;padding:6px 9px}}
+
+/* V11.10 ranked galleries: Watch List structure with active-theme surfaces */
+#v11RankedChartModal{background:color-mix(in srgb,var(--v10-bg) 78%,transparent)!important;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+#v11RankedChartModal>.dialog{width:min(1180px,calc(100vw - 28px))!important;max-height:calc(100vh - 28px)!important;padding:0 16px 18px!important;overflow:auto!important;border:1px solid var(--v10-line)!important;border-radius:18px!important;background:linear-gradient(145deg,var(--v10-bg-soft),var(--v10-panel-solid))!important;color:var(--v10-text)!important;box-shadow:var(--v10-shadow)!important}
+#v11RankedChartModal .modal-head{position:sticky!important;top:0!important;z-index:20!important;display:flex!important;align-items:center!important;justify-content:space-between!important;gap:14px!important;margin:0 -16px 16px!important;padding:16px 18px!important;border:0!important;border-bottom:1px solid var(--v10-line)!important;border-radius:18px 18px 0 0!important;background:linear-gradient(135deg,var(--v10-panel-solid),color-mix(in srgb,var(--v10-primary) 12%,var(--v10-panel-solid)))!important;color:var(--v10-text)!important;box-shadow:0 7px 22px color-mix(in srgb,var(--v10-bg) 55%,transparent)!important}
+#v11RankedChartModal .modal-head h2{margin:0!important;color:var(--v10-text)!important;font-size:1.28rem!important;font-weight:900!important;line-height:1.25!important;text-shadow:none!important;opacity:1!important}
+#v11RankedChartModal .modal-head .small{display:block!important;margin-top:4px!important;color:var(--v10-muted)!important;font-size:.78rem!important;font-weight:650!important;line-height:1.4!important;opacity:1!important}
+#v11RankedChartModal .modal-head .icon{display:inline-flex!important;align-items:center!important;justify-content:center!important;min-width:40px!important;width:40px!important;height:40px!important;padding:0!important;border:1px solid var(--v10-line)!important;border-radius:11px!important;background:color-mix(in srgb,var(--v10-card) 82%,var(--v10-panel-solid))!important;color:var(--v10-text)!important;font-size:1.35rem!important;font-weight:800!important;opacity:1!important}
+#v11RankedChartModal .modal-head .icon:hover{border-color:color-mix(in srgb,var(--v10-primary) 55%,var(--v10-line))!important;background:color-mix(in srgb,var(--v10-primary) 14%,var(--v10-panel-solid))!important}
+#v11RankedChartModal #v11RankedChartGallery.gallery{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:13px!important}
+#v11RankedChartModal .mini-card.v11-ranked-mini-card{min-width:0!important;padding:10px!important;border:1px solid var(--v10-line)!important;border-radius:12px!important;background:linear-gradient(145deg,color-mix(in srgb,var(--v10-card) 88%,var(--v10-panel-solid)),var(--v10-panel-solid))!important;color:var(--v10-text)!important;box-shadow:0 7px 20px color-mix(in srgb,var(--v10-bg) 42%,transparent)!important}
+#v11RankedChartModal .mini-card.v11-ranked-mini-card:hover{border-color:color-mix(in srgb,var(--v10-primary) 48%,var(--v10-line))!important;box-shadow:0 10px 28px color-mix(in srgb,var(--v10-primary) 11%,transparent)!important}
+#v11RankedChartModal .mini-card .row{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:10px!important;margin-bottom:7px!important}
+#v11RankedChartModal .mini-card h3{margin:0!important;color:var(--v10-text)!important;font-size:1rem!important;font-weight:900!important;line-height:1.3!important;opacity:1!important;text-shadow:none!important}
+#v11RankedChartModal .v11-ranked-number{color:var(--v10-primary)!important;font-size:.76rem!important;font-weight:900!important}
+#v11RankedChartModal .v11-ranked-summary-line{display:flex!important;align-items:center!important;flex-wrap:wrap!important;gap:7px 12px!important;margin:0 0 8px!important;color:var(--v10-muted)!important;font-size:.74rem!important;font-weight:650!important;line-height:1.35!important}
+#v11RankedChartModal .v11-ranked-summary-line b{color:var(--v10-text)!important;font-weight:900!important}
+#v11RankedChartModal .chart-box.mini-chart{height:300px!important;overflow:hidden!important;border:1px solid var(--v10-line)!important;border-radius:10px!important;background:color-mix(in srgb,var(--v10-bg-soft) 72%,var(--v10-panel-solid))!important}
+#v11RankedChartModal .chart-box.mini-chart canvas{display:block!important;width:100%!important;height:300px!important}
+#v11RankedChartModal .small.v11-ranked-coverage{display:block!important;margin-top:7px!important;color:var(--v10-muted)!important;font-size:.72rem!important;font-weight:650!important;line-height:1.4!important;opacity:1!important}
+#v11RankedChartModal .v11-signal{display:inline-flex!important;align-items:center!important;padding:4px 8px!important;border-radius:999px!important;font-size:.68rem!important;font-weight:900!important;line-height:1!important}
+#v11RankedChartModal .v11-signal.strongest,#v11RankedChartModal .v11-signal.buy{background:#dcfce7!important;color:#166534!important;border:1px solid #86efac!important}
+#v11RankedChartModal .v11-signal.watch{background:#fef3c7!important;color:#92400e!important;border:1px solid #fcd34d!important}
+#v11RankedChartModal .v11-signal.avoid,#v11RankedChartModal .v11-signal.sell{background:#fee2e2!important;color:#991b1b!important;border:1px solid #fca5a5!important}
+@media(max-width:820px){#v11RankedChartModal #v11RankedChartGallery.gallery{grid-template-columns:1fr!important}}
+@media(max-width:560px){#v11RankedChartModal>.dialog{width:100vw!important;max-height:100vh!important;border-radius:0!important}#v11RankedChartModal .modal-head{border-radius:0!important}#v11RankedChartModal .chart-box.mini-chart,#v11RankedChartModal .chart-box.mini-chart canvas{height:245px!important}}
+
+/* V11.11 — ranked galleries retain the exact scoped terminal palette after promotion */
+#v11RankedChartModal{
+ background:color-mix(in srgb,var(--v1125-surface-2,var(--v10-bg)) 78%,transparent)!important;
+}
+#v11RankedChartModal>.dialog{
+ border-color:var(--v1125-border,var(--v10-line))!important;
+ background:var(--v1125-surface-1,var(--v10-panel-solid))!important;
+ color:var(--v1125-text,var(--v10-text))!important;
+}
+#v11RankedChartModal .modal-head{
+ border-bottom-color:var(--v1125-border,var(--v10-line))!important;
+ background:linear-gradient(135deg,var(--v1125-surface-2,var(--v10-panel-solid)),color-mix(in srgb,var(--v1125-accent,var(--v10-primary)) 10%,var(--v1125-surface-2,var(--v10-panel-solid))))!important;
+ color:var(--v1125-text,var(--v10-text))!important;
+}
+#v11RankedChartModal .modal-head h2,
+#v11RankedChartModal .mini-card h3,
+#v11RankedChartModal .v11-ranked-summary-line b{color:var(--v1125-text,var(--v10-text))!important}
+#v11RankedChartModal .modal-head .small,
+#v11RankedChartModal .v11-ranked-summary-line,
+#v11RankedChartModal .small.v11-ranked-coverage{color:var(--v1125-muted,var(--v10-muted))!important}
+#v11RankedChartModal .modal-head .icon,
+#v11RankedChartModal .mini-card.v11-ranked-mini-card{
+ border-color:var(--v1125-border,var(--v10-line))!important;
+ background:var(--v1125-surface-2,var(--v10-card))!important;
+ color:var(--v1125-text,var(--v10-text))!important;
+}
+#v11RankedChartModal .chart-box.mini-chart{
+ border-color:var(--v1125-border,var(--v10-line))!important;
+ background:var(--v1125-surface-soft,var(--v10-bg-soft))!important;
+}
+#v11RankedChartModal .v11-ranked-number{color:var(--v1125-accent,var(--v10-primary))!important}
+
+/* V11.12 — exact themed gallery shell, header and canvas background */
+#v11RankedChartModal{
+ background:var(--v1125-overlay,rgba(2,6,23,.72))!important;
+}
+#v11RankedChartModal>.dialog{
+ background:var(--v1125-surface-1,var(--v10-panel-solid))!important;
+}
+#v11RankedChartModal .modal-head{
+ background:var(--v1125-surface-1,var(--v10-panel-solid))!important;
+ border-bottom:1px solid var(--v1125-border,var(--v10-line))!important;
+ box-shadow:0 8px 22px var(--v1125-shadow,rgba(2,6,23,.18))!important;
+}
+#v11RankedChartModal .modal-head>div:first-child{
+ min-width:0!important;
+ padding:0!important;
+ border:0!important;
+ border-radius:0!important;
+ background:transparent!important;
+ box-shadow:none!important;
+}
+#v11RankedChartModal #v11RankedChartGallery{
+ margin:0!important;
+ padding:2px!important;
+ border-radius:14px!important;
+ background:var(--v1125-surface-1,var(--v10-panel-solid))!important;
+}
+#v11RankedChartModal .modal-head h2{color:var(--v1125-text,var(--v10-text))!important}
+#v11RankedChartModal .modal-head .small{color:var(--v1125-muted,var(--v10-muted))!important}
 </style>
 
 <script>
@@ -3866,6 +4155,7 @@ body.ait-psa-index-only #aitPsaOpenNotifications{display:none!important}
   <button class="v11-tab" type="button" data-v11-tab="comparison">Comparison</button>
   <button class="v11-tab" type="button" data-v11-tab="portfolio">Portfolio</button>
   <button class="v11-tab" type="button" data-v11-tab="vpa">VPA</button>
+  <button class="v11-tab" type="button" data-v11-tab="potential">AIT Potential</button>
   <button class="v11-tab" type="button" data-v11-tab="explorer">Explorer</button>
   <button class="v11-tab" type="button" data-v11-tab="reports">Reports</button>
  </nav>
@@ -3918,7 +4208,7 @@ body.ait-psa-index-only #aitPsaOpenNotifications{display:none!important}
  <section class="v11-workspace" data-v11-workspace="indicators">
   <div class="v11-grid two">
    <article class="v11-card">
-    <div class="v11-card-head"><div><h3>Technical indicator scanner</h3><small>SMA, RSI, momentum and volume diagnostics</small></div><button class="btn primary" id="v11RunScanner" type="button">Run scanner</button></div>
+    <div class="v11-card-head"><div><h3>Technical indicator scanner</h3><small>SMA, RSI, momentum and volume diagnostics</small></div><div class="v11-potential-actions"><button class="btn primary" id="v11RunScanner" type="button">Run scanner</button><button class="btn soft" id="v11ViewIndicatorCharts" type="button">View 3M Charts</button></div></div>
     <div class="v11-card-body">
      <div class="v11-table-wrap"><table class="v11-table"><thead><tr><th>Code</th><th>Close</th><th>SMA20</th><th>SMA50</th><th>RSI14</th><th>Momentum</th><th>Signal</th></tr></thead><tbody id="v11IndicatorRows"></tbody></table></div>
     </div>
@@ -3981,10 +4271,42 @@ body.ait-psa-index-only #aitPsaOpenNotifications{display:none!important}
 
  <section class="v11-workspace" data-v11-workspace="vpa">
   <article class="v11-card">
-   <div class="v11-card-head"><div><h3>VPA-style analysis workspace</h3><small>Effort-versus-result, spread, volume and trend scoring</small></div><button class="btn primary" id="v11RunVpa" type="button">Analyze active list</button></div>
+   <div class="v11-card-head"><div><h3>VPA-style analysis workspace</h3><small>Effort-versus-result, spread, volume and trend scoring</small></div><div class="v11-potential-actions"><button class="btn primary" id="v11RunVpa" type="button">Analyze active list</button><button class="btn soft" id="v11ViewVpaCharts" type="button">View 3M Charts</button></div></div>
    <div class="v11-card-body">
     <div class="v11-table-wrap"><table class="v11-table"><thead><tr><th>Code</th><th>Score</th><th>Spread</th><th>Rel. volume</th><th>Trend</th><th>Effort/result</th><th>Classification</th></tr></thead><tbody id="v11VpaRows"></tbody></table></div>
     <div class="v11-note" style="margin-top:10px">The VPA score is a transparent heuristic derived only from locally stored OHLCV data. It does not claim to identify institutional activity with certainty.</div>
+   </div>
+  </article>
+ </section>
+
+ <section class="v11-workspace" data-v11-workspace="potential">
+  <article class="v11-card">
+   <div class="v11-card-head">
+    <div><h3>AIT Potential</h3><small>Combined technical-indicator and VPA opportunity ranking</small></div>
+    <div class="v11-potential-actions">
+     <button class="btn primary" id="v11RunPotential" type="button">Calculate potential</button>
+     <button class="btn soft" id="v11ViewPotentialCharts" type="button">View 3M Charts</button>
+    </div>
+   </div>
+   <div class="v11-card-body">
+    <section class="v11-potential-guideline" aria-labelledby="v11PotentialGuidelineTitle">
+     <div class="v11-potential-guideline-head">
+      <div><h4 id="v11PotentialGuidelineTitle">Scanner Guideline</h4><p>Use the ranking as a shortlist, then verify price action, liquidity, support and risk before making a decision.</p></div>
+     </div>
+     <div class="v11-potential-guideline-grid">
+      <div class="v11-potential-guide v11-potential-guide--strongest"><strong>Strongest · 70–100</strong><span>Indicator trend and VPA behavior are jointly favorable. Look for confirmation above resistance or a controlled pullback.</span></div>
+      <div class="v11-potential-guide v11-potential-guide--watch"><strong>Watch · 50–69.99</strong><span>Mixed or developing setup. Keep on the watch list until price, volume and momentum provide clearer confirmation.</span></div>
+      <div class="v11-potential-guide v11-potential-guide--avoid"><strong>Avoid · Below 50</strong><span>Weak combined evidence or unfavorable structure. Avoid fresh entry unless the setup improves materially.</span></div>
+      <div class="v11-potential-guide v11-potential-guide--formula"><strong>Ranking Formula</strong><span>Combined score = 50% Indicator Score + 50% VPA Score. Rows are ordered from the highest score to the lowest.</span></div>
+     </div>
+    </section>
+    <div class="v11-table-wrap">
+     <table class="v11-table v11-potential-table">
+      <thead><tr><th>Trading Code</th><th>LTP</th><th>Indicator Score</th><th>VPA Score</th><th>Combined Score</th><th>Strength</th><th>Signal</th></tr></thead>
+      <tbody id="v11PotentialRows"></tbody>
+     </table>
+    </div>
+    <div class="v11-note" style="margin-top:10px">LTP is the latest locally stored closing price. Scores use locally stored OHLCV data only and are analytical guidance, not a guaranteed trading outcome.</div>
    </div>
   </article>
  </section>
@@ -4340,6 +4662,14 @@ body.ait-psa-index-only #aitPsaOpenNotifications{display:none!important}
 <div class="modal" id="galleryModal"><div class="dialog wide">
  <div class="modal-head"><div><h2 id="galleryTitle">Watch List — 3M Charts</h2><span class="small">All available local OHLC charts</span></div><button class="btn soft icon" data-close="galleryModal">×</button></div>
  <div class="gallery" id="gallery"></div>
+</div></div>
+
+<div class="modal v11-ranked-chart-modal" id="v11RankedChartModal"><div class="dialog wide">
+ <div class="modal-head">
+  <div><h2 id="v11RankedChartTitle">Ranked 3M Charts</h2><span class="small" id="v11RankedChartSummary">Ranked from highest to lowest score</span></div>
+  <button class="btn soft icon" id="v11CloseRankedCharts" type="button" aria-label="Close ranked charts">×</button>
+ </div>
+ <div class="gallery" id="v11RankedChartGallery"></div>
 </div></div>
 
 
@@ -5553,6 +5883,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   document.getElementById("v11Terminal")?.scrollIntoView({behavior:"smooth",block:"start"});
   if(name==="explorer")renderExplorer();
   if(name==="portfolio")renderPortfolio();
+  if(name==="potential")runPotential();
  }
  tabs.forEach(t=>t.addEventListener("click",()=>selectTab(t.dataset.v11Tab)));
  let savedTab="charts";
@@ -5690,10 +6021,34 @@ document.addEventListener("DOMContentLoaded",()=>{
   if(r14!==null&&r14>=45&&r14<=70)points++;
   if(momentum!==null&&momentum>0)points++;
   const signal=points>=3?"Buy":points===2?"Watch":"Avoid";
-  return {code,current,s20,s50,r14,momentum,signal};
+
+  // A continuous score makes stocks with the same signal rank consistently.
+  const priceVsSma20=s20?((current/s20)-1)*100:0;
+  const smaTrend=s20&&s50?((s20/s50)-1)*100:0;
+  const rsiStrength=r14===null?0:Math.max(-15,Math.min(15,(r14-50)*0.75));
+  const momentumStrength=momentum===null?0:Math.max(-20,Math.min(20,momentum));
+  const strength=(points*100)+(priceVsSma20*2)+(smaTrend*2)+rsiStrength+momentumStrength;
+
+  // Normalize the scanner result to a transparent 0–100 score for AIT Potential.
+  let indicatorScore=points*18;
+  indicatorScore+=Math.max(-8,Math.min(8,priceVsSma20*1.5));
+  indicatorScore+=Math.max(-8,Math.min(8,smaTrend*1.5));
+  indicatorScore+=r14===null?0:Math.max(-8,Math.min(8,(r14-50)*0.4));
+  indicatorScore+=momentum===null?0:Math.max(-8,Math.min(8,momentum*0.8));
+  indicatorScore=Math.max(0,Math.min(100,Math.round(indicatorScore)));
+
+  return {code,current,s20,s50,r14,momentum,signal,points,strength,indicatorScore};
  }
  function runScanner(){
-  const data=codes().map(indicatorData).filter(x=>x.current!==null);
+  const data=codes()
+   .map(indicatorData)
+   .filter(x=>x.current!==null)
+   .sort((a,b)=>
+    (b.strength-a.strength)||
+    (b.points-a.points)||
+    ((b.momentum??-Infinity)-(a.momentum??-Infinity))||
+    a.code.localeCompare(b.code)
+   );
   const tbody=document.getElementById("v11IndicatorRows");
   tbody.innerHTML=data.length?data.map(x=>`<tr><td>${esc(x.code)}</td><td>${fmt(x.current)}</td><td>${fmt(x.s20)}</td><td>${fmt(x.s50)}</td><td>${fmt(x.r14,1)}</td><td>${fmt(x.momentum,1)}%</td><td><span class="v11-signal ${x.signal.toLowerCase()}">${x.signal}</span></td></tr>`).join(""):'<tr><td colspan="7">No local data.</td></tr>';
   return data;
@@ -5777,6 +6132,184 @@ document.addEventListener("DOMContentLoaded",()=>{
   return data;
  }
  document.getElementById("v11RunVpa")?.addEventListener("click",runVpa);
+
+ function potentialData(code){
+  const indicator=indicatorData(code);
+  const vpa=vpaData(code);
+  if(indicator.current===null||!vpa)return null;
+
+  const indicatorScore=indicator.indicatorScore;
+  const vpaScore=vpa.score;
+  const combinedScore=Math.round(((indicatorScore+vpaScore)/2)*10)/10;
+  const signal=combinedScore>=70?"Strongest":combinedScore>=50?"Watch":"Avoid";
+
+  return {code,ltp:indicator.current,indicatorScore,vpaScore,combinedScore,signal};
+ }
+
+ function runPotential(){
+  const tbody=document.getElementById("v11PotentialRows");
+  if(!tbody)return [];
+
+  const data=codes()
+   .map(potentialData)
+   .filter(Boolean)
+   .sort((a,b)=>
+    (b.combinedScore-a.combinedScore)||
+    (b.vpaScore-a.vpaScore)||
+    (b.indicatorScore-a.indicatorScore)||
+    a.code.localeCompare(b.code)
+   );
+
+  tbody.innerHTML=data.length?data.map(x=>`<tr>
+   <td><strong>${esc(x.code)}</strong></td>
+   <td>${fmt(x.ltp,2)}</td>
+   <td><span class="v11-score">${fmt(x.indicatorScore,0)}</span></td>
+   <td><span class="v11-score">${fmt(x.vpaScore,0)}</span></td>
+   <td><span class="v11-score">${fmt(x.combinedScore,1)}</span></td>
+   <td><div class="v11-strength" aria-label="Strength ${fmt(x.combinedScore,1)} percent"><span class="v11-strength-track"><span class="v11-strength-fill" style="--v11-strength:${Math.max(0,Math.min(100,x.combinedScore))}%"></span></span><span class="v11-strength-value">${fmt(x.combinedScore,1)}%</span></div></td>
+   <td><span class="v11-signal ${x.signal.toLowerCase()}">${x.signal}</span></td>
+  </tr>`).join(""):'<tr><td colspan="7">No sufficient local data for combined analysis.</td></tr>';
+
+  return data;
+ }
+ document.getElementById("v11RunPotential")?.addEventListener("click",runPotential);
+
+
+ function rankedChartData(mode){
+  if(mode==="indicator"){
+   return codes().map(indicatorData).filter(x=>x&&x.current!==null).map(x=>({
+    code:x.code,ltp:x.current,score:Number(x.indicatorScore||0),signal:x.signal||"Avoid",
+    scoreLabel:"Indicator score"
+   })).sort((a,b)=>(b.score-a.score)||a.code.localeCompare(b.code));
+  }
+  if(mode==="vpa"){
+   return codes().map(vpaData).filter(Boolean).map(x=>({
+    code:x.code,ltp:last(rowsFor(x.code))?.close??null,score:Number(x.score||0),signal:x.cls||"Avoid",
+    scoreLabel:"VPA score"
+   })).sort((a,b)=>(b.score-a.score)||a.code.localeCompare(b.code));
+  }
+  return codes().map(potentialData).filter(Boolean).map(x=>({
+   code:x.code,ltp:x.ltp,score:Number(x.combinedScore||0),signal:x.signal||"Avoid",
+   scoreLabel:"Combined score"
+  })).sort((a,b)=>(b.score-a.score)||a.code.localeCompare(b.code));
+ }
+
+ function openRankedCharts(mode="potential"){
+  const modal=document.getElementById("v11RankedChartModal");
+  const gallery=document.getElementById("v11RankedChartGallery");
+  const summary=document.getElementById("v11RankedChartSummary");
+  const title=document.getElementById("v11RankedChartTitle");
+  if(!modal||!gallery||!summary||!title)return;
+
+  // Preserve the terminal's active theme tokens before promoting the modal
+  // to <body>. The terminal applies part of its palette on a scoped ancestor,
+  // so moving the modal without copying these values causes mismatched surfaces.
+  const themeSource=
+   document.querySelector("#aitPsaTradingModal:not([hidden])")||
+   document.getElementById("v11Terminal")||
+   document.querySelector(".ait-psa-terminal-modal:not([hidden])")||
+   document.documentElement;
+  const themeStyles=getComputedStyle(themeSource);
+  const terminalPanel=themeStyles.getPropertyValue("--v10-panel-solid").trim()||themeStyles.getPropertyValue("--v10-card").trim()||themeStyles.backgroundColor;
+  const terminalCard=themeStyles.getPropertyValue("--v10-card").trim()||terminalPanel;
+  modal.style.setProperty("--v1125-surface-1",terminalPanel);
+  modal.style.setProperty("--v1125-surface-2",terminalCard);
+  [
+   "--v10-bg","--v10-bg-soft","--v10-panel","--v10-panel-solid","--v10-card",
+   "--v10-card-2","--v10-text","--v10-muted","--v10-line","--v10-primary",
+   "--v10-primary-2","--v10-accent","--v10-shadow","--v1125-surface-1",
+   "--v1125-surface-2","--v1125-surface-soft","--v1125-text","--v1125-muted",
+   "--v1125-border","--v1125-accent"
+  ].forEach(token=>{
+   const value=themeStyles.getPropertyValue(token).trim();
+   if(value)modal.style.setProperty(token,value);
+  });
+
+  // Use the terminal shell's actual rendered backdrop/shadow values for the
+  // promoted modal instead of generic fixed colors.
+  const sourceBackground=themeStyles.backgroundColor;
+  const sourceShadow=themeStyles.getPropertyValue("--v10-shadow").trim();
+  modal.style.setProperty("--v1125-overlay",
+   sourceBackground&&sourceBackground!=="rgba(0, 0, 0, 0)"
+    ?`color-mix(in srgb, ${sourceBackground} 76%, transparent)`
+    :"rgba(2,6,23,.72)"
+  );
+  modal.style.setProperty("--v1125-shadow",sourceShadow||"rgba(2,6,23,.18)");
+
+  // Keep the functional chart modal above the full-screen terminal shell.
+  if(modal.parentElement!==document.body)document.body.appendChild(modal);
+
+  const config={
+   indicator:{title:"Indicator Scanner — Ranked 3M Charts",description:"indicator score"},
+   vpa:{title:"VPA Scanner — Ranked 3M Charts",description:"VPA score"},
+   potential:{title:"AIT Potential — Ranked 3M Charts",description:"combined potential score"}
+  }[mode]||{title:"Ranked 3M Charts",description:"score"};
+  const data=rankedChartData(mode);
+
+  title.textContent=config.title;
+  summary.textContent=data.length
+   ?`${data.length} trading codes ranked from highest to lowest ${config.description}`
+   :`No sufficient local data for ${config.description} charts`;
+
+  gallery.innerHTML=data.length?data.map((x,index)=>{
+   const rows=(window.app&&typeof window.app.rangeData==="function")?window.app.rangeData(x.code,3):rowsFor(x.code).slice(-90);
+   const coverage=rows.length?`${rows.length} sessions • ${rows[0].date} to ${rows[rows.length-1].date}`:"No archive data for this code";
+   return `<div class="mini-card v11-ranked-mini-card" data-ranked-chart="${esc(x.code)}">
+    <div class="row">
+     <h3><span class="v11-ranked-number">#${index+1}</span> ${esc(x.code)}</h3>
+     <button class="btn blue" type="button" data-open-ranked-code="${esc(x.code)}" ${rows.length?"":"disabled"}>Open</button>
+    </div>
+    <div class="v11-ranked-summary-line">
+     <span>LTP <b>${fmt(x.ltp,2)}</b></span>
+     <span>${esc(x.scoreLabel)} <b>${fmt(x.score,1)}</b></span>
+     <span class="v11-signal ${String(x.signal).toLowerCase()}">${esc(x.signal)}</span>
+    </div>
+    <div class="chart-box mini-chart"><canvas></canvas></div>
+    <div class="small v11-ranked-coverage">${coverage}</div>
+   </div>`;
+  }).join(""):'<div class="empty">No sufficient local data for ranked charts.</div>';
+
+  modal.classList.add("open");
+  modal.setAttribute("aria-hidden","false");
+  document.body.classList.add("v11-ranked-modal-open");
+
+  requestAnimationFrame(()=>{
+   data.forEach(x=>{
+    const safeCode=window.CSS&&CSS.escape?CSS.escape(x.code):x.code.replace(/[^A-Za-z0-9_-]/g,"\\$&");
+    const canvas=gallery.querySelector(`[data-ranked-chart="${safeCode}"] canvas`);
+    if(!canvas)return;
+    const rows=(window.app&&typeof window.app.rangeData==="function")?window.app.rangeData(x.code,3):rowsFor(x.code).slice(-90);
+    if(window.CandleChart&&typeof window.CandleChart.draw==="function")window.CandleChart.draw(canvas,rows);
+    else if(typeof CandleChart!=="undefined"&&typeof CandleChart.draw==="function")CandleChart.draw(canvas,rows);
+   });
+   gallery.querySelectorAll("[data-open-ranked-code]").forEach(button=>button.addEventListener("click",()=>{
+    closeRankedCharts();
+    if(window.app&&typeof window.app.openChart==="function"){
+     window.app.openChart(button.dataset.openRankedCode);
+     if(window.app.chartRange)window.app.chartRange.value="3";
+     setTimeout(()=>window.app.drawCurrent?.(),60);
+    }
+   }));
+  });
+ }
+
+ function closeRankedCharts(){
+  const modal=document.getElementById("v11RankedChartModal");
+  modal?.classList.remove("open");
+  modal?.setAttribute("aria-hidden","true");
+  document.body.classList.remove("v11-ranked-modal-open");
+ }
+
+ document.getElementById("v11ViewPotentialCharts")?.addEventListener("click",()=>openRankedCharts("potential"));
+ document.getElementById("v11ViewIndicatorCharts")?.addEventListener("click",()=>openRankedCharts("indicator"));
+ document.getElementById("v11ViewVpaCharts")?.addEventListener("click",()=>openRankedCharts("vpa"));
+ document.getElementById("v11CloseRankedCharts")?.addEventListener("click",closeRankedCharts);
+ document.getElementById("v11RankedChartModal")?.addEventListener("click",event=>{
+  if(event.target===event.currentTarget)closeRankedCharts();
+ });
+ document.addEventListener("keydown",event=>{
+  if(event.key==="Escape"&&document.getElementById("v11RankedChartModal")?.classList.contains("open"))closeRankedCharts();
+ });
 
  function renderExplorer(){
   const q=(document.getElementById("v11ExplorerSearch")?.value||"").trim().toUpperCase();
