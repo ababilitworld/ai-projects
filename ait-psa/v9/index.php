@@ -14,7 +14,7 @@ header h1{margin:0 0 6px;font-size:clamp(1.7rem,4vw,2.8rem)}header p{margin:0;op
 .stat{padding:17px}.stat label{color:var(--muted);font-size:.82rem}.stat strong{display:block;margin-top:5px;font-size:1.8rem}.layout{display:grid;grid-template-columns:290px 1fr;gap:16px;margin-top:16px}
 .sidebar{padding:16px;align-self:start;position:sticky;top:10px}.row{display:flex;justify-content:space-between;align-items:center;gap:9px}.row h2,.row h3{margin:0}.small{color:var(--muted);font-size:.8rem}
 .btn{border:0;border-radius:10px;min-height:39px;padding:8px 12px;font-weight:800}.primary{background:var(--primary);color:#fff}.blue{background:var(--blue);color:#fff}.red{background:var(--red);color:#fff}.soft{background:#eef2f7;color:var(--ink);border:1px solid var(--line)}.icon{width:39px;padding:0}
-.lists{display:grid;gap:8px;margin-top:13px}.list{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px;align-items:center;padding:9px;border:1px solid var(--line);border-radius:11px}.list.active{background:#ccfbf1;border-color:var(--primary)}.select-list{border:0;background:none;text-align:left;min-width:0}.list-name{font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}.actions{display:flex;gap:5px;flex-wrap:wrap}
+.lists{display:grid;gap:8px;margin-top:13px}.list{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px;align-items:center;padding:9px;border:1px solid var(--line);border-radius:11px}.list.active{background:var(--ait-active-bg);border-color:var(--ait-active-border);color:var(--ait-text)}.select-list{border:0;background:none;text-align:left;min-width:0}.list-name{font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}.actions{display:flex;gap:5px;flex-wrap:wrap}
 .main{display:grid;gap:16px;min-width:0}.toolbar{display:flex;gap:9px;flex-wrap:wrap;padding:14px}.input,.select,.textarea{border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}.input,.select{min-height:42px;padding:8px 10px}.search{flex:1;min-width:220px}.textarea{width:100%;min-height:180px;padding:10px;resize:vertical}
 .panels{display:grid;grid-template-columns:1.05fr .95fr;gap:16px}.panel{padding:16px;min-width:0}.panel h2{margin:0;font-size:1.15rem}.head{display:flex;justify-content:space-between;align-items:flex-start;gap:9px}.scroll{display:grid;gap:7px;margin-top:12px;max-height:620px;overflow:auto;padding-right:3px}
 .code-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;padding:10px;border:1px solid var(--line);border-radius:10px}.code{font-weight:950;color:#115e59}.meta{display:block;color:var(--muted);font-size:.73rem;margin-top:2px}.empty{padding:38px 10px;text-align:center;color:var(--muted)}
@@ -4049,6 +4049,288 @@ body.ait-psa-index-only #aitPsaOpenNotifications{display:none!important}
 }
 </style>
 
+
+<style id="ait-uniform-theme-v10005">
+/* =========================================================
+   AIT UNIFORM THEME LAYER
+   One semantic palette for legacy and modern components.
+   This block intentionally comes last in <head>.
+   ========================================================= */
+:root,
+body,
+.ait-psa-terminal-shell,
+.v10-shell,
+.v119-menu-panel,
+.modal,
+.v1124-theme-dialog,
+#v11RankedChartModal {
+  --ait-bg: var(--v10-bg, var(--bg, #0b1220));
+  --ait-bg-soft: var(--v10-bg-soft, color-mix(in srgb, var(--ait-bg) 88%, var(--v10-primary, var(--primary, #2563eb)) 12%));
+  --ait-panel: var(--v10-panel-solid, var(--v10-panel, var(--panel, #111827)));
+  --ait-surface: var(--v10-card, var(--card, #172033));
+  --ait-surface-soft: color-mix(in srgb, var(--ait-surface) 92%, var(--v10-primary, var(--primary, #2563eb)) 8%);
+  --ait-surface-hover: color-mix(in srgb, var(--ait-surface) 86%, var(--v10-primary, var(--primary, #2563eb)) 14%);
+  --ait-text: var(--v10-text, var(--ink, var(--text, #f8fafc)));
+  --ait-muted: var(--v10-muted, var(--muted, #94a3b8));
+  --ait-border: var(--v10-line, var(--line, #334155));
+  --ait-accent: var(--v10-primary, var(--primary, #2563eb));
+  --ait-accent-2: var(--v10-secondary, var(--blue, #06b6d4));
+  --ait-success: var(--v10-success, var(--green, #16a34a));
+  --ait-danger: var(--v10-danger, var(--red, #dc2626));
+  --ait-warning: var(--v10-warning, var(--orange, #d97706));
+  --ait-active-bg: color-mix(in srgb, var(--ait-surface) 80%, var(--ait-accent) 20%);
+  --ait-active-border: color-mix(in srgb, var(--ait-accent) 76%, var(--ait-border));
+  --ait-overlay: color-mix(in srgb, var(--ait-bg) 76%, transparent);
+  --ait-shadow: 0 16px 42px color-mix(in srgb, #000 34%, var(--ait-accent) 6%);
+}
+
+/* Base text and form controls */
+body,
+.app,
+main,
+.main,
+.content,
+.workspace,
+[class*="workspace" i] {
+  color: var(--ait-text);
+}
+
+input,
+select,
+textarea,
+.input,
+.select,
+.field input,
+.field select,
+.field textarea {
+  background: var(--ait-surface-soft) !important;
+  border-color: var(--ait-border) !important;
+  color: var(--ait-text) !important;
+}
+input::placeholder,
+textarea::placeholder { color: var(--ait-muted) !important; opacity: .82; }
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--ait-accent) !important;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ait-accent) 18%, transparent) !important;
+}
+
+/* Uniform surfaces */
+.card,
+.panel,
+.stat,
+.metric,
+.widget,
+.list,
+.theme-list-item,
+.activity > div,
+.table-wrap,
+.table-card,
+.tabs,
+.tab-panel,
+.note,
+.dropdown-menu,
+.popover,
+.menu-panel,
+.v119-menu-panel,
+.v119-menu-group,
+.v105-panel,
+.v105-metric,
+.v105-list-item,
+.dialog,
+.modal-content,
+.v1124-theme-dialog-panel,
+.ait-psa-terminal-modal__dialog {
+  background: var(--ait-surface) !important;
+  border-color: var(--ait-border) !important;
+  color: var(--ait-text) !important;
+}
+
+/* Watch lists */
+.lists { gap: 8px; }
+.list,
+.theme-list-item {
+  border: 1px solid var(--ait-border) !important;
+  background: var(--ait-surface) !important;
+  color: var(--ait-text) !important;
+  box-shadow: none !important;
+  transition: background .18s ease, border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+.list:hover,
+.theme-list-item:hover {
+  background: var(--ait-surface-hover) !important;
+  border-color: color-mix(in srgb, var(--ait-accent) 44%, var(--ait-border)) !important;
+  transform: translateY(-1px);
+}
+.list.active,
+.theme-list-item.active {
+  background: var(--ait-active-bg) !important;
+  border-color: var(--ait-active-border) !important;
+  color: var(--ait-text) !important;
+  box-shadow:
+    inset 3px 0 0 var(--ait-accent),
+    0 8px 22px color-mix(in srgb, var(--ait-accent) 12%, transparent) !important;
+}
+.list.active .list-name,
+.list.active .small,
+.theme-list-item.active .list-name,
+.theme-list-item.active .small { color: var(--ait-text) !important; }
+.list .small,
+.theme-list-item .small { color: var(--ait-muted) !important; }
+.select-list { color: inherit !important; }
+
+/* Buttons */
+.btn,
+button.btn,
+.button,
+.tab,
+.ait-psa-terminal-back,
+.ait-psa-terminal-command {
+  border-color: var(--ait-border) !important;
+}
+.btn.soft,
+.soft,
+.tab,
+.ait-psa-terminal-back {
+  background: var(--ait-surface-soft) !important;
+  color: var(--ait-text) !important;
+}
+.btn.soft:hover,
+.soft:hover,
+.tab:hover,
+.ait-psa-terminal-back:hover {
+  background: var(--ait-surface-hover) !important;
+  border-color: color-mix(in srgb, var(--ait-accent) 52%, var(--ait-border)) !important;
+}
+.btn.primary,
+.primary,
+.tab.active {
+  background: var(--ait-accent) !important;
+  border-color: var(--ait-accent) !important;
+  color: #fff !important;
+}
+.btn.blue,
+.blue { background: var(--ait-accent-2) !important; color: #fff !important; }
+.btn.red,
+.red { background: var(--ait-danger) !important; color: #fff !important; }
+
+/* Tables */
+table,
+thead,
+tbody,
+tr,
+th,
+td { border-color: var(--ait-border) !important; }
+thead,
+th { background: var(--ait-surface-soft) !important; color: var(--ait-text) !important; }
+tbody tr { background: var(--ait-surface) !important; color: var(--ait-text) !important; }
+tbody tr:hover { background: var(--ait-surface-hover) !important; }
+td,
+.small,
+.muted,
+.help,
+.subtitle { color: var(--ait-muted); }
+
+/* Activity and notices */
+.activity > div {
+  border-left-color: var(--ait-accent) !important;
+  background: var(--ait-surface-soft) !important;
+}
+.note {
+  background: color-mix(in srgb, var(--ait-surface) 82%, var(--ait-warning) 18%) !important;
+  color: var(--ait-text) !important;
+}
+.success-note {
+  background: color-mix(in srgb, var(--ait-surface) 82%, var(--ait-success) 18%) !important;
+  color: var(--ait-text) !important;
+}
+
+/* Modals and drawers */
+.modal,
+.v1124-theme-dialog,
+.ait-psa-terminal-modal {
+  background: var(--ait-overlay) !important;
+  color: var(--ait-text) !important;
+}
+.dialog,
+.modal-content,
+.v1124-theme-dialog-panel,
+.ait-psa-terminal-modal__dialog {
+  box-shadow: var(--ait-shadow) !important;
+}
+.modal-head,
+.modal-header,
+.v11-ranked-chart-head,
+.v11-ranked-chart-header,
+#v11RankedChartModal .modal-head {
+  background: var(--ait-panel) !important;
+  border-color: var(--ait-border) !important;
+  color: var(--ait-text) !important;
+}
+.modal-head h1,
+.modal-head h2,
+.modal-header h1,
+.modal-header h2,
+.v11-ranked-chart-title,
+#v11RankedChartModal h1,
+#v11RankedChartModal h2 { color: var(--ait-text) !important; }
+.modal-head p,
+.modal-header p,
+.v11-ranked-chart-subtitle,
+#v11RankedChartModal p { color: var(--ait-muted) !important; }
+
+/* Menus */
+.v119-menu-panel,
+.v119-menu-group,
+.ait-psa-terminal-menu,
+.ait-psa-terminal-drawer {
+  background: var(--ait-panel) !important;
+  border-color: var(--ait-border) !important;
+  color: var(--ait-text) !important;
+}
+.v119-menu-group:hover,
+.ait-psa-terminal-group:hover {
+  background: var(--ait-surface-hover) !important;
+  border-color: color-mix(in srgb, var(--ait-accent) 46%, var(--ait-border)) !important;
+}
+
+/* Chart rule: only actual plot surfaces, never modal/header names containing chart. */
+.chart-container,
+.chart-wrap,
+.chart-panel,
+.chart-box,
+.chart-area,
+.chart-canvas-wrap,
+.mini-chart,
+.highcharts-container,
+.highcharts-root,
+canvas[data-chart],
+svg[data-chart] {
+  background: var(--v116-chart-bg, var(--ait-surface-soft)) !important;
+  border-color: var(--v116-chart-border, var(--ait-border)) !important;
+}
+#v11RankedChartModal,
+#v11RankedChartModal .dialog,
+#v11RankedChartModal .gallery,
+#v11RankedChartModal .modal-head,
+#v11RankedChartModal [class*="header" i],
+#v11RankedChartModal [class*="title" i] {
+  background: var(--ait-panel) !important;
+  border-color: var(--ait-border) !important;
+}
+#v11RankedChartModal .gallery { background: var(--ait-bg-soft) !important; }
+#v11RankedChartModal .mini-card { background: var(--ait-surface) !important; border-color: var(--ait-border) !important; color: var(--ait-text) !important; }
+
+/* Scrollbars */
+* { scrollbar-color: color-mix(in srgb, var(--ait-accent) 48%, var(--ait-border)) var(--ait-bg-soft); }
+*::-webkit-scrollbar-track { background: var(--ait-bg-soft); }
+*::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--ait-accent) 48%, var(--ait-border));
+  border: 3px solid var(--ait-bg-soft);
+}
+</style>
+
 </head>
 <body>
 <div class="v10-mobile-bar">
@@ -4802,7 +5084,7 @@ document.querySelectorAll("[data-mother-tab]").forEach(b=>b.onclick=()=>this.mot
  render(){
   setTimeout(()=>this.updatePremiumDashboard(),0);this.renderStats();this.renderLists();this.renderMother();this.renderWatch();this.renderActivity()}
  renderStats(){const rc=Object.values(this.s.history).reduce((n,a)=>n+a.length,0);this.sMother.textContent=this.s.motherCodes.length;this.sLists.textContent=this.s.watchLists.length;this.sHistory.textContent=Object.keys(this.s.history).length;this.sRecords.textContent=rc.toLocaleString();this.lastArchive.textContent=this.s.lastArchive?new Date(this.s.lastArchive).toLocaleString():"Never"}
- renderLists(){this.lists.innerHTML=this.s.watchLists.map(l=>`<div class="list ${l.id===this.s.activeId?"active":""}"><button class="select-list" data-la="select" data-id="${l.id}"><span class="list-name">${this.esc(l.name)}</span><span class="small">${l.codes.length} codes</span></button><div class="actions"><button class="btn blue icon" title="View all 3M charts" data-la="charts" data-id="${l.id}">▥</button><button class="btn soft icon" data-la="edit" data-id="${l.id}">✎</button><button class="btn soft icon" data-la="delete" data-id="${l.id}">🗑</button></div></div>`).join("");this.lists.querySelectorAll("[data-la]").forEach(b=>b.onclick=()=>this.listAction(b.dataset.la,b.dataset.id))}
+ renderLists(){this.lists.innerHTML=this.s.watchLists.map(l=>`<div class="list theme-list-item ${l.id===this.s.activeId?"active":""}"><button class="select-list" data-la="select" data-id="${l.id}"><span class="list-name">${this.esc(l.name)}</span><span class="small">${l.codes.length} codes</span></button><div class="actions"><button class="btn blue icon" title="View all 3M charts" data-la="charts" data-id="${l.id}">▥</button><button class="btn soft icon" data-la="edit" data-id="${l.id}">✎</button><button class="btn soft icon" data-la="delete" data-id="${l.id}">🗑</button></div></div>`).join("");this.lists.querySelectorAll("[data-la]").forEach(b=>b.onclick=()=>this.listAction(b.dataset.la,b.dataset.id))}
  setTradingCodeSearch(value){
   const normalized=String(value??"").trim().toUpperCase();
   this.searchTerm=normalized;
