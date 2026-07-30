@@ -1109,6 +1109,16 @@ body.v11-ranked-modal-open{overflow:hidden}
  background:color-mix(in srgb,var(--v10-primary) 12%,transparent);color:var(--v10-primary)
 }
 .v11-report-item p{margin:2px 0 0;font-size:.76rem}
+.v11-portfolio-layout{
+ display:grid;
+ grid-template-columns:minmax(0,1fr);
+ gap:12px;
+}
+.v11-portfolio-summary-card,
+.v11-portfolio-workspace-card{
+ width:100%;
+ min-width:0;
+}
 .v11-portfolio-form{
  display:grid;grid-template-columns:1fr;gap:8px;margin-bottom:10px
 }
@@ -3670,6 +3680,9 @@ body.ait-psa-terminal-open{overflow:hidden}
 .ait-psa-terminal-command-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.ait-psa-terminal-command{min-height:112px;padding:15px;border:1px solid var(--v10-line,var(--line,#334155));border-radius:16px;background:var(--v10-card,var(--card,#111827));color:inherit;text-align:left;cursor:pointer}.ait-psa-terminal-command:hover{border-color:var(--v10-primary,var(--primary,#60a5fa))}.ait-psa-terminal-command span,.ait-psa-terminal-command b,.ait-psa-terminal-command small{display:block}.ait-psa-terminal-command span{font-size:1.35rem}.ait-psa-terminal-command b{margin-top:10px}.ait-psa-terminal-command small{margin-top:4px;color:var(--v10-muted,var(--muted,#94a3b8));line-height:1.4}
 .ait-psa-terminal-head-actions{display:flex;align-items:center;gap:8px}.ait-psa-terminal-back{min-height:40px;padding:8px 12px;border:1px solid var(--v10-line,var(--line,#334155));border-radius:12px;background:var(--v10-card,var(--card,#111827));color:inherit;font-weight:850;cursor:pointer}.ait-psa-terminal-back:hover{border-color:var(--v10-primary,var(--primary,#60a5fa))}
 .ait-psa-workspace-host{min-width:0}.ait-psa-watchlist-layout{display:grid;grid-template-columns:minmax(260px,340px) minmax(0,1fr);gap:14px;align-items:start}.ait-psa-watchlist-layout>.sidebar{position:static!important;width:auto!important;display:block!important}.ait-psa-watchlist-layout>#marketWorkspace{display:grid!important;min-width:0}.ait-psa-workspace-host>#v11Terminal{display:block!important}.ait-psa-workspace-host>#downloadWorkspace{display:block!important}
+.ait-psa-workspace-host>#downloadWorkspace>.v1116-download-actions{display:none!important}
+.ait-psa-workspace-host>#downloadWorkspace{padding-top:0!important}
+.ait-psa-workspace-host>#downloadWorkspace>#downloadStatusCard{margin-top:0!important}
 .ait-psa-theme-host .v10-theme-grid{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:12px!important}.ait-psa-theme-host .v10-theme-option{display:grid!important;min-height:110px!important}
 .ait-psa-home-notifications{max-width:1500px;margin:14px auto;padding:0 14px}.ait-psa-home-notifications .v105-panel{margin:0}.ait-psa-index-only .v10-mobile-bar,.ait-psa-index-only .v10-control-deck,.ait-psa-index-only .app>.layout{display:none!important}.ait-psa-index-only .app{max-width:1500px!important}.ait-psa-index-only .app>header,.ait-psa-index-only .app>#overviewWorkspace{display:flex}.ait-psa-index-only #overviewWorkspace{display:grid}
 @media(max-width:800px){.ait-psa-terminal-modal{inset:0;border:0;border-radius:0}.ait-psa-terminal-command-grid,.ait-psa-theme-host .v10-theme-grid{grid-template-columns:1fr!important}.ait-psa-terminal-launcher{top:8px;right:8px}.ait-psa-terminal-modal__body{padding:11px}.ait-psa-watchlist-layout{grid-template-columns:1fr!important}}
@@ -4613,7 +4626,7 @@ svg[data-chart] {
  <section class="v11-workspace" data-v11-workspace="indicators">
   <div class="v11-grid two">
    <article class="v11-card">
-    <div class="v11-card-head"><div><h3>Technical indicator scanner</h3><small>SMA, RSI, momentum and volume diagnostics</small></div><div class="v11-potential-actions"><button class="btn primary" id="v11RunScanner" type="button">Run scanner</button><button class="btn soft" id="v11ViewIndicatorCharts" type="button">View 3M Charts</button></div></div>
+    <div class="v11-card-head"><div><h3>Technical indicator scanner</h3><small>SMA, RSI, momentum and volume diagnostics</small></div><div class="v11-potential-actions"><button class="btn primary" id="v11RunScanner" type="button">Run scanner</button><button class="btn soft" id="v11ViewIndicatorCharts" type="button">View 3M Charts</button><button class="btn soft" id="v11ViewIndicatorCharts6" type="button">View 6M Charts</button></div></div>
     <div class="v11-card-body">
      <div class="v11-table-wrap"><table class="v11-table"><thead><tr><th>Code</th><th>Close</th><th>SMA20</th><th>SMA50</th><th>RSI14</th><th>Momentum</th><th>Signal</th></tr></thead><tbody id="v11IndicatorRows"></tbody></table></div>
     </div>
@@ -4647,8 +4660,19 @@ svg[data-chart] {
  </section>
 
  <section class="v11-workspace" data-v11-workspace="portfolio">
-  <div class="v11-grid two">
-   <article class="v11-card">
+  <div class="v11-portfolio-layout">
+   <aside class="v11-card v11-portfolio-summary-card">
+    <div class="v11-card-head"><div><h3>Portfolio summary</h3><small>Calculated from downloaded closing prices</small></div></div>
+    <div class="v11-card-body">
+     <div class="v11-summary-grid">
+      <div class="v11-summary"><span>Total cost</span><strong id="v11PortfolioCost">0.00</strong></div>
+      <div class="v11-summary"><span>Market value</span><strong id="v11PortfolioValue">0.00</strong></div>
+      <div class="v11-summary"><span>Unrealized P/L</span><strong id="v11PortfolioPl">0.00</strong></div>
+      <div class="v11-summary"><span>Positions</span><strong id="v11PortfolioCount">0</strong></div>
+     </div>
+    </div>
+   </aside>
+   <article class="v11-card v11-portfolio-workspace-card">
     <div class="v11-card-head"><div><h3>Portfolio workspace</h3><small>Track positions locally in this browser</small></div></div>
     <div class="v11-card-body">
      <div class="v11-portfolio-form">
@@ -4660,23 +4684,12 @@ svg[data-chart] {
      <div class="v11-table-wrap"><table class="v11-table"><thead><tr><th>Code</th><th>Qty</th><th>Buy</th><th>Last</th><th>Cost</th><th>Value</th><th>P/L</th><th></th></tr></thead><tbody id="v11PortfolioRows"></tbody></table></div>
     </div>
    </article>
-   <aside class="v11-card">
-    <div class="v11-card-head"><div><h3>Portfolio summary</h3><small>Calculated from downloaded closing prices</small></div></div>
-    <div class="v11-card-body">
-     <div class="v11-summary-grid">
-      <div class="v11-summary"><span>Total cost</span><strong id="v11PortfolioCost">0.00</strong></div>
-      <div class="v11-summary"><span>Market value</span><strong id="v11PortfolioValue">0.00</strong></div>
-      <div class="v11-summary"><span>Unrealized P/L</span><strong id="v11PortfolioPl">0.00</strong></div>
-      <div class="v11-summary"><span>Positions</span><strong id="v11PortfolioCount">0</strong></div>
-     </div>
-    </div>
-   </aside>
   </div>
  </section>
 
  <section class="v11-workspace" data-v11-workspace="vpa">
   <article class="v11-card">
-   <div class="v11-card-head"><div><h3>VPA-style analysis workspace</h3><small>Effort-versus-result, spread, volume and trend scoring</small></div><div class="v11-potential-actions"><button class="btn primary" id="v11RunVpa" type="button">Analyze active list</button><button class="btn soft" id="v11ViewVpaCharts" type="button">View 3M Charts</button></div></div>
+   <div class="v11-card-head"><div><h3>VPA-style analysis workspace</h3><small>Effort-versus-result, spread, volume and trend scoring</small></div><div class="v11-potential-actions"><button class="btn primary" id="v11RunVpa" type="button">Analyze active list</button><button class="btn soft" id="v11ViewVpaCharts" type="button">View 3M Charts</button><button class="btn soft" id="v11ViewVpaCharts6" type="button">View 6M Charts</button></div></div>
    <div class="v11-card-body">
     <div class="v11-table-wrap"><table class="v11-table"><thead><tr><th>Code</th><th>Score</th><th>Spread</th><th>Rel. volume</th><th>Trend</th><th>Effort/result</th><th>Classification</th></tr></thead><tbody id="v11VpaRows"></tbody></table></div>
     <div class="v11-note" style="margin-top:10px">The VPA score is a transparent heuristic derived only from locally stored OHLCV data. It does not claim to identify institutional activity with certainty.</div>
@@ -4690,7 +4703,7 @@ svg[data-chart] {
     <div><h3>AIT Potential</h3><small>Combined technical-indicator and VPA opportunity ranking</small></div>
     <div class="v11-potential-actions">
      <button class="btn primary" id="v11RunPotential" type="button">Calculate potential</button>
-     <button class="btn soft" id="v11ViewPotentialCharts" type="button">View 3M Charts</button>
+     <button class="btn soft" id="v11ViewPotentialCharts" type="button">View 3M Charts</button><button class="btn soft" id="v11ViewPotentialCharts6" type="button">View 6M Charts</button>
     </div>
    </div>
    <div class="v11-card-body">
@@ -4830,7 +4843,7 @@ svg[data-chart] {
  <div class="v1116-download-actions">
   <div class="v1116-download-intro">
    <span class="v1116-download-kicker">DATA OPERATIONS</span>
-   <h3>Download & Data Center</h3>
+   <h3>Data Center</h3>
    <p>Import, synchronize, download, inspect, back up, and restore terminal data.</p>
   </div>
 
@@ -4900,8 +4913,10 @@ svg[data-chart] {
  <button class="btn primary" id="motherImport">Import DSE Trading Codes</button>
  <button class="btn blue" id="quickMotherSync">Sync DSE Trading Codes</button>
  <button class="btn blue" id="archiveImport">Import OHLC Archive</button>
- <button class="btn primary" id="dse3mUpdate">Download DSE 3M & View Charts</button>
+ <button class="btn primary" id="dse3mUpdate">Download DSE 3M</button>
+ <button class="btn primary" id="dse6mUpdate">Download DSE 6M</button>
  <button class="btn primary" id="viewListCharts">View Saved 3M Charts</button>
+ <button class="btn primary" id="viewListCharts6">View Saved 6M Charts</button>
  <button class="btn soft" id="viewDownloadedData">View Downloaded Data</button>
  <button class="btn soft" id="exportBtn">Backup Dashboard</button>
  <button class="btn soft" id="importBtn">Restore Dashboard</button>
@@ -4938,7 +4953,7 @@ svg[data-chart] {
  <section class="card panel">
   <div class="head">
    <div><h2 id="watchTitle">Active Watch List</h2><span class="small" id="watchMeta"></span></div>
-   <div class="actions"><button class="btn blue" id="dse3mUpdate2">Download DSE 3M</button><button class="btn primary" id="viewListCharts2">View Saved 3M Charts</button></div>
+   <div class="actions"><button class="btn blue" id="dse3mUpdate2">Download DSE 3M</button><button class="btn blue" id="dse6mUpdate2">Download DSE 6M</button><button class="btn primary" id="viewListCharts2">View Saved 3M Charts</button><button class="btn primary" id="viewListCharts6_2">View Saved 6M Charts</button></div>
   </div>
   <div class="scroll" id="watch"></div>
  </section>
@@ -5156,7 +5171,7 @@ class CandleChart{
 }
 class App{
  constructor(){this.store=new Store();this.s=this.store.load();this.editId=null;this.pending={};this.pendingMother=[];this.pendingMotherSource="";this.currentCode=null;this.searchTerm=""}
- init(){["lastArchive","sMother","sLists","sHistory","sRecords","lists","activity","newList","clearActivity","search","motherImport","quickMotherSync","saveStatus","motherModal","motherSourceSelect","motherUrl","autoMotherSync","openMotherSource","fetchMother","motherFiles","parseMotherFiles","motherPaste","parseMotherPaste","motherResult","motherCommitArea","mergeMother","replaceMother","archiveImport","dse3mUpdate","dse3mUpdate2","viewListCharts","viewListCharts2","downloadStatusCard","downloadStatusTitle","downloadStatusPercent","downloadStatusBar","downloadStatusText","hideDownloadStatus","viewDownloadedData","exportBtn","importBtn","dashboardFile","mother","motherMeta","watch","watchTitle","watchMeta","watchCodeSearch","clearWatchCodeSearch","watchCodeSearchStatus","listModal","listModalTitle","listForm","listName","archiveModal","dseStartDate","dseEndDate","fetchDseRange","downloadDseCsv","ohlcFiles","parseFiles","pasteOhlc","parsePaste","archiveUrl","urlCode","fetchUrl","parseResult","commitArea","mergeHistory","replaceHistory","chartModal","chartTitle","chartSubtitle","chartRange","downloadChart","chartCanvas","chartInfo","galleryModal","galleryTitle","gallery","dataModal","dataSummary","dataTable","toasts"].forEach(id=>this[id]=document.getElementById(id));this.bind();
+ init(){["lastArchive","sMother","sLists","sHistory","sRecords","lists","activity","newList","clearActivity","search","motherImport","quickMotherSync","saveStatus","motherModal","motherSourceSelect","motherUrl","autoMotherSync","openMotherSource","fetchMother","motherFiles","parseMotherFiles","motherPaste","parseMotherPaste","motherResult","motherCommitArea","mergeMother","replaceMother","archiveImport","dse3mUpdate","dse3mUpdate2","dse6mUpdate","dse6mUpdate2","viewListCharts","viewListCharts2","viewListCharts6","viewListCharts6_2","downloadStatusCard","downloadStatusTitle","downloadStatusPercent","downloadStatusBar","downloadStatusText","hideDownloadStatus","viewDownloadedData","exportBtn","importBtn","dashboardFile","mother","motherMeta","watch","watchTitle","watchMeta","watchCodeSearch","clearWatchCodeSearch","watchCodeSearchStatus","listModal","listModalTitle","listForm","listName","archiveModal","dseStartDate","dseEndDate","fetchDseRange","downloadDseCsv","ohlcFiles","parseFiles","pasteOhlc","parsePaste","archiveUrl","urlCode","fetchUrl","parseResult","commitArea","mergeHistory","replaceHistory","chartModal","chartTitle","chartSubtitle","chartRange","downloadChart","chartCanvas","chartInfo","galleryModal","galleryTitle","gallery","dataModal","dataSummary","dataTable","toasts"].forEach(id=>this[id]=document.getElementById(id));this.bind();
  this.searchTerm="";
  if(this.search)this.search.value="";
  if(this.watchCodeSearch)this.watchCodeSearch.value="";
@@ -5180,14 +5195,15 @@ this.mergeMother.onclick=()=>this.commitMother(false);
 this.replaceMother.onclick=()=>this.commitMother(true);
 this.hideDownloadStatus.onclick=()=>this.downloadStatusCard.style.display="none";
 this.archiveImport.onclick=()=>this.open("archiveModal");
-this.dse3mUpdate.onclick=this.dse3mUpdate2.onclick=()=>this.downloadActiveWatchlist3M();
+this.dse3mUpdate.onclick=this.dse3mUpdate2.onclick=()=>this.downloadActiveWatchlistMonths(3);
+this.dse6mUpdate.onclick=this.dse6mUpdate2.onclick=()=>this.downloadActiveWatchlistMonths(6);
 this.fetchDseRange.onclick=()=>this.fetchDseArchive(this.dseStartDate.value,this.dseEndDate.value,false,false);
 this.downloadDseCsv.onclick=()=>{
  if(!this.dseStartDate.value||!this.dseEndDate.value)return this.toast("Select dates first.",true);
  const p=new URLSearchParams({startDate:this.dseStartDate.value,endDate:this.dseEndDate.value,format:"csv"});
  window.location.href="dse_archive.php?"+p.toString()
 };
-this.viewListCharts.onclick=this.viewListCharts2.onclick=()=>this.openGallery();this.viewDownloadedData.onclick=()=>this.openDataPreview();this.parseFiles.onclick=()=>this.readFiles();this.parsePaste.onclick=()=>this.prepare(Parser.parse(this.pasteOhlc.value),"Pasted archive");this.fetchUrl.onclick=()=>this.fetchArchive();this.mergeHistory.onclick=()=>this.commit(false);this.replaceHistory.onclick=()=>this.commit(true);this.chartRange.onchange=()=>this.drawCurrent();this.downloadChart.onclick=()=>{const a=document.createElement("a");a.href=this.chartCanvas.toDataURL("image/png");a.download=`${this.currentCode||"DSE"}-candlestick.png`;a.click()};this.exportBtn.onclick=()=>this.export();this.importBtn.onclick=()=>this.dashboardFile.click();this.dashboardFile.onchange=e=>this.import(e);document.querySelectorAll("[data-close]").forEach(b=>b.onclick=()=>this.close(b.dataset.close));document.querySelectorAll(".modal").forEach(m=>m.onclick=e=>{if(e.target===m)this.close(m.id)});document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>this.tab(b.dataset.tab));
+this.viewListCharts.onclick=this.viewListCharts2.onclick=()=>this.openGallery(3);this.viewListCharts6.onclick=this.viewListCharts6_2.onclick=()=>this.openGallery(6);this.viewDownloadedData.onclick=()=>this.openDataPreview();this.parseFiles.onclick=()=>this.readFiles();this.parsePaste.onclick=()=>this.prepare(Parser.parse(this.pasteOhlc.value),"Pasted archive");this.fetchUrl.onclick=()=>this.fetchArchive();this.mergeHistory.onclick=()=>this.commit(false);this.replaceHistory.onclick=()=>this.commit(true);this.chartRange.onchange=()=>this.drawCurrent();this.downloadChart.onclick=()=>{const a=document.createElement("a");a.href=this.chartCanvas.toDataURL("image/png");a.download=`${this.currentCode||"DSE"}-candlestick.png`;a.click()};this.exportBtn.onclick=()=>this.export();this.importBtn.onclick=()=>this.dashboardFile.click();this.dashboardFile.onchange=e=>this.import(e);document.querySelectorAll("[data-close]").forEach(b=>b.onclick=()=>this.close(b.dataset.close));document.querySelectorAll(".modal").forEach(m=>m.onclick=e=>{if(e.target===m)this.close(m.id)});document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>this.tab(b.dataset.tab));
 document.querySelectorAll("[data-mother-tab]").forEach(b=>b.onclick=()=>this.motherTab(b.dataset.motherTab));window.addEventListener("resize",()=>{if(this.chartModal.classList.contains("open"))this.drawCurrent()})}
  active(){return this.s.watchLists.find(x=>x.id===this.s.activeId)||this.s.watchLists[0]}persist(){this.store.save(this.s);if(this.saveStatus){this.saveStatus.textContent="Saved permanently at "+new Date().toLocaleTimeString();clearTimeout(this._saveTimer);this._saveTimer=setTimeout(()=>this.saveStatus.textContent="Permanent autosave enabled",2200)}}
  updatePremiumDashboard(){
@@ -5207,7 +5223,7 @@ document.querySelectorAll("[data-mother-tab]").forEach(b=>b.onclick=()=>this.mot
  render(){
   setTimeout(()=>this.updatePremiumDashboard(),0);this.renderStats();this.renderLists();this.renderMother();this.renderWatch();this.renderActivity()}
  renderStats(){const rc=Object.values(this.s.history).reduce((n,a)=>n+a.length,0);this.sMother.textContent=this.s.motherCodes.length;this.sLists.textContent=this.s.watchLists.length;this.sHistory.textContent=Object.keys(this.s.history).length;this.sRecords.textContent=rc.toLocaleString();this.lastArchive.textContent=this.s.lastArchive?new Date(this.s.lastArchive).toLocaleString():"Never"}
- renderLists(){this.lists.innerHTML=this.s.watchLists.map(l=>`<div class="list theme-list-item ${l.id===this.s.activeId?"active":""}"><button class="select-list" data-la="select" data-id="${l.id}"><span class="list-name">${this.esc(l.name)}</span><span class="small">${l.codes.length} codes</span></button><div class="actions"><button class="btn blue icon" title="View all 3M charts" data-la="charts" data-id="${l.id}">▥</button><button class="btn soft icon" data-la="edit" data-id="${l.id}">✎</button><button class="btn soft icon" data-la="delete" data-id="${l.id}">🗑</button></div></div>`).join("");this.lists.querySelectorAll("[data-la]").forEach(b=>b.onclick=()=>this.listAction(b.dataset.la,b.dataset.id))}
+ renderLists(){this.lists.innerHTML=this.s.watchLists.map(l=>`<div class="list theme-list-item ${l.id===this.s.activeId?"active":""}"><button class="select-list" data-la="select" data-id="${l.id}"><span class="list-name">${this.esc(l.name)}</span><span class="small">${l.codes.length} codes</span></button><div class="actions"><button class="btn blue icon" title="View all 3M charts" data-la="charts" data-months="3" data-id="${l.id}">3M</button><button class="btn blue icon" title="View all 6M charts" data-la="charts" data-months="6" data-id="${l.id}">6M</button><button class="btn soft icon" data-la="edit" data-id="${l.id}">✎</button><button class="btn soft icon" data-la="delete" data-id="${l.id}">🗑</button></div></div>`).join("");this.lists.querySelectorAll("[data-la]").forEach(b=>b.onclick=()=>this.listAction(b.dataset.la,b.dataset.id,Number(b.dataset.months||3)))}
  setTradingCodeSearch(value){
   const normalized=String(value??"").trim().toUpperCase();
   this.searchTerm=normalized;
@@ -5235,14 +5251,14 @@ document.querySelectorAll("[data-mother-tab]").forEach(b=>b.onclick=()=>this.mot
    ?arr.map(code=>`<div class="code-row${this.searchTerm?" v1112-search-match":""}">
       <div><span class="code">${code}</span><span class="meta">${this.s.history[code]?.length||0} OHLC records</span></div>
       <div class="actions">
-       ${this.s.history[code]?.length?`<button class="btn blue" data-chart="${code}">3M Chart</button>`:""}
+       ${this.s.history[code]?.length?`<button class="btn blue" data-chart="${code}" data-months="3">3M Chart</button><button class="btn blue" data-chart="${code}" data-months="6">6M Chart</button>`:""}
        <button class="btn ${activeCodes.includes(code)?"soft":"primary"}" data-add="${code}" ${activeCodes.includes(code)?"disabled":""}>${activeCodes.includes(code)?"Added":"+ Add"}</button>
       </div>
      </div>`).join("")
    :`<div class="empty">${this.searchTerm?`No DSE trading code matches “${this.esc(this.searchTerm)}”.`:"No DSE trading codes. Import DSE codes or OHLC archive data."}</div>`;
 
   this.mother.querySelectorAll("[data-add]").forEach(button=>button.onclick=()=>this.add(button.dataset.add));
-  this.mother.querySelectorAll("[data-chart]").forEach(button=>button.onclick=()=>this.openChart(button.dataset.chart));
+  this.mother.querySelectorAll("[data-chart]").forEach(button=>button.onclick=()=>this.openChart(button.dataset.chart,Number(button.dataset.months||3)));
 
   const watchMatches=activeCodes.filter(code=>String(code).toUpperCase().includes(this.searchTerm)).length;
   this.updateTradingCodeSearchStatus(arr.length,watchMatches,all.length,activeCodes.length);
@@ -5258,20 +5274,20 @@ document.querySelectorAll("[data-mother-tab]").forEach(b=>b.onclick=()=>this.mot
    ?arr.map(code=>`<div class="code-row${this.searchTerm?" v1112-search-match":""}">
       <div><span class="code">${code}</span><span class="meta">${this.s.history[code]?.length||0} OHLC records</span></div>
       <div class="actions">
-       <button class="btn blue" data-chart="${code}" ${this.s.history[code]?.length?"":"disabled"}>3M Chart</button>
+       <button class="btn blue" data-chart="${code}" data-months="3" ${this.s.history[code]?.length?"":"disabled"}>3M Chart</button><button class="btn blue" data-chart="${code}" data-months="6" ${this.s.history[code]?.length?"":"disabled"}>6M Chart</button>
        <button class="btn red" data-remove="${code}">Remove</button>
       </div>
      </div>`).join("")
    :`<div class="empty">${this.searchTerm?`No active watch-list code matches “${this.esc(this.searchTerm)}”.`:"Add trading codes from the DSE Trading Code List."}</div>`;
 
-  this.watch.querySelectorAll("[data-chart]").forEach(button=>button.onclick=()=>this.openChart(button.dataset.chart));
+  this.watch.querySelectorAll("[data-chart]").forEach(button=>button.onclick=()=>this.openChart(button.dataset.chart,Number(button.dataset.months||3)));
   this.watch.querySelectorAll("[data-remove]").forEach(button=>button.onclick=()=>this.remove(button.dataset.remove));
 
   const dseMatches=this.s.motherCodes.filter(code=>code.includes(this.searchTerm)).length;
   this.updateTradingCodeSearchStatus(dseMatches,arr.length,this.s.motherCodes.length,activeCodes.length);
  }
  renderActivity(){this.activity.innerHTML=this.s.activity.length?this.s.activity.slice(0,8).map(x=>`<div><strong>${this.esc(x.m)}</strong><span>${new Date(x.at).toLocaleString()}</span></div>`).join(""):`<span class="small">No activity.</span>`}
- listAction(act,id){const l=this.s.watchLists.find(x=>x.id===id);if(!l)return;if(act==="select"){this.s.activeId=id;this.persist();this.render()}else if(act==="charts"){this.s.activeId=id;this.persist();this.render();this.openGallery()}else if(act==="edit")this.openList(l);else if(act==="delete"){if(this.s.watchLists.length===1)return this.toast("At least one list must remain.",true);if(confirm(`Delete "${l.name}"?`)){this.s.watchLists=this.s.watchLists.filter(x=>x.id!==id);if(this.s.activeId===id)this.s.activeId=this.s.watchLists[0].id;this.log(`Deleted watch list ${l.name}`);this.persist();this.render()}}}
+ listAction(act,id,months=3){const l=this.s.watchLists.find(x=>x.id===id);if(!l)return;if(act==="select"){this.s.activeId=id;this.persist();this.render()}else if(act==="charts"){this.s.activeId=id;this.persist();this.render();this.openGallery(months)}else if(act==="edit")this.openList(l);else if(act==="delete"){if(this.s.watchLists.length===1)return this.toast("At least one list must remain.",true);if(confirm(`Delete "${l.name}"?`)){this.s.watchLists=this.s.watchLists.filter(x=>x.id!==id);if(this.s.activeId===id)this.s.activeId=this.s.watchLists[0].id;this.log(`Deleted watch list ${l.name}`);this.persist();this.render()}}}
  openList(l=null){this.editId=l?.id||null;this.listModalTitle.textContent=l?"Edit Watch List":"Create Watch List";this.listName.value=l?.name||"";this.open("listModal")}
  saveList(e){e.preventDefault();const n=this.listName.value.trim();if(!n)return;if(this.editId){this.s.watchLists.find(x=>x.id===this.editId).name=n}else{const id=ID.make();this.s.watchLists.push({id,name:n,codes:[]});this.s.activeId=id}this.log(`Saved watch list ${n}`);this.persist();this.close("listModal");this.render()}
  add(c){const a=this.active();if(!a.codes.includes(c))a.codes.push(c);this.log(`Added ${c} to ${a.name}`);this.persist();this.render()}
@@ -5500,37 +5516,42 @@ document.querySelectorAll("[data-mother-tab]").forEach(b=>b.onclick=()=>this.mot
    return false
   }
  }
- async downloadActiveWatchlist3M(){
+ async downloadActiveWatchlistMonths(months=3){
   const a=this.active();
   if(!a.codes.length)return this.toast("The active watch list is empty.",true);
+  const period=Number(months)===6?6:3;
   const end=new Date(),start=new Date(end);
-  start.setMonth(start.getMonth()-3);
+  start.setMonth(start.getMonth()-period);
   const iso=d=>d.toISOString().slice(0,10);
   this.dseStartDate.value=iso(start);
   this.dseEndDate.value=iso(end);
-  await this.fetchDseArchive(iso(start),iso(end),true,true)
+  this.showDownloadStatus(`Preparing DSE ${period}M download`,`Active watch list: ${a.name} • ${a.codes.length} codes`,2);
+  return await this.fetchDseArchive(iso(start),iso(end),true,false)
  }
+ async downloadActiveWatchlist3M(){return this.downloadActiveWatchlistMonths(3)}
+ async downloadActiveWatchlist6M(){return this.downloadActiveWatchlistMonths(6)}
  async readFiles(){const files=[...this.ohlcFiles.files];if(!files.length)return this.toast("Select archive files.",true);let all={};for(const f of files){const code=Parser.cleanCode(f.name.replace(/\.[^.]+$/,""));const parsed=Parser.parse(await f.text(),files.length>1?code:"");Object.entries(parsed).forEach(([c,r])=>(all[c]??=[]).push(...r))}this.prepare(all,files.map(f=>f.name).join(", "))}
  async fetchArchive(){const url=this.archiveUrl.value.trim();if(!url)return this.toast("Enter an archive URL.",true);try{const r=await fetch(url);if(!r.ok)throw Error();this.prepare(Parser.parse(await r.text(),Parser.cleanCode(this.urlCode.value)),url)}catch(e){this.toast("Archive download was blocked. Download the file manually and import it.",true)}}
  prepare(data,source){Object.keys(data).forEach(c=>{const m=new Map(data[c].map(x=>[x.date,x]));data[c]=[...m.values()].sort((a,b)=>a.date.localeCompare(b.date))});this.pending=data;const sy=Object.keys(data).length,rc=Object.values(data).reduce((n,a)=>n+a.length,0);this.parseResult.style.display="block";this.parseResult.textContent=sy?`Parsed ${rc.toLocaleString()} OHLC records for ${sy} trading codes from ${source}.`:"No valid OHLC rows detected.";this.commitArea.style.display=sy?"flex":"none"}
  commit(replace,silent=false){if(replace)this.s.history={};for(const [c,r] of Object.entries(this.pending)){const old=replace?[]:(this.s.history[c]||[]);const m=new Map([...old,...r].map(x=>[x.date,x]));this.s.history[c]=[...m.values()].sort((a,b)=>a.date.localeCompare(b.date));if(!this.s.motherCodes.includes(c))this.s.motherCodes.push(c)}this.s.motherCodes=[...new Set(this.s.motherCodes)].sort();this.s.lastArchive=new Date().toISOString();this.s.lastArchiveSource=this.pendingSource||"Imported archive";this.log(`${replace?"Replaced":"Merged"} OHLC archive data`);this.persist();if(!silent)this.close("archiveModal");this.render();if(!silent)this.toast("Historical archive saved locally.")}
- openChart(code){this.currentCode=code;this.chartTitle.textContent=`${code} Candlestick Chart`;this.open("chartModal");setTimeout(()=>this.drawCurrent(),50)}
+ openChart(code,months=3){this.currentCode=code;this.chartTitle.textContent=`${code} Candlestick Chart`;if(this.chartRange)this.chartRange.value=String(Number(months)===6?6:3);this.open("chartModal");setTimeout(()=>this.drawCurrent(),50)}
  rangeData(code,months){const a=this.s.history[code]||[];if(!a.length)return[];const last=new Date(a[a.length-1].date+"T00:00:00"),cut=new Date(last);cut.setMonth(cut.getMonth()-months);return a.filter(x=>new Date(x.date+"T00:00:00")>=cut)}
  drawCurrent(){const data=this.rangeData(this.currentCode,Number(this.chartRange.value));CandleChart.draw(this.chartCanvas,data);if(data.length){const f=data[0],l=data[data.length-1],chg=(l.close/f.close-1)*100;this.chartSubtitle.textContent=`${data.length} sessions • ${f.date} to ${l.date}`;this.chartInfo.innerHTML=`<span>Open: <b>${f.open.toFixed(2)}</b></span><span>Last close: <b>${l.close.toFixed(2)}</b></span><span>Change: <b>${chg.toFixed(2)}%</b></span><span>Total volume: <b>${data.reduce((n,x)=>n+x.volume,0).toLocaleString()}</b></span>`}else{this.chartSubtitle.textContent="No local OHLC data";this.chartInfo.innerHTML=""}}
- openGallery(){
+ openGallery(months=3){
+  const period=Number(months)===6?6:3;
   const a=this.active();
-  this.galleryTitle.textContent=`${a.name} — 3M Charts`;
+  this.galleryTitle.textContent=`${a.name} — ${period}M Charts`;
   this.gallery.innerHTML="";
   this.open("galleryModal");
   if(!a.codes.length){this.gallery.innerHTML=`<div class="empty">This watch list is empty.</div>`;return}
   requestAnimationFrame(()=>{
    a.codes.forEach(c=>{
-    const data=this.rangeData(c,3);
+    const data=this.rangeData(c,period);
     const card=document.createElement("div");card.className="mini-card";
     card.innerHTML=`<div class="row"><h3>${this.esc(c)}</h3><button class="btn blue" data-open="${c}" ${data.length?"":"disabled"}>Open</button></div><div class="chart-box mini-chart"><canvas></canvas></div><div class="small">${data.length?`${data.length} sessions • ${data[0].date} to ${data[data.length-1].date}`:"No archive data for this code"}</div>`;
     this.gallery.appendChild(card);
     requestAnimationFrame(()=>CandleChart.draw(card.querySelector("canvas"),data));
-    card.querySelector("[data-open]").onclick=()=>{this.close("galleryModal");this.openChart(c)}
+    card.querySelector("[data-open]").onclick=()=>{this.close("galleryModal");this.openChart(c,period)}
    })
   })
  }
@@ -6611,7 +6632,8 @@ document.addEventListener("DOMContentLoaded",()=>{
   })).sort((a,b)=>(b.score-a.score)||a.code.localeCompare(b.code));
  }
 
- function openRankedCharts(mode="potential"){
+ function openRankedCharts(mode="potential",months=3){
+  const period=Number(months)===6?6:3;
   const modal=document.getElementById("v11RankedChartModal");
   const gallery=document.getElementById("v11RankedChartGallery");
   const summary=document.getElementById("v11RankedChartSummary");
@@ -6657,10 +6679,10 @@ document.addEventListener("DOMContentLoaded",()=>{
   if(modal.parentElement!==document.body)document.body.appendChild(modal);
 
   const config={
-   indicator:{title:"Indicator Scanner — Ranked 3M Charts",description:"indicator score"},
-   vpa:{title:"VPA Scanner — Ranked 3M Charts",description:"VPA score"},
-   potential:{title:"AIT Potential — Ranked 3M Charts",description:"combined potential score"}
-  }[mode]||{title:"Ranked 3M Charts",description:"score"};
+   indicator:{title:`Indicator Scanner — Ranked ${period}M Charts`,description:"indicator score"},
+   vpa:{title:`VPA Scanner — Ranked ${period}M Charts`,description:"VPA score"},
+   potential:{title:`AIT Potential — Ranked ${period}M Charts`,description:"combined potential score"}
+  }[mode]||{title:`Ranked ${period}M Charts`,description:"score"};
   const data=rankedChartData(mode);
 
   title.textContent=config.title;
@@ -6669,7 +6691,7 @@ document.addEventListener("DOMContentLoaded",()=>{
    :`No sufficient local data for ${config.description} charts`;
 
   gallery.innerHTML=data.length?data.map((x,index)=>{
-   const rows=(window.app&&typeof window.app.rangeData==="function")?window.app.rangeData(x.code,3):rowsFor(x.code).slice(-90);
+   const rows=(window.app&&typeof window.app.rangeData==="function")?window.app.rangeData(x.code,period):rowsFor(x.code).slice(-(period===6?180:90));
    const coverage=rows.length?`${rows.length} sessions • ${rows[0].date} to ${rows[rows.length-1].date}`:"No archive data for this code";
    return `<div class="mini-card v11-ranked-mini-card" data-ranked-chart="${esc(x.code)}">
     <div class="row">
@@ -6695,7 +6717,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     const safeCode=window.CSS&&CSS.escape?CSS.escape(x.code):x.code.replace(/[^A-Za-z0-9_-]/g,"\\$&");
     const canvas=gallery.querySelector(`[data-ranked-chart="${safeCode}"] canvas`);
     if(!canvas)return;
-    const rows=(window.app&&typeof window.app.rangeData==="function")?window.app.rangeData(x.code,3):rowsFor(x.code).slice(-90);
+    const rows=(window.app&&typeof window.app.rangeData==="function")?window.app.rangeData(x.code,period):rowsFor(x.code).slice(-(period===6?180:90));
     if(window.CandleChart&&typeof window.CandleChart.draw==="function")window.CandleChart.draw(canvas,rows);
     else if(typeof CandleChart!=="undefined"&&typeof CandleChart.draw==="function")CandleChart.draw(canvas,rows);
    });
@@ -6703,7 +6725,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     closeRankedCharts();
     if(window.app&&typeof window.app.openChart==="function"){
      window.app.openChart(button.dataset.openRankedCode);
-     if(window.app.chartRange)window.app.chartRange.value="3";
+     if(window.app.chartRange)window.app.chartRange.value=String(period);
      setTimeout(()=>window.app.drawCurrent?.(),60);
     }
    }));
@@ -6717,9 +6739,12 @@ document.addEventListener("DOMContentLoaded",()=>{
   document.body.classList.remove("v11-ranked-modal-open");
  }
 
- document.getElementById("v11ViewPotentialCharts")?.addEventListener("click",()=>openRankedCharts("potential"));
- document.getElementById("v11ViewIndicatorCharts")?.addEventListener("click",()=>openRankedCharts("indicator"));
- document.getElementById("v11ViewVpaCharts")?.addEventListener("click",()=>openRankedCharts("vpa"));
+ document.getElementById("v11ViewPotentialCharts")?.addEventListener("click",()=>openRankedCharts("potential",3));
+ document.getElementById("v11ViewPotentialCharts6")?.addEventListener("click",()=>openRankedCharts("potential",6));
+ document.getElementById("v11ViewIndicatorCharts")?.addEventListener("click",()=>openRankedCharts("indicator",3));
+ document.getElementById("v11ViewIndicatorCharts6")?.addEventListener("click",()=>openRankedCharts("indicator",6));
+ document.getElementById("v11ViewVpaCharts")?.addEventListener("click",()=>openRankedCharts("vpa",3));
+ document.getElementById("v11ViewVpaCharts6")?.addEventListener("click",()=>openRankedCharts("vpa",6));
  document.getElementById("v11CloseRankedCharts")?.addEventListener("click",closeRankedCharts);
  document.getElementById("v11RankedChartModal")?.addEventListener("click",event=>{
   if(event.target===event.currentTarget)closeRankedCharts();
@@ -8784,7 +8809,7 @@ document.addEventListener("keydown",event=>{
   <button class="ait-psa-terminal-group" id="aitPsaOpenInteraction" data-ait-psa-open="aitPsaInteractionModal" type="button"><span class="ait-psa-terminal-group__icon">✥</span><span><b>Interaction</b><small>Fullscreen, command palette and interface controls</small></span><i>→</i></button>
   <button class="ait-psa-terminal-group" id="aitPsaOpenNavigation" data-ait-psa-open="aitPsaNavigationModal" type="button"><span class="ait-psa-terminal-group__icon">🧭</span><span><b>Navigation</b><small>Jump to dashboard, summaries and notifications</small></span><i>→</i></button>
   <button class="ait-psa-terminal-group" id="aitPsaOpenNotification" data-ait-psa-open="aitPsaNotificationModal" type="button"><span class="ait-psa-terminal-group__icon">♢</span><span><b>Notification</b><small>Terminal events, download updates and alerts</small></span><i>→</i></button>
-  <button class="ait-psa-terminal-group" id="aitPsaOpenWorkspace" data-ait-psa-open="aitPsaWorkspaceModal" type="button"><span class="ait-psa-terminal-group__icon">▦</span><span><b>Workspace</b><small>Download Center, Watch List and Trading</small></span><i>→</i></button>
+  <button class="ait-psa-terminal-group" id="aitPsaOpenWorkspace" data-ait-psa-open="aitPsaWorkspaceModal" type="button"><span class="ait-psa-terminal-group__icon">▦</span><span><b>Workspace</b><small>Data Center, Watch List and Trading</small></span><i>→</i></button>
  </div>
 </aside>
 <div class="ait-psa-terminal-modal-shell" id="aitPsaTerminalModalShell" aria-hidden="true"><button class="ait-psa-terminal-modal-backdrop" id="aitPsaTerminalModalBackdrop" type="button" aria-label="Close modal"></button>
@@ -8794,8 +8819,14 @@ document.addEventListener("keydown",event=>{
  <section class="ait-psa-terminal-modal" id="aitPsaRecentActivityModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">INTERACTION ITEM</span><h2>◷ Recent Activity</h2><p>Review actions performed across the terminal.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" id="aitPsaBackToInteraction" type="button">← Interaction</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-activity-toolbar"><div><strong>Activity timeline</strong><small id="aitPsaRecentActivityCount">0 activities</small></div><button class="ait-psa-terminal-back" id="aitPsaClearRecentActivity" type="button">Clear Activity</button></div><div class="ait-psa-activity-list v105-list" id="aitPsaRecentActivityList"><div class="v105-empty">Your recent actions will appear here.</div></div></div></section>
  <section class="ait-psa-terminal-modal" id="aitPsaNavigationModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">TERMINAL GROUP</span><h2>🧭 Navigation</h2><p>Navigate the simplified index page.</p></div><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" data-ait-nav="v105Dashboard" type="button"><span>01</span><b>Dashboard</b><small>Operations overview and terminal health.</small></button><button class="ait-psa-terminal-command" data-ait-nav="overviewWorkspace" type="button"><span>02</span><b>Summaries</b><small>DSE codes, watch lists and OHLC totals.</small></button><button class="ait-psa-terminal-command" data-ait-nav="aitPsaHomeNotifications" type="button"><span>03</span><b>Notifications</b><small>Recent terminal events and alerts.</small></button></div></div></section>
  <section class="ait-psa-terminal-modal" id="aitPsaNotificationModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">TERMINAL GROUP</span><h2>♢ Notification</h2><p>Review terminal events and alerts.</p></div><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></header><div class="ait-psa-terminal-modal__body"><div class="v105-list" id="aitPsaModalNotificationList"></div></div></section>
- <section class="ait-psa-terminal-modal" id="aitPsaWorkspaceModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">TERMINAL GROUP</span><h2>▦ Workspace</h2><p>Open a full-width workspace terminal.</p></div><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" id="aitPsaOpenDownload" data-ait-psa-open="aitPsaDownloadModal" type="button"><span>⇩</span><b>Download Center</b><small>Archive, import, sync and download operations.</small></button><button class="ait-psa-terminal-command" id="aitPsaOpenWatchlist" data-ait-psa-open="aitPsaWatchlistModal" type="button"><span>★</span><b>Watch List</b><small>Manage watch lists and DSE trading codes.</small></button><button class="ait-psa-terminal-command" id="aitPsaOpenTrading" data-ait-psa-open="aitPsaTradingModal" type="button"><span>▥</span><b>Trading</b><small>Open the complete trading workspace.</small></button></div></div></section>
- <section class="ait-psa-terminal-modal ait-psa-workspace-modal" id="aitPsaDownloadModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">WORKSPACE TERMINAL</span><h2>⇩ Download Center</h2><p>Archive, import, synchronization and download management.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaWorkspaceModal" type="button">← Workspace</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body ait-psa-workspace-host" id="aitPsaDownloadHost"></div></section>
+ <section class="ait-psa-terminal-modal" id="aitPsaWorkspaceModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">TERMINAL GROUP</span><h2>▦ Workspace</h2><p>Open a full-width workspace terminal.</p></div><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" id="aitPsaOpenDownload" data-ait-psa-open="aitPsaDataCenterLauncherModal" type="button"><span>⇩</span><b>Data Center</b><small>Download, sync, import, backup and reporting operations.</small></button><button class="ait-psa-terminal-command" id="aitPsaOpenWatchlist" data-ait-psa-open="aitPsaWatchlistModal" type="button"><span>★</span><b>Watch List</b><small>Manage watch lists and DSE trading codes.</small></button><button class="ait-psa-terminal-command" id="aitPsaOpenTrading" data-ait-psa-open="aitPsaTradingModal" type="button"><span>▥</span><b>Trading</b><small>Open the complete trading workspace.</small></button></div></div></section>
+ <section class="ait-psa-terminal-modal" id="aitPsaDataCenterLauncherModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">DATA WORKSPACE</span><h2>⇩ Data Center</h2><p>Choose a data operation category.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaWorkspaceModal" type="button">← Workspace</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaDownloadMenuModal" type="button"><span>⇩</span><b>Download</b><small>Download DSE history and custom archive ranges.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaSyncMenuModal" type="button"><span>↻</span><b>Sync</b><small>Synchronize the latest available market-code directory.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaImportMenuModal" type="button"><span>⇧</span><b>Import</b><small>Import codes, OHLC archives and dashboard backups.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaBackupMenuModal" type="button"><span>◆</span><b>Backup</b><small>Export a portable terminal data backup.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaDataReportMenuModal" type="button"><span>▥</span><b>Report</b><small>Review saved charts, downloaded records and job status.</small></button></div></div></section>
+ <section class="ait-psa-terminal-modal" id="aitPsaDownloadMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">DATA CENTER CATEGORY</span><h2>⇩ Download</h2><p>Select a download operation.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaDataCenterLauncherModal" type="button">← Data Center</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" data-ait-data-action="dse3mUpdate" data-ait-data-group="download" type="button"><span>3M</span><b>Download DSE 3M</b><small>Download active watch-list history.</small></button><button class="ait-psa-terminal-command" data-ait-data-action="dse6mUpdate" data-ait-data-group="download" type="button"><span>6M</span><b>Download DSE 6M</b><small>Download six months of active watch-list history.</small></button><button class="ait-psa-terminal-command" data-ait-data-action="archiveImport" data-ait-data-group="download" type="button"><span>↧</span><b>Custom Archive Range</b><small>Open the archive workspace for a chosen date range.</small></button></div></div></section>
+ <section class="ait-psa-terminal-modal" id="aitPsaSyncMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">DATA CENTER CATEGORY</span><h2>↻ Sync</h2><p>Select a synchronization operation.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaDataCenterLauncherModal" type="button">← Data Center</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" data-ait-data-action="quickMotherSync" data-ait-data-group="sync" type="button"><span>↻</span><b>Sync DSE Codes</b><small>Refresh the latest available DSE trading-code list.</small></button></div></div></section>
+ <section class="ait-psa-terminal-modal" id="aitPsaImportMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">DATA CENTER CATEGORY</span><h2>⇧ Import</h2><p>Select an import or restore operation.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaDataCenterLauncherModal" type="button">← Data Center</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" data-ait-data-action="motherImport" data-ait-data-group="import" type="button"><span>DSE</span><b>Import DSE Codes</b><small>Import or replace the complete trading-code directory.</small></button><button class="ait-psa-terminal-command" data-ait-data-action="archiveImport" data-ait-data-group="import" type="button"><span>OHLC</span><b>Import OHLC Archive</b><small>Load historical records from files, pasted data or URL.</small></button><button class="ait-psa-terminal-command" data-ait-data-action="importBtn" data-ait-data-group="import" type="button"><span>⇧</span><b>Restore Dashboard</b><small>Restore a previously exported dashboard backup.</small></button></div></div></section>
+ <section class="ait-psa-terminal-modal" id="aitPsaBackupMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">DATA CENTER CATEGORY</span><h2>◆ Backup</h2><p>Select a backup operation.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaDataCenterLauncherModal" type="button">← Data Center</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" data-ait-data-action="exportBtn" data-ait-data-group="backup" type="button"><span>⇩</span><b>Backup Dashboard</b><small>Export watch lists, codes, history and settings.</small></button></div></div></section>
+ <section class="ait-psa-terminal-modal" id="aitPsaDataReportMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">DATA CENTER CATEGORY</span><h2>▥ Report</h2><p>Select a data review workspace.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaDataCenterLauncherModal" type="button">← Data Center</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" data-ait-data-action="viewListCharts" data-ait-data-group="report" type="button"><span>3M</span><b>Saved 3M Charts</b><small>Open saved three-month charts for the active list.</small></button><button class="ait-psa-terminal-command" data-ait-data-action="viewListCharts6" data-ait-data-group="report" type="button"><span>6M</span><b>Saved 6M Charts</b><small>Open saved six-month charts for the active list.</small></button><button class="ait-psa-terminal-command" data-ait-data-action="viewDownloadedData" data-ait-data-group="report" type="button"><span>⌗</span><b>Downloaded Data</b><small>Inspect stored OHLC records in a data table.</small></button><button class="ait-psa-terminal-command" data-ait-data-workspace="status" data-ait-data-group="report" type="button"><span>◉</span><b>Download Status</b><small>Open the Data Center workspace and current job status.</small></button></div></div></section>
+ <section class="ait-psa-terminal-modal ait-psa-workspace-modal" id="aitPsaDownloadModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow" id="aitPsaDataCenterEyebrow">DATA CENTER TOOL</span><h2 id="aitPsaDataCenterTitle">⇩ Data Center</h2><p id="aitPsaDataCenterDescription">Selected data operation workspace.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" id="aitPsaDataCenterBack" type="button">← Data Center</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body ait-psa-workspace-host" id="aitPsaDownloadHost"></div></section>
  <section class="ait-psa-terminal-modal ait-psa-workspace-modal" id="aitPsaWatchlistModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">WORKSPACE TERMINAL</span><h2>★ Watch List</h2><p>Manage stock groups, trading codes and chart access.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaWorkspaceModal" type="button">← Workspace</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body ait-psa-workspace-host" id="aitPsaWatchlistHost"></div></section>
  <section class="ait-psa-terminal-modal" id="aitPsaTradingLauncherModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">TRADING WORKSPACE</span><h2>▥ Trading</h2><p>Choose a trading workspace category.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaWorkspaceModal" type="button">← Workspace</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid ait-psa-trading-launcher-grid"><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaPortfolioMenuModal" type="button"><span>◫</span><b>Portfolio</b><small>Positions, quantities, cost, value and profit or loss.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaReportMenuModal" type="button"><span>▥</span><b>Report</b><small>Charts, generated reports and historical data explorer.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaScannerMenuModal" type="button"><span>⌁</span><b>Scanner</b><small>Indicators, VPA, AIT Potential and comparison analysis.</small></button></div></div></section>
  <section class="ait-psa-terminal-modal" id="aitPsaPortfolioMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">TRADING CATEGORY</span><h2>◫ Portfolio</h2><p>Select the portfolio workspace.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaTradingLauncherModal" type="button">← Trading</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid ait-psa-trading-tool-grid"><button class="ait-psa-terminal-command" data-ait-trading-tab="portfolio" data-ait-trading-group="portfolio" type="button"><span>◫</span><b>Portfolio Manager</b><small>Manage holdings and review current portfolio performance.</small></button></div></div></section>
@@ -8843,7 +8874,13 @@ document.addEventListener('DOMContentLoaded', () => {
     aitPsaNavigationModal: 'Navigation',
     aitPsaNotificationModal: 'Notification',
     aitPsaWorkspaceModal: 'Workspace',
-    aitPsaDownloadModal: 'Download Center',
+    aitPsaDataCenterLauncherModal: 'Data Center',
+    aitPsaDownloadMenuModal: 'Download',
+    aitPsaSyncMenuModal: 'Sync',
+    aitPsaImportMenuModal: 'Import',
+    aitPsaBackupMenuModal: 'Backup',
+    aitPsaDataReportMenuModal: 'Data Report',
+    aitPsaDownloadModal: 'Data Center Tool',
     aitPsaWatchlistModal: 'Watch List',
     aitPsaTradingLauncherModal: 'Trading',
     aitPsaPortfolioMenuModal: 'Portfolio',
@@ -8940,7 +8977,7 @@ document.addEventListener('DOMContentLoaded', () => {
     ['aitPsaOpenWorkspace', 'aitPsaWorkspaceModal'],
     ['aitPsaOpenThemeMenu', 'aitPsaThemeModal'],
     ['aitPsaBackToAppearance', 'aitPsaAppearanceModal'],
-    ['aitPsaOpenDownload', 'aitPsaDownloadModal'],
+    ['aitPsaOpenDownload', 'aitPsaDataCenterLauncherModal'],
     ['aitPsaOpenWatchlist', 'aitPsaWatchlistModal'],
     ['aitPsaOpenTrading', 'aitPsaTradingLauncherModal']
   ].forEach(([buttonId, modalId]) => bindModalRoute(buttonId, modalId));
@@ -8996,6 +9033,61 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  const dataCenterGroupModal = {
+    download: 'aitPsaDownloadMenuModal',
+    sync: 'aitPsaSyncMenuModal',
+    import: 'aitPsaImportMenuModal',
+    backup: 'aitPsaBackupMenuModal',
+    report: 'aitPsaDataReportMenuModal'
+  };
+  const dataCenterDefinitions = {
+    dse3mUpdate: ['3M', 'Download DSE 3M', 'Download three months of active watch-list history.'],
+    dse6mUpdate: ['6M', 'Download DSE 6M', 'Download six months of active watch-list history.'],
+    archiveImport: ['OHLC', 'Archive Workspace', 'Download or import historical OHLC archive records.'],
+    quickMotherSync: ['↻', 'Sync DSE Codes', 'Synchronize the latest available DSE code directory.'],
+    motherImport: ['DSE', 'Import DSE Codes', 'Import or replace the complete trading-code directory.'],
+    importBtn: ['⇧', 'Restore Dashboard', 'Restore terminal data from a dashboard backup.'],
+    exportBtn: ['⇩', 'Backup Dashboard', 'Export terminal data and settings as a portable backup.'],
+    viewListCharts: ['3M', 'Saved 3M Charts', 'Review saved three-month charts for the active watch list.'],
+    viewListCharts6: ['6M', 'Saved 6M Charts', 'Review saved six-month charts for the active watch list.'],
+    viewDownloadedData: ['⌗', 'Downloaded Data', 'Inspect stored OHLC records in a data table.'],
+    status: ['◉', 'Download Status', 'Review Data Center operations and current download status.']
+  };
+  let activeDataCenterGroup = 'download';
+
+  const openDataCenterTool = (actionName, groupName, execute = true) => {
+    activeDataCenterGroup = groupName || 'download';
+    const definition = dataCenterDefinitions[actionName] || ['⇩', 'Data Center', 'Selected data operation workspace.'];
+    const title = document.getElementById('aitPsaDataCenterTitle');
+    const description = document.getElementById('aitPsaDataCenterDescription');
+    const eyebrow = document.getElementById('aitPsaDataCenterEyebrow');
+    const back = document.getElementById('aitPsaDataCenterBack');
+    if (title) title.textContent = `${definition[0]} ${definition[1]}`;
+    if (description) description.textContent = definition[2];
+    if (eyebrow) eyebrow.textContent = `${activeDataCenterGroup.toUpperCase()} TOOL`;
+    if (back) back.textContent = `← ${activeDataCenterGroup.charAt(0).toUpperCase()+activeDataCenterGroup.slice(1)}`;
+    openModal('aitPsaDownloadModal');
+    if (execute && actionName !== 'status') {
+      requestAnimationFrame(() => {
+        const target = document.getElementById(actionName);
+        if (target) target.click();
+      });
+    } else if (actionName === 'status') {
+      requestAnimationFrame(() => {
+        const statusCard = document.getElementById('downloadStatusCard');
+        if (statusCard) {
+          statusCard.style.display = '';
+          statusCard.scrollIntoView({behavior:'smooth',block:'start'});
+        }
+      });
+    }
+    recordTerminalActivity(`${definition[1]} opened`, `${activeDataCenterGroup} data center tool opened`);
+  };
+
+  document.getElementById('aitPsaDataCenterBack')?.addEventListener('click', () => {
+    openModal(dataCenterGroupModal[activeDataCenterGroup] || 'aitPsaDataCenterLauncherModal');
+  });
+
   const tradingToolDefinitions = {
     portfolio: ['◫ Portfolio', 'Portfolio holdings and performance workspace.'],
     charts: ['▥ Charts', 'Multi-chart analysis workspace.'],
@@ -9039,6 +9131,30 @@ document.addEventListener('DOMContentLoaded', () => {
   document.addEventListener('click', async (event) => {
     const dockClose = event.target.closest('#aitPsaTerminalDockClose');
     if (dockClose) { setDock(false); return; }
+
+    const dataTool = event.target.closest('[data-ait-data-action]');
+    if (dataTool) {
+      event.preventDefault();
+      event.stopPropagation();
+      const actionName=dataTool.dataset.aitDataAction;
+      if(actionName==='dse3mUpdate'||actionName==='dse6mUpdate'){
+        closeModal();
+        const target=document.getElementById(actionName);
+        if(target)target.click();
+        requestAnimationFrame(()=>openDataCenterTool('status','report',false));
+      }else{
+        openDataCenterTool(actionName, dataTool.dataset.aitDataGroup, true);
+      }
+      return;
+    }
+
+    const dataWorkspace = event.target.closest('[data-ait-data-workspace]');
+    if (dataWorkspace) {
+      event.preventDefault();
+      event.stopPropagation();
+      openDataCenterTool(dataWorkspace.dataset.aitDataWorkspace, dataWorkspace.dataset.aitDataGroup, false);
+      return;
+    }
 
     const tradingTool = event.target.closest('[data-ait-trading-tab]');
     if (tradingTool) {
