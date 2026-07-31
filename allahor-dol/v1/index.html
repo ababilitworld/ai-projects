@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="bn" data-theme="emerald">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <title>আল্লাহর দল — Interactive eBook Terminal</title>
+  <link rel="stylesheet" href="assets/css/ababil-allahor-dol.css">
+</head>
+<body>
+  <div class="ababil-book-app" id="ababilBookApp">
+    <header class="ababil-book-header">
+      <button class="ababil-icon-button" id="ababilTerminalToggle" type="button"
+        aria-label="টার্মিনাল খুলুন" aria-controls="ababilTerminal" aria-expanded="false">
+        <span aria-hidden="true">☰</span>
+      </button>
+
+      <div class="ababil-brand">
+        <div class="ababil-brand-mark" aria-hidden="true">ا</div>
+        <div>
+          <h1>আল্লাহর দল</h1>
+          <p>ঐক্য, জ্ঞান, আমল ও টেকসই উন্নয়নের নির্দেশিকা</p>
+        </div>
+      </div>
+
+      <div class="ababil-header-status">
+        <span class="ababil-status-dot" aria-hidden="true"></span>
+        <span>Local terminal ready</span>
+      </div>
+    </header>
+
+    <aside class="ababil-terminal" id="ababilTerminal" aria-label="eBook terminal">
+      <div class="ababil-terminal-head">
+        <div>
+          <span class="ababil-terminal-kicker">AIT-style control center</span>
+          <h2>Reader Terminal</h2>
+        </div>
+        <button class="ababil-icon-button" id="ababilTerminalClose" type="button" aria-label="টার্মিনাল বন্ধ করুন">×</button>
+      </div>
+
+      <div class="ababil-terminal-search">
+        <label for="ababilTerminalSearch">দ্রুত খুঁজুন</label>
+        <div>
+          <input id="ababilTerminalSearch" type="search" placeholder="মেনু বা অধ্যায় লিখুন">
+          <button type="button" id="ababilSearchButton">⌕</button>
+        </div>
+      </div>
+
+      <nav class="ababil-terminal-groups" aria-label="Terminal menu groups">
+        <section class="ababil-terminal-group">
+          <button class="ababil-group-toggle" type="button" aria-expanded="false">
+            <span><i>▦</i> Workspace</span><b>⌄</b>
+          </button>
+          <div class="ababil-group-panel">
+            <button type="button" data-action="reading-mode">Reading workspace</button>
+            <button type="button" data-action="focus-mode">Focus workspace</button>
+            <button type="button" data-action="presentation-mode">Presentation workspace</button>
+            <button type="button" data-action="reset-workspace">Reset workspace</button>
+          </div>
+        </section>
+
+        <section class="ababil-terminal-group">
+          <button class="ababil-group-toggle" type="button" aria-expanded="false">
+            <span><i>◐</i> Appearance</span><b>⌄</b>
+          </button>
+          <div class="ababil-group-panel">
+            <button type="button" data-action="theme-emerald">Emerald theme</button>
+            <button type="button" data-action="theme-midnight">Midnight theme</button>
+            <button type="button" data-action="theme-parchment">Parchment theme</button>
+            <button type="button" data-action="font-increase">Increase font</button>
+            <button type="button" data-action="font-decrease">Decrease font</button>
+            <button type="button" data-action="font-reset">Reset font</button>
+          </div>
+        </section>
+
+        <section class="ababil-terminal-group">
+          <button class="ababil-group-toggle" type="button" aria-expanded="false">
+            <span><i>⌁</i> Interaction</span><b>⌄</b>
+          </button>
+          <div class="ababil-group-panel">
+            <button type="button" data-action="toggle-cards">Toggle insight cards</button>
+            <button type="button" data-action="expand-all">Expand all sections</button>
+            <button type="button" data-action="collapse-all">Collapse all sections</button>
+            <button type="button" data-action="clear-highlights">Clear highlights</button>
+          </div>
+        </section>
+
+        <section class="ababil-terminal-group">
+          <button class="ababil-group-toggle" type="button" aria-expanded="false">
+            <span><i>➜</i> Navigation</span><b>⌄</b>
+          </button>
+          <div class="ababil-group-panel">
+            <button type="button" data-target="ababilIntro">ভূমিকা</button>
+            <button type="button" data-target="ababilLessons">খিযির (আ.) থেকে শিক্ষা</button>
+            <button type="button" data-target="ababilUnity">ঐক্য ও সহযোগিতা</button>
+            <button type="button" data-target="ababilRoadmap">কর্মপথ</button>
+            <button type="button" data-target="ababilPrinciples">১১টি মূলনীতি</button>
+            <button type="button" data-target="ababilDua">দোয়া</button>
+          </div>
+        </section>
+
+        <section class="ababil-terminal-group">
+          <button class="ababil-group-toggle" type="button" aria-expanded="false">
+            <span><i>◉</i> Notification</span><b>⌄</b>
+          </button>
+          <div class="ababil-group-panel">
+            <button type="button" data-action="notifications-toggle">Reading notifications</button>
+            <button type="button" data-action="progress-alert">Progress reminder</button>
+            <button type="button" data-action="show-tip">Show learning tip</button>
+          </div>
+        </section>
+
+        <section class="ababil-terminal-group">
+          <button class="ababil-group-toggle" type="button" aria-expanded="false">
+            <span><i>◷</i> Activity</span><b>⌄</b>
+          </button>
+          <div class="ababil-group-panel">
+            <button type="button" data-action="show-activity">Recent activity</button>
+            <button type="button" data-action="clear-activity">Clear activity</button>
+          </div>
+        </section>
+      </nav>
+
+      <div class="ababil-terminal-footer">
+        <button type="button" data-action="print-a4">Print A4</button>
+        <button type="button" data-action="print-a5">Print A5</button>
+      </div>
+    </aside>
+
+    <div class="ababil-terminal-backdrop" id="ababilTerminalBackdrop"></div>
+
+    <main class="ababil-book-main" id="ababilBookMain">
+      <section class="ababil-hero" id="ababilIntro">
+        <div class="ababil-hero-copy">
+          <span class="ababil-eyebrow">بسم الله الرحمن الرحيم</span>
+          <h2>আল্লাহর সন্তুষ্টির পথে জ্ঞান, আমল, ঐক্য ও দায়িত্বশীল প্রচেষ্টা</h2>
+          <p>দুনিয়ার জীবনকে পরীক্ষা ক্ষেত্র হিসেবে মেনে নিয়ে, সঠিক জ্ঞান অর্জন করে, হালাল পথে থেকে এবং মানুষের উপকারের মাধ্যমে আল্লাহর সন্তুষ্টি অর্জনের চেষ্টা করাই এই বইয়ের মূল আহ্বান।</p>
+          <div class="ababil-hero-actions">
+            <button type="button" data-target="ababilLessons">পড়া শুরু করুন</button>
+            <button type="button" data-action="focus-mode">Focus mode</button>
+          </div>
+        </div>
+        <aside class="ababil-quote-card">
+          <span>জীবনের দিকনির্দেশনা</span>
+          <blockquote>ইসলাম অনুযায়ী নিজের জীবনকে সাজান; আল্লাহর সন্তুষ্টিকে লক্ষ্য করুন এবং প্রতিটি দায়িত্ব আমানত হিসেবে পালন করুন।</blockquote>
+        </aside>
+      </section>
+
+      <section class="ababil-dashboard">
+        <article class="ababil-metric-card"><b>০১</b><h3>ঈমান</h3><p>পরীক্ষার মাঝে আল্লাহর উপর ভরসা।</p></article>
+        <article class="ababil-metric-card"><b>০২</b><h3>জ্ঞান</h3><p>অন্ধ অনুসরণ নয়, যাচাই করা শিক্ষা।</p></article>
+        <article class="ababil-metric-card"><b>০৩</b><h3>ঐক্য</h3><p>বিরোধ কমিয়ে কল্যাণে সহযোগিতা।</p></article>
+        <article class="ababil-metric-card"><b>০৪</b><h3>সেবা</h3><p>মানবতার জন্য উপকারী হওয়া।</p></article>
+      </section>
+
+      <section class="ababil-content-section" id="ababilLessons">
+        <button class="ababil-section-toggle" type="button" aria-expanded="true">
+          <span><small>অধ্যায় ১</small> খিযির (আ.)-এর ঘটনা থেকে মূল শিক্ষা</span><b>−</b>
+        </button>
+        <div class="ababil-section-body">
+          <div class="ababil-insight-grid">
+            <article><span>অদৃশ্য সাহায্য</span><p>আল্লাহ তাঁর বান্দাকে এমন উপায়ে সাহায্য করতে পারেন, যার তাৎক্ষণিক ব্যাখ্যা মানুষের কাছে স্পষ্ট হয় না।</p></article>
+            <article><span>ছোট ক্ষতি, বড় সুরক্ষা</span><p>কখনও সাময়িক অসুবিধা ভবিষ্যতের বড় বিপদ থেকে রক্ষার মাধ্যম হতে পারে।</p></article>
+            <article><span>ঈমানের পরীক্ষা</span><p>ধৈর্য, তাকওয়া এবং সঠিক কাজের মাধ্যমে পরীক্ষায় উত্তীর্ণ হওয়ার চেষ্টা করতে হয়।</p></article>
+            <article><span>আল্লাহর হিকমাহ</span><p>প্রতিটি ঘটনার পূর্ণ জ্ঞান মানুষের কাছে নাও থাকতে পারে; তাই তাড়াহুড়া করে সিদ্ধান্ত নয়।</p></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="ababil-content-section" id="ababilUnity">
+        <button class="ababil-section-toggle" type="button" aria-expanded="true">
+          <span><small>অধ্যায় ২</small> মুসলিম ঐক্য ও দায়িত্বশীল সহযোগিতা</span><b>−</b>
+        </button>
+        <div class="ababil-section-body">
+          <div class="ababil-two-column">
+            <article class="ababil-good-panel">
+              <h3>যা করবেন</h3>
+              <ul>
+                <li>সঠিক জ্ঞান অর্জন করুন।</li>
+                <li>ভালো কাজে সহযোগিতা করুন।</li>
+                <li>ভুল দেখলে ব্যক্তিগতভাবে নসিহত করুন।</li>
+                <li>মুসলিমদের মধ্যে বিরোধ কমানোর চেষ্টা করুন।</li>
+                <li>উদ্দেশ্য রাখুন আল্লাহর সন্তুষ্টি।</li>
+              </ul>
+            </article>
+            <article class="ababil-warning-panel">
+              <h3>যা এড়িয়ে চলবেন</h3>
+              <ul>
+                <li>অন্ধ দলীয় অনুসরণ।</li>
+                <li>সামাজিক মাধ্যমে অপমান ও কাদা ছোড়াছুড়ি।</li>
+                <li>ভিন্নমতকে শত্রুতা হিসেবে দেখা।</li>
+                <li>প্রমাণ ছাড়া অভিযোগ।</li>
+                <li>ঐক্যের নামে অন্যায়কে সমর্থন।</li>
+              </ul>
+            </article>
+          </div>
+          <div class="ababil-verse-card">
+            <span>কুরআনিক নির্দেশনা</span>
+            <h3>“তোমরা সবাই আল্লাহর রজ্জুকে দৃঢ়ভাবে ধারণ করো এবং পরস্পর বিচ্ছিন্ন হয়ো না।”</h3>
+            <p>সূরা আলে ইমরান, ৩:১০৩ — অর্থের সারসংক্ষেপ</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="ababil-content-section" id="ababilRoadmap">
+        <button class="ababil-section-toggle" type="button" aria-expanded="true">
+          <span><small>অধ্যায় ৩</small> কিভাবে আল্লাহর সন্তুষ্টির পথে চলবেন</span><b>−</b>
+        </button>
+        <div class="ababil-section-body">
+          <div class="ababil-roadmap">
+            <div><b>১</b><span>দুনিয়াকে পরীক্ষা ক্ষেত্র হিসেবে গ্রহণ</span></div>
+            <div><b>২</b><span>হালাল উপার্জন ও হালাল জীবন</span></div>
+            <div><b>৩</b><span>মানুষের উপকার ও প্রতিদান আল্লাহর কাছে চাওয়া</span></div>
+            <div><b>৪</b><span>সকল অবস্থায় ধৈর্য ও তাওয়াক্কুল</span></div>
+            <div><b>৫</b><span>ভুল হলে তওবা এবং সংশোধন</span></div>
+            <div><b>৬</b><span>বান্দার হক নষ্ট হলে তা ফিরিয়ে দেওয়া</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="ababil-content-section" id="ababilPrinciples">
+        <button class="ababil-section-toggle" type="button" aria-expanded="true">
+          <span><small>অধ্যায় ৪</small> ১১টি উন্নয়নমূলক মূলনীতি</span><b>−</b>
+        </button>
+        <div class="ababil-section-body">
+          <ol class="ababil-principles">
+            <li>জ্ঞান ও উত্তম গুণাবলি অর্জন।</li>
+            <li>সত্য ও কল্যাণের বার্তা প্রচার।</li>
+            <li>ঐক্যবদ্ধ হওয়া।</li>
+            <li>মানুষের উপকার করা।</li>
+            <li>ক্ষতি প্রতিরোধে সচেতন ব্যবস্থা তৈরি।</li>
+            <li>উদ্ভাবন ও গবেষণা।</li>
+            <li>সকল ক্ষেত্রে স্বয়ংসম্পূর্ণতার চেষ্টা।</li>
+            <li>হালাল আয়, খাদ্য ও পোশাকের ব্যবস্থা।</li>
+            <li>সমস্যা সমাধানের কার্যকর পদ্ধতি তৈরি।</li>
+            <li>সিস্টেম সংরক্ষণ, মূল্যায়ন ও উন্নয়ন।</li>
+            <li>আল্লাহর উপর ভরসা ও ধৈর্য ধারণ।</li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="ababil-checklist-panel">
+        <div>
+          <span class="ababil-eyebrow">Daily review</span>
+          <h2>দৈনন্দিন আত্মমূল্যায়ন</h2>
+        </div>
+        <div class="ababil-checklist-grid">
+          <label><input type="checkbox"> সালাত ও ইবাদত</label>
+          <label><input type="checkbox"> কুরআন ও জ্ঞানচর্চা</label>
+          <label><input type="checkbox"> হালাল উপার্জন</label>
+          <label><input type="checkbox"> মানুষের উপকার</label>
+          <label><input type="checkbox"> তওবা ও আত্মসংশোধন</label>
+          <label><input type="checkbox"> ঐক্য ও সুন্দর আচরণ</label>
+        </div>
+      </section>
+
+      <section class="ababil-dua" id="ababilDua">
+        <span>সমাপনী দোয়া</span>
+        <h2>হে আল্লাহ, সকল মুসলিমকে ঐক্যবদ্ধ করুন, সত্য ও কল্যাণের পথে সম্মিলিতভাবে কাজ করার তৌফিক দিন এবং আমাদের উপর আপনার সন্তুষ্টি দান করুন। আমীন।</h2>
+      </section>
+    </main>
+
+    <aside class="ababil-activity-drawer" id="ababilActivityDrawer" aria-hidden="true">
+      <div>
+        <h2>Recent Activity</h2>
+        <button type="button" id="ababilActivityClose">×</button>
+      </div>
+      <ol id="ababilActivityList"></ol>
+    </aside>
+
+    <div class="ababil-toast-region" id="ababilToastRegion" aria-live="polite"></div>
+  </div>
+  <script src="assets/js/ababil-allahor-dol.js"></script>
+</body>
+</html>

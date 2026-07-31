@@ -1,0 +1,1 @@
+Added BMR beside BMI. Added Baby, Child, Teen, Adult and Older Adult profiles plus Male/Female selection and age-aware safety logic across calculators. Pediatric BMI and weight targets are not interpreted using adult categories.

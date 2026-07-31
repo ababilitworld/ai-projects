@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en" data-theme="dark-glass">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Body Metrics Roadmap</title>
+<link rel="stylesheet" href="../assets/planner.css"></head>
+<body><main class="calc-app"><div class="calc-shell">
+<section class="calc-hero"><div><span class="calc-kicker">Integrated Planner / 1 of 3</span><h1>Body Metrics Roadmap</h1><p>Define your current BMI, BMR, BSR and body-fat estimate, choose desired targets, and generate weekly and monthly milestones.</p></div><aside class="calc-badge"><output id="heroBadge">READY</output><small id="heroBadgeLabel">Plan status</small></aside></section>
+
+<div class="planner-tabs">
+<button class="is-active" data-step-target="profileStep" type="button">1. Profile</button>
+<button data-step-target="metricsStep" type="button">2. Current & Target</button>
+<button data-step-target="timelineStep" type="button">3. Timeline</button>
+<button data-step-target="roadmapStep" type="button">4. Roadmap</button>
+</div>
+<section class="planner-step is-active" id="profileStep"><div class="calc-panel"><h2>Profile</h2><div class="calc-grid">
+<label class="calc-field"><span>Life stage</span><select id="lifeStage"><option value="adult">Adult</option><option value="older">Older adult</option><option value="teen">Teen</option><option value="child">Child</option></select></label>
+<label class="calc-field"><span>Sex</span><select id="sex"><option value="male">Male</option><option value="female">Female</option></select></label>
+<label class="calc-field"><span>Age</span><input id="age" min="2" max="100" type="number" value="41"></label>
+<label class="calc-field"><span>Height (cm)</span><input id="height" min="80" max="230" type="number" value="174"></label>
+</div></div></section>
+<section class="planner-step" id="metricsStep"><div class="calc-layout">
+<div class="calc-panel"><h2>Current metrics</h2><div class="calc-grid">
+<label class="calc-field"><span>Weight (kg)</span><input id="currentWeight" min="10" max="300" step=".1" type="number" value="80"></label>
+<label class="calc-field"><span>Waist (cm)</span><input id="currentWaist" min="30" max="220" step=".1" type="number" value="95"></label>
+<label class="calc-field"><span>Body fat (%)</span><input id="currentFat" min="2" max="70" step=".1" type="number" value="28"></label>
+<label class="calc-field"><span>BMR (optional)</span><input id="currentBmr" min="500" max="4000" step="1" type="number" placeholder="Auto"></label>
+</div></div>
+<div class="calc-panel"><h2>Target metrics</h2><div class="calc-grid">
+<label class="calc-field"><span>Target BMI</span><input id="targetBmi" min="14" max="40" step=".1" type="number" value="23"></label>
+<label class="calc-field"><span>Target waist (cm)</span><input id="targetWaist" min="30" max="220" step=".1" type="number" value="84"></label>
+<label class="calc-field"><span>Target body fat (%)</span><input id="targetFat" min="2" max="60" step=".1" type="number" value="20"></label>
+<label class="calc-field"><span>Target BMR (optional)</span><input id="targetBmr" min="500" max="4000" step="1" type="number" placeholder="Auto from target weight"></label>
+</div></div></div></section>
+<section class="planner-step" id="timelineStep"><div class="calc-panel"><h2>Planning horizon</h2><div class="calc-grid">
+<label class="calc-field"><span>Start date</span><input id="startDate" type="date"></label>
+<label class="calc-field"><span>Plan length (weeks)</span><input id="weeks" min="4" max="104" type="number" value="24"></label>
+<label class="calc-field"><span>Review frequency</span><select id="review"><option value="weekly">Weekly</option><option value="biweekly">Every 2 weeks</option><option value="monthly">Monthly</option></select></label>
+<label class="calc-field"><span>Target approach</span><select id="approach"><option value="steady">Steady progression</option><option value="gentle">Gentle start</option><option value="front">Stronger early focus</option></select></label>
+</div></div></section>
+<section class="planner-step" id="roadmapStep"><div class="calc-panel"><h2>Generated roadmap</h2>
+<div class="planner-summary">
+<div class="result-card"><small>Current BMI</small><strong id="currentBmiOut">—</strong><span id="currentWeightLabel">Current weight</span></div>
+<div class="result-card"><small>Target weight</small><strong id="targetWeightOut">—</strong><span>Derived from target BMI</span></div>
+<div class="result-card"><small>Current BSR</small><strong id="currentBsrOut">—</strong><span>Waist-to-height ratio</span></div>
+<div class="result-card"><small>Weekly weight path</small><strong id="weeklyWeightOut">—</strong><span>Linear planning estimate</span></div>
+</div><div class="planner-milestones" id="milestones"></div>
+<div class="calc-note">This planner distributes your chosen targets across time. It is not a diagnosis or a substitute for individualized medical or dietetic advice. Child and teen goals should be reviewed by a qualified clinician.</div></div></section>
+<div class="planner-actions"><button class="calc-button" id="loadPlan" type="button">Load saved</button><button class="calc-button calc-button--primary" id="generatePlan" type="button">Generate & Save Roadmap</button></div>
+
+</div></main><script src="../assets/planner.js"></script><script>
+document.addEventListener('DOMContentLoaded',()=>{
+ const P=window.Planner;
+ const today=new Date().toISOString().slice(0,10);P.q('startDate').value=today;
+ const fill=data=>Object.entries(data||{}).forEach(([k,v])=>{const e=P.q(k);if(e&&v!==undefined)e.value=v});
+ P.q('loadPlan').onclick=()=>fill(P.profile().metrics);
+ P.q('generatePlan').onclick=()=>{
+  const height=P.n('height',174),weight=P.n('currentWeight',80),waist=P.n('currentWaist',95),fat=P.n('currentFat',28),age=P.n('age',41);
+  const sex=P.q('sex').value,targetBmi=P.n('targetBmi',23),targetWaist=P.n('targetWaist',84),targetFat=P.n('targetFat',20),weeks=Math.max(4,P.n('weeks',24));
+  const targetWeight=targetBmi*((height/100)**2),currentBmi=P.bmi(weight,height),currentBsr=waist/height;
+  const currentBmr=P.n('currentBmr')||P.bmr(sex,weight,height,age),targetBmr=P.n('targetBmr')||P.bmr(sex,targetWeight,height,age);
+  P.q('currentBmiOut').textContent=P.round(currentBmi);P.q('targetWeightOut').textContent=`${P.round(targetWeight)} kg`;P.q('currentBsrOut').textContent=P.round(currentBsr,3);
+  P.q('weeklyWeightOut').textContent=`${P.round((targetWeight-weight)/weeks,2)} kg`;
+  const rows=[`<div class="milestone-row milestone-row--head"><span>Period</span><span>Weight</span><span>BMI</span><span>Waist</span><span>Fat</span></div>`];
+  const points=[];for(let week=0;week<=weeks;week+=4){points.push(week)}if(points.at(-1)!==weeks)points.push(weeks);
+  points.forEach(week=>{const w=P.interpolate(weight,targetWeight,week,weeks),wa=P.interpolate(waist,targetWaist,week,weeks),f=P.interpolate(fat,targetFat,week,weeks),bm=P.interpolate(currentBmr,targetBmr,week,weeks);rows.push(`<div class="milestone-row"><span>${week===0?'Start':`Week ${week}`}</span><span>${P.round(w)} kg</span><span>${P.round(P.bmi(w,height))}</span><span>${P.round(wa)} cm</span><span>${P.round(f)}% · BMR ${Math.round(bm)}</span></div>`)});
+  P.q('milestones').innerHTML=rows.join('');P.q('heroBadge').textContent=`${weeks}W`;P.q('heroBadgeLabel').textContent='Roadmap generated';
+  const fields=['lifeStage','sex','age','height','currentWeight','currentWaist','currentFat','currentBmr','targetBmi','targetWaist','targetFat','targetBmr','startDate','weeks','review','approach'];
+  const metrics={};fields.forEach(id=>metrics[id]=P.q(id).value);metrics.derived={currentBmi,currentBsr,currentBmr,targetWeight,targetBmr};
+  P.save({metrics});
+ };
+});
+</script></body></html>

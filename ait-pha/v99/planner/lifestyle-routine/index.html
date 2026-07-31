@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en" data-theme="dark-glass">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Lifestyle Routine Planner</title>
+<link rel="stylesheet" href="../assets/planner.css"></head>
+<body><main class="calc-app"><div class="calc-shell">
+<section class="calc-hero"><div><span class="calc-kicker">Integrated Planner / 3 of 3</span><h1>Lifestyle Routine Planner</h1><p>Coordinate walking, guided breathing and sun-bath routines, then progress them through weekly and monthly milestones.</p></div><aside class="calc-badge"><output id="heroBadge">READY</output><small id="heroBadgeLabel">Plan status</small></aside></section>
+
+<div class="planner-tabs"><button class="is-active" data-step-target="routineStep" type="button">1. Routine Targets</button><button data-step-target="progressionStep" type="button">2. Progression</button><button data-step-target="calendarStep" type="button">3. Weekly & Monthly</button></div>
+<section class="planner-step is-active" id="routineStep"><div class="calc-layout">
+<div class="calc-panel"><h2>Walking</h2><div class="calc-grid">
+<label class="calc-field"><span>Current min/session</span><input id="walkCurrent" min="0" max="240" type="number" value="20"></label>
+<label class="calc-field"><span>Target min/session</span><input id="walkTarget" min="0" max="240" type="number" value="45"></label>
+<label class="calc-field"><span>Days/week</span><input id="walkDays" min="0" max="7" type="number" value="5"></label>
+<label class="calc-field"><span>Intensity</span><select id="walkIntensity"><option>Comfortable</option><option selected>Moderate</option><option>Brisk intervals</option></select></label>
+</div></div>
+<div class="calc-panel"><h2>Breathing & Sun Bath</h2><div class="calc-grid">
+<label class="calc-field"><span>Breathing min/session</span><input id="breathMinutes" min="1" max="60" type="number" value="10"></label>
+<label class="calc-field"><span>Breathing days/week</span><input id="breathDays" min="1" max="7" type="number" value="7"></label>
+<label class="calc-field"><span>Sun bath min/session</span><input id="sunMinutes" min="0" max="90" type="number" value="15"></label>
+<label class="calc-field"><span>Sun bath days/week</span><input id="sunDays" min="0" max="7" type="number" value="4"></label>
+</div></div></div></section>
+<section class="planner-step" id="progressionStep"><div class="calc-panel"><h2>Progression rules</h2><div class="calc-grid">
+<label class="calc-field"><span>Plan length (weeks)</span><input id="routineWeeks" min="4" max="52" type="number" value="12"></label>
+<label class="calc-field"><span>Walking progression</span><select id="walkProgress"><option value="linear">Linear</option><option value="gentle" selected>Gentle first month</option><option value="step">Step every 2 weeks</option></select></label>
+<label class="calc-field"><span>Recovery day</span><select id="recovery"><option>Friday</option><option selected>Sunday</option><option>Custom</option></select></label>
+<label class="calc-field"><span>Reminder time</span><input id="reminderTime" type="time" value="06:30"></label>
+</div></div></section>
+<section class="planner-step" id="calendarStep"><div class="calc-panel"><h2>Generated routine</h2><div class="planner-summary">
+<div class="result-card"><small>Walking/week now</small><strong id="walkNowOut">—</strong><span>Current weekly volume</span></div>
+<div class="result-card"><small>Walking/week target</small><strong id="walkTargetOut">—</strong><span>Final weekly volume</span></div>
+<div class="result-card"><small>Breathing/month</small><strong id="breathMonthOut">—</strong><span>4-week estimate</span></div>
+<div class="result-card"><small>Sun bath/month</small><strong id="sunMonthOut">—</strong><span>4-week estimate</span></div>
+</div><div class="week-grid" id="routineWeek"></div><div class="planner-milestones" id="routineMilestones"></div>
+<div class="calc-note">Sun exposure needs vary with skin tone, season, latitude, clothing, medicines, and skin-cancer risk. Avoid burning and follow local medical guidance. Stop exercise for chest pain, faintness, severe breathlessness, or other alarming symptoms.</div></div></section>
+<div class="planner-actions"><button class="calc-button" id="openWalking" type="button">Open Walking Tool</button><button class="calc-button" id="openBreathing" type="button">Open Breathing Tool</button><button class="calc-button calc-button--primary" id="saveRoutine" type="button">Generate & Save Lifestyle Plan</button></div>
+
+</div></main><script src="../assets/planner.js"></script><script>
+document.addEventListener('DOMContentLoaded',()=>{
+ const P=window.Planner,days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+ const fill=data=>Object.entries(data||{}).forEach(([k,v])=>{const e=P.q(k);if(e&&v!==undefined)e.value=v});
+ const generate=()=>{
+  const wc=P.n('walkCurrent',20),wt=P.n('walkTarget',45),wd=P.n('walkDays',5),bm=P.n('breathMinutes',10),bd=P.n('breathDays',7),sm=P.n('sunMinutes',15),sd=P.n('sunDays',4),weeks=P.n('routineWeeks',12);
+  P.q('walkNowOut').textContent=`${wc*wd} min`;P.q('walkTargetOut').textContent=`${wt*wd} min`;P.q('breathMonthOut').textContent=`${bm*bd*4} min`;P.q('sunMonthOut').textContent=`${sm*sd*4} min`;
+  P.q('routineWeek').innerHTML=days.map((d,i)=>{const walk=i<wd?`${wt} min walking`:'Recovery / mobility';const breath=i<bd?`${bm} min breathing`:'Optional breathing';const sun=i<sd?`${sm} min sun bath`:'No planned sun bath';return `<div class="day-card"><b>${d}</b><span>${walk}</span><span>${breath}</span><span>${sun}</span></div>`}).join('');
+  const rows=[`<div class="milestone-row milestone-row--head"><span>Period</span><span>Walk/session</span><span>Weekly walk</span><span>Breathing</span><span>Sun bath</span></div>`];
+  for(let w=0;w<=weeks;w+=4){const mins=P.interpolate(wc,wt,w,weeks);rows.push(`<div class="milestone-row"><span>${w===0?'Start':`Week ${w}`}</span><span>${P.round(mins)} min</span><span>${P.round(mins*wd)} min</span><span>${bm*bd} min/wk</span><span>${sm*sd} min/wk</span></div>`)}
+  if(weeks%4)rows.push(`<div class="milestone-row"><span>Week ${weeks}</span><span>${wt} min</span><span>${wt*wd} min</span><span>${bm*bd} min/wk</span><span>${sm*sd} min/wk</span></div>`);
+  P.q('routineMilestones').innerHTML=rows.join('');P.q('heroBadge').textContent=`${weeks}W`;P.q('heroBadgeLabel').textContent='Lifestyle horizon';
+ };
+ P.q('saveRoutine').onclick=()=>{generate();const fields=['walkCurrent','walkTarget','walkDays','walkIntensity','breathMinutes','breathDays','sunMinutes','sunDays','routineWeeks','walkProgress','recovery','reminderTime'],lifestyle={};fields.forEach(id=>lifestyle[id]=P.q(id).value);P.save({lifestyle});};
+ P.q('openWalking').onclick=()=>parent.postMessage({type:'ait-pha-open-tool',src:'exercise/walking/index.html',title:'Walking Exercise'},'*');
+ P.q('openBreathing').onclick=()=>parent.postMessage({type:'ait-pha-open-tool',src:'exercise/breathing/index.html',title:'Breathing Exercise'},'*');
+ fill(P.profile().lifestyle);generate();
+});
+</script></body></html>

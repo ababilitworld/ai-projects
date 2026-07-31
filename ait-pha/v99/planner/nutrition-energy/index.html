@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en" data-theme="dark-glass">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Nutrition & Energy Planner</title>
+<link rel="stylesheet" href="../assets/planner.css"></head>
+<body><main class="calc-app"><div class="calc-shell">
+<section class="calc-hero"><div><span class="calc-kicker">Integrated Planner / 2 of 3</span><h1>Nutrition & Energy Planner</h1><p>Turn BMR and activity into a configurable food-energy plan with daily structure, weekly consistency targets, and monthly reviews.</p></div><aside class="calc-badge"><output id="heroBadge">READY</output><small id="heroBadgeLabel">Plan status</small></aside></section>
+
+<div class="planner-tabs"><button class="is-active" data-step-target="energyStep" type="button">1. Energy</button><button data-step-target="foodStep" type="button">2. Food Pattern</button><button data-step-target="nutritionSchedule" type="button">3. Weekly & Monthly</button></div>
+<section class="planner-step is-active" id="energyStep"><div class="calc-layout">
+<div class="calc-panel"><h2>Energy profile</h2><div class="calc-grid">
+<label class="calc-field"><span>Current BMR (kcal)</span><input id="bmr" min="500" max="4000" type="number" value="1700"></label>
+<label class="calc-field"><span>Activity factor</span><select id="activity"><option value="1.2">Mostly sedentary</option><option value="1.375">Lightly active</option><option value="1.55" selected>Moderately active</option><option value="1.725">Very active</option></select></label>
+<label class="calc-field"><span>Daily energy adjustment</span><input id="adjustment" min="-1000" max="1000" step="25" type="number" value="-350"></label>
+<label class="calc-field"><span>Meals per day</span><select id="meals"><option>3</option><option selected>4</option><option>5</option><option>6</option></select></label>
+</div></div>
+<div class="calc-panel"><h2>Calculated budget</h2><div class="calc-results">
+<div class="result-card"><small>Estimated TDEE</small><strong id="tdeeOut">—</strong><span>Before adjustment</span></div>
+<div class="result-card"><small>Daily food budget</small><strong id="budgetOut">—</strong><span>User-configured target</span></div>
+<div class="result-card"><small>Per meal average</small><strong id="mealOut">—</strong><span>Flexible distribution</span></div>
+</div></div></div></section>
+<section class="planner-step" id="foodStep"><div class="calc-panel"><h2>Food pattern</h2><div class="calc-grid">
+<label class="calc-field"><span>Protein servings/day</span><input id="protein" min="0" max="12" step=".5" type="number" value="4"></label>
+<label class="calc-field"><span>Vegetable servings/day</span><input id="vegetables" min="0" max="15" step=".5" type="number" value="5"></label>
+<label class="calc-field"><span>Fruit servings/day</span><input id="fruit" min="0" max="10" step=".5" type="number" value="2"></label>
+<label class="calc-field"><span>Whole-grain servings/day</span><input id="grains" min="0" max="12" step=".5" type="number" value="3"></label>
+<label class="calc-field"><span>Water target (L/day)</span><input id="water" min=".5" max="8" step=".1" type="number" value="2.5"></label>
+<label class="calc-field"><span>Flexible meals/week</span><input id="flexMeals" min="0" max="14" type="number" value="2"></label>
+<label class="calc-field calc-field--wide"><span>Food notes / restrictions</span><input id="notes" type="text" placeholder="Example: lower sodium, halal, lactose-free"></label>
+</div></div></section>
+<section class="planner-step" id="nutritionSchedule"><div class="calc-panel"><h2>Nutrition milestones</h2><div class="planner-summary">
+<div class="result-card"><small>Weekly calorie budget</small><strong id="weeklyCalories">—</strong><span>Total planning budget</span></div>
+<div class="result-card"><small>Monthly water target</small><strong id="monthlyWater">—</strong><span>30-day estimate</span></div>
+<div class="result-card"><small>Weekly vegetable servings</small><strong id="weeklyVeg">—</strong><span>Consistency target</span></div>
+<div class="result-card"><small>Plan adherence goal</small><strong id="adherenceOut">85%</strong><span>Adjustable behavior target</span></div>
+</div><div class="week-grid" id="foodWeek"></div><div class="calc-note">Energy needs and food tolerance vary. Use this as an organizational plan and adapt it with a qualified clinician or dietitian when medical conditions, pregnancy, childhood, eating disorders, or medication are relevant.</div></div></section>
+<div class="planner-actions"><button class="calc-button" id="loadNutrition" type="button">Load saved</button><button class="calc-button calc-button--primary" id="saveNutrition" type="button">Generate & Save Nutrition Plan</button></div>
+
+</div></main><script src="../assets/planner.js"></script><script>
+document.addEventListener('DOMContentLoaded',()=>{
+ const P=window.Planner,days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+ const fill=data=>Object.entries(data||{}).forEach(([k,v])=>{const e=P.q(k);if(e&&v!==undefined)e.value=v});
+ const recalc=()=>{
+  const bmr=P.n('bmr',1700),activity=Number(P.q('activity').value),adjust=P.n('adjustment',-350),meals=P.n('meals',4),budget=Math.max(800,bmr*activity+adjust);
+  P.q('tdeeOut').textContent=`${Math.round(bmr*activity)} kcal`;P.q('budgetOut').textContent=`${Math.round(budget)} kcal`;P.q('mealOut').textContent=`${Math.round(budget/meals)} kcal`;
+  P.q('weeklyCalories').textContent=`${Math.round(budget*7).toLocaleString()} kcal`;P.q('monthlyWater').textContent=`${P.round(P.n('water',2.5)*30)} L`;P.q('weeklyVeg').textContent=`${P.round(P.n('vegetables',5)*7)} servings`;
+  P.q('foodWeek').innerHTML=days.map((d,i)=>`<div class="day-card"><b>${d}</b><span>${P.n('meals',4)} meals</span><span>${P.n('protein',4)} protein servings</span><span>${P.n('vegetables',5)} vegetable servings</span><span>${P.n('water',2.5)} L water</span>${i>=5?'<span>Flexible review day</span>':''}</div>`).join('');
+  P.q('heroBadge').textContent=`${Math.round(budget)}`;P.q('heroBadgeLabel').textContent='Daily kcal plan';
+  return {budget,tdee:bmr*activity};
+ };
+ ['bmr','activity','adjustment','meals','protein','vegetables','fruit','grains','water','flexMeals'].forEach(id=>P.q(id).addEventListener('input',recalc));
+ P.q('loadNutrition').onclick=()=>{fill(P.profile().nutrition);recalc()};
+ P.q('saveNutrition').onclick=()=>{const derived=recalc(),fields=['bmr','activity','adjustment','meals','protein','vegetables','fruit','grains','water','flexMeals','notes'],nutrition={derived};fields.forEach(id=>nutrition[id]=P.q(id).value);P.save({nutrition});};
+ const metrics=P.profile().metrics;if(metrics?.derived?.currentBmr)P.q('bmr').value=Math.round(metrics.derived.currentBmr);recalc();
+});
+</script></body></html>
