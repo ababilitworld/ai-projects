@@ -1103,3 +1103,5 @@ body.is-exporting #jpgPanel {
   opacity:1!important;
   pointer-events:auto!important;
 }
+
+@media print{html[data-print-mode="poster"] @page{size:A3 landscape;margin:10mm}}

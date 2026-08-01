@@ -458,6 +458,88 @@
   }
   function exitExercise(){ if(!exerciseShell)return; exerciseShell.classList.remove('open'); exerciseShell.setAttribute('aria-hidden','true'); exerciseFrame.src='about:blank'; document.body.classList.remove('terminal-ui-open'); launcher.focus(); }
   shell.addEventListener('click',e=>{const button=e.target.closest('[data-exercise-src]');if(button){e.preventDefault();openExercise(button);}});
+  function openPlannerDataModule(moduleId, foodId='', foodMode=''){
+    closeModal();
+    const isFood=moduleId==='foodsModule';
+    exerciseTitle.textContent=isFood?'Data Center / Food':'AIT – Health Planner / Profile';
+    exerciseFrame.dataset.parentModal='dataManagerModal';
+    exerciseFrame.dataset.parentLabel='Data';
+    const backButton=document.getElementById('terminalExerciseBack');
+    if(backButton)backButton.textContent='← Data';
+    const kicker=exerciseShell.querySelector('header div span');
+    if(kicker)kicker.textContent=isFood?'WORKSPACE / DATA CENTER / DATA / FOOD':'WORKSPACE / DATA CENTER / DATA / PROFILE';
+
+    let foodQuery='';
+    if(foodId){
+      foodQuery=`?edit=${encodeURIComponent(foodId)}`;
+    }else if(foodMode==='create'){
+      foodQuery='?create=1';
+    }
+
+    exerciseFrame.src=isFood
+      ? `data-center/food/index.html${foodQuery}`
+      : `planner/health-planner/index.html?module=${encodeURIComponent(moduleId)}`;
+    exerciseShell.classList.add('open');
+    exerciseShell.setAttribute('aria-hidden','false');
+    document.body.classList.add('terminal-ui-open');
+    exerciseFrame.addEventListener('load',()=>syncExerciseTheme(),{once:true});
+  }
+
+  function downloadPlannerBackup(){
+    const keys=['ait-pha-health-planner-v4','ait-pha-health-planner-v3','heart-routine-theme'];
+    const payload={exportedAt:new Date().toISOString(),version:'99.24',storage:{}};
+    keys.forEach(key=>{const value=localStorage.getItem(key);if(value!==null)payload.storage[key]=value;});
+    const blob=new Blob([JSON.stringify(payload,null,2)],{type:'application/json'});
+    const url=URL.createObjectURL(blob);
+    const link=document.createElement('a');
+    link.href=url;
+    link.download=`ait-health-planner-backup-${new Date().toISOString().slice(0,10)}.json`;
+    link.click();
+    URL.revokeObjectURL(url);
+  }
+
+  function importPlannerBackup(file){
+    if(!file)return;
+    const reader=new FileReader();
+    reader.onload=()=>{
+      try{
+        const payload=JSON.parse(String(reader.result||''));
+        if(!payload.storage||typeof payload.storage!=='object')throw new Error('Invalid backup format');
+        Object.entries(payload.storage).forEach(([key,value])=>localStorage.setItem(key,String(value)));
+        alert('Planner data imported successfully.');
+        location.reload();
+      }catch(error){alert(`Import failed: ${error.message}`);}
+    };
+    reader.readAsText(file);
+  }
+
+  shell.addEventListener('click',event=>{
+    const plannerButton=event.target.closest('[data-planner-module]');
+    if(plannerButton){event.preventDefault();openPlannerDataModule(plannerButton.dataset.plannerModule);return;}
+    const actionButton=event.target.closest('[data-workspace-action]');
+    if(!actionButton)return;
+    event.preventDefault();
+    const action=actionButton.dataset.workspaceAction;
+    if(action==='backup'){downloadPlannerBackup();return;}
+    if(action==='sync'){localStorage.setItem('ait-health-planner-last-sync',new Date().toISOString());alert('Local planner data synchronized.');return;}
+    if(action==='import'){document.getElementById('terminalDataImportFile')?.click();return;}
+    if(action==='poster'){document.documentElement.dataset.printMode='poster';closeModal();setTimeout(()=>{window.print();delete document.documentElement.dataset.printMode;},80);}
+  });
+
+  document.getElementById('terminalDataImportFile')?.addEventListener('change',event=>{
+    importPlannerBackup(event.target.files?.[0]);
+    event.target.value='';
+  });
+
+  window.addEventListener('message',event=>{
+    if(event.data?.type==='ait-pha-open-data-center-food'){
+      openPlannerDataModule('foodsModule',event.data.foodId||'',event.data.mode||'');
+    }
+    if(event.data?.type==='ait-pha-food-data-updated'){
+      try{exerciseFrame.contentWindow?.postMessage({type:'ait-pha-refresh-food-data'},'*')}catch(error){}
+    }
+  });
+
   window.addEventListener('message',e=>{
     if(e.data?.type!=='ait-pha-open-tool'||!e.data.src)return;
     exerciseTitle.textContent=e.data.title||'Tool Workspace';

@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en" data-theme="dark-glass">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>AIT – Health Planner</title>
+  <link rel="stylesheet" href="../assets/planner.css">
+</head>
+<body>
+<main class="calc-app">
+  <div class="calc-shell">
+    <section class="calc-hero">
+      <div>
+        <span class="calc-kicker">AIT / PROFILE-BASED PLANNER</span>
+        <h1>AIT – Health Planner</h1>
+        <p>Manage user profiles, maintain a reusable Bangladeshi food catalogue, and generate progressive health-plan reports from current values, target values, routine parameters and available foods.</p>
+      </div>
+      <aside class="calc-badge"><output id="heroBadge">0</output><small id="heroBadgeLabel">Saved profiles</small></aside>
+    </section>
+
+    <nav class="hp-module-nav" aria-label="Health planner modules">
+      <button class="is-active" data-module="profilesModule" type="button"><span>👤</span><b>Profile</b><small>Create, edit and generate plans</small></button>
+      <button data-module="reportsModule" type="button"><span>📊</span><b>Report</b><small>Generated plans and milestones</small></button>
+    </nav>
+
+    <section class="hp-module is-active" id="profilesModule">
+      <div class="hp-module-head">
+        <div><span class="calc-kicker">PROFILE MODULE</span><h2>User profiles</h2><p>Each profile contains identity, current and target metrics, routine settings and selected available foods.</p></div>
+        <div class="hp-head-actions">
+          <button class="calc-button calc-button--primary" id="createProfile" type="button">＋ Create Profile</button>
+        </div>
+      </div>
+      <div class="hp-profile-list" id="profileList"></div>
+    </section>
+<section class="hp-module" id="reportsModule">
+      <div class="hp-module-head">
+        <div><span class="calc-kicker">REPORT MODULE</span><h2>Generated health plans</h2><p>Every generated plan is saved as a report snapshot so progress targets can be reviewed later.</p></div>
+        <button class="calc-button" id="refreshReports" type="button">↻ Refresh</button>
+      </div>
+      <div class="hp-report-list" id="reportList"></div>
+    </section>
+  </div>
+</main>
+
+<section class="hp-workspace" hidden id="profileWorkspace" aria-hidden="true">
+  <header class="hp-workspace__header">
+    <div><span class="calc-kicker">PROFILE / CREATE OR EDIT</span><h2 id="profileWorkspaceTitle">Create Profile</h2><p>Current, target, routine and available-food settings are stored together in this profile.</p></div>
+    <button class="terminal-icon-button" id="closeProfileWorkspace" type="button" aria-label="Close">×</button>
+  </header>
+  <div class="hp-workspace__body">
+    <form id="profileForm">
+      <input id="profileId" type="hidden">
+      <div class="hp-form-tabs">
+        <button class="is-active" data-form-step="identityStep" type="button">1. Identity</button>
+        <button data-form-step="metricsStep" type="button">2. Current & Target</button>
+        <button data-form-step="routineStep" type="button">3. Routine</button>
+        <button data-form-step="foodsStep" type="button">4. Available Food</button>
+      </div>
+
+      <section class="hp-form-step is-active" id="identityStep">
+        <div class="hp-section"><h2>Identity and planning information</h2><div class="hp-grid">
+          <label class="hp-field"><span>Profile name</span><input id="profileName" required type="text"></label>
+          <label class="hp-field"><span>Life stage</span><select id="lifeStage"><option value="baby">Baby (0–1)</option><option value="child">Child (2–12)</option><option value="teen">Teen (13–19)</option><option value="adult">Adult (20–64)</option><option value="older">Older adult (65+)</option></select></label>
+          <label class="hp-field"><span>Sex</span><select id="sex"><option value="male">Male</option><option value="female">Female</option></select></label>
+          <label class="hp-field"><span>Age</span><input id="age" min="0" max="120" step="1" type="number"></label>
+          <label class="hp-field"><span>Height (cm)</span><input id="height" min="40" max="230" step=".1" type="number"></label>
+          <label class="hp-field"><span>Activity level</span><select id="activity"><option value="1.2">Mostly sedentary</option><option value="1.375">Lightly active</option><option value="1.55">Moderately active</option><option value="1.725">Very active</option></select></label>
+          <label class="hp-field"><span>Plan start date</span><input id="startDate" type="date"></label>
+          <label class="hp-field"><span>Planning horizon (weeks)</span><input id="planWeeks" min="4" max="104" value="24" type="number"></label>
+          <label class="hp-field hp-field--wide"><span>Health notes, restrictions or priorities</span><textarea id="notes"></textarea></label>
+        </div></div>
+      </section>
+
+      <section class="hp-form-step" id="metricsStep">
+        <div class="calc-layout">
+          <div class="hp-section"><h2>Current values</h2><div class="hp-grid hp-grid--2">
+            <label class="hp-field"><span>Weight (kg)</span><input id="currentWeight" min="2" max="350" step=".1" type="number"></label>
+            <label class="hp-field"><span>Waist (cm)</span><input id="currentWaist" min="20" max="250" step=".1" type="number"></label>
+            <label class="hp-field"><span>Hip (cm)</span><input id="currentHip" min="20" max="250" step=".1" type="number"></label>
+            <label class="hp-field"><span>Neck (cm)</span><input id="currentNeck" min="10" max="100" step=".1" type="number"></label>
+            <label class="hp-field"><span>Body fat (%)</span><input id="currentFat" min="2" max="70" step=".1" type="number"></label>
+            <label class="hp-field"><span>BMR (kcal/day)</span><input id="currentBmr" min="300" max="5000" step="1" type="number" placeholder="Auto"></label>
+          </div></div>
+          <div class="hp-section"><h2>Target values</h2><div class="hp-grid hp-grid--2">
+            <label class="hp-field"><span>Target BMI</span><input id="targetBmi" min="10" max="50" step=".1" type="number"></label>
+            <label class="hp-field"><span>Target weight (kg)</span><input id="targetWeight" min="2" max="350" step=".1" type="number" placeholder="Derived from BMI"></label>
+            <label class="hp-field"><span>Target waist (cm)</span><input id="targetWaist" min="20" max="250" step=".1" type="number"></label>
+            <label class="hp-field"><span>Target BSR</span><input id="targetBsr" min=".2" max="1.2" step=".001" type="number"></label>
+            <label class="hp-field"><span>Target body fat (%)</span><input id="targetFat" min="2" max="60" step=".1" type="number"></label>
+            <label class="hp-field"><span>Target BMR</span><input id="targetBmr" min="300" max="5000" step="1" type="number" placeholder="Auto"></label>
+          </div></div>
+        </div>
+      </section>
+
+      <section class="hp-form-step" id="routineStep">
+        <div class="hp-section"><h2>Routine cycle</h2><div class="hp-cycle">
+          <label><input name="cycle" type="radio" value="daily" checked><b>Daily</b><small>Day-by-day schedule</small></label>
+          <label><input name="cycle" type="radio" value="weekly"><b>Weekly</b><small>Weekly volume and review</small></label>
+          <label><input name="cycle" type="radio" value="monthly"><b>Monthly</b><small>Monthly milestones</small></label>
+        </div></div>
+        <div class="calc-layout">
+          <div class="hp-section"><h2>Exercise</h2><div class="hp-grid hp-grid--2">
+            <label class="hp-field"><span>Walking minutes/session</span><input id="walkMinutes" min="0" max="240" type="number"></label>
+            <label class="hp-field"><span>Walking days/week</span><input id="walkDays" min="0" max="7" type="number"></label>
+            <label class="hp-field"><span>Breathing minutes/session</span><input id="breathMinutes" min="0" max="60" type="number"></label>
+            <label class="hp-field"><span>Breathing days/week</span><input id="breathDays" min="0" max="7" type="number"></label>
+          </div></div>
+          <div class="hp-section"><h2>Sun, fasting and meals</h2><div class="hp-grid hp-grid--2">
+            <label class="hp-field"><span>Sun exposure minutes/session</span><input id="sunMinutes" min="0" max="90" type="number"></label>
+            <label class="hp-field"><span>Sun exposure days/week</span><input id="sunDays" min="0" max="7" type="number"></label>
+            <label class="hp-field"><span>Fasting duration</span><select id="fastingHours"><option value="12">12 hours</option><option value="15">15 hours</option><option value="18">18 hours</option></select></label>
+            <label class="hp-field"><span>Daily meal count</span><select id="mealCount"><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option></select></label>
+            <label class="hp-field"><span>Eating window start</span><input id="eatingStart" type="time"></label>
+            <label class="hp-field"><span>Weekly review day</span><select id="reviewDay"><option>Friday</option><option>Sunday</option><option>Monday</option><option>Saturday</option></select></label>
+          </div></div>
+        </div>
+      </section>
+
+      <section class="hp-form-step" id="foodsStep">
+        <div class="hp-af2">
+          <header class="hp-af2__header">
+            <div>
+              <span class="calc-kicker">PROFILE / AVAILABLE FOOD</span>
+              <h2>Available foods</h2>
+              <p>Select foods available to this profile. Search, filter, add or edit foods from the shared Data Center catalogue.</p>
+            </div>
+            <button class="hp-af2__add" id="addFoodFromProfile" type="button">
+              <span aria-hidden="true">＋</span><b>Add Food</b>
+            </button>
+          </header>
+
+          <div class="hp-af2__toolbar">
+            <div class="hp-af2__search">
+              <span aria-hidden="true">⌕</span>
+              <input id="profileFoodSearch" type="search" autocomplete="off" placeholder="Search English name, বাংলা নাম, category or serving">
+              <button id="clearProfileFoodSearch" type="button" aria-label="Clear search">×</button>
+            </div>
+            <label class="hp-af2__filter"><span>Category</span><select id="profileFoodCategory"><option value="all">All categories</option></select></label>
+            <label class="hp-af2__filter"><span>Selection</span><select id="profileFoodSelectionFilter"><option value="all">All foods</option><option value="selected">Selected only</option><option value="unselected">Not selected</option></select></label>
+          </div>
+
+          <div class="hp-af2__meta">
+            <div><strong id="availableFoodVisibleCount">0</strong><span>Visible</span></div>
+            <div><strong id="availableFoodSelectedCount">0</strong><span>Selected</span></div>
+            <div class="hp-af2__bulk"><button id="selectVisibleFoods" type="button">Select visible</button><button id="clearVisibleFoods" type="button">Clear visible</button></div>
+          </div>
+
+          <div class="hp-af2__list" id="profileFoodList"></div>
+
+          <div class="hp-af2__preferences">
+            <label class="hp-field"><span>Food preference</span><select id="dietStyle"><option value="balanced">Balanced</option><option value="higher-protein">Higher protein</option><option value="higher-fiber">Higher fiber</option><option value="lower-carb">Lower carbohydrate</option><option value="vegetarian">Vegetarian</option></select></label>
+            <label class="hp-field"><span>Foods to avoid / allergies</span><input id="avoidFoods" placeholder="Comma-separated"></label>
+          </div>
+        </div>
+      </section>
+
+      <footer class="hp-workspace__footer">
+        <button class="calc-button" id="cancelProfile" type="button">Cancel</button>
+        <div>
+          <button class="calc-button" id="saveProfile" type="submit">Save Profile</button>
+          <button class="calc-button calc-button--primary" id="saveAndGenerate" type="button">Save & Generate Plan</button>
+        </div>
+      </footer>
+    </form>
+  </div>
+</section>
+
+<section class="hp-workspace" hidden id="foodWorkspace" aria-hidden="true">
+  <header class="hp-workspace__header">
+    <div><span class="calc-kicker">DATA CENTER / DATA / FOOD</span><h2 id="foodWorkspaceTitle">Add Food</h2><p>Manage the shared Bangladeshi food catalogue from Workspace → Data Center → Data → Food.</p></div>
+    <button class="terminal-icon-button" id="closeFoodWorkspace" type="button" aria-label="Close">×</button>
+  </header>
+  <div class="hp-workspace__body">
+    <form id="foodForm" class="hp-section">
+      <input id="foodId" type="hidden">
+      <div class="hp-grid hp-grid--2">
+        <label class="hp-field hp-field--wide"><span>Title — automatically generated</span><input id="foodTitle" readonly type="text" placeholder="English Name (বাংলা নাম)"><small>Format: English Name (বাংলা নাম)</small></label>
+        <label class="hp-field"><span>English name</span><input id="foodEnglishName" required type="text" placeholder="White rice"></label>
+        <label class="hp-field"><span>বাংলা নাম</span><input id="foodBengaliName" required type="text" placeholder="সাদা ভাত"></label>
+        <label class="hp-field"><span>Category</span><input id="foodCategoryInput" required type="text" placeholder="Carbohydrate"></label>
+        <label class="hp-field"><span>Serving description</span><input id="foodServing" required type="text" placeholder="1 cup cooked"></label>
+        <label class="hp-field"><span>Serving weight (g)</span><input id="foodServingWeight" min="0.1" required step="0.1" type="number" placeholder="158"></label>
+        <label class="hp-field"><span>Energy (kcal/serving)</span><input id="foodEnergyKcal" min="0" required step="0.1" type="number" placeholder="205"></label>
+      </div>
+
+      <div class="hp-nutrition-editor">
+        <div class="hp-nutrition-editor__head">
+          <div><span class="calc-kicker">NUTRIENTS PER SERVING</span><h3>Food ingredients and nutrition</h3></div>
+          <small>Values are stored per selected serving, not per 100 g.</small>
+        </div>
+        <div class="hp-grid hp-grid--4">
+          <label class="hp-field"><span>Protein (g)</span><input id="foodProtein" min="0" step="0.01" type="number" value="0"></label>
+          <label class="hp-field"><span>Carbohydrate (g)</span><input id="foodCarbohydrate" min="0" step="0.01" type="number" value="0"></label>
+          <label class="hp-field"><span>Fat (g)</span><input id="foodFat" min="0" step="0.01" type="number" value="0"></label>
+          <label class="hp-field"><span>Fiber (g)</span><input id="foodFiber" min="0" step="0.01" type="number" value="0"></label>
+          <label class="hp-field"><span>Sugar (g)</span><input id="foodSugar" min="0" step="0.01" type="number" value="0"></label>
+          <label class="hp-field"><span>Sodium (mg)</span><input id="foodSodium" min="0" step="0.1" type="number" value="0"></label>
+          <label class="hp-field"><span>Calcium (mg)</span><input id="foodCalcium" min="0" step="0.1" type="number" value="0"></label>
+          <label class="hp-field"><span>Iron (mg)</span><input id="foodIron" min="0" step="0.01" type="number" value="0"></label>
+          <label class="hp-field"><span>Potassium (mg)</span><input id="foodPotassium" min="0" step="0.1" type="number" value="0"></label>
+          <label class="hp-field"><span>Vitamin C (mg)</span><input id="foodVitaminC" min="0" step="0.1" type="number" value="0"></label>
+          <label class="hp-field"><span>Vitamin A (µg RAE)</span><input id="foodVitaminA" min="0" step="0.1" type="number" value="0"></label>
+          <label class="hp-field"><span>Cholesterol (mg)</span><input id="foodCholesterol" min="0" step="0.1" type="number" value="0"></label>
+        </div>
+      </div>
+
+      <div class="hp-grid hp-grid--2">
+        <label class="hp-field hp-field--wide"><span>Ingredients / preparation</span><textarea id="foodIngredients" placeholder="Rice, water; cooked without added oil"></textarea></label>
+        <label class="hp-field hp-field--wide"><span>Nutrition notes</span><textarea id="foodNotes" placeholder="Any assumptions, brand, cooking method or source"></textarea></label>
+      </div>
+      <footer class="hp-workspace__footer hp-workspace__footer--embedded">
+        <button class="calc-button" id="cancelFood" type="button">Cancel</button>
+        <button class="calc-button calc-button--primary" type="submit">Save Food</button>
+      </footer>
+    </form>
+  </div>
+</section>
+
+<section class="hp-workspace" hidden id="reportWorkspace" aria-hidden="true">
+  <header class="hp-workspace__header">
+    <div><span class="calc-kicker">REPORT / HEALTH PLAN</span><h2 id="reportWorkspaceTitle">Generated Plan</h2><p id="reportIntro"></p></div>
+    <button class="terminal-icon-button" id="closeReportWorkspace" type="button" aria-label="Close">×</button>
+  </header>
+  <div class="hp-workspace__body">
+    <div class="hp-section"><h2>Summary</h2><div class="hp-plan-summary" id="reportSummary"></div></div>
+    <div class="hp-section"><h2>Weekly and monthly milestones</h2><div class="hp-table-wrap"><table class="hp-table"><thead><tr><th>Period</th><th>Metrics</th><th>Exercise</th><th>Sun & fasting</th><th>Meals & foods</th></tr></thead><tbody id="reportMilestones"></tbody></table></div></div>
+    <div class="hp-section"><h2>Balanced daily diet plan</h2>
+      <div class="hp-plan-summary" id="reportNutritionSummary"></div>
+      <div class="hp-balanced-meals" id="reportBalancedMeals"></div>
+    </div>
+    <div class="hp-section"><h2>Daily routine template</h2><div class="week-grid" id="reportDaily"></div></div>
+  </div>
+</section>
+
+<script>window.AIT_BD_FOODS=[{"id": "rice-white", "name": "সাদা ভাত", "category": "Carbohydrate", "serving": "1 cup cooked", "energy": "205 kcal", "title": "Cooked White Rice (সাদা ভাত)", "englishName": "Cooked White Rice", "bengaliName": "সাদা ভাত", "servingWeight": 158.0, "energyKcal": 205.0, "ingredients": "", "nutrients": {"protein": 4.3, "carbohydrate": 44.5, "fat": 0.4, "fiber": 0.6, "sugar": 0.1, "sodium": 2.0, "calcium": 16.0, "iron": 0.3, "potassium": 55.0, "vitaminC": 0.0, "vitaminA": 0.0, "cholesterol": 0.0}, "notes": "Editable starter nutrition estimate; verify recipe/brand/cooking method before clinical use."}, {"id": "rice-brown", "name": "লাল চালের ভাত", "category": "Carbohydrate", "serving": "1 cup cooked", "energy": "216 kcal", "title": "Cooked Brown Rice (লাল চালের ভাত)", "englishName": "Cooked Brown Rice", "bengaliName": "লাল চালের ভাত", "servingWeight": 195.0, "energyKcal": 216.0, "ingredients": "", "nutrients": {"protein": 5.0, "carbohydrate": 44.8, "fat": 1.8, "fiber": 3.5, "sugar": 0.7, "sodium": 10.0, "calcium": 20.0, "iron": 0.8, "potassium": 84.0, "vitaminC": 0.0, "vitaminA": 0.0, "cholesterol": 0.0}, "notes": "Editable starter nutrition estimate; verify recipe/brand/cooking method before clinical use."}, {"id": "roti", "name": "আটার রুটি", "category": "Carbohydrate", "serving": "1 medium roti", "energy": "120 kcal", "title": "Whole-Wheat Roti (আটার রুটি)", "englishName": "Whole-Wheat Roti", "bengaliName": "আটার রুটি", "servingWeight": 40.0, "energyKcal": 120.0, "ingredients": "", "nutrients": {"protein": 4.0, "carbohydrate": 22.0, "fat": 2.0, "fiber": 3.0, "sugar": 1.0, "sodium": 180.0, "calcium": 20.0, "iron": 1.2, "potassium": 90.0, "vitaminC": 0.0, "vitaminA": 0.0, "cholesterol": 0.0}, "notes": "Editable starter nutrition estimate; verify recipe/brand/cooking method before clinical use."}, {"id": "paratha", "name": "সাদা পরোটা", "category": "Carbohydrate", "serving": "1 medium paratha", "energy": "260 kcal", "title": "Plain Paratha (সাদা পরোটা)", "englishName": "Plain Paratha", "bengaliName": "সাদা পরোটা", "servingWeight": 80.0, "energyKcal": 260.0, "ingredients": "", "nutrients": {"protein": 5.0, "carbohydrate": 35.0, "fat": 11.0, "fiber": 2.0, "sugar": 2.0, "sodium": 350.0, "calcium": 25.0, "iron": 1.5, "potassium": 100.0, "vitaminC": 0.0, "vitaminA": 0.0, "cholesterol": 5.0}, "notes": "Editable starter nutrition estimate; verify recipe/brand/cooking method before clinical use."}, {"id": "khichuri", "name": "সবজি খিচুড়ি", "category": "Mixed meal", "serving": "1 medium bowl", "energy": "300 kcal", "title": "Vegetable Khichuri (সবজি খিচুড়ি)", "englishName": "Vegetable Khichuri", "bengaliName": "সবজি খিচুড়ি", "servingWeight": 250.0, "energyKcal": 300.0, "ingredients": "", "nutrients": {"protein": 11.0, "carbohydrate": 50.0, "fat": 7.0, "fiber": 7.0, "sugar": 3.0, "sodium": 450.0, "calcium": 45.0, "iron": 3.0, "potassium": 420.0, "vitaminC": 8.0, "vitaminA": 120.0, "cholesterol": 5.0}, "notes": "Editable starter nutrition estimate; verify recipe/brand/cooking method before clinical use."}, {"id": "chira", "name": "চিড়া", "category": "Carbohydrate", "serving": "1 cup dry", "energy": "300 kcal", "title": "Flattened Rice (চিড়া)", "englishName": "Flattened Rice", "bengaliName": "চিড়া", "servingWeight": 80.0, "energyKcal": 300.0, "ingredients": "", "nutrients": {"protein": 6.0, "carbohydrate": 65.0, "fat": 2.0, "fiber": 3.0, "sugar": 1.0, "sodium": 15.0, "calcium": 20.0, "iron": 2.0, "potassium": 110.0, "vitaminC": 0.0, "vitaminA": 0.0, "cholesterol": 0.0}, "notes": "Editable starter nutrition estimate; verify recipe/brand/cooking method before clinical use."}, {"id": "muri", "name": "মুড়ি", "category": "Carbohydrate", "serving": "2 cups", "energy": "110 kcal", "title": "Puffed Rice (মুড়ি)", "englishName": "Puffed Rice", "bengaliName": "মুড়ি", "servingWeight": 28.0, "energyKcal": 110.0, "ingredients": "", "nutrients": {"protein": 2.5, "carbohydrate": 24.0, "fat": 0.3, "fiber": 0.6, "sugar": 0.1, "sodium": 100.0, "calcium": 8.0, "iron": 0.7, "potassium": 35.0, "vitaminC": 0.0, "vitaminA": 0.0, "cholesterol": 0.0}, "notes": "Editable starter nutrition estimate; verify recipe/brand/cooking method before clinical use."}, {"id": "oats", "name": "রান্না করা ওটস", "category": "Carbohydrate", "serving": "1 cup cooked", "energy": "150 kcal", "title": "Cooked Oats (রান্না করা ওটস)", "englishName": "Cooked Oats", "bengaliName": "রান্না করা ওটস", "servingWeight": 234.0, "energyKcal": 150.0, "ingredients": "", "nutrients": {"protein": 5.0, "carbohydrate": 27.0, "fat": 2.5, "fiber": 4.0, "sugar": 1.0, "sodium": 5.0, "calcium": 20.0, "iron": 1.7, "potassium": 150.0, "vitaminC": 0.0, "vitaminA": 0.0, "cholesterol": 0.0}, "notes": "Editable starter nutrition estimate; verify recipe/brand/cooking method before clinical use."}, {"id": "dal", "name": "রান্না করা মসুর ডাল", "category": "Protein/Fiber", "serving": "1 cup cooked", "energy": "230 kcal", "title": "Cooked Lentils (রান্না করা মসুর ডাল)", "englishName": "Cooked Lentils", "bengaliName": "রান্না করা মসুর ডাল", "servingWeight": 198.0, "energyKcal": 230.0, "ingredients": "", "nutrients": {"protein": 18.0, "carbohydrate": 40.0, "fat": 0.8, "fiber": 15.0, "sugar": 3.5, "sodium": 4.0, "calcium": 38.0, "iron": 6.6, "potassium": 730.0, "vitaminC": 3.0, "vitaminA": 8.0, "cholesterol": 0.0}, "notes": "Editable starter nutrition estimate; verify recipe/brand/cooking method before clinical use."}, {"id": "chickpea", "name": "সেদ্ধ ছোলা", "category": "Protein/Fiber", "serving": "1 cup boiled", "energy": "269 kcal", "title": "Boiled Chickpeas (সেদ্ধ ছোলা)", "englishName": "Boiled Chickpeas", "bengaliName": "সেদ্ধ ছোলা", "servingWeight": 164.0, "energyKcal": 269.0, "ingredients": "", "nutrients": {"protein": 14.5, "carbohydrate": 45.0, "fat": 4.2, "fiber": 12.5, "sugar": 8.0, "sodium": 11.0, "calcium": 80.0, "iron": 4.7, "potassium": 477.0, "vitaminC": 2.0, "vitaminA": 3.0, "cholesterol": 0.0}, "notes": "Editable starter nutrition estimate; verify recipe/brand/cooking method before clinical use."}, {"id": "mung", "name": "রান্না করা মুগ ডাল", "category": "Protein/Fiber", "serving": "1 cup cooked", "energy": "212 kcal", "title": "Cooked Mung Dal (রান্না করা মুগ ডাল)", "englishName": "Cooked Mung Dal", "bengaliName": "রান্না করা মুগ ডাল", "servingWeight": 202.0, "energyKcal": 212.0, "ingredients": "", "nutrients": {"protein": 14.2, "carbohydrate": 38.7, "fat": 0.8, "fiber": 15.4, "sugar": 4.0, "sodium": 4.0, "calcium": 55.0, "iron": 2.8, "potassium": 537.0, "vitaminC": 3.0, "vitaminA": 6.0, "cholesterol": 0.0}, "notes": "Editable starter nutrition estimate; verify recipe/brand/cooking method before clinical use."}, {"id": "egg", "name": "সেদ্ধ ডিম", "category": "Protein", "serving": "1 large egg", "energy": "72 kcal", "title": "Boiled Egg (সেদ্ধ ডিম)", "englishName": "Boiled Egg", "bengaliName": "সেদ্ধ ডিম", "servingWeight": 50.0, "energyKcal": 72.0, "ingredients": "", "nutrients": {"protein": 6.3, "carbohydrate": 0.4, "fat": 4.8, "fiber": 0.0, "sugar": 0.2, "sodium": 71.0, "calcium": 28.0, "iron": 0.9, "potassium": 69.0, "vitaminC": 0.0, "vitaminA": 80.0, "cholesterol": 186.0}, "notes": "Editable starter nutrition estimate; verify recipe/brand/cooking method before clinical use."}, {"id": "chicken", "name": "রান্না করা চামড়াবিহীন মুরগি", "category": "Protein", "serving": "100 g cooked", "energy": "165 kcal", "title": "Cooked Skinless Chicken (রান্না করা চামড়াবিহীন মুরগি)", "englishName": "Cooked Skinless Chicken", "bengaliName": "রান্না করা চামড়াবিহীন মুরগি", "servingWeight": 100.0, "energyKcal": 165.0, "ingredients": "", "nutrients": {"protein": 31.0, "carbohydrate": 0.0, "fat": 3.6, "fiber": 0.0, "sugar": 0.0, "sodium": 74.0, "calcium": 15.0, "iron": 1.0, "potassium": 256.0, "vitaminC": 0.0, "vitaminA": 5.0, "cholesterol": 85.0}, "notes": "Editable starter nutrition estimate; verify recipe/brand/cooking method before clinical use."}, {"id": "beef", "name": "রান্না করা চর্বিহীন গরুর মাংস", "category": "Protein", "serving": "100 g cooked", "energy": "250 kcal", "title": "Cooked Lean Beef (রান্না করা চর্বিহীন গরুর মাংস)", "englishName": "Cooked Lean Beef", "bengaliName": "রান্না করা চর্বিহীন গরুর মাংস", "servingWeight": 100.0, "energyKcal": 250.0, "ingredients": "", "nutrients": {"protein": 26.0, "carbohydrate": 0.0, "fat": 15.0, "fiber": 0.0, "sugar": 0.0, "sodium": 72.0, "calcium": 18.0, "iron": 2.6, "potassium": 318.0, "vitaminC": 0.0, "vitaminA": 0.0, "cholesterol": 90.0}, "notes": "Editable starter nutrition estimate; verify recipe/brand/cooking method before clinical use."}, {"id": "mutton", "name": "রান্না করা খাসির মাংস", "category": "Protein", "serving": "100 g cooked", "energy": "294 kcal", "title": "Cooked Mutton (রান্না করা খাসির মাংস)", "englishName": "Cooked Mutton", "bengaliName": "রান্না করা খাসির মাংস", "servingWeight": 100.0, "energyKcal": 294.0, "ingredients": "", "nutrients": {"protein": 25.0, "carbohydrate": 0.0, "fat": 21.0, "fiber": 0.0, "sugar": 0.0, "sodium": 72.0, "calcium": 17.0, "iron": 2.0, "potassium": 310.0, "vitaminC": 0.0, "vitaminA": 0.0, "cholesterol": 97.0}, "notes": "Editable starter nutrition estimate; verify recipe/brand/cooking method before clinical use."}, {"id": "hilsa", "name": "রান্না করা ইলিশ মাছ", "category": "Protein/Fat", "serving": "100 g cooked", "energy": "310 kcal", "title": "Cooked Hilsa Fish (রান্না করা ইলিশ মাছ)", "englishName": "Cooked Hilsa Fish", "bengaliName": "রান্না করা ইলিশ মাছ", "servingWeight": 100.0, "energyKcal": 310.0, "ingredients": "", "nutrients": {"protein": 22.0, "carbohydrate": 0.0, "fat": 24.0, "fiber": 0.0, "sugar": 0.0, "sodium": 80.0, "calcium": 20.0, "iron": 1.0, "potassium": 350.0, "vitaminC": 0.0, "vitaminA": 20.0, "cholesterol": 70.0}, "notes": "Editable starter nutrition estimate; verify recipe/brand/cooking method before clinical use."}, {"id": "rui", "name": "রান্না করা রুই মাছ", "category": "Protein", "serving": "100 g cooked", "energy": "130 kcal", "title": "Cooked Rohu Fish (রান্না করা রুই মাছ)", "englishName": "Cooked Rohu Fish", "bengaliName": "রান্না করা রুই মাছ", "servingWeight": 100.0, "energyKcal": 130.0, "ingredients": "", "nutrients": {"protein": 20.0, "carbohydrate": 0.0, "fat": 5.0, "fiber": 0.0, "sugar": 0.0, "sodium": 60.0, "calcium": 30.0, "iron": 1.2, "potassium": 300.0, "vitaminC": 0.0, "vitaminA": 12.0, "cholesterol": 65.0}, "notes": "Editable starter nutrition estimate; verify recipe/brand/cooking method before clinical use."}, {"id": "tilapia", "name": "রান্না করা তেলাপিয়া", "category": "Protein", "serving": "100 g cooked", "energy": "128 kcal", "title": "Cooked Tilapia (রান্না করা তেলাপিয়া)", "englishName": "Cooked Tilapia", "bengaliName": "রান্না করা তেলাপিয়া", "servingWeight": 100.0, "energyKcal": 128.0, "ingredients": "", "nutrients": {"protein": 26.0, "carbohydrate": 0.0, "fat": 2.7, "fiber": 0.0, "sugar": 0.0, "sodium": 56.0, "calcium": 14.0, "iron": 0.7, "potassium": 302.0, "vitaminC": 0.0, "vitaminA": 0.0, "cholesterol": 57.0}, "notes": "Editable starter nutrition estimate; verify recipe/brand/cooking method before clinical use."}, {"id": "small-fish", "name": "রান্না করা ছোট মাছ", "category": "Protein/Mineral", "serving": "100 g cooked", "energy": "150 kcal", "title": "Cooked Small Fish (রান্না করা ছোট মাছ)", "englishName": "Cooked Small Fish", "bengaliName": "রান্না করা ছোট মাছ", "servingWeight": 100.0, "energyKcal": 150.0, "ingredients": "", "nutrients": {"protein": 22.0, "carbohydrate": 0.0, "fat": 6.0, "fiber": 0.0, "sugar": 0.0, "sodium": 90.0, "calcium": 250.0, "iron": 3.0, "potassium": 350.0, "vitaminC": 0.0, "vitaminA": 40.0, "cholesterol": 65.0}, "notes": "Editable starter nutrition estimate; verify recipe/brand/cooking method before clinical use."}, {"id": "milk", "name": "গরুর দুধ", "category": "Dairy", "serving": "1 cup", "energy": "149 kcal", "title": "Cow's Milk (গরুর দুধ)", "englishName": "Cow's Milk", "bengaliName": "গরুর দুধ", "servingWeight": 244.0, "energyKcal": 149.0, "ingredients": "", "nutrients": {"protein": 7.7, "carbohydrate": 11.7, "fat": 7.9, "fiber": 0.0, "sugar": 12.3, "sodium": 105.0, "calcium": 276.0, "iron": 0.1, "potassium": 322.0, "vitaminC": 0.0, "vitaminA": 112.0, "cholesterol": 24.0}, "notes": "Editable starter nutrition estimate; verify recipe/brand/cooking method before clinical use."}, {"id": "yogurt", "name": "সাদা টক দই", "category": "Dairy", "serving": "1 cup", "energy": "120 kcal", "title": "Plain Yogurt (সাদা টক দই)", "englishName": "Plain Yogurt", "bengaliName": "সাদা টক দই", "servingWeight": 245.0, "energyKcal": 120.0, "ingredients": "", "nutrients": {"protein": 9.0, "carbohydrate": 11.0, "fat": 4.0, "fiber": 0.0, "sugar": 10.0, "sodium": 100.0, "calcium": 300.0, "iron": 0.2, "potassium": 380.0, "vitaminC": 2.0, "vitaminA": 30.0, "cholesterol": 15.0}, "notes": "Editable starter nutrition estimate; verify recipe/brand/cooking method before clinical use."}, {"id": "spinach", "name": "রান্না করা পালং শাক", "category": "Vegetable", "serving": "1 cup cooked", "energy": "41 kcal", "title": "Cooked Spinach (রান্না করা পালং শাক)", "englishName": "Cooked Spinach", "bengaliName": "রান্না করা পালং শাক", "servingWeight": 180.0, "energyKcal": 41.0, "ingredients": "", "nutrients": {"protein": 5.3, "carbohydrate": 6.8, "fat": 0.5, "fiber": 4.3, "sugar": 0.8, "sodium": 126.0, "calcium": 245.0, "iron": 6.4, "potassium": 839.0, "vitaminC": 18.0, "vitaminA": 943.0, "cholesterol": 0.0}, "notes": "Editable starter nutrition estimate; verify recipe/brand/cooking method before clinical use."}, {"id": "lal-shak", "name": "রান্না করা লাল শাক", "category": "Vegetable", "serving": "1 cup cooked", "energy": "45 kcal", "title": "Cooked Red Amaranth (রান্না করা লাল শাক)", "englishName": "Cooked Red Amaranth", "bengaliName": "রান্না করা লাল শাক", "servingWeight": 180.0, "energyKcal": 45.0, "ingredients": "", "nutrients": {"protein": 5.0, "carbohydrate": 7.0, "fat": 0.6, "fiber": 4.0, "sugar": 1.0, "sodium": 100.0, "calcium": 210.0, "iron": 4.0, "potassium": 700.0, "vitaminC": 25.0, "vitaminA": 750.0, "cholesterol": 0.0}, "notes": "Editable starter nutrition estimate; verify recipe/brand/cooking method before clinical use."}, {"id": "lau", "name": "রান্না করা লাউ", "category": "Vegetable", "serving": "1 cup cooked", "energy": "35 kcal", "title": "Cooked Bottle Gourd (রান্না করা লাউ)", "englishName": "Cooked Bottle Gourd", "bengaliName": "রান্না করা লাউ", "servingWeight": 180.0, "energyKcal": 35.0, "ingredients": "", "nutrients": {"protein": 1.5, "carbohydrate": 8.0, "fat": 0.2, "fiber": 2.0, "sugar": 3.0, "sodium": 20.0, "calcium": 30.0, "iron": 0.6, "potassium": 250.0, "vitaminC": 18.0, "vitaminA": 30.0, "cholesterol": 0.0}, "notes": "Editable starter nutrition estimate; verify recipe/brand/cooking method before clinical use."}, {"id": "kumra", "name": "রান্না করা মিষ্টি কুমড়া", "category": "Vegetable", "serving": "1 cup cooked", "energy": "50 kcal", "title": "Cooked Pumpkin (রান্না করা মিষ্টি কুমড়া)", "englishName": "Cooked Pumpkin", "bengaliName": "রান্না করা মিষ্টি কুমড়া", "servingWeight": 205.0, "energyKcal": 50.0, "ingredients": "", "nutrients": {"protein": 2.0, "carbohydrate": 12.0, "fat": 0.3, "fiber": 3.0, "sugar": 5.0, "sodium": 3.0, "calcium": 50.0, "iron": 1.0, "potassium": 564.0, "vitaminC": 12.0, "vitaminA": 1000.0, "cholesterol": 0.0}, "notes": "Editable starter nutrition estimate; verify recipe/brand/cooking method before clinical use."}, {"id": "begun", "name": "রান্না করা বেগুন", "category": "Vegetable", "serving": "1 cup cooked", "energy": "70 kcal", "title": "Cooked Eggplant (রান্না করা বেগুন)", "englishName": "Cooked Eggplant", "bengaliName": "রান্না করা বেগুন", "servingWeight": 180.0, "energyKcal": 70.0, "ingredients": "", "nutrients": {"protein": 2.0, "carbohydrate": 15.0, "fat": 1.0, "fiber": 6.0, "sugar": 7.0, "sodium": 5.0, "calcium": 15.0, "iron": 0.7, "potassium": 230.0, "vitaminC": 5.0, "vitaminA": 35.0, "cholesterol": 0.0}, "notes": "Editable starter nutrition estimate; verify recipe/brand/cooking method before clinical use."}, {"id": "okra", "name": "রান্না করা ঢেঁড়স", "category": "Vegetable", "serving": "1 cup cooked", "energy": "80 kcal", "title": "Cooked Okra (রান্না করা ঢেঁড়স)", "englishName": "Cooked Okra", "bengaliName": "রান্না করা ঢেঁড়স", "servingWeight": 160.0, "energyKcal": 80.0, "ingredients": "", "nutrients": {"protein": 3.0, "carbohydrate": 18.0, "fat": 1.0, "fiber": 6.0, "sugar": 3.0, "sodium": 10.0, "calcium": 120.0, "iron": 1.2, "potassium": 300.0, "vitaminC": 30.0, "vitaminA": 55.0, "cholesterol": 0.0}, "notes": "Editable starter nutrition estimate; verify recipe/brand/cooking method before clinical use."}, {"id": "mixed-veg", "name": "রান্না করা মিশ্র সবজি", "category": "Vegetable", "serving": "1 cup cooked", "energy": "100 kcal", "title": "Cooked Mixed Vegetables (রান্না করা মিশ্র সবজি)", "englishName": "Cooked Mixed Vegetables", "bengaliName": "রান্না করা মিশ্র সবজি", "servingWeight": 200.0, "energyKcal": 100.0, "ingredients": "", "nutrients": {"protein": 4.0, "carbohydrate": 18.0, "fat": 2.0, "fiber": 6.0, "sugar": 5.0, "sodium": 180.0, "calcium": 80.0, "iron": 2.0, "potassium": 450.0, "vitaminC": 30.0, "vitaminA": 300.0, "cholesterol": 0.0}, "notes": "Editable starter nutrition estimate; verify recipe/brand/cooking method before clinical use."}, {"id": "salad", "name": "শসা ও টমেটোর সালাদ", "category": "Vegetable", "serving": "1 medium bowl", "energy": "50 kcal", "title": "Cucumber and Tomato Salad (শসা ও টমেটোর সালাদ)", "englishName": "Cucumber and Tomato Salad", "bengaliName": "শসা ও টমেটোর সালাদ", "servingWeight": 180.0, "energyKcal": 50.0, "ingredients": "", "nutrients": {"protein": 2.0, "carbohydrate": 11.0, "fat": 0.5, "fiber": 3.0, "sugar": 6.0, "sodium": 40.0, "calcium": 35.0, "iron": 1.0, "potassium": 400.0, "vitaminC": 35.0, "vitaminA": 120.0, "cholesterol": 0.0}, "notes": "Editable starter nutrition estimate; verify recipe/brand/cooking method before clinical use."}, {"id": "banana", "name": "কলা", "category": "Fruit", "serving": "1 medium", "energy": "105 kcal", "title": "Banana (কলা)", "englishName": "Banana", "bengaliName": "কলা", "servingWeight": 118.0, "energyKcal": 105.0, "ingredients": "", "nutrients": {"protein": 1.3, "carbohydrate": 27.0, "fat": 0.4, "fiber": 3.1, "sugar": 14.4, "sodium": 1.0, "calcium": 6.0, "iron": 0.3, "potassium": 422.0, "vitaminC": 10.0, "vitaminA": 4.0, "cholesterol": 0.0}, "notes": "Editable starter nutrition estimate; verify recipe/brand/cooking method before clinical use."}, {"id": "mango", "name": "আম", "category": "Fruit", "serving": "1 cup sliced", "energy": "99 kcal", "title": "Mango (আম)", "englishName": "Mango", "bengaliName": "আম", "servingWeight": 165.0, "energyKcal": 99.0, "ingredients": "", "nutrients": {"protein": 1.4, "carbohydrate": 25.0, "fat": 0.6, "fiber": 2.6, "sugar": 23.0, "sodium": 2.0, "calcium": 18.0, "iron": 0.3, "potassium": 277.0, "vitaminC": 60.0, "vitaminA": 89.0, "cholesterol": 0.0}, "notes": "Editable starter nutrition estimate; verify recipe/brand/cooking method before clinical use."}, {"id": "guava", "name": "পেয়ারা", "category": "Fruit", "serving": "1 medium", "energy": "82 kcal", "title": "Guava (পেয়ারা)", "englishName": "Guava", "bengaliName": "পেয়ারা", "servingWeight": 120.0, "energyKcal": 82.0, "ingredients": "", "nutrients": {"protein": 3.1, "carbohydrate": 17.0, "fat": 1.1, "fiber": 6.5, "sugar": 10.7, "sodium": 2.0, "calcium": 22.0, "iron": 0.3, "potassium": 501.0, "vitaminC": 274.0, "vitaminA": 37.0, "cholesterol": 0.0}, "notes": "Editable starter nutrition estimate; verify recipe/brand/cooking method before clinical use."}, {"id": "papaya", "name": "পেঁপে", "category": "Fruit", "serving": "1 cup cubed", "energy": "62 kcal", "title": "Papaya (পেঁপে)", "englishName": "Papaya", "bengaliName": "পেঁপে", "servingWeight": 145.0, "energyKcal": 62.0, "ingredients": "", "nutrients": {"protein": 0.7, "carbohydrate": 16.0, "fat": 0.4, "fiber": 2.5, "sugar": 11.0, "sodium": 12.0, "calcium": 30.0, "iron": 0.4, "potassium": 360.0, "vitaminC": 88.0, "vitaminA": 68.0, "cholesterol": 0.0}, "notes": "Editable starter nutrition estimate; verify recipe/brand/cooking method before clinical use."}, {"id": "apple", "name": "আপেল", "category": "Fruit", "serving": "1 medium", "energy": "95 kcal", "title": "Apple (আপেল)", "englishName": "Apple", "bengaliName": "আপেল", "servingWeight": 182.0, "energyKcal": 95.0, "ingredients": "", "nutrients": {"protein": 0.5, "carbohydrate": 25.0, "fat": 0.3, "fiber": 4.4, "sugar": 19.0, "sodium": 2.0, "calcium": 11.0, "iron": 0.2, "potassium": 195.0, "vitaminC": 8.0, "vitaminA": 5.0, "cholesterol": 0.0}, "notes": "Editable starter nutrition estimate; verify recipe/brand/cooking method before clinical use."}, {"id": "orange", "name": "কমলা", "category": "Fruit", "serving": "1 medium", "energy": "62 kcal", "title": "Orange (কমলা)", "englishName": "Orange", "bengaliName": "কমলা", "servingWeight": 131.0, "energyKcal": 62.0, "ingredients": "", "nutrients": {"protein": 1.2, "carbohydrate": 15.4, "fat": 0.2, "fiber": 3.1, "sugar": 12.2, "sodium": 0.0, "calcium": 52.0, "iron": 0.1, "potassium": 237.0, "vitaminC": 70.0, "vitaminA": 14.0, "cholesterol": 0.0}, "notes": "Editable starter nutrition estimate; verify recipe/brand/cooking method before clinical use."}, {"id": "dates", "name": "খেজুর", "category": "Fruit", "serving": "3 medium dates", "energy": "67 kcal", "title": "Dates (খেজুর)", "englishName": "Dates", "bengaliName": "খেজুর", "servingWeight": 24.0, "energyKcal": 67.0, "ingredients": "", "nutrients": {"protein": 0.5, "carbohydrate": 18.0, "fat": 0.1, "fiber": 1.6, "sugar": 16.0, "sodium": 1.0, "calcium": 15.0, "iron": 0.2, "potassium": 167.0, "vitaminC": 0.0, "vitaminA": 2.0, "cholesterol": 0.0}, "notes": "Editable starter nutrition estimate; verify recipe/brand/cooking method before clinical use."}, {"id": "coconut-water", "name": "ডাবের পানি", "category": "Drink", "serving": "1 cup", "energy": "45 kcal", "title": "Coconut Water (ডাবের পানি)", "englishName": "Coconut Water", "bengaliName": "ডাবের পানি", "servingWeight": 240.0, "energyKcal": 45.0, "ingredients": "", "nutrients": {"protein": 1.7, "carbohydrate": 9.0, "fat": 0.5, "fiber": 2.6, "sugar": 6.3, "sodium": 250.0, "calcium": 57.0, "iron": 0.7, "potassium": 600.0, "vitaminC": 6.0, "vitaminA": 0.0, "cholesterol": 0.0}, "notes": "Editable starter nutrition estimate; verify recipe/brand/cooking method before clinical use."}, {"id": "nuts", "name": "চিনাবাদাম বা মিশ্র বাদাম", "category": "Healthy fat", "serving": "1 small handful", "energy": "170 kcal", "title": "Peanuts or Mixed Nuts (চিনাবাদাম বা মিশ্র বাদাম)", "englishName": "Peanuts or Mixed Nuts", "bengaliName": "চিনাবাদাম বা মিশ্র বাদাম", "servingWeight": 30.0, "energyKcal": 170.0, "ingredients": "", "nutrients": {"protein": 7.0, "carbohydrate": 6.0, "fat": 14.0, "fiber": 2.5, "sugar": 1.5, "sodium": 5.0, "calcium": 35.0, "iron": 1.3, "potassium": 200.0, "vitaminC": 0.0, "vitaminA": 0.0, "cholesterol": 0.0}, "notes": "Editable starter nutrition estimate; verify recipe/brand/cooking method before clinical use."}, {"id": "mustard-oil", "name": "সরিষার তেল", "category": "Fat", "serving": "1 tablespoon", "energy": "120 kcal", "title": "Mustard Oil (সরিষার তেল)", "englishName": "Mustard Oil", "bengaliName": "সরিষার তেল", "servingWeight": 14.0, "energyKcal": 120.0, "ingredients": "", "nutrients": {"protein": 0.0, "carbohydrate": 0.0, "fat": 14.0, "fiber": 0.0, "sugar": 0.0, "sodium": 0.0, "calcium": 0.0, "iron": 0.0, "potassium": 0.0, "vitaminC": 0.0, "vitaminA": 0.0, "cholesterol": 0.0}, "notes": "Editable starter nutrition estimate; verify recipe/brand/cooking method before clinical use."}, {"id": "tea-milk", "name": "দুধ ও চিনিযুক্ত চা", "category": "Drink", "serving": "1 cup", "energy": "100 kcal", "title": "Milk Tea with Sugar (দুধ ও চিনিযুক্ত চা)", "englishName": "Milk Tea with Sugar", "bengaliName": "দুধ ও চিনিযুক্ত চা", "servingWeight": 180.0, "energyKcal": 100.0, "ingredients": "", "nutrients": {"protein": 3.0, "carbohydrate": 16.0, "fat": 3.0, "fiber": 0.0, "sugar": 12.0, "sodium": 60.0, "calcium": 100.0, "iron": 0.1, "potassium": 120.0, "vitaminC": 0.0, "vitaminA": 20.0, "cholesterol": 10.0}, "notes": "Editable starter nutrition estimate; verify recipe/brand/cooking method before clinical use."}, {"id": "tea-black", "name": "চিনি ছাড়া চা", "category": "Drink", "serving": "1 cup", "energy": "2 kcal", "title": "Tea without Sugar (চিনি ছাড়া চা)", "englishName": "Tea without Sugar", "bengaliName": "চিনি ছাড়া চা", "servingWeight": 240.0, "energyKcal": 2.0, "ingredients": "", "nutrients": {"protein": 0.0, "carbohydrate": 0.5, "fat": 0.0, "fiber": 0.0, "sugar": 0.0, "sodium": 5.0, "calcium": 0.0, "iron": 0.0, "potassium": 20.0, "vitaminC": 0.0, "vitaminA": 0.0, "cholesterol": 0.0}, "notes": "Editable starter nutrition estimate; verify recipe/brand/cooking method before clinical use."}, {"id": "sweets", "name": "বাংলাদেশি মিষ্টি", "category": "Treat", "serving": "1 small piece", "energy": "200 kcal", "title": "Bangladeshi Milk Sweet (বাংলাদেশি মিষ্টি)", "englishName": "Bangladeshi Milk Sweet", "bengaliName": "বাংলাদেশি মিষ্টি", "servingWeight": 50.0, "energyKcal": 200.0, "ingredients": "", "nutrients": {"protein": 3.0, "carbohydrate": 30.0, "fat": 8.0, "fiber": 0.5, "sugar": 22.0, "sodium": 80.0, "calcium": 80.0, "iron": 0.5, "potassium": 70.0, "vitaminC": 0.0, "vitaminA": 15.0, "cholesterol": 15.0}, "notes": "Editable starter nutrition estimate; verify recipe/brand/cooking method before clinical use."}, {"id": "singara", "name": "সিঙ্গারা", "category": "Snack", "serving": "1 medium", "energy": "180 kcal", "title": "Singara (সিঙ্গারা)", "englishName": "Singara", "bengaliName": "সিঙ্গারা", "servingWeight": 80.0, "energyKcal": 180.0, "ingredients": "", "nutrients": {"protein": 4.0, "carbohydrate": 24.0, "fat": 8.0, "fiber": 2.0, "sugar": 2.0, "sodium": 350.0, "calcium": 25.0, "iron": 1.5, "potassium": 180.0, "vitaminC": 5.0, "vitaminA": 40.0, "cholesterol": 0.0}, "notes": "Editable starter nutrition estimate; verify recipe/brand/cooking method before clinical use."}];</script>
+<script>
+window.addEventListener('error', event => {
+  console.error('[AIT Health Planner Runtime Error]', event.error || event.message);
+});
+</script><script src="../assets/health-planner.js"></script>
+</body>
+</html>

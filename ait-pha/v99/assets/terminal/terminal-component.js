@@ -24,16 +24,41 @@
 <div aria-hidden="true" class="terminal-modal-shell no-print" id="terminalModalShell">
   <button aria-label="Close modal" class="terminal-modal-backdrop" id="terminalModalBackdrop" tabindex="-1" type="button"></button>
   <section aria-labelledby="workspaceModalTitle" aria-modal="true" class="terminal-modal" hidden id="workspaceModal" role="dialog">
-    <header class="terminal-modal__header"><div><span class="terminal-modal__eyebrow">TERMINAL GROUP</span><h2 id="workspaceModalTitle">⚡ Workspace</h2><p>Output and paper commands</p></div><button aria-label="Close" class="terminal-icon-button" data-close-terminal-modal type="button">×</button></header>
-    <div class="terminal-modal__body">
-      <section class="terminal-control-section"><h3>Output</h3><div class="terminal-command-grid">
-        <button class="terminal-command terminal-command--primary" data-command="print" type="button"><span>🖨</span><b>Color Print</b><small>Print using selected paper</small></button>
-        <button class="terminal-command" data-command="image" type="button"><span>📷</span><b>A0 Image</b><small>Open high-resolution JPG export</small></button>
-      </div></section>
-      <section class="terminal-control-section"><h3>Paper size</h3><div class="terminal-segment" id="terminalPaperSegment">
-        <button data-paper-command="a0" type="button">A0</button><button data-paper-command="a4" type="button">A4</button><button data-paper-command="a5" type="button">A5</button>
-      </div></section>
-    </div>
+    <header class="terminal-modal__header"><div><span class="terminal-modal__eyebrow">WORKSPACE</span><h2 id="workspaceModalTitle">⚡ Workspace Center</h2><p>Manage planner data and report outputs</p></div><button aria-label="Close" class="terminal-icon-button" data-close-terminal-modal type="button">×</button></header>
+    <div class="terminal-modal__body"><section class="terminal-control-section"><h3>Workspace modules</h3><div class="terminal-command-grid">
+      <button class="terminal-command terminal-command--primary" data-open-terminal-modal="dataCenterModal" type="button"><span>🗄</span><b>Data Center</b><small>Data, backup, sync and import</small></button>
+      <button class="terminal-command" data-open-terminal-modal="reportCenterModal" type="button"><span>🖨</span><b>Report</b><small>Print, poster and image outputs</small></button>
+    </div></section></div>
+  </section>
+
+  <section aria-labelledby="dataCenterModalTitle" aria-modal="true" class="terminal-modal" hidden id="dataCenterModal" role="dialog">
+    <header class="terminal-modal__header"><div><span class="terminal-modal__eyebrow">WORKSPACE / DATA CENTER</span><h2 id="dataCenterModalTitle">🗄 Data Center</h2><p>Manage AIT Health Planner records</p></div><div class="terminal-header-actions"><button class="terminal-back-button" data-open-terminal-modal="workspaceModal" type="button">← Workspace</button><button aria-label="Close" class="terminal-icon-button" data-close-terminal-modal type="button">×</button></div></header>
+    <div class="terminal-modal__body"><section class="terminal-control-section"><h3>Data Center tools</h3><div class="terminal-command-grid">
+      <button class="terminal-command terminal-command--primary" data-open-terminal-modal="dataManagerModal" type="button"><span>🧾</span><b>Data</b><small>Food and profile records</small></button>
+      <button class="terminal-command" data-workspace-action="backup" type="button"><span>💾</span><b>Backup</b><small>Download all planner data as JSON</small></button>
+      <button class="terminal-command" data-workspace-action="sync" type="button"><span>🔄</span><b>Sync</b><small>Save a local synchronization checkpoint</small></button>
+      <button class="terminal-command" data-workspace-action="import" type="button"><span>📥</span><b>Import</b><small>Restore planner data from JSON</small></button>
+    </div><input accept=".json,application/json" hidden id="terminalDataImportFile" type="file"></section></div>
+  </section>
+
+  <section aria-labelledby="dataManagerModalTitle" aria-modal="true" class="terminal-modal" hidden id="dataManagerModal" role="dialog">
+    <header class="terminal-modal__header"><div><span class="terminal-modal__eyebrow">WORKSPACE / DATA CENTER / DATA</span><h2 id="dataManagerModalTitle">🧾 Planner Data</h2><p>Open Food or Profile data management</p></div><div class="terminal-header-actions"><button class="terminal-back-button" data-open-terminal-modal="dataCenterModal" type="button">← Data Center</button><button aria-label="Close" class="terminal-icon-button" data-close-terminal-modal type="button">×</button></div></header>
+    <div class="terminal-modal__body"><section class="terminal-control-section"><h3>Data type</h3><div class="terminal-command-grid">
+      <button class="terminal-command terminal-command--primary" data-planner-module="foodsModule" type="button"><span>🥗</span><b>Food</b><small>Open standalone full-screen Food Data workspace</small></button>
+      <button class="terminal-command" data-planner-module="profilesModule" type="button"><span>👤</span><b>Profile</b><small>Health-planner profiles</small></button>
+    </div></section></div>
+  </section>
+
+  <section aria-labelledby="reportCenterModalTitle" aria-modal="true" class="terminal-modal" hidden id="reportCenterModal" role="dialog">
+    <header class="terminal-modal__header"><div><span class="terminal-modal__eyebrow">WORKSPACE / REPORT</span><h2 id="reportCenterModalTitle">🖨 Report</h2><p>Create print, poster and image outputs</p></div><div class="terminal-header-actions"><button class="terminal-back-button" data-open-terminal-modal="workspaceModal" type="button">← Workspace</button><button aria-label="Close" class="terminal-icon-button" data-close-terminal-modal type="button">×</button></div></header>
+    <div class="terminal-modal__body"><section class="terminal-control-section"><h3>Report tools</h3><div class="terminal-command-grid">
+      <button class="terminal-command terminal-command--primary" data-command="print" type="button"><span>🖨</span><b>Print</b><small>Use the existing color-print workflow</small></button>
+      <button class="terminal-command" data-workspace-action="poster" type="button"><span>🪧</span><b>Poster</b><small>A3 landscape poster output</small></button>
+      <button class="terminal-command" data-command="image" type="button"><span>🖼</span><b>Image</b><small>Use the existing high-resolution image export</small></button>
+    </div></section>
+    <section class="terminal-control-section"><h3>Paper size</h3><div class="terminal-segment" id="terminalPaperSegment">
+      <button data-paper-command="a0" type="button">A0</button><button data-paper-command="a4" type="button">A4</button><button data-paper-command="a5" type="button">A5</button>
+    </div></section></div>
   </section>
   <section aria-labelledby="navigationModalTitle" aria-modal="true" class="terminal-modal terminal-modal--wide" hidden id="navigationModal" role="dialog">
     <header class="terminal-modal__header"><div><span class="terminal-modal__eyebrow">TERMINAL GROUP</span><h2 id="navigationModalTitle">🧭 Navigation</h2><p>Jump directly to an ebook page</p></div><button aria-label="Close" class="terminal-icon-button" data-close-terminal-modal type="button">×</button></header>
@@ -54,7 +79,7 @@
     <div class="terminal-modal__body"><section class="terminal-control-section"><h3>Available tools</h3><div class="terminal-command-grid">
       <button class="terminal-command terminal-command--primary" data-open-terminal-modal="exerciseModal" type="button"><span>🏃</span><b>Exercise</b><small>Walking and breathing workspaces</small></button>
       <button class="terminal-command" data-open-terminal-modal="calculatorModal" type="button"><span>🧮</span><b>Calculator</b><small>BMI, BMR, BSR, body fat and live weight</small></button>
-      <button class="terminal-command" data-open-terminal-modal="plannerModal" type="button"><span>🗓</span><b>Integrated Health Progress Planner</b><small>Metrics, food-energy and lifestyle plans</small></button>
+      <button class="terminal-command" data-open-terminal-modal="plannerModal" type="button"><span>🗓</span><b>AIT – Health Planner</b><small>Profile-based target, food, fasting and lifestyle planning</small></button>
     </div></section></div>
   </section>
   <section aria-labelledby="exerciseModalTitle" aria-modal="true" class="terminal-modal" hidden id="exerciseModal" role="dialog">
@@ -75,12 +100,48 @@
     </div></section></div>
   </section>
   <section aria-labelledby="plannerModalTitle" aria-modal="true" class="terminal-modal" hidden id="plannerModal" role="dialog">
-    <header class="terminal-modal__header"><div><span class="terminal-modal__eyebrow">TOOLS / PLANNER</span><h2 id="plannerModalTitle">🗓 Integrated Health Progress Planner</h2><p>Build coordinated weekly and monthly targets from current to desired health metrics</p></div><div class="terminal-header-actions"><button class="terminal-back-button" data-open-terminal-modal="toolsModal" type="button">← Tools</button><button aria-label="Close" class="terminal-icon-button" data-close-terminal-modal type="button">×</button></div></header>
-    <div class="terminal-modal__body"><section class="terminal-control-section"><h3>Three coordinated planners</h3><div class="terminal-command-grid">
-      <button class="terminal-command terminal-command--primary" data-exercise-src="planner/body-metrics/index.html" data-exercise-title="Body Metrics Roadmap" data-parent-modal="plannerModal" data-parent-label="Planner" data-workspace-kicker="TOOLS / PLANNER / BODY METRICS" type="button"><span>🎯</span><b>Body Metrics Roadmap</b><small>Current and target BMI, BMR, BSR, fat and milestone schedule</small></button>
-      <button class="terminal-command" data-exercise-src="planner/nutrition-energy/index.html" data-exercise-title="Nutrition & Energy Planner" data-parent-modal="plannerModal" data-parent-label="Planner" data-workspace-kicker="TOOLS / PLANNER / NUTRITION" type="button"><span>🥗</span><b>Nutrition & Energy Planner</b><small>Food pattern, energy budget and weekly/monthly nutrition goals</small></button>
-      <button class="terminal-command" data-exercise-src="planner/lifestyle-routine/index.html" data-exercise-title="Lifestyle Routine Planner" data-parent-modal="plannerModal" data-parent-label="Planner" data-workspace-kicker="TOOLS / PLANNER / LIFESTYLE" type="button"><span>🌿</span><b>Lifestyle Routine Planner</b><small>Walking, breathing and sun-bath schedule with progressive targets</small></button>
-    </div></section></div>
+    <header class="terminal-modal__header">
+      <div>
+        <span class="terminal-modal__eyebrow">TOOLS / PLANNER</span>
+        <h2 id="plannerModalTitle">🗓 AIT – Health Planner</h2>
+        <p>Manage profiles and generated health-plan reports</p>
+      </div>
+      <div class="terminal-header-actions">
+        <button class="terminal-back-button" data-open-terminal-modal="toolsModal" type="button">← Tools</button>
+        <button aria-label="Close" class="terminal-icon-button" data-close-terminal-modal type="button">×</button>
+      </div>
+    </header>
+    <div class="terminal-modal__body">
+      <section class="terminal-control-section">
+        <h3>Planner modules</h3>
+        <div class="terminal-command-grid">
+          <button
+            class="terminal-command terminal-command--primary"
+            data-exercise-src="planner/health-planner/index.html?module=profilesModule"
+            data-exercise-title="AIT – Health Planner / Profile"
+            data-parent-modal="plannerModal"
+            data-parent-label="AIT Planner"
+            data-workspace-kicker="TOOLS / AIT HEALTH PLANNER / PROFILE"
+            type="button">
+            <span>👤</span>
+            <b>Profile</b>
+            <small>Profile list, create/edit workspace and plan generation</small>
+          </button>
+          <button
+            class="terminal-command"
+            data-exercise-src="planner/health-planner/index.html?module=reportsModule"
+            data-exercise-title="AIT – Health Planner / Report"
+            data-parent-modal="plannerModal"
+            data-parent-label="AIT Planner"
+            data-workspace-kicker="TOOLS / AIT HEALTH PLANNER / REPORT"
+            type="button">
+            <span>📊</span>
+            <b>Report</b>
+            <small>Open generated plan history and reports</small>
+          </button>
+        </div>
+      </section>
+    </div>
   </section>
   <section aria-labelledby="interactionModalTitle" aria-modal="true" class="terminal-modal" hidden id="interactionModal" role="dialog">
     <header class="terminal-modal__header"><div><span class="terminal-modal__eyebrow">TERMINAL GROUP</span><h2 id="interactionModalTitle">✥ Interaction</h2><p>Reading and viewport controls</p></div><button aria-label="Close" class="terminal-icon-button" data-close-terminal-modal type="button">×</button></header>
