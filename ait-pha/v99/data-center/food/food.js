@@ -60,6 +60,11 @@ class FoodDataWorkspace {
     this.q('foodSearch').oninput=()=>this.render();
     this.q('foodCategory').onchange=()=>this.render();
     this.q('closeEditor').onclick=()=>this.closeEditor();
+    this.q('foodEditorBack').onclick=()=>this.closeEditor();
+    this.q('foodEditorForward').onclick=()=>{};
+    this.q('foodCrumbDataCenter').onclick=()=>parent.postMessage({type:'ait-pha-workspace-breadcrumb',target:'dataCenterModal'},'*');
+    this.q('foodCrumbFood').onclick=()=>this.closeEditor();
+    this.q('foodEditorTerminal').onclick=()=>parent.postMessage({type:'ait-pha-open-terminal'},'*');
     this.q('cancelEditor').onclick=()=>this.closeEditor();
     this.q('foodForm').onsubmit=event=>{event.preventDefault();this.saveFood()};
     ['foodEnglishName','foodBengaliName'].forEach(id=>this.q(id).addEventListener('input',()=>this.syncTitle()));

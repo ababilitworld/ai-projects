@@ -3,9 +3,11 @@
   const config = window.AITPHATerminalConfig || {};
   const mount = document.getElementById('terminalComponentMount');
   if (!mount) return;
-  const groupMarkup = (config.groups || []).map(group => `
-    <button class="terminal-group-card" data-open-terminal-modal="${group.id}" type="button">
-      <span class="terminal-group-card__icon">${group.icon}</span><span><b>${group.title}</b><small>${group.description}</small></span><i>→</i>
+  const schema=window.AIT_TERMINAL_SCHEMA||{};
+  const rootItems=schema.menu||[];
+  const groupMarkup=rootItems.map(item=>`
+    <button class="terminal-group-card" data-dynamic-terminal-item="${item.id}" type="button">
+      <span class="terminal-group-card__icon">${item.icon||'•'}</span><span><b>${item.label}</b><small>${item.description||''}</small></span><i>→</i>
     </button>`).join('');
   mount.innerHTML = `
 <button aria-controls="terminalDock" aria-expanded="false" class="terminal-launcher no-print" id="terminalLauncher" type="button">
@@ -18,7 +20,7 @@
     <div class="terminal-dock__title"><span aria-hidden="true">${config.brand?.icon || '⌘'}</span><div><strong>${config.brand?.title || 'Terminal'}</strong><small>${config.brand?.subtitle || ''}</small></div></div>
     <button aria-label="Close terminal menu" class="terminal-icon-button" id="terminalDockClose" type="button">×</button>
   </header>
-  <div class="terminal-dock__groups">${groupMarkup}</div>
+  <div class="terminal-dock__groups" id="dynamicTerminalMenuMount">${groupMarkup}</div>
   <footer class="terminal-dock__footer"><span class="terminal-live-dot"></span><span id="terminalActiveTheme">Dark Glass active</span></footer>
 </aside>
 <div aria-hidden="true" class="terminal-modal-shell no-print" id="terminalModalShell">
@@ -83,7 +85,7 @@
     </div></section></div>
   </section>
   <section aria-labelledby="exerciseModalTitle" aria-modal="true" class="terminal-modal" hidden id="exerciseModal" role="dialog">
-    <header class="terminal-modal__header"><div><span class="terminal-modal__eyebrow">TOOLS / EXERCISE</span><h2 id="exerciseModalTitle">🏃 Exercise</h2><p>Open a guided full-screen workspace</p></div><div class="terminal-header-actions"><button class="terminal-back-button" data-open-terminal-modal="toolsModal" type="button">← Tools</button><button aria-label="Close" class="terminal-icon-button" data-close-terminal-modal type="button">×</button></div></header>
+    <header class="terminal-modal__header"><div><span class="terminal-modal__eyebrow">TOOLS / EXERCISE</span><h2 id="exerciseModalTitle">🏃 Exercise</h2><p>Open a guided full-screen workspace</p></div><div class="terminal-header-actions"><button id="terminalToolsTrigger" class="terminal-back-button" data-open-terminal-modal="toolsModal" type="button">← Tools</button><button aria-label="Close" class="terminal-icon-button" data-close-terminal-modal type="button">×</button></div></header>
     <div class="terminal-modal__body"><section class="terminal-control-section"><h3>Exercise tools</h3><div class="terminal-command-grid">
       <button class="terminal-command terminal-command--primary" data-exercise-src="exercise/walking/index.html" data-exercise-title="Walking Exercise" type="button"><span>🚶</span><b>Walking</b><small>Warm-up, power walk and cool-down timer</small></button>
       <button class="terminal-command" data-exercise-src="exercise/breathing/index.html" data-exercise-title="Breathing Exercise" type="button"><span>🫁</span><b>Breathing</b><small>Guided breathing timer and relaxation cycles</small></button>
@@ -161,7 +163,18 @@
   </section>
 </div>
 <section class="terminal-exercise-shell no-print" id="terminalExerciseShell" aria-hidden="true">
-  <header><button class="terminal-back-button" id="terminalExerciseBack" type="button">← Exercise</button><div><span>TOOLS / EXERCISE</span><h2 id="terminalExerciseTitle">Exercise Workspace</h2></div><button class="terminal-icon-button" id="terminalExerciseClose" type="button" aria-label="Close exercise workspace">×</button></header>
+  <header class="terminal-workspace-nav">
+    <div class="terminal-workspace-nav__history">
+      <button class="terminal-nav-icon" id="terminalWorkspaceBack" type="button" aria-label="Back" title="Back">←</button>
+      <button class="terminal-nav-icon" id="terminalWorkspaceForward" type="button" aria-label="Forward" title="Forward">→</button>
+    </div>
+    <nav class="terminal-workspace-breadcrumb" id="terminalWorkspaceBreadcrumb" aria-label="Workspace breadcrumb"></nav>
+    <div class="terminal-workspace-nav__actions">
+      <button class="terminal-nav-button" id="terminalWorkspaceHome" type="button">⌂ Back to Terminal</button>
+      <button class="terminal-nav-icon" id="terminalWorkspaceTerminal" type="button" aria-label="Open terminal" title="Open terminal">☰</button>
+      <button class="terminal-nav-icon" id="terminalExerciseClose" type="button" aria-label="Close workspace" title="Close">×</button>
+    </div>
+  </header>
   <iframe id="terminalExerciseFrame" title="Exercise workspace" loading="eager"></iframe>
 </section>`;
 })();

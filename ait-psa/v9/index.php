@@ -1156,6 +1156,11 @@ body.v11-ranked-modal-open{overflow:hidden}
  border-radius:14px
 }
 
+
+.v11-portfolio-form-actions,.v11-portfolio-row-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.v11-portfolio-form-actions{align-self:end}
+.v11-portfolio-row-actions{justify-content:flex-end;flex-wrap:nowrap}
+.v11-portfolio-row-actions .btn{white-space:nowrap}
 @media(min-width:680px){
  .v11-shell{margin-left:14px;margin-right:14px}
  .v11-controls{grid-template-columns:repeat(3,minmax(0,1fr))}
@@ -3663,6 +3668,13 @@ canvas,
 }
 #v11RankedChartModal .modal-head h2{color:var(--v1125-text,var(--v10-text))!important}
 #v11RankedChartModal .modal-head .small{color:var(--v1125-muted,var(--v10-muted))!important}
+
+.v11-portfolio-position-modal .dialog{width:min(620px,100%)}
+.v11-portfolio-position-modal .v11-portfolio-form{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:8px}
+.v11-portfolio-position-modal .v11-portfolio-form label{display:grid;gap:6px;font-weight:800;color:var(--text)}
+.v11-portfolio-position-modal .v11-portfolio-form input,.v11-portfolio-position-modal .v11-portfolio-form select{width:100%;min-height:44px;border:1px solid var(--line);border-radius:11px;background:var(--card);color:var(--text);padding:9px 11px}
+.v11-portfolio-position-modal .v11-portfolio-form input:focus,.v11-portfolio-position-modal .v11-portfolio-form select:focus{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px color-mix(in srgb,var(--primary) 18%,transparent)}
+@media(max-width:640px){.v11-portfolio-position-modal .v11-portfolio-form{grid-template-columns:1fr}}
 </style>
 
 <script>
@@ -4514,7 +4526,7 @@ svg[data-chart] {
   <div class="v10-menu">
    <button class="btn v10-menu-trigger" type="button"><span>◆ Backup</span><span>⌄</span></button>
    <div class="v10-menu-panel">
-    <button type="button" data-proxy="exportBtn">Backup dashboard</button>
+    <button type="button" data-proxy="exportBtn">Backup dashboard + portfolio</button>
     <button type="button" data-proxy="importBtn">Restore dashboard</button>
    </div>
   </div>
@@ -4701,21 +4713,17 @@ svg[data-chart] {
      <div class="v11-summary-grid">
       <div class="v11-summary"><span>Total cost</span><strong id="v11PortfolioCost">0.00</strong></div>
       <div class="v11-summary"><span>Market value</span><strong id="v11PortfolioValue">0.00</strong></div>
+      <div class="v11-summary"><span>Broker commission</span><strong id="v11PortfolioCommission">0.00</strong></div>
       <div class="v11-summary"><span>Unrealized P/L</span><strong id="v11PortfolioPl">0.00</strong></div>
+      <div class="v11-summary"><span>Portfolio P/L</span><strong id="v11PortfolioPlPercent">0.00%</strong></div>
       <div class="v11-summary"><span>Positions</span><strong id="v11PortfolioCount">0</strong></div>
      </div>
     </div>
    </aside>
    <article class="v11-card v11-portfolio-workspace-card">
-    <div class="v11-card-head"><div><h3>Portfolio workspace</h3><small>Track positions locally in this browser</small></div></div>
+    <div class="v11-card-head"><div><h3>Portfolio workspace</h3><small>Track positions locally in this browser</small></div><button class="btn primary" type="button" id="v11OpenPortfolioModal">Add position</button></div>
     <div class="v11-card-body">
-     <div class="v11-portfolio-form">
-      <label>Code<select id="v11PortfolioCode"></select></label>
-      <label>Quantity<input id="v11PortfolioQty" type="number" min="0" step="1"></label>
-      <label>Buy price<input id="v11PortfolioBuy" type="number" min="0" step="0.01"></label>
-      <button class="btn primary" type="button" id="v11AddPosition">Add position</button>
-     </div>
-     <div class="v11-table-wrap"><table class="v11-table"><thead><tr><th>Code</th><th>Qty</th><th>Buy</th><th>Last</th><th>Cost</th><th>Value</th><th>P/L</th><th></th></tr></thead><tbody id="v11PortfolioRows"></tbody></table></div>
+     <div class="v11-table-wrap"><table class="v11-table"><thead><tr><th>Code</th><th>Qty</th><th>Buy</th><th>Last</th><th>Cost</th><th>Market Value</th><th>Broker Commission</th><th>Net P/L</th><th>% P/L</th><th></th></tr></thead><tbody id="v11PortfolioRows"></tbody></table></div>
     </div>
    </article>
   </div>
@@ -4926,11 +4934,11 @@ svg[data-chart] {
    </button>
    <button class="v1116-action-card" type="button" data-v1116-action="exportBtn">
     <span class="v1116-action-icon">⇩</span>
-    <span><strong>Backup Dashboard</strong><small>Export watch lists, codes, history, and settings</small></span>
+    <span><strong>Backup Dashboard</strong><small>Export dashboard, market history, settings, and portfolio positions</small></span>
    </button>
    <button class="v1116-action-card" type="button" data-v1116-action="importBtn">
     <span class="v1116-action-icon">⇧</span>
-    <span><strong>Restore Dashboard</strong><small>Restore a previously exported dashboard backup</small></span>
+    <span><strong>Restore Dashboard</strong><small>Restore a complete or legacy dashboard backup, including portfolio data</small></span>
    </button>
   </div>
  </div>
@@ -5012,6 +5020,19 @@ svg[data-chart] {
 </div>
 </main>
 </div>
+</div>
+
+<div class="modal v11-portfolio-position-modal" id="v11PortfolioModal" role="dialog" aria-modal="true" aria-labelledby="v11PortfolioModalTitle">
+ <div class="dialog">
+  <div class="modal-head"><div><h2 id="v11PortfolioModalTitle">Add portfolio position</h2><div class="small">Enter position details and broker commission.</div></div><button class="btn soft icon" type="button" id="v11ClosePortfolioModal" aria-label="Close">×</button></div>
+  <div class="v11-portfolio-form">
+   <label>Code<select id="v11PortfolioCode"></select></label>
+   <label>Quantity<input id="v11PortfolioQty" type="number" min="0" step="1"></label>
+   <label>Buy price<input id="v11PortfolioBuy" type="number" min="0" step="0.01"></label>
+   <label>Broker commission (%)<input id="v11PortfolioCommissionRate" type="number" min="0" max="100" step="0.01" value="0.4"></label>
+  </div>
+  <div class="form-actions"><button class="btn soft" type="button" id="v11CancelPositionEdit">Cancel</button><button class="btn primary" type="button" id="v11AddPosition">Add position</button></div>
+ </div>
 </div>
 
 <div class="modal" id="listModal"><div class="dialog"><div class="modal-head"><h2 id="listModalTitle">Create Watch List</h2><button class="btn soft icon" data-close="listModal">×</button></div><form class="form" id="listForm"><div class="field"><label>Watch-list name</label><input class="input" style="width:100%" id="listName" required maxlength="60"></div><div class="form-actions"><button type="button" class="btn soft" data-close="listModal">Cancel</button><button class="btn primary">Save</button></div></form></div></div>
@@ -5150,6 +5171,45 @@ svg[data-chart] {
  <div style="overflow:auto"><table style="width:100%;border-collapse:collapse" id="dataTable"><thead><tr><th>Code</th><th>Date</th><th>Open</th><th>High</th><th>Low</th><th>Close</th><th>Volume</th></tr></thead><tbody></tbody></table></div>
 </div></div>
 
+<div class="modal ait-psa-download-confirm-modal" id="downloadConfirmModal" role="dialog" aria-modal="true" aria-labelledby="downloadConfirmTitle">
+ <div class="dialog" style="max-width:560px">
+  <div class="modal-head">
+   <div><h2 id="downloadConfirmTitle">Confirm download</h2><span class="small">Review the operation before it starts</span></div>
+   <button class="btn soft icon" id="downloadConfirmClose" type="button" aria-label="Close confirmation">×</button>
+  </div>
+  <div class="card" style="margin:0">
+   <p id="downloadConfirmMessage" style="margin:0;line-height:1.65">Start this download?</p>
+   <div class="note" id="downloadConfirmDetails" style="margin-top:12px">The operation may take several minutes depending on the number of trading codes and the selected period.</div>
+   <div class="form-actions" style="justify-content:flex-end;margin-top:18px">
+    <button class="btn soft" id="downloadConfirmCancel" type="button">Cancel</button>
+    <button class="btn primary" id="downloadConfirmProceed" type="button">Confirm &amp; Continue</button>
+   </div>
+  </div>
+ </div>
+</div>
+
+<div class="modal ait-psa-operation-result-modal" id="operationResultModal" role="dialog" aria-modal="true" aria-labelledby="operationResultTitle">
+ <div class="dialog" style="max-width:580px">
+  <div class="modal-head">
+   <div><h2 id="operationResultTitle">Operation completed</h2><span class="small" id="operationResultSubtitle">The requested operation finished successfully</span></div>
+   <button class="btn soft icon" id="operationResultClose" type="button" aria-label="Close result">×</button>
+  </div>
+  <div class="card" style="margin:0">
+   <div style="display:flex;gap:14px;align-items:flex-start">
+    <div id="operationResultIcon" aria-hidden="true" style="font-size:34px;line-height:1">✓</div>
+    <div style="min-width:0;flex:1">
+     <p id="operationResultMessage" style="margin:0;line-height:1.65;font-weight:700">Completed successfully.</p>
+     <div class="note" id="operationResultDetails" style="margin-top:12px">Your data is ready.</div>
+    </div>
+   </div>
+   <div class="form-actions" style="justify-content:flex-end;margin-top:18px">
+    <button class="btn soft" id="operationResultSecondary" type="button" style="display:none">View Status</button>
+    <button class="btn primary" id="operationResultPrimary" type="button">Close</button>
+   </div>
+  </div>
+ </div>
+</div>
+
 <nav class="v10-bottom-nav" aria-label="Mobile workspace navigation">
  <button type="button" data-v10-scroll="overviewWorkspace" class="active"><span>⌂</span>Overview</button>
  <button type="button" data-v10-scroll="downloadWorkspace"><span>⇩</span>Download</button>
@@ -5223,7 +5283,7 @@ class CandleChart{
 }
 class App{
  constructor(){this.store=new Store();this.s=this.store.load();this.editId=null;this.pending={};this.pendingMother=[];this.pendingMotherSource="";this.currentCode=null;this.searchTerm=""}
- init(){["lastArchive","sMother","sLists","sHistory","sRecords","lists","activity","newList","clearActivity","search","motherImport","quickMotherSync","saveStatus","motherModal","motherSourceSelect","motherUrl","autoMotherSync","openMotherSource","fetchMother","motherFiles","parseMotherFiles","motherPaste","parseMotherPaste","motherResult","motherCommitArea","mergeMother","replaceMother","archiveImport","dse3mUpdate","dse3mUpdate2","dse6mUpdate","dse6mUpdate2","viewListCharts","viewListCharts2","viewListCharts6","viewListCharts6_2","downloadStatusCard","downloadStatusTitle","downloadStatusPercent","downloadStatusBar","downloadStatusText","hideDownloadStatus","viewDownloadedData","exportBtn","importBtn","dashboardFile","mother","motherMeta","watch","watchTitle","watchMeta","watchCodeSearch","clearWatchCodeSearch","watchCodeSearchStatus","listModal","listModalTitle","listForm","listName","archiveModal","dseStartDate","dseEndDate","fetchDseRange","downloadDseCsv","ohlcFiles","parseFiles","pasteOhlc","parsePaste","archiveUrl","urlCode","fetchUrl","parseResult","commitArea","mergeHistory","replaceHistory","chartModal","chartTitle","chartSubtitle","chartRange","downloadChart","chartCanvas","chartInfo","galleryModal","galleryTitle","gallery","dataModal","dataSummary","dataTable","toasts"].forEach(id=>this[id]=document.getElementById(id));this.bind();
+ init(){["lastArchive","sMother","sLists","sHistory","sRecords","lists","activity","newList","clearActivity","search","motherImport","quickMotherSync","saveStatus","motherModal","motherSourceSelect","motherUrl","autoMotherSync","openMotherSource","fetchMother","motherFiles","parseMotherFiles","motherPaste","parseMotherPaste","motherResult","motherCommitArea","mergeMother","replaceMother","archiveImport","dse3mUpdate","dse3mUpdate2","dse6mUpdate","dse6mUpdate2","viewListCharts","viewListCharts2","viewListCharts6","viewListCharts6_2","downloadStatusCard","downloadStatusTitle","downloadStatusPercent","downloadStatusBar","downloadStatusText","hideDownloadStatus","viewDownloadedData","exportBtn","importBtn","dashboardFile","mother","motherMeta","watch","watchTitle","watchMeta","watchCodeSearch","clearWatchCodeSearch","watchCodeSearchStatus","listModal","listModalTitle","listForm","listName","archiveModal","dseStartDate","dseEndDate","fetchDseRange","downloadDseCsv","ohlcFiles","parseFiles","pasteOhlc","parsePaste","archiveUrl","urlCode","fetchUrl","parseResult","commitArea","mergeHistory","replaceHistory","chartModal","chartTitle","chartSubtitle","chartRange","downloadChart","chartCanvas","chartInfo","galleryModal","galleryTitle","gallery","dataModal","dataSummary","dataTable","downloadConfirmModal","downloadConfirmTitle","downloadConfirmMessage","downloadConfirmDetails","downloadConfirmClose","downloadConfirmCancel","downloadConfirmProceed","operationResultModal","operationResultTitle","operationResultSubtitle","operationResultIcon","operationResultMessage","operationResultDetails","operationResultClose","operationResultSecondary","operationResultPrimary","toasts"].forEach(id=>this[id]=document.getElementById(id));this.bind();
  this.searchTerm="";
  if(this.search)this.search.value="";
  if(this.watchCodeSearch)this.watchCodeSearch.value="";
@@ -5247,15 +5307,33 @@ this.mergeMother.onclick=()=>this.commitMother(false);
 this.replaceMother.onclick=()=>this.commitMother(true);
 this.hideDownloadStatus.onclick=()=>this.downloadStatusCard.style.display="none";
 this.archiveImport.onclick=()=>this.open("archiveModal");
-this.dse3mUpdate.onclick=this.dse3mUpdate2.onclick=()=>this.downloadActiveWatchlistMonths(3);
-this.dse6mUpdate.onclick=this.dse6mUpdate2.onclick=()=>this.downloadActiveWatchlistMonths(6);
-this.fetchDseRange.onclick=()=>this.fetchDseArchive(this.dseStartDate.value,this.dseEndDate.value,false,false);
-this.downloadDseCsv.onclick=()=>{
+this.dse3mUpdate.onclick=this.dse3mUpdate2.onclick=async()=>{
+ const a=this.active();
+ if(await this.confirmDownload("Download DSE 3M",`Download three months of DSE history for ${a?.name||"the active watch list"}?`,`${a?.codes?.length||0} trading codes will be requested. Progress will appear in Download Status.`))this.downloadActiveWatchlistMonths(3);
+};
+this.dse6mUpdate.onclick=this.dse6mUpdate2.onclick=async()=>{
+ const a=this.active();
+ if(await this.confirmDownload("Download DSE 6M",`Download six months of DSE history for ${a?.name||"the active watch list"}?`,`${a?.codes?.length||0} trading codes will be requested. Progress will appear in Download Status.`))this.downloadActiveWatchlistMonths(6);
+};
+this.fetchDseRange.onclick=async()=>{
  if(!this.dseStartDate.value||!this.dseEndDate.value)return this.toast("Select dates first.",true);
+ if(await this.confirmDownload("Download DSE range",`Download DSE archive data from ${this.dseStartDate.value} to ${this.dseEndDate.value}?`,"Downloaded records will be merged into the local terminal history after processing."))this.fetchDseArchive(this.dseStartDate.value,this.dseEndDate.value,false,false);
+};
+this.downloadDseCsv.onclick=async()=>{
+ if(!this.dseStartDate.value||!this.dseEndDate.value)return this.toast("Select dates first.",true);
+ if(!(await this.confirmDownload("Download CSV",`Download a CSV for ${this.dseStartDate.value} to ${this.dseEndDate.value}?`,"The generated CSV will be saved by your browser.")))return;
  const p=new URLSearchParams({startDate:this.dseStartDate.value,endDate:this.dseEndDate.value,format:"csv"});
  window.location.href="dse_archive.php?"+p.toString()
 };
-this.viewListCharts.onclick=this.viewListCharts2.onclick=()=>this.openGallery(3);this.viewListCharts6.onclick=this.viewListCharts6_2.onclick=()=>this.openGallery(6);this.viewDownloadedData.onclick=()=>this.openDataPreview();this.parseFiles.onclick=()=>this.readFiles();this.parsePaste.onclick=()=>this.prepare(Parser.parse(this.pasteOhlc.value),"Pasted archive");this.fetchUrl.onclick=()=>this.fetchArchive();this.mergeHistory.onclick=()=>this.commit(false);this.replaceHistory.onclick=()=>this.commit(true);this.chartRange.onchange=()=>this.drawCurrent();this.downloadChart.onclick=()=>{const a=document.createElement("a");a.href=this.chartCanvas.toDataURL("image/png");a.download=`${this.currentCode||"DSE"}-candlestick.png`;a.click()};this.exportBtn.onclick=()=>this.export();this.importBtn.onclick=()=>this.dashboardFile.click();this.dashboardFile.onchange=e=>this.import(e);document.querySelectorAll("[data-close]").forEach(b=>b.onclick=()=>this.close(b.dataset.close));document.querySelectorAll(".modal").forEach(m=>m.onclick=e=>{if(e.target===m)this.close(m.id)});document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>this.tab(b.dataset.tab));
+this.viewListCharts.onclick=this.viewListCharts2.onclick=()=>this.openGallery(3);this.viewListCharts6.onclick=this.viewListCharts6_2.onclick=()=>this.openGallery(6);this.viewDownloadedData.onclick=()=>this.openDataPreview();this.parseFiles.onclick=()=>this.readFiles();this.parsePaste.onclick=()=>this.prepare(Parser.parse(this.pasteOhlc.value),"Pasted archive");this.fetchUrl.onclick=async()=>{if(await this.confirmDownload("Download archive URL","Download and parse the entered archive URL?","The remote source may block browser access; manual import remains available if it fails."))this.fetchArchive()};this.mergeHistory.onclick=()=>this.commit(false);this.replaceHistory.onclick=()=>this.commit(true);this.chartRange.onchange=()=>this.drawCurrent();this.downloadChart.onclick=()=>{const a=document.createElement("a");a.href=this.chartCanvas.toDataURL("image/png");a.download=`${this.currentCode||"DSE"}-candlestick.png`;a.click()};this.exportBtn.onclick=()=>this.export();this.importBtn.onclick=()=>this.dashboardFile.click();this.dashboardFile.onchange=e=>this.import(e);document.querySelectorAll("[data-close]").forEach(b=>b.onclick=()=>this.close(b.dataset.close));document.querySelectorAll(".modal").forEach(m=>m.onclick=e=>{if(e.target===m){if(m.id==="downloadConfirmModal")this.resolveDownloadConfirmation(false);else this.close(m.id)}});
+this.downloadConfirmProceed.onclick=()=>this.resolveDownloadConfirmation(true);
+this.downloadConfirmCancel.onclick=this.downloadConfirmClose.onclick=()=>this.resolveDownloadConfirmation(false);
+this.operationResultClose.onclick=this.operationResultPrimary.onclick=()=>this.close("operationResultModal");
+this.operationResultSecondary.onclick=()=>{
+ this.close("operationResultModal");
+ this.downloadStatusCard.style.display="block";
+ try{window.openDataCenterTool?.("status","report",false)}catch(_){}
+};document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>this.tab(b.dataset.tab));
 document.querySelectorAll("[data-mother-tab]").forEach(b=>b.onclick=()=>this.motherTab(b.dataset.motherTab));window.addEventListener("resize",()=>{if(this.chartModal.classList.contains("open"))this.drawCurrent()})}
  active(){return this.s.watchLists.find(x=>x.id===this.s.activeId)||this.s.watchLists[0]}persist(){this.store.save(this.s);if(this.saveStatus){this.saveStatus.textContent="Saved permanently at "+new Date().toLocaleTimeString();clearTimeout(this._saveTimer);this._saveTimer=setTimeout(()=>this.saveStatus.textContent="Permanent autosave enabled",2200)}}
  updatePremiumDashboard(){
@@ -5426,6 +5504,14 @@ document.querySelectorAll("[data-mother-tab]").forEach(b=>b.onclick=()=>this.mot
  }
  completeDownloadStatus(text){
   this.showDownloadStatus("Download completed",text,100,"success");
+  this.showOperationResult({
+   title:"Download completed",
+   subtitle:"DSE archive data was saved successfully",
+   message:"Download and local storage completed.",
+   details:text||"The requested DSE data is now available in Download Status and local chart history.",
+   icon:"✓",
+   showStatus:true
+  });
  }
  failDownloadStatus(text){
   this.showDownloadStatus("Download failed",text,100,"error");
@@ -5617,8 +5703,70 @@ document.querySelectorAll("[data-mother-tab]").forEach(b=>b.onclick=()=>this.mot
   this.open("dataModal")
  }
  tab(name){document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x.dataset.tab===name));document.querySelectorAll(".tab-panel").forEach(x=>x.classList.toggle("active",x.dataset.panel===name))}
- export(){const b=new Blob([JSON.stringify(this.s,null,2)],{type:"application/json"}),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download=`dse-permanent-dashboard-backup-${new Date().toISOString().slice(0,10)}.json`;a.click();URL.revokeObjectURL(a.href)}
- async import(e){const f=e.target.files[0];if(!f)return;try{this.s=this.store.norm(JSON.parse(await f.text()));this.persist();this.render();this.toast("Permanent dashboard backup restored.")}catch(x){this.toast("Invalid dashboard file.",true)}e.target.value=""}
+ confirmDownload(title,message,details=""){
+  if(this._downloadConfirmResolver)this.resolveDownloadConfirmation(false);
+  this.downloadConfirmTitle.textContent=title||"Confirm download";
+  this.downloadConfirmMessage.textContent=message||"Start this download?";
+  this.downloadConfirmDetails.textContent=details||"The operation will start only after confirmation.";
+  this.open("downloadConfirmModal");
+  setTimeout(()=>this.downloadConfirmProceed?.focus(),0);
+  return new Promise(resolve=>{this._downloadConfirmResolver=resolve});
+ }
+ resolveDownloadConfirmation(confirmed){
+  this.close("downloadConfirmModal");
+  const resolve=this._downloadConfirmResolver;
+  this._downloadConfirmResolver=null;
+  if(resolve)resolve(Boolean(confirmed));
+ }
+ showOperationResult({title="Operation completed",subtitle="The requested operation finished successfully",message="Completed successfully.",details="Your data is ready.",icon="✓",showStatus=false}={}){
+  this.operationResultTitle.textContent=title;
+  this.operationResultSubtitle.textContent=subtitle;
+  this.operationResultMessage.textContent=message;
+  this.operationResultDetails.textContent=details;
+  this.operationResultIcon.textContent=icon;
+  this.operationResultSecondary.style.display=showStatus?"inline-flex":"none";
+  this.open("operationResultModal");
+  setTimeout(()=>this.operationResultPrimary?.focus(),0);
+ }
+ async export(){
+  const portfolioData=(()=>{try{const value=JSON.parse(localStorage.getItem("ababil-dse-v11-portfolio")||"[]");return Array.isArray(value)?value:[]}catch{return[]}})();
+  if(!(await this.confirmDownload("Create terminal backup",`Download a complete backup containing dashboard and ${portfolioData.length} portfolio position${portfolioData.length===1?"":"s"}?`,"The backup can later restore watch lists, codes, OHLC history, settings stored in the dashboard state, and Portfolio data.")))return;
+  const packageData={format:"ait-psa-terminal-backup",version:2,createdAt:new Date().toISOString(),dashboard:this.s,portfolio:portfolioData};
+  const b=new Blob([JSON.stringify(packageData,null,2)],{type:"application/json"}),a=document.createElement("a");
+  a.href=URL.createObjectURL(b);a.download=`ait-psa-complete-backup-${new Date().toISOString().slice(0,10)}.json`;a.click();URL.revokeObjectURL(a.href);
+  const backupMessage=`Backup created with ${portfolioData.length} portfolio position${portfolioData.length===1?"":"s"}.`;
+  this.toast(backupMessage);
+  this.showOperationResult({
+   title:"Backup completed",
+   subtitle:"Complete terminal backup created",
+   message:"Your backup file was generated successfully.",
+   details:`Included dashboard state, watch lists, DSE codes, OHLC history, settings, activity data, and ${portfolioData.length} portfolio position${portfolioData.length===1?"":"s"}.`,
+   icon:"✓"
+  });
+ }
+ async import(e){
+  const f=e.target.files[0];if(!f)return;
+  try{
+   const parsed=JSON.parse(await f.text());
+   const isPackage=parsed&&parsed.format==="ait-psa-terminal-backup"&&parsed.dashboard;
+   this.s=this.store.norm(isPackage?parsed.dashboard:parsed);
+   if(isPackage&&Array.isArray(parsed.portfolio)){
+    localStorage.setItem("ababil-dse-v11-portfolio",JSON.stringify(parsed.portfolio));
+    try{portfolio.splice(0,portfolio.length,...parsed.portfolio);renderPortfolio()}catch(_){window.dispatchEvent(new CustomEvent("ait-psa-portfolio-restored"))}
+   }
+   this.persist();this.render();
+   const restoredMessage=isPackage?`Complete backup restored${Array.isArray(parsed.portfolio)?` with ${parsed.portfolio.length} portfolio position${parsed.portfolio.length===1?"":"s"}`:""}.`:"Legacy dashboard backup restored.";
+   this.toast(restoredMessage);
+   this.showOperationResult({
+    title:"Restore completed",
+    subtitle:"Terminal data restored successfully",
+    message:restoredMessage,
+    details:isPackage?"Dashboard, watch lists, downloaded data, settings, activity records, and Portfolio data are available immediately.":"The legacy dashboard backup was restored successfully.",
+    icon:"✓"
+   });
+  }catch(x){this.toast("Invalid dashboard backup file.",true)}
+  e.target.value=""
+ }
  log(m){
   const at=new Date().toISOString();
   this.s.activity.unshift({m,at});
@@ -6086,7 +6234,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   {icon:"⌁",name:"Custom archive range",detail:"Choose start and end dates",keys:"",run:()=>document.getElementById("archiveImport")?.click()},
   {icon:"♢",name:"Open notifications",detail:"Review terminal events and alerts",keys:"Ctrl B",run:()=>openDrawer("notifications")},
   {icon:"▦",name:"Open workspaces",detail:"Jump between operating areas",keys:"",run:()=>openDrawer("workspaces")},
-  {icon:"◆",name:"Backup dashboard",detail:"Export terminal configuration and data",keys:"",run:()=>document.getElementById("exportBtn")?.click()},
+  {icon:"◆",name:"Backup dashboard + portfolio",detail:"Export terminal configuration and data",keys:"",run:()=>document.getElementById("exportBtn")?.click()},
   {icon:"◇",name:"Restore dashboard",detail:"Import a saved dashboard backup",keys:"",run:()=>document.getElementById("importBtn")?.click()},
   {icon:"◐",name:"Use Premium Dark Glass",detail:"Switch the interface theme",keys:"",run:()=>setTheme("dark-glass")},
   {icon:"○",name:"Use Classic Light",detail:"Restore the previous light design",keys:"",run:()=>setTheme("classic-light")},
@@ -6275,6 +6423,7 @@ document.addEventListener("DOMContentLoaded",()=>{
  const tabs=[...document.querySelectorAll("[data-v11-tab]")];
  const workspaces=[...document.querySelectorAll("[data-v11-workspace]")];
  let portfolio=[];
+ let portfolioEditIndex=-1;
  try{portfolio=JSON.parse(localStorage.getItem(PORTFOLIO_KEY)||"[]")}catch{portfolio=[]}
 
  const appState=()=>{
@@ -6592,24 +6741,88 @@ document.addEventListener("DOMContentLoaded",()=>{
  function savePortfolio(){try{localStorage.setItem(PORTFOLIO_KEY,JSON.stringify(portfolio))}catch{}}
  function renderPortfolio(){
   const tbody=document.getElementById("v11PortfolioRows");
-  let cost=0,value=0;
+  let grossCost=0,marketValue=0,totalCommission=0,netPl=0;
   tbody.innerHTML=portfolio.length?portfolio.map((p,i)=>{
    const row=last(rowsFor(p.code)),lastClose=Number(row?.close||0);
-   const c=p.qty*p.buy,v=p.qty*lastClose,pl=v-c;cost+=c;value+=v;
-   return `<tr><td>${esc(p.code)}</td><td>${fmt(p.qty,0)}</td><td>${fmt(p.buy)}</td><td>${fmt(lastClose)}</td><td>${fmt(c)}</td><td>${fmt(v)}</td><td>${fmt(pl)}</td><td><button class="btn danger" type="button" data-remove-position="${i}">Remove</button></td></tr>`;
-  }).join(""):'<tr><td colspan="8">No positions added.</td></tr>';
-  tbody.querySelectorAll("[data-remove-position]").forEach(btn=>btn.addEventListener("click",()=>{portfolio.splice(Number(btn.dataset.removePosition),1);savePortfolio();renderPortfolio()}));
-  document.getElementById("v11PortfolioCost").textContent=fmt(cost);
-  document.getElementById("v11PortfolioValue").textContent=fmt(value);
-  document.getElementById("v11PortfolioPl").textContent=fmt(value-cost);
+   const qty=Number(p.qty||0),buy=Number(p.buy||0),commissionRate=Math.max(0,Number(p.commissionRate??0.4));
+   const grossPositionCost=qty*buy;
+   const grossPositionValue=qty*lastClose;
+   const buyCommission=grossPositionCost*(commissionRate/100);
+   const estimatedSellCommission=grossPositionValue*(commissionRate/100);
+   const positionCommission=buyCommission+estimatedSellCommission;
+   const adjustedCost=grossPositionCost+buyCommission;
+   const netValue=grossPositionValue-estimatedSellCommission;
+   const positionPl=netValue-adjustedCost;
+   const positionPlPercent=adjustedCost>0?(positionPl/adjustedCost)*100:0;
+   grossCost+=adjustedCost;marketValue+=netValue;totalCommission+=positionCommission;netPl+=positionPl;
+   const plClass=positionPl>0?"positive":positionPl<0?"negative":"";
+   return `<tr><td>${esc(p.code)}</td><td>${fmt(qty,0)}</td><td>${fmt(buy)}</td><td>${fmt(lastClose)}</td><td>${fmt(adjustedCost)}</td><td>${fmt(netValue)}</td><td>${fmt(positionCommission)} <small>(${fmt(commissionRate,2)}%)</small></td><td class="${plClass}">${fmt(positionPl)}</td><td class="${plClass}">${fmt(positionPlPercent,2)}%</td><td><div class="v11-portfolio-row-actions"><button class="btn soft" type="button" data-edit-position="${i}">Edit</button><button class="btn danger" type="button" data-remove-position="${i}">Remove</button></div></td></tr>`;
+  }).join(""):'<tr><td colspan="10">No positions added.</td></tr>';
+  tbody.querySelectorAll("[data-edit-position]").forEach(btn=>btn.addEventListener("click",()=>{
+   const index=Number(btn.dataset.editPosition),position=portfolio[index];
+   if(!position)return;
+   portfolioEditIndex=index;
+   document.getElementById("v11PortfolioCode").value=String(position.code||"");
+   document.getElementById("v11PortfolioQty").value=String(position.qty??"");
+   document.getElementById("v11PortfolioBuy").value=String(position.buy??"");
+   document.getElementById("v11PortfolioCommissionRate").value=String(position.commissionRate??0.4);
+   const submit=document.getElementById("v11AddPosition"),cancel=document.getElementById("v11CancelPositionEdit");
+   if(submit)submit.textContent="Update position";
+   if(cancel)cancel.hidden=false;
+   const title=document.getElementById("v11PortfolioModalTitle");
+   if(title)title.textContent="Edit portfolio position";
+   document.getElementById("v11PortfolioModal")?.classList.add("open");
+   document.getElementById("v11PortfolioQty")?.focus();
+  }));
+  tbody.querySelectorAll("[data-remove-position]").forEach(btn=>btn.addEventListener("click",()=>{
+   const index=Number(btn.dataset.removePosition);
+   portfolio.splice(index,1);
+   if(portfolioEditIndex===index)resetPortfolioForm();
+   else if(portfolioEditIndex>index)portfolioEditIndex--;
+   savePortfolio();renderPortfolio();
+  }));
+  const portfolioPlPercent=grossCost>0?(netPl/grossCost)*100:0;
+  document.getElementById("v11PortfolioCost").textContent=fmt(grossCost);
+  document.getElementById("v11PortfolioValue").textContent=fmt(marketValue);
+  document.getElementById("v11PortfolioCommission").textContent=fmt(totalCommission);
+  document.getElementById("v11PortfolioPl").textContent=fmt(netPl);
+  document.getElementById("v11PortfolioPlPercent").textContent=`${fmt(portfolioPlPercent,2)}%`;
   document.getElementById("v11PortfolioCount").textContent=portfolio.length;
  }
+ function resetPortfolioForm(){
+  portfolioEditIndex=-1;
+  const qty=document.getElementById("v11PortfolioQty"),buy=document.getElementById("v11PortfolioBuy"),commission=document.getElementById("v11PortfolioCommissionRate"),submit=document.getElementById("v11AddPosition"),cancel=document.getElementById("v11CancelPositionEdit");
+  if(qty)qty.value="";
+  if(buy)buy.value="";
+  if(commission)commission.value="0.4";
+  if(submit)submit.textContent="Add position";
+  if(cancel)cancel.hidden=false;
+  const title=document.getElementById("v11PortfolioModalTitle");
+  if(title)title.textContent="Add portfolio position";
+ }
+ function openPortfolioModal(){
+  resetPortfolioForm();
+  document.getElementById("v11PortfolioModal")?.classList.add("open");
+  document.getElementById("v11PortfolioCode")?.focus();
+ }
+ function closePortfolioModal(){
+  document.getElementById("v11PortfolioModal")?.classList.remove("open");
+  resetPortfolioForm();
+ }
+ document.getElementById("v11OpenPortfolioModal")?.addEventListener("click",openPortfolioModal);
+ document.getElementById("v11ClosePortfolioModal")?.addEventListener("click",closePortfolioModal);
+ document.getElementById("v11CancelPositionEdit")?.addEventListener("click",closePortfolioModal);
+ document.getElementById("v11PortfolioModal")?.addEventListener("click",event=>{if(event.target===event.currentTarget)closePortfolioModal()});
+ document.addEventListener("keydown",event=>{if(event.key==="Escape"&&document.getElementById("v11PortfolioModal")?.classList.contains("open"))closePortfolioModal()});
  document.getElementById("v11AddPosition")?.addEventListener("click",()=>{
   const code=String(document.getElementById("v11PortfolioCode")?.value||"").trim().toUpperCase();
   const qty=Number(document.getElementById("v11PortfolioQty")?.value);
   const buy=Number(document.getElementById("v11PortfolioBuy")?.value);
-  if(!code||!Number.isFinite(qty)||qty<=0||!Number.isFinite(buy)||buy<=0)return;
-  portfolio.push({code,qty,buy});savePortfolio();renderPortfolio();
+  const commissionRate=Number(document.getElementById("v11PortfolioCommissionRate")?.value||0.4);
+  if(!code||!Number.isFinite(qty)||qty<=0||!Number.isFinite(buy)||buy<=0||!Number.isFinite(commissionRate)||commissionRate<0||commissionRate>100)return;
+  const position={code,qty,buy,commissionRate};
+  if(portfolioEditIndex>=0&&portfolio[portfolioEditIndex])portfolio[portfolioEditIndex]=position;else portfolio.push(position);
+  savePortfolio();renderPortfolio();closePortfolioModal();
  });
  renderPortfolio();
 
@@ -6968,7 +7181,7 @@ document.addEventListener("DOMContentLoaded",()=>{
    runComparison().forEach(x=>text+=`${x.code}: Score ${fmt(x.score,1)}, Signal ${x.signal}, Return ${fmt(x.ret20,1)}%, Volatility ${fmt(x.volatility,2)}%, RV ${fmt(x.rv,2)}x\n`);
   }else if(type==="portfolio"){
    text+="PORTFOLIO\n";
-   portfolio.forEach(p=>{const lc=Number(last(rowsFor(p.code))?.close||0);text+=`${p.code}: Qty ${p.qty}, Buy ${fmt(p.buy)}, Last ${fmt(lc)}, P/L ${fmt(p.qty*(lc-p.buy))}\n`});
+   portfolio.forEach(p=>{const lc=Number(last(rowsFor(p.code))?.close||0),rate=Math.max(0,Number(p.commissionRate??0.4)),grossCost=p.qty*p.buy,grossValue=p.qty*lc,commission=grossCost*(rate/100)+grossValue*(rate/100),netPl=(grossValue-grossValue*(rate/100))-(grossCost+grossCost*(rate/100)),plPct=(grossCost+grossCost*(rate/100))>0?netPl/(grossCost+grossCost*(rate/100))*100:0;text+=`${p.code}: Qty ${p.qty}, Buy ${fmt(p.buy)}, Last ${fmt(lc)}, Commission ${fmt(commission)}, Net P/L ${fmt(netPl)} (${fmt(plPct,2)}%)\n`});
   }
   document.getElementById("v11ReportOutput").value=text;
  }
@@ -9006,7 +9219,7 @@ document.addEventListener("keydown",event=>{
  <section class="ait-psa-terminal-modal" id="aitPsaDataCenterLauncherModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">DATA WORKSPACE</span><h2>⇩ Data Center</h2><p>Choose a data operation category.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaWorkspaceModal" type="button">← Workspace</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaDownloadMenuModal" type="button"><span>⇩</span><b>Download</b><small>Download DSE history and custom archive ranges.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaSyncMenuModal" type="button"><span>↻</span><b>Sync</b><small>Synchronize the latest available market-code directory.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaImportMenuModal" type="button"><span>⇧</span><b>Import</b><small>Import codes, OHLC archives and dashboard backups.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaBackupMenuModal" type="button"><span>◆</span><b>Backup</b><small>Export a portable terminal data backup.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaDataReportMenuModal" type="button"><span>▥</span><b>Report</b><small>Review saved charts, downloaded records and job status.</small></button></div></div></section>
  <section class="ait-psa-terminal-modal" id="aitPsaDownloadMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">DATA CENTER CATEGORY</span><h2>⇩ Download</h2><p>Select a download operation.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaDataCenterLauncherModal" type="button">← Data Center</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" data-ait-data-action="dse3mUpdate" data-ait-data-group="download" type="button"><span>3M</span><b>Download DSE 3M</b><small>Download active watch-list history.</small></button><button class="ait-psa-terminal-command" data-ait-data-action="dse6mUpdate" data-ait-data-group="download" type="button"><span>6M</span><b>Download DSE 6M</b><small>Download six months of active watch-list history.</small></button><button class="ait-psa-terminal-command" data-ait-data-action="archiveImport" data-ait-data-group="download" type="button"><span>↧</span><b>Custom Archive Range</b><small>Open the archive workspace for a chosen date range.</small></button></div></div></section>
  <section class="ait-psa-terminal-modal" id="aitPsaSyncMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">DATA CENTER CATEGORY</span><h2>↻ Sync</h2><p>Select a synchronization operation.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaDataCenterLauncherModal" type="button">← Data Center</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" data-ait-data-action="quickMotherSync" data-ait-data-group="sync" type="button"><span>↻</span><b>Sync DSE Codes</b><small>Refresh the latest available DSE trading-code list.</small></button></div></div></section>
- <section class="ait-psa-terminal-modal" id="aitPsaImportMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">DATA CENTER CATEGORY</span><h2>⇧ Import</h2><p>Select an import or restore operation.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaDataCenterLauncherModal" type="button">← Data Center</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" data-ait-data-action="motherImport" data-ait-data-group="import" type="button"><span>DSE</span><b>Import DSE Codes</b><small>Import or replace the complete trading-code directory.</small></button><button class="ait-psa-terminal-command" data-ait-data-action="archiveImport" data-ait-data-group="import" type="button"><span>OHLC</span><b>Import OHLC Archive</b><small>Load historical records from files, pasted data or URL.</small></button><button class="ait-psa-terminal-command" data-ait-data-action="importBtn" data-ait-data-group="import" type="button"><span>⇧</span><b>Restore Dashboard</b><small>Restore a previously exported dashboard backup.</small></button></div></div></section>
+ <section class="ait-psa-terminal-modal" id="aitPsaImportMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">DATA CENTER CATEGORY</span><h2>⇧ Import</h2><p>Select an import or restore operation.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaDataCenterLauncherModal" type="button">← Data Center</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" data-ait-data-action="motherImport" data-ait-data-group="import" type="button"><span>DSE</span><b>Import DSE Codes</b><small>Import or replace the complete trading-code directory.</small></button><button class="ait-psa-terminal-command" data-ait-data-action="archiveImport" data-ait-data-group="import" type="button"><span>OHLC</span><b>Import OHLC Archive</b><small>Load historical records from files, pasted data or URL.</small></button><button class="ait-psa-terminal-command" data-ait-data-action="importBtn" data-ait-data-group="import" type="button"><span>⇧</span><b>Restore Dashboard</b><small>Restore a complete or legacy dashboard backup, including portfolio data.</small></button></div></div></section>
  <section class="ait-psa-terminal-modal" id="aitPsaBackupMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">DATA CENTER CATEGORY</span><h2>◆ Backup</h2><p>Select a backup operation.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaDataCenterLauncherModal" type="button">← Data Center</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" data-ait-data-action="exportBtn" data-ait-data-group="backup" type="button"><span>⇩</span><b>Backup Dashboard</b><small>Export watch lists, codes, history and settings.</small></button></div></div></section>
  <section class="ait-psa-terminal-modal" id="aitPsaDataReportMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">DATA CENTER CATEGORY</span><h2>▥ Report</h2><p>Select a data review workspace.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaDataCenterLauncherModal" type="button">← Data Center</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" data-ait-data-action="viewListCharts" data-ait-data-group="report" type="button"><span>3M</span><b>Saved 3M Charts</b><small>Open saved three-month charts for the active list.</small></button><button class="ait-psa-terminal-command" data-ait-data-action="viewListCharts6" data-ait-data-group="report" type="button"><span>6M</span><b>Saved 6M Charts</b><small>Open saved six-month charts for the active list.</small></button><button class="ait-psa-terminal-command" data-ait-data-action="viewDownloadedData" data-ait-data-group="report" type="button"><span>⌗</span><b>Downloaded Data</b><small>Inspect stored OHLC records in a data table.</small></button><button class="ait-psa-terminal-command" data-ait-data-workspace="status" data-ait-data-group="report" type="button"><span>◉</span><b>Download Status</b><small>Open the Data Center workspace and current job status.</small></button></div></div></section>
  <section class="ait-psa-terminal-modal ait-psa-workspace-modal" id="aitPsaDownloadModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow" id="aitPsaDataCenterEyebrow">DATA CENTER TOOL</span><h2 id="aitPsaDataCenterTitle">⇩ Data Center</h2><p id="aitPsaDataCenterDescription">Selected data operation workspace.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" id="aitPsaDataCenterBack" type="button">← Data Center</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body ait-psa-workspace-host" id="aitPsaDownloadHost"></div></section>

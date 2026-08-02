@@ -49,7 +49,21 @@
       <h2 id="editorTitle">Add Food</h2>
       <p>Title is generated as English Name (বাংলা নাম).</p>
     </div>
+    <div class="hp-workspace-nav hp-workspace-nav--reusable">
+  <div class="hp-workspace-nav__history">
+    <button class="terminal-icon-button" id="foodEditorBack" type="button" aria-label="Back">←</button>
+    <button class="terminal-icon-button" id="foodEditorForward" type="button" aria-label="Forward" disabled>→</button>
+  </div>
+  <nav class="hp-workspace-breadcrumb" aria-label="Food editor breadcrumb">
+    <button type="button" id="foodCrumbDataCenter">Data Center</button><span>›</span>
+    <button type="button" id="foodCrumbFood">Food</button><span>›</span>
+    <strong id="foodCrumbCurrent">Editor</strong>
+  </nav>
+  <div class="hp-workspace-nav__actions">
+    <button class="calc-button" id="foodEditorTerminal" type="button">⌂ Back to Terminal</button>
     <button class="terminal-icon-button" id="closeEditor" type="button" aria-label="Close">×</button>
+  </div>
+</div>
   </header>
   <div class="hp-workspace__body">
     <form id="foodForm">

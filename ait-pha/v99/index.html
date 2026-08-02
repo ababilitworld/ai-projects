@@ -46,6 +46,7 @@ box-shadow:0 8px 20px rgba(0,0,0,.08);
 </div>
 <div id="terminalComponentMount"></div>
 <script src="assets/terminal/terminal-config.js"></script>
+<script src="assets/terminal/terminal-schema.js"></script>
 <script src="assets/terminal/terminal-component.js"></script>
 <aside class="print-help no-print">
 <b>প্রিন্ট সেটিং:</b> Background graphics ON · Headers/footers OFF · Margins None · Scale 100%। Border-এর চারদিকে নিরাপদ print gutter স্বয়ংক্রিয়ভাবে রাখা হয়েছে।
@@ -238,52 +239,67 @@ box-shadow:0 8px 20px rgba(0,0,0,.08);
 <article class="food-card caution"><div>🥛</div><h3>Spicy golden milk</h3><p>low-fat milk, চিনি-মধু ছাড়া</p><small>fasting-এর বাইরে</small></article>
 <article class="food-card avoid"><div>🍯</div><h3>Honey</h3><p>TG বেশি থাকলে আপাতত বাদ</p><small>natural হলেও sugar</small></article>
 </div>
-<section class="two-panels">
-<article class="panel"><div class="panel-head"><b>02</b><h3>রান্নার ব্যবহারিক নিয়ম</h3></div><ul class="check-list"><li>Olive + mustard oil মিলিয়ে দৈনিক added oil প্রায় ২–৩ চা-চামচের মধ্যে রাখুন।</li><li>ভাজা নয়—ঝোল, সেদ্ধ, grill, steam বা air-fry (অল্প তেল)।</li><li>মাছের ঝোলে অতিরিক্ত তেল ও আলু কমান।</li><li>মোট লবণ প্রায় ৫ গ্রামের কম রাখার চেষ্টা করুন।</li></ul></article>
-<article class="panel red"><div class="panel-head"><b>!</b><h3>কমান বা বাদ দিন</h3></div><ul class="cross-list"><li>চিনি, মিষ্টি, soft drink, packaged juice</li><li>সাদা ভাতের বড় portion, ময়দা, biscuit ও bakery</li><li>deep-fried খাবার, trans fat ও অতিরিক্ত ghee</li><li>এক বেলায় অনেক বাদাম বা তেল</li></ul></article>
-</section>
 </div>
 <footer class="folio"><span>খাবারের তালিকা ২</span><span class="folio-number"></span></footer>
 </div>
 </section>
-<!-- 7: MENU -->
-<section class="paper-page" data-title="নমুনা মেনু">
+<!-- 7: PRACTICAL HEALTH GUIDE -->
+<section class="paper-page practical-guide-page" data-title="ব্যবহারিক স্বাস্থ্য নির্দেশনা">
 <div class="page-art">
 <div class="frame frame-outer"></div><div class="frame frame-inner"></div>
 <div class="page-body">
-<header class="chapter-head"><span>অধ্যায় ৪</span><h2>একদিনের বাস্তব নমুনা মেনু</h2><p>ক্ষুধা, ওষুধ, কাজ ও চিকিৎসকের নির্দেশ অনুযায়ী portion সামঞ্জস্য করুন</p></header>
-<div class="menu-list">
-<article><time>৯:০০ AM</time><div>🥣</div><section><h3>প্রথম খাবার</h3><p>Plain yogurt ২০০ গ্রাম + ১টি ডিম + শসা + ½ কাপ ছোলা অথবা ২টি walnut।</p><small>লক্ষ্য: protein ও fiber দিয়ে fasting ভাঙা</small></section></article>
-<article><time>১২:৩০ PM</time><div>🐟</div><section><h3>দুপুর</h3><p>মাছ ১৫০ গ্রাম + দুই ধরনের সবজি + বড় সালাদ + ১–২টি ছোট আটার রুটি।</p><small>রুটি নেওয়ার আগে সবজি ও protein খান</small></section></article>
-<article><time>৫:১৫ PM</time><div>🥒</div><section><h3>হালকা নাস্তা</h3><p>শসা/Plain yogurt/৫টি almond—শুধু প্রকৃত ক্ষুধা থাকলে।</p><small>ক্ষুধা না থাকলে snack প্রয়োজন নেই</small></section></article>
-<article><time>৫:৪৫ PM</time><div>🍲</div><section><h3>শেষ খাবার</h3><p>মাছ/soybean/ডিম + প্রচুর সবজি; প্রয়োজন হলে ১টি ছোট রুটি।</p><small>৬টার মধ্যে শেষ করুন; তারপর পানি</small></section></article>
-</div>
-<section class="plate-area">
-<div class="plate-diagram"><div class="veg"><b>½</b><span>সবজি ও সালাদ</span></div><div class="protein"><b>¼</b><span>মাছ/ডিম/ডাল/soy</span></div><div class="carb"><b>¼</b><span>রুটি/whole grain</span></div></div>
-<article class="panel"><div class="panel-head"><b>04</b><h3>খাবারের চারটি নিয়ম</h3></div><ol><li>প্রথমে সালাদ/সবজি, এরপর protein, শেষে রুটি।</li><li>ধীরে ১৫–২০ মিনিটে খাবার শেষ করুন।</li><li>পেট প্রায় ৮০% ভরলে থামুন।</li><li>খাওয়ার পরে সম্ভব হলে ১০–১৫ মিনিট হালকা হাঁটুন।</li></ol></article>
+<header class="chapter-head"><span>অধ্যায় ৪</span><h2>ব্যবহারিক স্বাস্থ্য নির্দেশনা</h2><p>খাবার, রান্না, নিরাপদ রোদ, শ্বাস ও হাঁটার সহজ প্রয়োগযোগ্য নিয়ম</p></header>
+
+<section class="practical-guide-grid">
+<article class="panel practical-guide-card">
+<div class="panel-head"><b>01</b><h3>কমান বা বাদ দিন</h3></div>
+<ul class="cross-list"><li>চিনি, মিষ্টি, soft drink ও packaged juice</li><li>সাদা ভাতের বড় portion, ময়দা, biscuit ও bakery</li><li>Deep-fried খাবার, trans fat ও অতিরিক্ত ghee</li><li>এক বেলায় অনেক বাদাম, তেল বা উচ্চ-ক্যালরির খাবার</li></ul>
+</article>
+
+<article class="panel practical-guide-card">
+<div class="panel-head"><b>02</b><h3>রান্নার ব্যবহারিক নিয়ম</h3></div>
+<ul class="check-list"><li>Olive ও mustard oil মিলিয়ে দৈনিক added oil প্রায় ২–৩ চা-চামচে রাখুন।</li><li>ভাজার বদলে ঝোল, সেদ্ধ, grill, steam বা অল্প তেলে air-fry করুন।</li><li>মাছের ঝোলে অতিরিক্ত তেল ও আলু কমান।</li><li>মোট লবণ দৈনিক প্রায় ৫ গ্রামের কম রাখার চেষ্টা করুন।</li></ul>
+</article>
+
+<article class="panel practical-guide-card">
+<div class="panel-head"><b>03</b><h3>খাবারের চারটি নিয়ম</h3></div>
+<ol class="practical-number-list"><li>প্রথমে সালাদ/সবজি, এরপর protein, শেষে রুটি বা whole grain।</li><li>ধীরে ১৫–২০ মিনিটে খাবার শেষ করুন।</li><li>পেট প্রায় ৮০% ভরলে থামুন।</li><li>খাওয়ার পরে সম্ভব হলে ১০–১৫ মিনিট হালকা হাঁটুন।</li></ol>
+</article>
+
+<article class="panel practical-guide-card practical-guide-card--sun">
+<div class="panel-head"><b>04</b><h3>ভিটামিন D-এর জন্য নিরাপদ রোদ</h3></div>
+<div class="compact-fact-grid"><div><b>সময়</b><span>সকাল ১০:৩০–দুপুর ২টার মধ্যে সুবিধাজনক সময়ে</span></div><div><b>সময়কাল</b><span>সাধারণত ৫–১৫ মিনিট</span></div><div><b>কীভাবে</b><span>খোলা আকাশে হাত ও পায়ের কিছু অংশে সরাসরি রোদ</span></div><div><b>সতর্কতা</b><span>ত্বক লাল, গরম বা জ্বালা করলে সঙ্গে সঙ্গে ছায়ায় যান</span></div></div>
+</article>
+
+<article class="panel practical-guide-card">
+<div class="panel-head"><b>05</b><h3>শ্বাস-প্রশ্বাস · ১৫ মিনিট</h3></div>
+<div class="compact-breath-grid"><div><strong>৬-৩-৯</strong><span>৬ সেকেন্ড নিন<br>৩ সেকেন্ড ধরে রাখুন<br>৯ সেকেন্ড ছাড়ুন</span></div><div><strong>৯-৩-১২</strong><span>৯ সেকেন্ড নিন<br>৩ সেকেন্ড ধরে রাখুন<br>১২ সেকেন্ড ছাড়ুন</span></div></div>
+<p class="compact-warning">মাথা ঘোরা, বুক ধড়ফড় বা অস্বস্তি হলে থামুন এবং স্বাভাবিক শ্বাস নিন।</p>
+</article>
+
+<article class="panel practical-guide-card">
+<div class="panel-head"><b>06</b><h3>হাঁটার কাঠামো</h3></div>
+<div class="compact-walk-grid"><div><b>সেশন ১</b><strong>৬০ মিনিট</strong><span>সকাল</span></div><div><b>সেশন ২</b><strong>৬০ মিনিট</strong><span>বিকাল</span></div><div><b>সেশন ৩</b><strong>৩০–৬০ মিনিট</strong><span>রাতের খাবারের পরে</span></div></div>
+<p class="compact-warning"><b>Talk test:</b> ছোট বাক্যে কথা বলতে না পারলে গতি কমান।</p>
+</article>
 </section>
 </div>
-<footer class="folio"><span>নমুনা মেনু</span><span class="folio-number"></span></footer>
+<footer class="folio"><span>ব্যবহারিক স্বাস্থ্য নির্দেশনা</span><span class="folio-number"></span></footer>
 </div>
 </section>
 <!-- 8: WALK BREATH BP -->
-<section class="paper-page" data-title="হাঁটা, শ্বাস ও BP">
+<section class="paper-page" data-title="রক্তচাপ ও নিরাপত্তা">
 <div class="page-art">
 <div class="frame frame-outer"></div><div class="frame frame-inner"></div>
 <div class="page-body">
-<header class="chapter-head"><span>অধ্যায় ৫</span><h2>হাঁটা, শ্বাস-প্রশ্বাস ও রক্তচাপ</h2><p>অতিরিক্ত নয়—নিয়মিত, নিরাপদ ও দীর্ঘদিন চালিয়ে যাওয়াই মূল লক্ষ্য</p></header>
-<section class="exercise-top">
-<article class="panel"><div class="panel-head"><b>05</b><h3>হাঁটার কাঠামো</h3></div><div class="walk-cards"><div><b>সেশন ১</b><strong>৬০ মিনিট</strong><span>সকাল</span></div><div><b>সেশন ২</b><strong>৬০ মিনিট</strong><span>বিকাল</span></div><div><b>সেশন ৩</b><strong>৩০–৬০ মিনিট</strong><span>রাতে খাবারের পরে</span></div></div><p class="yellow-note"><b>Talk test:</b> হাঁটার সময় ছোট বাক্যে কথা বলতে পারবেন; হাঁপিয়ে গেলে গতি কমান।</p></article>
-<article class="panel"><div class="panel-head"><b>06</b><h3>শ্বাস-প্রশ্বাস · ১৫ মিনিট</h3></div><div class="breath-cards"><div><strong>৬-৩-৯</strong><span>৬ সেকেন্ড নিন<br/>৩ সেকেন্ড ধরে রাখুন<br/>৯ সেকেন্ড ছাড়ুন</span></div><div><strong>৯-৩-১২</strong><span>৯ সেকেন্ড নিন<br/>৩ সেকেন্ড ধরে রাখুন<br/>১২ সেকেন্ড ছাড়ুন</span></div></div><p class="yellow-note">মাথা ঘোরা, বুক ধড়ফড় বা অস্বস্তি হলে বিরতি নিয়ে স্বাভাবিক শ্বাস নিন।</p></article>
-</section>
-<article class="panel sunbath-guide"><div class="panel-head"><b>☀</b><h3>ভিটামিন D-এর জন্য নিরাপদ রোদ</h3></div><div class="sunbath-guide__grid"><div><strong>সময়</strong><span>সকাল ১০:৩০–দুপুর ২টার মধ্যে সুবিধাজনক সময়ে</span></div><div><strong>সময়কাল</strong><span>সাধারণত ৫–১৫ মিনিট; ত্বকের ধরন ও রোদের তীব্রতা অনুযায়ী কম-বেশি হতে পারে</span></div><div><strong>কীভাবে</strong><span>খোলা আকাশে হাত ও পায়ের কিছু অংশে সরাসরি রোদ নিন; জানালার কাচের আড়াল নয়</span></div><div><strong>সতর্কতা</strong><span>ত্বক লাল, গরম বা জ্বালা করলে সঙ্গে সঙ্গে ছায়ায় যান; আলো-সংবেদনশীল ওষুধ বা ত্বকের রোগ থাকলে চিকিৎসকের পরামর্শ নিন</span></div></div></article>
+<header class="chapter-head"><span>অধ্যায় ৫</span><h2>রক্তচাপ, নিরাপত্তা ও জরুরি সংকেত</h2><p>সঠিকভাবে পরিমাপ করুন, শরীরের সতর্ক সংকেত চিনুন এবং প্রয়োজনমতো দ্রুত সাহায্য নিন</p></header>
 <section class="bp-box">
 <div class="bp-icon">BP</div>
 <div><h3>রক্তচাপ মাপার সঠিক নিয়ম</h3><ul class="check-list"><li>মাপার আগে ৫ মিনিট চুপচাপ বসুন।</li><li>পা মেঝেতে, পিঠ সমর্থিত, হাত হৃদ্‌যন্ত্রের সমতলে রাখুন।</li><li>সঠিক cuff; ১ মিনিট ব্যবধানে ২টি reading নিন।</li><li>সকাল ও সন্ধ্যায় ৭ দিনের average লিখুন।</li></ul></div>
 </section>
 <div class="stop-box"><b>হাঁটা থামিয়ে দ্রুত সাহায্য নিন:</b><span>বুকব্যথা</span><span>অস্বাভাবিক শ্বাসকষ্ট</span><span>অজ্ঞান/তীব্র মাথা ঘোরা</span><span>হঠাৎ দুর্বলতা</span></div>
 </div>
-<footer class="folio"><span>হাঁটা, শ্বাস ও BP</span><span class="folio-number"></span></footer>
+<footer class="folio"><span>রক্তচাপ ও নিরাপত্তা</span><span class="folio-number"></span></footer>
 </div>
 </section>
 <!-- 9: TRACKING -->

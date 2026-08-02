@@ -45,7 +45,21 @@
 <section class="hp-workspace" hidden id="profileWorkspace" aria-hidden="true">
   <header class="hp-workspace__header">
     <div><span class="calc-kicker">PROFILE / CREATE OR EDIT</span><h2 id="profileWorkspaceTitle">Create Profile</h2><p>Current, target, routine and available-food settings are stored together in this profile.</p></div>
+    <div class="hp-workspace-nav hp-workspace-nav--reusable">
+  <div class="hp-workspace-nav__history">
+    <button class="terminal-icon-button" id="profileWorkspaceBack" type="button" aria-label="Back">←</button>
+    <button class="terminal-icon-button" id="profileWorkspaceForward" type="button" aria-label="Forward" disabled>→</button>
+  </div>
+  <nav class="hp-workspace-breadcrumb" aria-label="Profile workspace breadcrumb">
+    <button type="button" data-profile-crumb="profiles">AIT Planner</button><span>›</span>
+    <button type="button" data-profile-crumb="profiles">Profile</button><span>›</span>
+    <strong id="profileWorkspaceBreadcrumbCurrent">Workspace</strong>
+  </nav>
+  <div class="hp-workspace-nav__actions">
+    <button class="calc-button" id="profileWorkspaceTerminal" type="button">⌂ Back to Terminal</button>
     <button class="terminal-icon-button" id="closeProfileWorkspace" type="button" aria-label="Close">×</button>
+  </div>
+</div>
   </header>
   <div class="hp-workspace__body">
     <form id="profileForm">
@@ -219,7 +233,21 @@
 <section class="hp-workspace" hidden id="reportWorkspace" aria-hidden="true">
   <header class="hp-workspace__header">
     <div><span class="calc-kicker">REPORT / HEALTH PLAN</span><h2 id="reportWorkspaceTitle">Generated Plan</h2><p id="reportIntro"></p></div>
+    <div class="hp-workspace-nav hp-workspace-nav--reusable">
+  <div class="hp-workspace-nav__history">
+    <button class="terminal-icon-button" id="reportWorkspaceBack" type="button" aria-label="Back">←</button>
+    <button class="terminal-icon-button" id="reportWorkspaceForward" type="button" aria-label="Forward" disabled>→</button>
+  </div>
+  <nav class="hp-workspace-breadcrumb" aria-label="Report workspace breadcrumb">
+    <button type="button" data-report-crumb="reports">AIT Planner</button><span>›</span>
+    <button type="button" data-report-crumb="reports">Report</button><span>›</span>
+    <strong>Workspace</strong>
+  </nav>
+  <div class="hp-workspace-nav__actions">
+    <button class="calc-button" id="reportWorkspaceTerminal" type="button">⌂ Back to Terminal</button>
     <button class="terminal-icon-button" id="closeReportWorkspace" type="button" aria-label="Close">×</button>
+  </div>
+</div>
   </header>
   <div class="hp-workspace__body">
     <div class="hp-section"><h2>Summary</h2><div class="hp-plan-summary" id="reportSummary"></div></div>

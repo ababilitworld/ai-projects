@@ -430,59 +430,221 @@
   const exerciseShell=document.getElementById('terminalExerciseShell');
   const exerciseFrame=document.getElementById('terminalExerciseFrame');
   const exerciseTitle=document.getElementById('terminalExerciseTitle');
+  class ReusableWorkspaceNavigator {
+    constructor({shell,frame,breadcrumb,backButton,forwardButton,homeButton,terminalButton,closeButton,onHome,onTerminal,onClose,onThemeSync}) {
+      this.shell=shell;
+      this.frame=frame;
+      this.breadcrumb=breadcrumb;
+      this.backButton=backButton;
+      this.forwardButton=forwardButton;
+      this.homeButton=homeButton;
+      this.terminalButton=terminalButton;
+      this.closeButton=closeButton;
+      this.onHome=onHome;
+      this.onTerminal=onTerminal;
+      this.onClose=onClose;
+      this.onThemeSync=onThemeSync;
+      this.history=[];
+      this.index=-1;
+      this.bind();
+      this.update();
+    }
+
+    bind(){
+      this.backButton?.addEventListener('click',()=>this.back());
+      this.forwardButton?.addEventListener('click',()=>this.forward());
+      this.homeButton?.addEventListener('click',()=>this.home());
+      this.terminalButton?.addEventListener('click',()=>this.onTerminal?.());
+      this.closeButton?.addEventListener('click',()=>this.close());
+      this.breadcrumb?.addEventListener('click',event=>{
+        const button=event.target.closest('[data-workspace-history-index]');
+        if(!button)return;
+        this.go(Number(button.dataset.workspaceHistoryIndex));
+      });
+    }
+
+    open(state,{replace=false}={}){
+      const normalized=this.normalize(state);
+      if(replace&&this.index>=0){
+        this.history[this.index]=normalized;
+      }else{
+        this.history=this.history.slice(0,this.index+1);
+        this.history.push(normalized);
+        this.index=this.history.length-1;
+      }
+      this.render();
+    }
+
+    normalize(state){
+      return {
+        src:String(state.src||'about:blank'),
+        title:String(state.title||'Workspace'),
+        breadcrumb:Array.isArray(state.breadcrumb)&&state.breadcrumb.length
+          ? state.breadcrumb.map(item=>String(item))
+          : ['Workspace',String(state.title||'Workspace')],
+        parentModal:String(state.parentModal||'toolsModal'),
+        parentLabel:String(state.parentLabel||'Tools')
+      };
+    }
+
+    render(){
+      const state=this.history[this.index];
+      if(!state)return;
+      this.frame.dataset.parentModal=state.parentModal;
+      this.frame.dataset.parentLabel=state.parentLabel;
+      this.frame.src=state.src;
+      this.shell.classList.add('open');
+      this.shell.setAttribute('aria-hidden','false');
+      document.body.classList.add('terminal-ui-open');
+      this.renderBreadcrumb();
+      this.update();
+      this.frame.addEventListener('load',()=>this.onThemeSync?.(),{once:true});
+    }
+
+    renderBreadcrumb(){
+      const state=this.history[this.index];
+      if(!this.breadcrumb||!state)return;
+      this.breadcrumb.innerHTML=state.breadcrumb.map((label,index)=>{
+        const isLast=index===state.breadcrumb.length-1;
+        const historyIndex=this.findHistoryIndexForCrumb(state.breadcrumb,index);
+        return `<span class="terminal-workspace-breadcrumb__item ${isLast?'is-current':''}">
+          ${index?'<i aria-hidden="true">›</i>':''}
+          <button type="button" ${isLast||historyIndex<0?'disabled':''} data-workspace-history-index="${historyIndex}">${this.escape(label)}</button>
+        </span>`;
+      }).join('');
+    }
+
+    findHistoryIndexForCrumb(crumbs,crumbIndex){
+      const target=crumbs.slice(0,crumbIndex+1).join(' / ');
+      for(let i=this.index;i>=0;i--){
+        if(this.history[i].breadcrumb.join(' / ')===target)return i;
+      }
+      return -1;
+    }
+
+    back(){
+      if(this.index<=0)return;
+      this.index--;
+      this.render();
+    }
+
+    forward(){
+      if(this.index>=this.history.length-1)return;
+      this.index++;
+      this.render();
+    }
+
+    go(index){
+      if(!Number.isInteger(index)||index<0||index>=this.history.length)return;
+      this.index=index;
+      this.render();
+    }
+
+    home(){
+      this.clear();
+      this.onHome?.();
+    }
+
+    close(){
+      this.clear();
+      this.onClose?.();
+    }
+
+    clear(){
+      this.history=[];
+      this.index=-1;
+      this.frame.src='about:blank';
+      this.shell.classList.remove('open');
+      this.shell.setAttribute('aria-hidden','true');
+      document.body.classList.remove('terminal-ui-open');
+      this.renderBreadcrumb();
+      this.update();
+    }
+
+    update(){
+      if(this.backButton)this.backButton.disabled=this.index<=0;
+      if(this.forwardButton)this.forwardButton.disabled=this.index<0||this.index>=this.history.length-1;
+    }
+
+    escape(value){
+      const div=document.createElement('div');
+      div.textContent=value;
+      return div.innerHTML;
+    }
+  }
+
   function syncExerciseTheme(theme=root.dataset.theme||'dark-glass'){ if(exerciseFrame?.contentWindow) exerciseFrame.contentWindow.postMessage({type:'ait-pha-theme',theme},'*'); }
+  const workspaceNavigator=new ReusableWorkspaceNavigator({
+    shell:exerciseShell,
+    frame:exerciseFrame,
+    breadcrumb:document.getElementById('terminalWorkspaceBreadcrumb'),
+    backButton:document.getElementById('terminalWorkspaceBack'),
+    forwardButton:document.getElementById('terminalWorkspaceForward'),
+    homeButton:document.getElementById('terminalWorkspaceHome'),
+    terminalButton:document.getElementById('terminalWorkspaceTerminal'),
+    closeButton:document.getElementById('terminalExerciseClose'),
+    onHome:()=>{setDock(true);},
+    onTerminal:()=>{setDock(true);},
+    onClose:()=>{},
+    onThemeSync:()=>syncExerciseTheme()
+  });
+
   function openExercise(button){
     if(!exerciseShell||!exerciseFrame)return;
     closeModal();
-    exerciseTitle.textContent=button.dataset.exerciseTitle||'Tool Workspace';
-    exerciseFrame.dataset.parentModal=button.dataset.parentModal||(button.closest('#plannerModal')?'plannerModal':button.closest('#calculatorModal')?'calculatorModal':'exerciseModal');
-    exerciseFrame.dataset.parentLabel=button.dataset.parentLabel||(button.closest('#plannerModal')?'Planner':button.closest('#calculatorModal')?'Calculator':'Exercise');
-    const backButton=document.getElementById('terminalExerciseBack');
-    if(backButton)backButton.textContent=`← ${exerciseFrame.dataset.parentLabel}`;
-    const kicker=exerciseShell.querySelector('header div span');
-    if(kicker)kicker.textContent=button.dataset.workspaceKicker||'TOOLS / WORKSPACE';
-    exerciseFrame.src=button.dataset.exerciseSrc;
-    exerciseShell.classList.add('open');
-    exerciseShell.setAttribute('aria-hidden','false');
-    document.body.classList.add('terminal-ui-open');
-    exerciseFrame.addEventListener('load',()=>syncExerciseTheme(),{once:true});
+    const title=button.dataset.exerciseTitle||'Tool Workspace';
+    const kicker=button.dataset.workspaceKicker||'Tools / Workspace';
+    const breadcrumb=kicker.split('/').map(part=>part.trim()).filter(Boolean);
+    workspaceNavigator.open({
+      src:button.dataset.exerciseSrc,
+      title,
+      breadcrumb:[...breadcrumb,title],
+      parentModal:button.dataset.parentModal||(button.closest('#plannerModal')?'plannerModal':button.closest('#calculatorModal')?'calculatorModal':'exerciseModal'),
+      parentLabel:button.dataset.parentLabel||(button.closest('#plannerModal')?'AIT Planner':button.closest('#calculatorModal')?'Calculator':'Exercise')
+    });
   }
-  function closeExercise(){
-    if(!exerciseShell)return;
-    const parentModal=exerciseFrame.dataset.parentModal||'exerciseModal';
-    exerciseShell.classList.remove('open');
-    exerciseShell.setAttribute('aria-hidden','true');
-    exerciseFrame.src='about:blank';
-    document.body.classList.remove('terminal-ui-open');
-    openModal(parentModal);
-  }
-  function exitExercise(){ if(!exerciseShell)return; exerciseShell.classList.remove('open'); exerciseShell.setAttribute('aria-hidden','true'); exerciseFrame.src='about:blank'; document.body.classList.remove('terminal-ui-open'); launcher.focus(); }
-  shell.addEventListener('click',e=>{const button=e.target.closest('[data-exercise-src]');if(button){e.preventDefault();openExercise(button);}});
-  function openPlannerDataModule(moduleId, foodId='', foodMode=''){
-    closeModal();
-    const isFood=moduleId==='foodsModule';
-    exerciseTitle.textContent=isFood?'Data Center / Food':'AIT – Health Planner / Profile';
-    exerciseFrame.dataset.parentModal='dataManagerModal';
-    exerciseFrame.dataset.parentLabel='Data';
-    const backButton=document.getElementById('terminalExerciseBack');
-    if(backButton)backButton.textContent='← Data';
-    const kicker=exerciseShell.querySelector('header div span');
-    if(kicker)kicker.textContent=isFood?'WORKSPACE / DATA CENTER / DATA / FOOD':'WORKSPACE / DATA CENTER / DATA / PROFILE';
 
-    let foodQuery='';
-    if(foodId){
-      foodQuery=`?edit=${encodeURIComponent(foodId)}`;
-    }else if(foodMode==='create'){
-      foodQuery='?create=1';
+  function closeExercise(){
+    workspaceNavigator.back();
+  }
+
+  function exitExercise(){
+    workspaceNavigator.close();
+  }
+
+  function openPlannerDataModule(moduleId,foodId='',foodMode=''){
+    const isFood=moduleId==='foodsModule';
+    const isProfile=moduleId==='profilesModule';
+    if(!isFood&&!isProfile)return;
+
+    closeModal();
+
+    let src='';
+    let title='';
+    let breadcrumb=[];
+
+    if(isFood){
+      const query=foodId
+        ? `?edit=${encodeURIComponent(foodId)}`
+        : foodMode==='create'
+          ? '?create=1'
+          : '';
+      src=`data-center/food/index.html${query}`;
+      title=foodId?'Edit Food':'Food Data Workspace';
+      breadcrumb=['Workspace','Data Center','Data','Food',...(foodId?['Edit']:foodMode==='create'?['Create']:[])];
+    }else{
+      src='planner/health-planner/index.html?module=profilesModule';
+      title='Profile List';
+      breadcrumb=['Workspace','Data Center','Data','Profile'];
     }
 
-    exerciseFrame.src=isFood
-      ? `data-center/food/index.html${foodQuery}`
-      : `planner/health-planner/index.html?module=${encodeURIComponent(moduleId)}`;
-    exerciseShell.classList.add('open');
-    exerciseShell.setAttribute('aria-hidden','false');
-    document.body.classList.add('terminal-ui-open');
-    exerciseFrame.addEventListener('load',()=>syncExerciseTheme(),{once:true});
+    workspaceNavigator.open({
+      src,
+      title,
+      breadcrumb,
+      parentModal:'dataManagerModal',
+      parentLabel:'Data'
+    });
   }
 
   function downloadPlannerBackup(){
@@ -515,7 +677,13 @@
 
   shell.addEventListener('click',event=>{
     const plannerButton=event.target.closest('[data-planner-module]');
-    if(plannerButton){event.preventDefault();openPlannerDataModule(plannerButton.dataset.plannerModule);return;}
+    if(plannerButton){
+      event.preventDefault();
+      event.stopPropagation();
+      const moduleId=plannerButton.getAttribute('data-planner-module');
+      openPlannerDataModule(moduleId);
+      return;
+    }
     const actionButton=event.target.closest('[data-workspace-action]');
     if(!actionButton)return;
     event.preventDefault();
@@ -532,6 +700,17 @@
   });
 
   window.addEventListener('message',event=>{
+    if(event.data?.type==='ait-pha-workspace-breadcrumb'){
+      workspaceNavigator.home();
+      openModal(event.data.target||'workspaceModal');
+    }
+  });
+
+  window.addEventListener('message',event=>{
+    if(event.data?.type==='ait-pha-open-terminal')setDock(true);
+  });
+
+  window.addEventListener('message',event=>{
     if(event.data?.type==='ait-pha-open-data-center-food'){
       openPlannerDataModule('foodsModule',event.data.foodId||'',event.data.mode||'');
     }
@@ -545,15 +724,49 @@
     exerciseTitle.textContent=e.data.title||'Tool Workspace';
     exerciseFrame.dataset.parentModal='plannerModal';
     exerciseFrame.dataset.parentLabel='Planner';
-    const backButton=document.getElementById('terminalExerciseBack');if(backButton)backButton.textContent='← Planner';
+
     exerciseFrame.src=e.data.src;
     exerciseFrame.addEventListener('load',()=>syncExerciseTheme(),{once:true});
   });
-  document.getElementById('terminalExerciseBack')?.addEventListener('click',closeExercise);
-  document.getElementById('terminalExerciseClose')?.addEventListener('click',exitExercise);
 
-  launcher.addEventListener('click',()=>setDock(!dock.classList.contains('open'))); dockClose?.addEventListener('click',()=>setDock(false)); dockBackdrop?.addEventListener('click',()=>setDock(false));
-  document.querySelectorAll('[data-open-terminal-modal]').forEach(b=>b.addEventListener('click',()=>openModal(b.dataset.openTerminalModal)));
+
+  class DynamicTerminalController{
+    constructor(schema,mount){this.schema=schema||{menu:[]};this.mount=mount;this.stack=[];this.bind();this.render();}
+    bind(){this.mount?.addEventListener('click',e=>{const back=e.target.closest('[data-dynamic-terminal-back]');if(back){e.preventDefault();this.back();return;}const btn=e.target.closest('[data-dynamic-terminal-item]');if(!btn)return;e.preventDefault();const item=this.find(btn.dataset.dynamicTerminalItem);if(item)this.activate(item);});}
+    render(items=this.schema.menu||[],title='Terminal'){
+      if(!this.mount)return;
+      this.mount.innerHTML=`${this.stack.length?`<button class="dynamic-terminal-back" data-dynamic-terminal-back type="button">← ${this.escape(title)}</button>`:''}${items.map(item=>`<button class="terminal-group-card" data-dynamic-terminal-item="${this.escape(item.id)}" type="button"><span class="terminal-group-card__icon">${this.escape(item.icon||'•')}</span><span><b>${this.escape(item.label||item.id)}</b><small>${this.escape(item.description||'')}</small></span><i>${item.children?.length?'→':'↗'}</i></button>`).join('')}`;
+    }
+    activate(item){
+      if(item.children?.length){this.stack.push(item);this.render(item.children,item.label);return;}
+      const a=item.action||{};
+      if(a.type==='workspace'){workspaceNavigator.open({src:a.route,title:a.title||item.label,breadcrumb:a.breadcrumb||[...this.stack.map(x=>x.label),item.label],parentModal:'toolsModal',parentLabel:this.stack.at(-1)?.label||'Terminal'});setDock(false);return;}
+      if(a.type==='modal'){openModal(a.modalId);return;}
+      if(a.type==='command'){
+        if(a.command==='backup')downloadPlannerBackup();
+        if(a.command==='sync'){localStorage.setItem('ait-health-planner-last-sync',new Date().toISOString());alert('Local planner data synchronized.');}
+        if(a.command==='import')document.getElementById('terminalDataImportFile')?.click();
+        if(a.command==='print'){setDock(false);setTimeout(()=>clickId('printBtn'),80);}
+        if(a.command==='image'){setDock(false);setTimeout(()=>clickId('jpgBtn'),80);}
+        if(a.command==='poster'){document.documentElement.dataset.printMode='poster';setDock(false);setTimeout(()=>{window.print();delete document.documentElement.dataset.printMode;},80);}
+      }
+    }
+    back(){this.stack.pop();const p=this.stack.at(-1);this.render(p?.children||this.schema.menu||[],p?.label||'Terminal');}
+    find(id,items=this.schema.menu||[]){for(const item of items){if(item.id===id)return item;const found=item.children&&this.find(id,item.children);if(found)return found;}return null;}
+    escape(v){const d=document.createElement('div');d.textContent=String(v??'');return d.innerHTML;}
+  }
+  const dynamicTerminalController=new DynamicTerminalController(window.AIT_TERMINAL_SCHEMA,document.getElementById('dynamicTerminalMenuMount'));
+
+  launcher.addEventListener('click',()=>setDock(!dock.classList.contains('open')));
+  document.getElementById('terminalToolsTrigger')?.addEventListener('click',event=>{event.preventDefault();event.stopPropagation();openModal('toolsModal');}); dockClose?.addEventListener('click',()=>setDock(false)); dockBackdrop?.addEventListener('click',()=>setDock(false));
+  document.addEventListener('click',event=>{
+    const modalTrigger=event.target.closest('[data-open-terminal-modal]');
+    if(!modalTrigger)return;
+    event.preventDefault();
+    event.stopPropagation();
+    const modalId=modalTrigger.getAttribute('data-open-terminal-modal');
+    if(modalId)openModal(modalId);
+  });
   document.querySelectorAll('[data-close-terminal-modal]').forEach(b=>b.addEventListener('click',closeModal)); modalBackdrop?.addEventListener('click',closeModal);
   document.querySelectorAll('[data-theme-value]').forEach(b=>b.addEventListener('click',()=>applyTheme(b.dataset.themeValue)));
   document.querySelectorAll('[data-paper-command]').forEach(b=>b.addEventListener('click',()=>{const s=document.getElementById('paperSize');if(s){s.value=b.dataset.paperCommand;s.dispatchEvent(new Event('change',{bubbles:true}));}syncPaper();}));
