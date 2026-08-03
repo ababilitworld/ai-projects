@@ -4708,14 +4708,14 @@ svg[data-chart] {
  <section class="v11-workspace" data-v11-workspace="portfolio">
   <div class="v11-portfolio-layout">
    <aside class="v11-card v11-portfolio-summary-card">
-    <div class="v11-card-head"><div><h3>Portfolio summary</h3><small>Calculated from downloaded closing prices</small></div></div>
+    <div class="v11-card-head"><div><h3>Portfolio summary</h3><small>Calculated from downloaded CloseP values</small></div></div>
     <div class="v11-card-body">
      <div class="v11-summary-grid">
-      <div class="v11-summary"><span>Total cost</span><strong id="v11PortfolioCost">0.00</strong></div>
-      <div class="v11-summary"><span>Market value</span><strong id="v11PortfolioValue">0.00</strong></div>
-      <div class="v11-summary"><span>Broker commission</span><strong id="v11PortfolioCommission">0.00</strong></div>
-      <div class="v11-summary"><span>Unrealized P/L</span><strong id="v11PortfolioPl">0.00</strong></div>
+      <div class="v11-summary"><span>Total cost value</span><strong id="v11PortfolioCost">0.00</strong></div>
+      <div class="v11-summary"><span>Net market value</span><strong id="v11PortfolioValue">0.00</strong></div>
+      <div class="v11-summary"><span>Net unrealized P/L</span><strong id="v11PortfolioPl">0.00</strong></div>
       <div class="v11-summary"><span>Portfolio P/L</span><strong id="v11PortfolioPlPercent">0.00%</strong></div>
+      <div class="v11-summary"><span>Total broker commission</span><strong id="v11PortfolioCommission">0.00</strong></div>
       <div class="v11-summary"><span>Positions</span><strong id="v11PortfolioCount">0</strong></div>
      </div>
     </div>
@@ -4723,7 +4723,7 @@ svg[data-chart] {
    <article class="v11-card v11-portfolio-workspace-card">
     <div class="v11-card-head"><div><h3>Portfolio workspace</h3><small>Track positions locally in this browser</small></div><button class="btn primary" type="button" id="v11OpenPortfolioModal">Add position</button></div>
     <div class="v11-card-body">
-     <div class="v11-table-wrap"><table class="v11-table"><thead><tr><th>Code</th><th>Qty</th><th>Buy</th><th>Last</th><th>Cost</th><th>Market Value</th><th>Broker Commission</th><th>Net P/L</th><th>% P/L</th><th></th></tr></thead><tbody id="v11PortfolioRows"></tbody></table></div>
+     <div class="v11-table-wrap"><table class="v11-table"><thead><tr><th>Code</th><th>Quantity</th><th>Buy Price</th><th>Broker Commission</th><th>Costing Rate</th><th>Cost Value</th><th>CloseP</th><th>Net Market Value</th><th>Net P/L</th><th>% P/L</th><th>Actions</th></tr></thead><tbody id="v11PortfolioRows"></tbody></table></div>
     </div>
    </article>
   </div>
@@ -5154,6 +5154,13 @@ svg[data-chart] {
 
 <div class="modal" id="galleryModal"><div class="dialog wide">
  <div class="modal-head"><div><h2 id="galleryTitle">Watch List — 3M Charts</h2><span class="small">All available local OHLC charts</span></div><button class="btn soft icon" data-close="galleryModal">×</button></div>
+ <div class="v11-scanner-searchbar v11-chart-gallery-search" data-gallery-search="gallery">
+  <div class="v11-scanner-searchbar__orb" aria-hidden="true">⌕</div>
+  <div class="v11-scanner-searchbar__copy"><span class="v11-scanner-searchbar__kicker">CHART GALLERY</span><label for="gallerySearch">Search Trading Code</label><small>Instantly filter watch-list 3M and 6M charts</small></div>
+  <div class="v11-scanner-searchbar__field v11-chart-gallery-search__field"><span class="v11-scanner-searchbar__icon" aria-hidden="true">⌕</span><input class="input" id="gallerySearch" type="search" autocomplete="off" spellcheck="false" placeholder="Search ROBI, ALIF, SUMITPOWER…" aria-label="Search watch-list charts"><kbd class="v11-scanner-searchbar__key">/</kbd></div>
+  <button class="btn soft v11-scanner-searchbar__clear v11-chart-gallery-search__clear" id="gallerySearchClear" type="button">Clear</button>
+  <div class="v11-scanner-searchbar__count v11-chart-gallery-search__count" id="gallerySearchCount" aria-live="polite">0 shown</div>
+ </div>
  <div class="gallery" id="gallery"></div>
 </div></div>
 
@@ -5161,6 +5168,13 @@ svg[data-chart] {
  <div class="modal-head">
   <div><h2 id="v11RankedChartTitle">Ranked 3M Charts</h2><span class="small" id="v11RankedChartSummary">Ranked from highest to lowest score</span></div>
   <button class="btn soft icon" id="v11CloseRankedCharts" type="button" aria-label="Close ranked charts">×</button>
+ </div>
+ <div class="v11-scanner-searchbar v11-chart-gallery-search" data-gallery-search="v11RankedChartGallery">
+  <div class="v11-scanner-searchbar__orb" aria-hidden="true">⌕</div>
+  <div class="v11-scanner-searchbar__copy"><span class="v11-scanner-searchbar__kicker">RANKED CHARTS</span><label for="v11RankedChartSearch">Search Trading Code</label><small>Instantly filter ranked scanner 3M and 6M charts</small></div>
+  <div class="v11-scanner-searchbar__field v11-chart-gallery-search__field"><span class="v11-scanner-searchbar__icon" aria-hidden="true">⌕</span><input class="input" id="v11RankedChartSearch" type="search" autocomplete="off" spellcheck="false" placeholder="Search ROBI, ALIF, SUMITPOWER…" aria-label="Search ranked charts"><kbd class="v11-scanner-searchbar__key">/</kbd></div>
+  <button class="btn soft v11-scanner-searchbar__clear v11-chart-gallery-search__clear" id="v11RankedChartSearchClear" type="button">Clear</button>
+  <div class="v11-scanner-searchbar__count v11-chart-gallery-search__count" id="v11RankedChartSearchCount" aria-live="polite">0 shown</div>
  </div>
  <div class="gallery" id="v11RankedChartGallery"></div>
 </div></div>
@@ -5680,6 +5694,7 @@ document.querySelectorAll("[data-mother-tab]").forEach(b=>b.onclick=()=>this.mot
   const a=this.active();
   this.galleryTitle.textContent=`${a.name} — ${period}M Charts`;
   this.gallery.innerHTML="";
+  if(window.AITChartGallerySearch)window.AITChartGallerySearch.reset("gallery");
   this.open("galleryModal");
   if(!a.codes.length){this.gallery.innerHTML=`<div class="empty">This watch list is empty.</div>`;return}
   requestAnimationFrame(()=>{
@@ -5691,6 +5706,7 @@ document.querySelectorAll("[data-mother-tab]").forEach(b=>b.onclick=()=>this.mot
     requestAnimationFrame(()=>CandleChart.draw(card.querySelector("canvas"),data));
     card.querySelector("[data-open]").onclick=()=>{this.close("galleryModal");this.openChart(c,period)}
    })
+   if(window.AITChartGallerySearch)window.AITChartGallerySearch.refresh("gallery");
   })
  }
  openDataPreview(){
@@ -6745,6 +6761,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   tbody.innerHTML=portfolio.length?portfolio.map((p,i)=>{
    const row=last(rowsFor(p.code)),lastClose=Number(row?.close||0);
    const qty=Number(p.qty||0),buy=Number(p.buy||0),commissionRate=Math.max(0,Number(p.commissionRate??0.4));
+   const costingRate=buy*(1+(commissionRate/100));
    const grossPositionCost=qty*buy;
    const grossPositionValue=qty*lastClose;
    const buyCommission=grossPositionCost*(commissionRate/100);
@@ -6756,8 +6773,8 @@ document.addEventListener("DOMContentLoaded",()=>{
    const positionPlPercent=adjustedCost>0?(positionPl/adjustedCost)*100:0;
    grossCost+=adjustedCost;marketValue+=netValue;totalCommission+=positionCommission;netPl+=positionPl;
    const plClass=positionPl>0?"positive":positionPl<0?"negative":"";
-   return `<tr><td>${esc(p.code)}</td><td>${fmt(qty,0)}</td><td>${fmt(buy)}</td><td>${fmt(lastClose)}</td><td>${fmt(adjustedCost)}</td><td>${fmt(netValue)}</td><td>${fmt(positionCommission)} <small>(${fmt(commissionRate,2)}%)</small></td><td class="${plClass}">${fmt(positionPl)}</td><td class="${plClass}">${fmt(positionPlPercent,2)}%</td><td><div class="v11-portfolio-row-actions"><button class="btn soft" type="button" data-edit-position="${i}">Edit</button><button class="btn danger" type="button" data-remove-position="${i}">Remove</button></div></td></tr>`;
-  }).join(""):'<tr><td colspan="10">No positions added.</td></tr>';
+   return `<tr><td>${esc(p.code)}</td><td>${fmt(qty,0)}</td><td>${fmt(buy)}</td><td>${fmt(positionCommission)} <small>(${fmt(commissionRate,2)}%)</small></td><td>${fmt(costingRate)}</td><td>${fmt(adjustedCost)}</td><td>${fmt(lastClose)}</td><td>${fmt(netValue)}</td><td class="${plClass}">${fmt(positionPl)}</td><td class="${plClass}">${fmt(positionPlPercent,2)}%</td><td><div class="v11-portfolio-row-actions"><button class="btn soft" type="button" data-edit-position="${i}">Edit</button><button class="btn danger" type="button" data-remove-position="${i}">Remove</button></div></td></tr>`;
+  }).join(""):'<tr><td colspan="11">No positions added.</td></tr>';
   tbody.querySelectorAll("[data-edit-position]").forEach(btn=>btn.addEventListener("click",()=>{
    const index=Number(btn.dataset.editPosition),position=portfolio[index];
    if(!position)return;
@@ -7036,6 +7053,7 @@ document.addEventListener("DOMContentLoaded",()=>{
    ?`${data.length} trading codes ranked from highest to lowest ${config.description}`
    :`No sufficient local data for ${config.description} charts`;
 
+  if(window.AITChartGallerySearch)window.AITChartGallerySearch.reset("v11RankedChartGallery");
   gallery.innerHTML=data.length?data.map((x,index)=>{
    const rows=(window.app&&typeof window.app.rangeData==="function")?window.app.rangeData(x.code,period):rowsFor(x.code).slice(-(period===6?180:90));
    const coverage=rows.length?`${rows.length} sessions • ${rows[0].date} to ${rows[rows.length-1].date}`:"No archive data for this code";
@@ -7067,6 +7085,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     if(window.CandleChart&&typeof window.CandleChart.draw==="function")window.CandleChart.draw(canvas,rows);
     else if(typeof CandleChart!=="undefined"&&typeof CandleChart.draw==="function")CandleChart.draw(canvas,rows);
    });
+   if(window.AITChartGallerySearch)window.AITChartGallerySearch.refresh("v11RankedChartGallery");
    gallery.querySelectorAll("[data-open-ranked-code]").forEach(button=>button.addEventListener("click",()=>{
     closeRankedCharts();
     if(window.app&&typeof window.app.openChart==="function"){
@@ -7181,7 +7200,7 @@ document.addEventListener("DOMContentLoaded",()=>{
    runComparison().forEach(x=>text+=`${x.code}: Score ${fmt(x.score,1)}, Signal ${x.signal}, Return ${fmt(x.ret20,1)}%, Volatility ${fmt(x.volatility,2)}%, RV ${fmt(x.rv,2)}x\n`);
   }else if(type==="portfolio"){
    text+="PORTFOLIO\n";
-   portfolio.forEach(p=>{const lc=Number(last(rowsFor(p.code))?.close||0),rate=Math.max(0,Number(p.commissionRate??0.4)),grossCost=p.qty*p.buy,grossValue=p.qty*lc,commission=grossCost*(rate/100)+grossValue*(rate/100),netPl=(grossValue-grossValue*(rate/100))-(grossCost+grossCost*(rate/100)),plPct=(grossCost+grossCost*(rate/100))>0?netPl/(grossCost+grossCost*(rate/100))*100:0;text+=`${p.code}: Qty ${p.qty}, Buy ${fmt(p.buy)}, Last ${fmt(lc)}, Commission ${fmt(commission)}, Net P/L ${fmt(netPl)} (${fmt(plPct,2)}%)\n`});
+   portfolio.forEach(p=>{const lc=Number(last(rowsFor(p.code))?.close||0),rate=Math.max(0,Number(p.commissionRate??0.4)),costingRate=Number(p.buy||0)*(1+(rate/100)),grossCost=p.qty*p.buy,costValue=p.qty*costingRate,grossValue=p.qty*lc,commission=grossCost*(rate/100)+grossValue*(rate/100),netPl=(grossValue-grossValue*(rate/100))-costValue,plPct=costValue>0?netPl/costValue*100:0;text+=`${p.code}: Quantity ${p.qty}, Buy Price ${fmt(p.buy)}, Broker Commission ${fmt(commission)} (${fmt(rate,2)}%), Costing Rate ${fmt(costingRate)}, Cost Value ${fmt(costValue)}, CloseP ${fmt(lc)}, Net Market Value ${fmt(grossValue-grossValue*(rate/100))}, Net P/L ${fmt(netPl)} (${fmt(plPct,2)}%)\n`});
   }
   document.getElementById("v11ReportOutput").value=text;
  }
@@ -9771,6 +9790,28 @@ document.addEventListener('DOMContentLoaded', () => {
  const init=()=>document.querySelectorAll('.v11-scanner-card').forEach(setupCard);
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
  new MutationObserver(init).observe(document.documentElement,{childList:true,subtree:true});
+})();
+</script>
+
+
+<style id="v10030-chart-gallery-search-style">
+.v11-chart-gallery-search{margin:0 0 14px}
+.v11-chart-gallery-empty{grid-column:1/-1;padding:24px;text-align:center;color:var(--v10-muted,var(--muted,#94a3b8));border:1px dashed var(--v10-line,var(--line,#334155));border-radius:14px}
+</style>
+<script id="v10029-chart-gallery-search-script">
+(()=>{"use strict";
+ const configs={
+  gallery:{input:"gallerySearch",clear:"gallerySearchClear",count:"gallerySearchCount"},
+  v11RankedChartGallery:{input:"v11RankedChartSearch",clear:"v11RankedChartSearchClear",count:"v11RankedChartSearchCount"}
+ };
+ const normalize=value=>String(value||"").trim().toUpperCase();
+ function elements(galleryId){const cfg=configs[galleryId],gallery=document.getElementById(galleryId);if(!cfg||!gallery)return null;return{gallery,input:document.getElementById(cfg.input),clear:document.getElementById(cfg.clear),count:document.getElementById(cfg.count)}}
+ function apply(galleryId){const refs=elements(galleryId);if(!refs)return;const term=normalize(refs.input?.value);const cards=[...refs.gallery.querySelectorAll(":scope > .mini-card")];let shown=0;cards.forEach(card=>{const code=normalize(card.getAttribute("data-ranked-chart")||card.querySelector("h3")?.textContent||card.textContent);const visible=!term||code.includes(term);card.hidden=!visible;if(visible)shown++});let empty=refs.gallery.querySelector(":scope > .v11-chart-gallery-empty");if(term&&cards.length&&shown===0){if(!empty){empty=document.createElement("div");empty.className="v11-chart-gallery-empty";refs.gallery.appendChild(empty)}empty.textContent=`No chart matches “${refs.input.value.trim()}”.`;empty.hidden=false}else if(empty)empty.remove();if(refs.count)refs.count.textContent=`${shown} of ${cards.length} shown`;if(refs.clear)refs.clear.disabled=!term}
+ function bind(galleryId){const refs=elements(galleryId);if(!refs||refs.input?.dataset.bound==="1")return;if(refs.input){refs.input.dataset.bound="1";refs.input.addEventListener("input",()=>apply(galleryId));refs.input.addEventListener("keydown",event=>{if(event.key==="Escape"&&refs.input.value){refs.input.value="";apply(galleryId)}})}refs.clear?.addEventListener("click",()=>{if(refs.input)refs.input.value="";apply(galleryId);refs.input?.focus()});apply(galleryId)}
+ function reset(galleryId){bind(galleryId);const refs=elements(galleryId);if(refs?.input)refs.input.value="";apply(galleryId)}
+ function refresh(galleryId){bind(galleryId);apply(galleryId)}
+ window.AITChartGallerySearch={reset,refresh,apply};
+ document.addEventListener("DOMContentLoaded",()=>Object.keys(configs).forEach(bind));
 })();
 </script>
 

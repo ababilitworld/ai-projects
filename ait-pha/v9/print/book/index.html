@@ -1,0 +1,11 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Book Print</title><link rel="stylesheet" href="../print-workspace.css"></head>
+<body><main class="pw-shell">
+<section class="pw-hero"><div><span class="pw-kicker">WORKSPACE / REPORT / PRINT / BOOK</span><h1>Book Print Workspace</h1><p>Select a binding method. The output engine applies the corresponding imposition, gutter and print media rules.</p></div><div>📚</div></section>
+<section class="pw-panel"><h2>Binding method</h2><div class="pw-grid">
+<label class="pw-option"><input type="radio" name="binding" value="saddle-stitch"><b>Saddle-Stitch</b><small>A4 landscape sheets, two A5 pages per side, reordered in 4-page signatures.</small></label>
+<label class="pw-option"><input type="radio" name="binding" value="perfect-binding"><b>Perfect Binding</b><small>A5 sequential pages with mirrored inner gutter for glued spine binding.</small></label>
+<label class="pw-option"><input type="radio" name="binding" value="wire-o"><b>Wire-O</b><small>A5 sequential pages with an enlarged punch/binding margin.</small></label>
+</div><div class="pw-summary"><div class="pw-stat"><strong id="bindingValue">Saddle-Stitch</strong><span>Binding</span></div><div class="pw-stat"><strong id="sheetValue">A4 Landscape</strong><span>Output sheet</span></div><div class="pw-stat"><strong id="orderValue">Booklet</strong><span>Page order</span></div></div>
+<div class="pw-actions"><button class="pw-button" id="applyButton">Apply</button><button class="pw-button pw-button--primary" id="printButton">Apply & Print</button></div>
+<div class="pw-note" id="bindingNote"></div></section>
+</main><script src="book.js"></script></body></html>

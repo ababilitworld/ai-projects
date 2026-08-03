@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 520" role="img" aria-labelledby="t d">
+<title id="t">সুষম খাবারের প্লেট</title>
+<desc id="d">অর্ধেক সবজি, এক-চতুর্থাংশ প্রোটিন এবং এক-চতুর্থাংশ শর্করা</desc>
+<rect width="720" height="520" rx="36" fill="#f7faf7"/>
+<circle cx="330" cy="255" r="190" fill="#fff" stroke="#cbd5d1" stroke-width="14"/>
+<path d="M330 65A190 190 0 0 1 330 445L330 255Z" fill="#86c96f"/>
+<path d="M330 255L330 445A190 190 0 0 1 140 255Z" fill="#f2c464"/>
+<path d="M140 255A190 190 0 0 1 330 65L330 255Z" fill="#ef8d72"/>
+<line x1="330" y1="65" x2="330" y2="445" stroke="#fff" stroke-width="8"/>
+<line x1="140" y1="255" x2="330" y2="255" stroke="#fff" stroke-width="8"/>
+<text x="430" y="250" text-anchor="middle" font-family="sans-serif" font-size="31" font-weight="700" fill="#17321d">½ সবজি</text>
+<text x="240" y="185" text-anchor="middle" font-family="sans-serif" font-size="24" font-weight="700" fill="#5f2116">¼ প্রোটিন</text>
+<text x="235" y="335" text-anchor="middle" font-family="sans-serif" font-size="23" font-weight="700" fill="#5d4511">¼ শর্করা</text>
+<circle cx="600" cy="150" r="55" fill="#dceef7" stroke="#8abbd1" stroke-width="6"/>
+<text x="600" y="158" text-anchor="middle" font-family="sans-serif" font-size="22" font-weight="700" fill="#19445a">পানি</text>
+</svg>

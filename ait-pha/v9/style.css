@@ -931,3 +931,821 @@ body.is-exporting #jpgPanel {
 .cover-disclaimer .disclaimer-point--red{color:#b91c1c}
 .cover-disclaimer .disclaimer-point--orange{color:#c2410c}
 .cover-disclaimer .disclaimer-point--green{color:#166534}
+
+/* Reusable terminal extension: Tools > Exercise and full-screen workspaces */
+.terminal-header-actions{display:flex;align-items:center;gap:8px}.terminal-back-button{min-height:38px;padding:8px 12px;border:1px solid var(--terminal-line);border-radius:11px;color:var(--terminal-text);background:var(--terminal-card);font:inherit;font-size:.76rem;font-weight:800;cursor:pointer}.terminal-back-button:hover{border-color:var(--terminal-primary);background:color-mix(in srgb,var(--terminal-primary) 10%,var(--terminal-card))}.terminal-exercise-shell{position:fixed;inset:0;z-index:2147483646;display:grid;grid-template-rows:auto 1fr;color:var(--terminal-text);background:var(--terminal-bg);opacity:0;visibility:hidden;pointer-events:none;transition:opacity .2s ease,visibility .2s ease}.terminal-exercise-shell.open{opacity:1;visibility:visible;pointer-events:auto}.terminal-exercise-shell>header{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:14px;padding:12px 16px;border-bottom:1px solid var(--terminal-line);background:linear-gradient(135deg,var(--terminal-panel),var(--terminal-card));box-shadow:0 12px 34px var(--terminal-shadow)}.terminal-exercise-shell>header div{text-align:center}.terminal-exercise-shell>header span{display:block;color:var(--terminal-primary);font-size:.62rem;font-weight:900;letter-spacing:.15em}.terminal-exercise-shell>header h2{margin:3px 0 0;color:var(--terminal-text);font-size:1.05rem}.terminal-exercise-shell iframe{width:100%;height:100%;border:0;background:var(--terminal-bg)}
+.terminal-theme-swatch[data-swatch="dark-glass"]{--s1:#07111f;--s2:#38bdf8;--s3:#a78bfa}.terminal-theme-swatch[data-swatch="classic-light"]{--s1:#eef3f8;--s2:#087f75;--s3:#2563eb}.terminal-theme-swatch[data-swatch="sapphire"]{--s1:#061426;--s2:#60a5fa;--s3:#22d3ee}.terminal-theme-swatch[data-swatch="emerald"]{--s1:#061914;--s2:#34d399;--s3:#a3e635}.terminal-theme-swatch[data-swatch="royal-purple"]{--s1:#12091f;--s2:#c084fc;--s3:#f472b6}.terminal-theme-swatch[data-swatch="carbon-oled"]{--s1:#000;--s2:#f8fafc;--s3:#22c55e}.terminal-theme-swatch[data-swatch="crimson"]{--s1:#19080d;--s2:#fb7185;--s3:#f59e0b}.terminal-theme-swatch[data-swatch="coffee"]{--s1:#1a120d;--s2:#d6a46d;--s3:#facc15}.terminal-theme-swatch[data-swatch="aurora"]{--s1:#06151a;--s2:#2dd4bf;--s3:#c084fc}.terminal-theme-swatch i:nth-child(1){--sw:var(--s1)}.terminal-theme-swatch i:nth-child(2){--sw:var(--s2)}.terminal-theme-swatch i:nth-child(3){--sw:var(--s3)}
+@media(max-width:700px){.terminal-exercise-shell>header{grid-template-columns:auto 1fr auto;padding:9px}.terminal-exercise-shell>header h2{font-size:.88rem}.terminal-exercise-shell>header span{display:none}.terminal-back-button{padding:7px 9px;font-size:.68rem}}
+@media print{.terminal-exercise-shell{display:none!important}}
+
+/* =========================================================
+   V99.14 — FULL-VIEWPORT TERMINAL WORKSPACES
+   All terminal submenu dialogs use the complete viewport.
+   ========================================================= */
+.terminal-modal-shell{
+  position:fixed!important;
+  inset:0!important;
+  width:100vw!important;
+  height:100dvh!important;
+  overflow:hidden!important;
+  background:var(--terminal-bg)!important;
+}
+.terminal-modal-shell .terminal-modal-backdrop{
+  display:none!important;
+}
+.terminal-modal{
+  position:absolute!important;
+  inset:0!important;
+  left:0!important;
+  top:0!important;
+  right:0!important;
+  bottom:0!important;
+  z-index:1!important;
+  display:grid!important;
+  grid-template-rows:auto minmax(0,1fr)!important;
+  width:100vw!important;
+  max-width:none!important;
+  height:100dvh!important;
+  min-height:100dvh!important;
+  max-height:none!important;
+  margin:0!important;
+  overflow:hidden!important;
+  border:0!important;
+  border-radius:0!important;
+  color:var(--terminal-text)!important;
+  background:
+    radial-gradient(circle at 8% 0%,color-mix(in srgb,var(--terminal-primary) 14%,transparent),transparent 30%),
+    radial-gradient(circle at 100% 10%,color-mix(in srgb,var(--terminal-accent) 11%,transparent),transparent 28%),
+    linear-gradient(145deg,var(--terminal-bg),var(--terminal-bg-2))!important;
+  box-shadow:none!important;
+  transform:translateY(2.5%)!important;
+  transform-origin:center!important;
+  opacity:0!important;
+  transition:opacity .2s ease,transform .2s ease!important;
+}
+.terminal-modal[hidden]{display:none!important}
+.terminal-modal-shell.open .terminal-modal:not([hidden]){
+  transform:none!important;
+  opacity:1!important;
+}
+.terminal-modal--wide{
+  width:100vw!important;
+  max-width:none!important;
+}
+.terminal-modal__header{
+  position:relative!important;
+  z-index:2!important;
+  flex:0 0 auto!important;
+  min-height:72px!important;
+  padding:14px clamp(14px,2.5vw,34px)!important;
+  border-bottom:1px solid var(--terminal-line)!important;
+  color:var(--terminal-text)!important;
+  background:linear-gradient(135deg,var(--terminal-panel),var(--terminal-card))!important;
+  box-shadow:0 10px 32px color-mix(in srgb,var(--terminal-shadow) 62%,transparent)!important;
+}
+.terminal-modal__body{
+  display:grid!important;
+  align-content:start!important;
+  gap:18px!important;
+  width:100%!important;
+  height:100%!important;
+  min-height:0!important;
+  max-height:none!important;
+  padding:clamp(16px,2.6vw,36px)!important;
+  overflow:auto!important;
+  overscroll-behavior:contain!important;
+  color:var(--terminal-text)!important;
+  background:transparent!important;
+}
+.terminal-control-section{
+  width:min(1440px,100%)!important;
+  margin-inline:auto!important;
+}
+.terminal-command-grid{
+  grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr))!important;
+}
+.terminal-command-grid--compact{
+  grid-template-columns:repeat(auto-fit,minmax(min(210px,100%),1fr))!important;
+}
+.terminal-theme-grid{
+  grid-template-columns:repeat(auto-fit,minmax(min(230px,100%),1fr))!important;
+  width:min(1440px,100%)!important;
+  margin-inline:auto!important;
+}
+.terminal-command,
+.terminal-theme-grid button,
+.terminal-toggle-list label,
+.terminal-segment,
+.terminal-zoom-console{
+  background:color-mix(in srgb,var(--terminal-card) 88%,transparent)!important;
+  border-color:var(--terminal-line)!important;
+}
+.terminal-exercise-shell{
+  width:100vw!important;
+  height:100dvh!important;
+  min-height:100dvh!important;
+}
+@media(max-width:700px){
+  .terminal-modal{
+    inset:0!important;
+    width:100vw!important;
+    height:100dvh!important;
+    min-height:100dvh!important;
+    max-height:none!important;
+    border-radius:0!important;
+    transform:translateY(4%)!important;
+  }
+  .terminal-modal-shell.open .terminal-modal:not([hidden]){transform:none!important}
+  .terminal-modal__header{min-height:64px!important;padding:10px 12px!important}
+  .terminal-modal__header h2{font-size:1.05rem!important}
+  .terminal-modal__header p{display:none!important}
+  .terminal-modal__body{height:100%!important;max-height:none!important;padding:12px!important}
+  .terminal-command-grid,
+  .terminal-command-grid--compact,
+  .terminal-theme-grid{grid-template-columns:1fr!important}
+}
+@supports not (height:100dvh){
+  .terminal-modal-shell,.terminal-modal,.terminal-exercise-shell{height:100vh!important;min-height:100vh!important}
+}
+@media print{
+  .terminal-modal-shell,.terminal-exercise-shell{display:none!important}
+}
+
+/* V99.15 — fullscreen modal visibility hotfix */
+.terminal-modal-shell{
+  visibility:hidden!important;
+  opacity:0!important;
+  background:transparent!important;
+  pointer-events:none!important;
+  transition:opacity .18s ease,visibility 0s linear .18s!important;
+}
+.terminal-modal-shell.open{
+  visibility:visible!important;
+  opacity:1!important;
+  background:
+    radial-gradient(circle at 8% 0%,color-mix(in srgb,var(--terminal-primary) 14%,transparent),transparent 30%),
+    radial-gradient(circle at 100% 10%,color-mix(in srgb,var(--terminal-accent) 11%,transparent),transparent 28%),
+    linear-gradient(145deg,var(--terminal-bg),var(--terminal-bg-2))!important;
+  pointer-events:auto!important;
+  transition:opacity .18s ease!important;
+}
+.terminal-modal[hidden]{display:none!important}
+.terminal-modal-shell:not(.open) .terminal-modal{
+  display:none!important;
+}
+.terminal-exercise-shell{
+  visibility:hidden!important;
+  opacity:0!important;
+  pointer-events:none!important;
+}
+.terminal-exercise-shell.open{
+  visibility:visible!important;
+  opacity:1!important;
+  pointer-events:auto!important;
+}
+
+@media print{html[data-print-mode="poster"] @page{size:A3 landscape;margin:10mm}}
+
+/* v99.36 reusable workspace navigation */
+.terminal-workspace-nav{
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr) auto;
+  gap:12px;
+  align-items:center;
+  padding:12px 16px;
+  border-bottom:1px solid var(--v10-line,var(--terminal-line));
+  background:var(--v10-panel,var(--terminal-panel));
+}
+.terminal-workspace-nav__history,
+.terminal-workspace-nav__actions{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.terminal-nav-icon,
+.terminal-nav-button{
+  min-height:42px;
+  border:1px solid var(--v10-line,var(--terminal-line));
+  border-radius:12px;
+  background:var(--v10-card,var(--terminal-card));
+  color:var(--v10-text,var(--terminal-text));
+  font-weight:900;
+  cursor:pointer;
+}
+.terminal-nav-icon{width:42px;padding:0}
+.terminal-nav-button{padding:8px 13px}
+.terminal-nav-icon:disabled{opacity:.4;cursor:not-allowed}
+.terminal-workspace-breadcrumb{
+  display:flex;
+  align-items:center;
+  min-width:0;
+  overflow:auto;
+  scrollbar-width:none;
+}
+.terminal-workspace-breadcrumb::-webkit-scrollbar{display:none}
+.terminal-workspace-breadcrumb__item{
+  display:inline-flex;
+  align-items:center;
+  white-space:nowrap;
+}
+.terminal-workspace-breadcrumb__item i{
+  margin:0 8px;
+  color:var(--v10-muted,var(--terminal-muted));
+  font-style:normal;
+}
+.terminal-workspace-breadcrumb__item button{
+  border:0;
+  background:transparent;
+  color:var(--v10-primary,var(--terminal-primary));
+  font-weight:850;
+  cursor:pointer;
+}
+.terminal-workspace-breadcrumb__item.is-current button,
+.terminal-workspace-breadcrumb__item button:disabled{
+  color:var(--v10-text,var(--terminal-text));
+  cursor:default;
+}
+@media(max-width:760px){
+  .terminal-workspace-nav{grid-template-columns:auto 1fr}
+  .terminal-workspace-nav__actions{grid-column:1/-1;justify-content:flex-end}
+  .terminal-workspace-breadcrumb{grid-column:2}
+}
+
+.dynamic-terminal-back{width:100%;min-height:42px;margin-bottom:8px;padding:9px 12px;border:1px solid var(--v10-line,var(--terminal-line));border-radius:12px;background:var(--v10-panel,var(--terminal-panel));color:var(--v10-primary,var(--terminal-primary));font-weight:900;text-align:left;cursor:pointer}
+
+
+/* v99.40 — Page 7 practical health guide */
+.practical-guide-page .page-body{display:flex;flex-direction:column}
+.practical-guide-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-content:start}
+.practical-guide-card{min-width:0;padding:14px}
+.practical-guide-card .panel-head{margin-bottom:9px}
+.practical-guide-card .panel-head h3{font-size:1.02rem;line-height:1.25}
+.practical-guide-card ul,.practical-guide-card ol{margin:0;padding-left:21px}
+.practical-guide-card li{margin:0 0 5px;line-height:1.35;font-size:.84rem}
+.practical-guide-card--sun{background:linear-gradient(180deg,color-mix(in srgb,var(--gold) 10%,var(--cream)),var(--cream))}
+.practical-number-list{counter-reset:guide-rule;list-style:none!important;padding-left:0!important;display:grid;gap:6px}
+.practical-number-list li{counter-increment:guide-rule;display:grid;grid-template-columns:25px 1fr;gap:7px;align-items:start;margin:0}
+.practical-number-list li::before{content:counter(guide-rule);display:grid;place-items:center;width:23px;height:23px;border-radius:8px;background:var(--green-3);color:var(--green);font-weight:800;font-size:.72rem}
+.compact-fact-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+.compact-fact-grid>div{padding:8px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.55)}
+.compact-fact-grid b,.compact-fact-grid span{display:block}
+.compact-fact-grid b{margin-bottom:3px;color:var(--gold);font-size:.74rem}
+.compact-fact-grid span{font-size:.76rem;line-height:1.3}
+.compact-breath-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.compact-breath-grid>div{padding:9px;border:1px solid var(--line);border-radius:11px;text-align:center;background:var(--green-3)}
+.compact-breath-grid strong,.compact-breath-grid span{display:block}
+.compact-breath-grid strong{margin-bottom:4px;color:var(--green);font-size:1.05rem}
+.compact-breath-grid span{font-size:.76rem;line-height:1.35}
+.compact-walk-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px}
+.compact-walk-grid>div{padding:8px 5px;border:1px solid var(--line);border-radius:10px;text-align:center;background:rgba(255,255,255,.58)}
+.compact-walk-grid b,.compact-walk-grid strong,.compact-walk-grid span{display:block}
+.compact-walk-grid b{font-size:.68rem;color:var(--muted)}
+.compact-walk-grid strong{margin:3px 0;color:var(--blue);font-size:.9rem}
+.compact-walk-grid span{font-size:.68rem}
+.compact-warning{margin:8px 0 0;padding:7px 9px;border-radius:9px;background:#fff7d6;color:#6d5200;font-size:.74rem;line-height:1.35}
+@media(max-width:760px){.practical-guide-grid{grid-template-columns:1fr}.compact-fact-grid{grid-template-columns:1fr}.compact-walk-grid{grid-template-columns:1fr 1fr}.compact-walk-grid>div:last-child{grid-column:1/-1}}
+@media print{.practical-guide-grid{gap:8px}.practical-guide-card{padding:10px}.practical-guide-card li{font-size:8.5pt}.compact-fact-grid span,.compact-breath-grid span,.compact-warning{font-size:8pt}}
+
+
+
+
+
+
+
+
+
+
+
+/* Mobile: one card per row */
+@media (max-width:767px){
+  .page7-fit-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+/* Tablet: two equal columns */
+@media (min-width:768px) and (max-width:1199px){
+  .page7-fit-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    gap:12px;
+  }
+
+  .page7-fit-card{
+    height:100%;
+  }
+
+  .page7-fit-card--plate .practical-food-plate img{
+    max-width:230px;
+    max-height:140px;
+  }
+}
+
+/* Desktop: three equal columns, two clean rows */
+@media (min-width:1200px){
+  .page7-fit-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:14px;
+  }
+
+  .page7-fit-card{
+    height:100%;
+  }
+
+  .page7-fit-card h2,
+  .page7-fit-card h3,
+  .page7-fit-card h4{
+    font-size:.96rem;
+  }
+
+  .page7-fit-card p,
+  .page7-fit-card li{
+    font-size:.76rem;
+    line-height:1.34;
+  }
+
+  .page7-fit-card--plate .practical-food-plate img{
+    max-width:220px;
+    max-height:135px;
+  }
+}
+
+/* Prevent ebook page containers from forcing narrow desktop cards */
+@media (min-width:768px){
+  .page[data-page="7"] .page7-fit-grid,
+  .page:nth-of-type(7) .page7-fit-grid{
+    width:100%;
+    max-width:none;
+  }
+
+  .page[data-page="7"] .page7-fit-card,
+  .page:nth-of-type(7) .page7-fit-card{
+    box-sizing:border-box;
+  }
+}
+
+@media print{
+  .page7-fit-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+    gap:6px;
+  }
+
+  .page7-fit-card{
+    padding:6px 8px;
+  }
+
+  .page7-fit-card h2,
+  .page7-fit-card h3,
+  .page7-fit-card h4{
+    margin-bottom:3px;
+    font-size:.84rem;
+  }
+
+  .page7-guide-number{
+    width:27px;
+    height:23px;
+    font-size:.65rem;
+  }
+
+  .page7-fit-card p,
+  .page7-fit-card li{
+    font-size:.66rem;
+    line-height:1.2;
+  }
+
+  .page7-fit-card--plate .practical-food-plate img{
+    max-height:95px;
+  }
+
+  .page7-fit-card--plate .practical-food-plate figcaption{
+    font-size:.64rem;
+  }
+}
+
+
+/* v100.45 — verified Page 6 and Page 7 responsive structure */
+.page6-practical-wrap{margin:12px 0 0;break-inside:avoid}
+.page6-practical-card{padding:0;border:.4mm solid #c6d7ce;border-radius:4mm;background:var(--card,#fff);overflow:hidden}
+.page6-practical-card .panel-head{padding:2.2mm 3mm}
+.page6-practical-card .panel-head> b{display:none!important}
+.page6-practical-card .panel-head h3{font-size:12.5pt}
+.page6-practical-card ul{margin:8px 12px 10px}
+
+.practical-guide-page .page-body{display:flex;flex-direction:column;min-height:0}
+.page7-guide-shell{display:block!important;min-height:0}
+.page7-fit-grid{display:grid;grid-template-columns:1fr;gap:10px;align-items:stretch;width:100%;min-width:0}
+.page7-fit-card{box-sizing:border-box;min-width:0;width:100%;padding:10px 12px;border:1px solid var(--line,#cfd8d3);border-radius:13px;background:var(--card,#fff);overflow:hidden;break-inside:avoid;page-break-inside:avoid}
+.page7-fit-card .panel-head{margin:-10px -12px 8px;padding:9px 11px;border-radius:12px 12px 0 0}
+.page7-fit-card .panel-head>b{display:none!important}
+.page7-fit-card>h3{margin:-10px -12px 8px;padding:9px 11px;background:linear-gradient(90deg,var(--forest),var(--forest2));color:#fff;border-radius:12px 12px 0 0}
+.page7-fit-card h2,.page7-fit-card h3,.page7-fit-card h4{display:flex;align-items:center;gap:8px;font-size:.96rem;line-height:1.25}
+.page7-fit-card .panel-head h3{margin:0;font-size:.96rem}
+.page7-guide-number{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;width:30px;height:26px;border-radius:8px;background:rgba(255,255,255,.18);color:#fff;border:1px solid rgba(255,255,255,.3);font-size:.72rem;font-weight:950;letter-spacing:.06em}
+.page7-fit-card p,.page7-fit-card li{font-size:.79rem;line-height:1.36}
+.page7-fit-card ul,.page7-fit-card ol{margin:6px 0 0;padding-left:18px}
+.page7-fit-card--plate{display:flex;flex-direction:column}
+.page7-plate-card-body{display:grid;place-items:center;flex:1;min-height:0}
+.page7-fit-card--plate .practical-food-plate{display:grid;grid-template-columns:1fr;gap:6px;width:100%;margin:0;padding:4px;border:0;background:transparent;text-align:center}
+.page7-fit-card--plate .practical-food-plate img{display:block;width:100%;max-width:240px;max-height:145px;margin:auto;object-fit:contain}
+.page7-fit-card--plate .practical-food-plate figcaption{font-size:.75rem;line-height:1.3;text-align:center}
+
+@media (min-width:768px){
+  .page7-fit-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .page7-fit-card{height:100%}
+  .page7-fit-card--plate .practical-food-plate img{max-width:220px;max-height:130px}
+}
+@media (min-width:1280px){
+  .page7-fit-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .page7-fit-card{padding:11px 13px}
+  .page7-fit-card .panel-head{margin:-11px -13px 8px}
+  .page7-fit-card>h3{margin:-11px -13px 8px}
+  .page7-fit-card p,.page7-fit-card li{font-size:.81rem}
+  .page7-fit-card--plate .practical-food-plate img{max-width:250px;max-height:150px}
+}
+@media print{
+  .page6-practical-wrap{margin-top:7px}
+  .page6-practical-card .panel-head{padding:1.6mm 2.4mm}
+  .page6-practical-card ul{margin:5px 10px 7px}
+  .page7-fit-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+  .page7-fit-card{padding:6px 8px}
+  .page7-fit-card .panel-head{margin:-6px -8px 4px;padding:5px 7px}
+  .page7-fit-card>h3{margin:-6px -8px 4px;padding:5px 7px}
+  .page7-fit-card h2,.page7-fit-card h3,.page7-fit-card h4,.page7-fit-card .panel-head h3{font-size:.82rem}
+  .page7-guide-number{width:25px;height:21px;font-size:.62rem}
+  .page7-fit-card p,.page7-fit-card li{font-size:.65rem;line-height:1.18}
+  .page7-fit-card ul,.page7-fit-card ol{margin-top:3px;padding-left:14px}
+  .page7-fit-card--plate .practical-food-plate img{max-height:90px}
+  .page7-fit-card--plate .practical-food-plate figcaption{font-size:.62rem}
+}
+
+
+/* v100.46 — Normal and book print modes */
+.booklet-print-stage{display:none}
+
+@media print{
+  html[data-book-binding] body > *:not(#bookletPrintStage):not(#book){
+    display:none!important;
+  }
+
+  body.book-print-active #book{
+    transform:none!important;
+    margin:0!important;
+  }
+
+  /* Saddle-stitch: one physical landscape sheet per PDF page */
+  body.book-print-saddle #book{
+    display:none!important;
+  }
+
+  body.book-print-saddle #bookletPrintStage{
+    display:block!important;
+    width:var(--booklet-sheet-width)!important;
+    margin:0!important;
+    padding:0!important;
+  }
+
+  body.book-print-saddle .booklet-sheet{
+    display:flex!important;
+    flex-flow:row nowrap!important;
+    align-items:stretch!important;
+    justify-content:flex-start!important;
+    width:var(--booklet-sheet-width)!important;
+    height:var(--booklet-sheet-height)!important;
+    min-width:var(--booklet-sheet-width)!important;
+    min-height:var(--booklet-sheet-height)!important;
+    max-width:var(--booklet-sheet-width)!important;
+    max-height:var(--booklet-sheet-height)!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:hidden!important;
+    background:#fff!important;
+
+    /* Only the complete imposed sheet may create a PDF page break. */
+    break-before:auto!important;
+    page-break-before:auto!important;
+    break-inside:avoid!important;
+    page-break-inside:avoid!important;
+    break-after:page!important;
+    page-break-after:always!important;
+  }
+
+  body.book-print-saddle .booklet-sheet:last-child{
+    break-after:auto!important;
+    page-break-after:auto!important;
+  }
+
+  body.book-print-saddle .booklet-sheet > .book-print-page{
+    position:relative!important;
+    display:block!important;
+    flex:0 0 var(--booklet-page-width)!important;
+    width:var(--booklet-page-width)!important;
+    min-width:var(--booklet-page-width)!important;
+    max-width:var(--booklet-page-width)!important;
+    height:var(--booklet-page-height)!important;
+    min-height:var(--booklet-page-height)!important;
+    max-height:var(--booklet-page-height)!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    box-shadow:none!important;
+    transform:none!important;
+    overflow:hidden!important;
+
+    /*
+     * Critical fix: .paper-page normally has page-break-after: always.
+     * A cloned half-page must never create its own PDF page.
+     */
+    break-before:auto!important;
+    page-break-before:auto!important;
+    break-after:auto!important;
+    page-break-after:auto!important;
+    break-inside:avoid!important;
+    page-break-inside:avoid!important;
+  }
+
+  body.book-print-saddle .booklet-sheet > .book-print-page::before,
+  body.book-print-saddle .booklet-sheet > .book-print-page::after{
+    display:none!important;
+  }
+
+  body.book-print-saddle .booklet-sheet > .book-print-page .page-body{
+    height:auto!important;
+    min-height:0!important;
+    max-height:none!important;
+  }
+
+  body.book-print-saddle .booklet-sheet > .book-print-page .page-footer{
+    position:absolute!important;
+    right:0!important;
+    bottom:0!important;
+    left:0!important;
+  }
+
+  body.book-print-saddle .booklet-sheet > .book-print-page:first-child{
+    border-right:.2mm dashed rgba(0,0,0,.22)!important;
+  }
+
+  body.book-print-saddle .book-print-blank{
+    background:#fff!important;
+  }
+
+  body.book-print-saddle .book-print-blank > *{
+    display:none!important;
+  }
+
+  /* Perfect binding: mirrored gutter on sequential A5 pages */
+  body.book-print-perfect #book{
+    display:block!important;
+  }
+  body.book-print-perfect .paper-page{
+    width:148mm!important;
+    height:210mm!important;
+    min-height:210mm!important;
+    margin:0!important;
+    box-shadow:none!important;
+    border:0!important;
+    break-after:page;
+    page-break-after:always;
+  }
+  body.book-print-perfect .paper-page:nth-child(odd){
+    padding-left:14mm!important;
+    padding-right:8mm!important;
+  }
+  body.book-print-perfect .paper-page:nth-child(even){
+    padding-left:8mm!important;
+    padding-right:14mm!important;
+  }
+
+  /* Wire-O: enlarged binding edge */
+  body.book-print-wire .paper-page{
+    width:148mm!important;
+    height:210mm!important;
+    min-height:210mm!important;
+    margin:0!important;
+    padding-left:16mm!important;
+    padding-right:8mm!important;
+    box-shadow:none!important;
+    border:0!important;
+    break-after:page;
+    page-break-after:always;
+  }
+}
+
+/* v100.47 unified configurable print workspace */
+@media print{
+  html.print-hide-page-numbers .page-number,
+  html.print-hide-page-numbers [data-page-number],
+  html.print-hide-page-numbers .page-footer__number{display:none!important}
+  html.print-crop-marks .paper-page{position:relative;outline:.25mm solid #000;outline-offset:-2mm}
+  html[data-book-type="manual"] .paper-page{padding-left:16mm!important;padding-right:12mm!important}
+  html[data-book-type="standard-book"] .paper-page{padding-top:10mm!important;padding-bottom:12mm!important}
+  html[data-book-type="booklet"] .paper-page{padding:8mm!important}
+}
+
+
+/* v100.50 — Print-safe margins and clipping prevention */
+@media print{
+  .paper-page,
+  .book-print-page{
+    box-sizing:border-box!important;
+    overflow:hidden!important;
+  }
+
+  html[data-print-mode="normal"] .paper-page{
+    padding:10mm!important;
+  }
+
+  body.book-print-saddle .booklet-sheet{
+    box-sizing:border-box!important;
+    padding:4mm!important;
+    gap:2mm!important;
+  }
+
+  body.book-print-saddle .booklet-sheet > .book-print-page{
+    box-sizing:border-box!important;
+    padding:6mm!important;
+    overflow:hidden!important;
+  }
+
+  body.book-print-saddle .booklet-sheet > .book-print-page .page-body{
+    box-sizing:border-box!important;
+    max-width:100%!important;
+    overflow:hidden!important;
+  }
+
+  body.book-print-perfect .paper-page{
+    box-sizing:border-box!important;
+    padding-top:8mm!important;
+    padding-bottom:8mm!important;
+  }
+
+  body.book-print-perfect .paper-page:nth-child(odd){
+    padding-left:14mm!important;
+    padding-right:8mm!important;
+  }
+
+  body.book-print-perfect .paper-page:nth-child(even){
+    padding-left:8mm!important;
+    padding-right:14mm!important;
+  }
+
+  body.book-print-wire .paper-page{
+    box-sizing:border-box!important;
+    padding-top:8mm!important;
+    padding-bottom:8mm!important;
+    padding-left:16mm!important;
+    padding-right:8mm!important;
+  }
+
+  .paper-page img,
+  .book-print-page img,
+  .paper-page svg,
+  .book-print-page svg,
+  .paper-page table,
+  .book-print-page table{
+    max-width:100%!important;
+    height:auto!important;
+  }
+
+  .paper-page *,
+  .book-print-page *{
+    box-sizing:border-box!important;
+  }
+
+  .page-body{
+    max-width:100%!important;
+    overflow:hidden!important;
+  }
+
+  html.print-crop-marks .paper-page{
+    outline-offset:-3mm!important;
+  }
+}
+
+
+/* v100.51 verified saddle-stitch scaling and clipping fix */
+@media print{
+  body.book-print-saddle .booklet-sheet{
+    padding:0!important;
+    gap:0!important;
+  }
+  body.book-print-saddle .booklet-page-slot{
+    position:relative!important;
+    display:block!important;
+    flex:0 0 var(--booklet-page-width)!important;
+    width:var(--booklet-page-width)!important;
+    min-width:var(--booklet-page-width)!important;
+    max-width:var(--booklet-page-width)!important;
+    height:var(--booklet-page-height)!important;
+    min-height:var(--booklet-page-height)!important;
+    max-height:var(--booklet-page-height)!important;
+    margin:0!important;
+    padding:0!important;
+    overflow:hidden!important;
+    break-before:auto!important;
+    break-after:auto!important;
+    page-break-before:auto!important;
+    page-break-after:auto!important;
+    background:#fff!important;
+  }
+  body.book-print-saddle .booklet-page-slot:first-child{
+    border-right:.2mm dashed rgba(0,0,0,.22)!important;
+  }
+  body.book-print-saddle .booklet-page-slot > .book-print-page{
+    position:absolute!important;
+    top:0!important;
+    left:0!important;
+    display:block!important;
+    width:210mm!important;
+    min-width:210mm!important;
+    max-width:210mm!important;
+    height:297mm!important;
+    min-height:297mm!important;
+    max-height:297mm!important;
+    margin:0!important;
+    padding:0!important;
+    border:0!important;
+    box-shadow:none!important;
+    overflow:hidden!important;
+    transform:scale(var(--booklet-page-scale))!important;
+    transform-origin:top left!important;
+    break-before:auto!important;
+    break-after:auto!important;
+    page-break-before:auto!important;
+    page-break-after:auto!important;
+  }
+  body.book-print-saddle .booklet-page-slot > .book-print-blank{
+    width:100%!important;
+    height:100%!important;
+    transform:none!important;
+  }
+}
+
+
+/* v100.52 — Dynamic paper dimensions for every supported paper size */
+@media print{
+  html[data-print-mode="normal"] .paper-page{
+    width:var(--selected-print-width)!important;
+    height:var(--selected-print-height)!important;
+    min-width:var(--selected-print-width)!important;
+    min-height:var(--selected-print-height)!important;
+    max-width:var(--selected-print-width)!important;
+    max-height:var(--selected-print-height)!important;
+  }
+
+  body.book-print-perfect .paper-page,
+  body.book-print-wire .paper-page{
+    width:var(--selected-print-width)!important;
+    height:var(--selected-print-height)!important;
+    min-width:var(--selected-print-width)!important;
+    min-height:var(--selected-print-height)!important;
+    max-width:var(--selected-print-width)!important;
+    max-height:var(--selected-print-height)!important;
+  }
+}
+
+@media print{
+.paper-page,.book-print-page{padding:calc(var(--print-safe-margin,10mm) + var(--print-bleed,0mm))!important}
+html[data-printer-type="digital-press"] .paper-page,html[data-printer-type="offset-press"] .paper-page{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+html[data-cover-type="hardcover"] .paper-page:first-child{padding-left:calc(var(--print-safe-margin,10mm) + var(--print-spine-width,0mm) + 15mm)!important;padding-right:calc(var(--print-safe-margin,10mm) + 15mm)!important}
+html[data-cover-type="softcover"] .paper-page:first-child{padding-left:calc(var(--print-safe-margin,10mm) + var(--print-spine-width,0mm))!important}
+html.print-foil-layer .paper-page:first-child{outline:.3mm dashed #000;outline-offset:-5mm}
+}
+
+/* v100.54 — Poster output engine */
+@media print{
+  html.poster-print-active #book{
+    width:var(--poster-width)!important;
+    min-width:var(--poster-width)!important;
+    margin:0!important;
+    display:grid!important;
+    grid-template-columns:1fr!important;
+  }
+  html.poster-print-active .paper-page{
+    width:var(--poster-width)!important;
+    min-width:var(--poster-width)!important;
+    max-width:var(--poster-width)!important;
+    height:var(--poster-height)!important;
+    min-height:var(--poster-height)!important;
+    max-height:var(--poster-height)!important;
+    padding:calc(var(--poster-safe-margin,10mm) + var(--poster-bleed,0mm))!important;
+    margin:0!important;
+    border:0!important;
+    box-shadow:none!important;
+    overflow:hidden!important;
+    break-after:page!important;
+    page-break-after:always!important;
+    -webkit-print-color-adjust:exact;
+    print-color-adjust:exact;
+  }
+  html[data-poster-layout="grid"] .page-body{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:var(--poster-gap,16px)!important}
+  html[data-poster-layout="timeline"] .page-body{display:grid!important;grid-template-columns:1fr!important;gap:var(--poster-gap,16px)!important}
+  html[data-poster-layout="infographic"] .page-body{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:var(--poster-gap,16px)!important}
+  html[data-poster-density="minimal"] .page-body>*:nth-child(n+5){display:none!important}
+  html[data-poster-density="balanced"] .page-body>*:nth-child(n+9){display:none!important}
+  html[data-poster-theme="minimal"] .paper-page{background:#fff!important;color:#111!important}
+  html[data-poster-typography="bold"] .paper-page h1,html[data-poster-typography="bold"] .paper-page h2{font-weight:950!important;letter-spacing:-.03em}
+  html[data-poster-typography="compact"] .paper-page{font-size:85%!important}
+  html.poster-hide-background .paper-page{background:#fff!important;color:#111!important}
+  html.poster-crop-marks .paper-page{outline:.3mm solid #000;outline-offset:-3mm}
+  html.poster-registration-marks .paper-page::after{content:"✚  ✚  ✚  ✚";position:absolute;inset:2mm;display:flex;justify-content:space-between;align-items:flex-start;color:#000;font:8pt sans-serif;pointer-events:none}
+}

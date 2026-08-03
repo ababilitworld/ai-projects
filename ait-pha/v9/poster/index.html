@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Poster Workspace</title>
+<link rel="stylesheet" href="poster-workspace.css">
+</head>
+<body>
+<main class="ps-shell">
+  <header class="ps-hero">
+    <div>
+      <span class="ps-kicker">WORKSPACE / REPORT / POSTER</span>
+      <h1>Poster Workspace</h1>
+      <p>Create a professional poster layout, preview the output and send it to print.</p>
+    </div>
+    <div class="ps-hero__icon">🪧</div>
+  </header>
+
+  <section class="ps-layout">
+    <form class="ps-panel ps-config" id="posterConfigForm">
+      <section class="ps-section">
+        <div class="ps-section__head"><span class="ps-step">01</span><div><h2>Poster size</h2><p>Select a standard or custom poster format.</p></div></div>
+        <div class="ps-grid ps-grid--3">
+          <label class="ps-choice"><input type="radio" name="size" value="a3" checked><span>▧</span><b>A3</b><small>297 × 420 mm</small></label>
+          <label class="ps-choice"><input type="radio" name="size" value="a2"><span>▨</span><b>A2</b><small>420 × 594 mm</small></label>
+          <label class="ps-choice"><input type="radio" name="size" value="a1"><span>▩</span><b>A1</b><small>594 × 841 mm</small></label>
+          <label class="ps-choice"><input type="radio" name="size" value="a0"><span>▦</span><b>A0</b><small>841 × 1189 mm</small></label>
+          <label class="ps-choice"><input type="radio" name="size" value="24x36"><span>▭</span><b>24 × 36 in</b><small>Large display poster</small></label>
+          <label class="ps-choice"><input type="radio" name="size" value="custom"><span>✦</span><b>Custom</b><small>Set width and height</small></label>
+        </div>
+        <div class="ps-field-grid ps-field-grid--2 ps-custom-size" id="customSizeFields" hidden>
+          <label class="ps-field"><span>Width</span><div class="ps-input-suffix"><input type="number" name="customWidth" min="100" max="2000" value="420"><i>mm</i></div></label>
+          <label class="ps-field"><span>Height</span><div class="ps-input-suffix"><input type="number" name="customHeight" min="100" max="3000" value="594"><i>mm</i></div></label>
+        </div>
+      </section>
+
+      <section class="ps-section">
+        <div class="ps-section__head"><span class="ps-step">02</span><div><h2>Orientation & layout</h2><p>Choose the visual structure of the poster.</p></div></div>
+        <div class="ps-grid ps-grid--2">
+          <label class="ps-choice"><input type="radio" name="orientation" value="portrait" checked><span>▯</span><b>Portrait</b><small>Vertical layout</small></label>
+          <label class="ps-choice"><input type="radio" name="orientation" value="landscape"><span>▭</span><b>Landscape</b><small>Horizontal layout</small></label>
+        </div>
+        <div class="ps-grid ps-grid--4 ps-layout-choices">
+          <label class="ps-choice"><input type="radio" name="layout" value="hero" checked><span>★</span><b>Hero</b><small>Large headline and key message</small></label>
+          <label class="ps-choice"><input type="radio" name="layout" value="grid"><span>▦</span><b>Grid</b><small>Balanced card layout</small></label>
+          <label class="ps-choice"><input type="radio" name="layout" value="timeline"><span>↦</span><b>Timeline</b><small>Step-by-step sequence</small></label>
+          <label class="ps-choice"><input type="radio" name="layout" value="infographic"><span>◫</span><b>Infographic</b><small>Visual data summary</small></label>
+        </div>
+      </section>
+
+      <section class="ps-section">
+        <div class="ps-section__head"><span class="ps-step">03</span><div><h2>Content selection</h2><p>Select the ebook pages and content density.</p></div></div>
+        <div class="ps-field-grid ps-field-grid--3">
+          <label class="ps-field"><span>Page source</span><select name="source">
+            <option value="current">Current page</option><option value="selected" selected>Selected pages</option><option value="all">All pages summary</option>
+          </select></label>
+          <label class="ps-field"><span>Page range</span><input name="pageRange" value="1-7" placeholder="e.g. 1-7"></label>
+          <label class="ps-field"><span>Content density</span><select name="density">
+            <option value="minimal">Minimal</option><option value="balanced" selected>Balanced</option><option value="detailed">Detailed</option>
+          </select></label>
+        </div>
+        <div class="ps-toggle-grid">
+          <label class="ps-toggle"><input type="checkbox" name="showTitle" checked><span><b>Poster title</b><small>Display poster heading</small></span></label>
+          <label class="ps-toggle"><input type="checkbox" name="showPageNumbers"><span><b>Page references</b><small>Show source page numbers</small></span></label>
+          <label class="ps-toggle"><input type="checkbox" name="showQr"><span><b>QR placeholder</b><small>Reserve space for QR code</small></span></label>
+        </div>
+      </section>
+
+      <section class="ps-section">
+        <div class="ps-section__head"><span class="ps-step">04</span><div><h2>Visual style</h2><p>Control spacing, background and typography.</p></div></div>
+        <div class="ps-field-grid ps-field-grid--4">
+          <label class="ps-field"><span>Theme</span><select name="theme"><option value="current" selected>Current Theme</option><option value="light">Light</option><option value="dark">Dark</option><option value="minimal">Minimal</option></select></label>
+          <label class="ps-field"><span>Typography</span><select name="typography"><option value="editorial" selected>Editorial</option><option value="modern">Modern</option><option value="bold">Bold Display</option><option value="compact">Compact</option></select></label>
+          <label class="ps-field"><span>Card radius</span><select name="radius"><option value="0">Square</option><option value="8">8 px</option><option value="16" selected>16 px</option><option value="24">24 px</option></select></label>
+          <label class="ps-field"><span>Gap</span><select name="gap"><option value="8">Compact</option><option value="16" selected>Balanced</option><option value="24">Spacious</option></select></label>
+        </div>
+      </section>
+
+      <section class="ps-section">
+        <div class="ps-section__head"><span class="ps-step">05</span><div><h2>Print production</h2><p>Configure bleed, safe margin and device output.</p></div></div>
+        <div class="ps-field-grid ps-field-grid--4">
+          <label class="ps-field"><span>Bleed</span><select name="bleed"><option value="0">None</option><option value="3" selected>3 mm</option><option value="5">5 mm</option></select></label>
+          <label class="ps-field"><span>Safe margin</span><select name="safeMargin"><option value="5">5 mm</option><option value="10" selected>10 mm</option><option value="15">15 mm</option><option value="20">20 mm</option></select></label>
+          <label class="ps-field"><span>Printer type</span><select name="printerType"><option value="home">Home Printer</option><option value="digital" selected>Digital Press</option><option value="large-format">Large Format</option><option value="offset">Offset Press</option></select></label>
+          <label class="ps-field"><span>Resolution</span><select name="resolution"><option value="150">150 DPI</option><option value="300" selected>300 DPI</option><option value="600">600 DPI</option></select></label>
+        </div>
+        <div class="ps-field-grid ps-field-grid--3">
+          <label class="ps-field"><span>Color intent</span><select name="colorProfile"><option value="srgb">sRGB</option><option value="cmyk-fogra39" selected>CMYK · FOGRA39</option><option value="cmyk-swop">CMYK · SWOP</option></select></label>
+          <label class="ps-field"><span>Mounting</span><select name="mounting"><option value="none">None</option><option value="foam-board">Foam Board</option><option value="pvc">PVC Board</option><option value="roll-up">Roll-up Stand</option><option value="frame">Frame</option></select></label>
+          <label class="ps-field"><span>Finishing</span><select name="finishing"><option value="none">None</option><option value="matte" selected>Matte Lamination</option><option value="gloss">Gloss Lamination</option><option value="spot-uv">Spot UV</option></select></label>
+        </div>
+        <div class="ps-toggle-grid">
+          <label class="ps-toggle"><input type="checkbox" name="cropMarks"><span><b>Crop marks</b><small>Add trim guides</small></span></label>
+          <label class="ps-toggle"><input type="checkbox" name="registrationMarks"><span><b>Registration marks</b><small>Add alignment marks</small></span></label>
+          <label class="ps-toggle"><input type="checkbox" name="includeBackground" checked><span><b>Print background</b><small>Preserve theme colors</small></span></label>
+        </div>
+      </section>
+
+      <footer class="ps-actions">
+        <button class="ps-button" type="reset" id="resetPoster">Reset</button>
+        <button class="ps-button" type="button" id="applyPoster">Apply</button>
+        <button class="ps-button ps-button--primary" type="button" id="previewPoster">Preview</button>
+      </footer>
+    </form>
+
+    <aside class="ps-panel ps-summary-panel">
+      <span class="ps-kicker">LIVE POSTER SUMMARY</span>
+      <h2>Poster output</h2>
+      <div class="ps-mini-preview" id="miniPreview"><div class="ps-mini-title">Poster title</div><div class="ps-mini-grid"><i></i><i></i><i></i><i></i></div></div>
+      <dl class="ps-summary">
+        <div><dt>Size</dt><dd id="sumSize">A3</dd></div>
+        <div><dt>Orientation</dt><dd id="sumOrientation">Portrait</dd></div>
+        <div><dt>Layout</dt><dd id="sumLayout">Hero</dd></div>
+        <div><dt>Density</dt><dd id="sumDensity">Balanced</dd></div>
+        <div><dt>Bleed</dt><dd id="sumBleed">3 mm</dd></div>
+        <div><dt>Safe margin</dt><dd id="sumSafe">10 mm</dd></div>
+        <div><dt>Device</dt><dd id="sumDevice">Digital Press</dd></div>
+      </dl>
+      <div class="ps-note" id="posterAdvice">A3 portrait poster with balanced content is selected.</div>
+    </aside>
+  </section>
+</main>
+
+<section class="ps-modal" id="posterPreviewModal" hidden aria-hidden="true">
+  <div class="ps-modal__backdrop" data-close-poster-preview></div>
+  <article class="ps-modal__dialog">
+    <header class="ps-modal__header"><div><span class="ps-kicker">POSTER PREVIEW</span><h2>Poster Configuration & Preview</h2></div><button type="button" data-close-poster-preview>×</button></header>
+    <div class="ps-modal__body">
+      <div class="ps-preview-info">
+        <section><h3>Selected configuration</h3><dl id="posterSelectedConfig"></dl></section>
+        <section><h3>Suggested device settings</h3><dl id="posterDeviceConfig"></dl><div class="ps-note" id="posterDeviceNote"></div></section>
+      </div>
+      <section class="ps-preview-canvas-wrap">
+        <div class="ps-preview-canvas" id="posterPreviewCanvas">
+          <div class="ps-safe-guide"></div>
+          <div class="ps-poster-content">
+            <h3 id="previewPosterTitle">Poster title</h3>
+            <div class="ps-poster-cards" id="previewPosterCards"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+    <footer class="ps-modal__footer"><button class="ps-button" type="button" data-close-poster-preview>Back</button><button class="ps-button ps-button--primary" type="button" id="printPoster">Print Poster</button></footer>
+  </article>
+</section>
+
+<script src="poster.js"></script>
+</body>
+</html>

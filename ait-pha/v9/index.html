@@ -44,107 +44,10 @@ box-shadow:0 8px 20px rgba(0,0,0,.08);
 <span id="zoomLabel">100%</span>
 <span id="pageCount"></span>
 </div>
-<button aria-controls="terminalDock" aria-expanded="false" class="terminal-launcher no-print" id="terminalLauncher" type="button">
-<span aria-hidden="true" class="terminal-launcher__icon terminal-launcher__icon--prompt"><span>&gt;_</span></span>
-<span class="terminal-launcher__copy"><b>Terminal</b></span>
-</button>
-<button aria-label="Close terminal menu" class="terminal-dock-backdrop no-print" id="terminalDockBackdrop" tabindex="-1" type="button"></button>
-<aside aria-hidden="true" aria-label="Heart Routine terminal" class="terminal-dock no-print" id="terminalDock">
-<header class="terminal-dock__header">
-<div class="terminal-dock__title"><span aria-hidden="true">⌘</span><div><strong>Heart Routine Terminal</strong><small>Choose a control group</small></div></div>
-<button aria-label="Close terminal menu" class="terminal-icon-button" id="terminalDockClose" type="button">×</button>
-</header>
-<div class="terminal-dock__groups">
-<button class="terminal-group-card" data-open-terminal-modal="actionModal" type="button">
-<span class="terminal-group-card__icon">⚡</span><span><b>Action</b><small>Print, image export and paper controls</small></span><i>→</i>
-</button>
-<button class="terminal-group-card" data-open-terminal-modal="navigationModal" type="button">
-<span class="terminal-group-card__icon">🧭</span><span><b>Navigation</b><small>Jump directly to ebook pages</small></span><i>→</i>
-</button>
-<button class="terminal-group-card" data-open-terminal-modal="exerciseModal" type="button">
-<span class="terminal-group-card__icon">🏃</span><span><b>Exercise</b><small>Breathing and walking tools</small></span><i>→</i>
-</button>
-<button class="terminal-group-card" data-open-terminal-modal="interactionModal" type="button">
-<span class="terminal-group-card__icon">✥</span><span><b>Interaction</b><small>Zoom, focus, pages and display controls</small></span><i>→</i>
-</button>
-<button class="terminal-group-card" data-open-terminal-modal="appearanceModal" type="button">
-<span class="terminal-group-card__icon">◉</span><span><b>Appearance</b><small>Switch terminal themes and reading surface</small></span><i>→</i>
-</button>
-</div>
-<footer class="terminal-dock__footer"><span class="terminal-live-dot"></span><span id="terminalActiveTheme">Dark Glass active</span></footer>
-</aside>
-<div aria-hidden="true" class="terminal-modal-shell no-print" id="terminalModalShell">
-<button aria-label="Close modal" class="terminal-modal-backdrop" id="terminalModalBackdrop" tabindex="-1" type="button"></button>
-<section aria-labelledby="actionModalTitle" aria-modal="true" class="terminal-modal" hidden="" id="actionModal" role="dialog">
-<header class="terminal-modal__header"><div><span class="terminal-modal__eyebrow">TERMINAL GROUP</span><h2 id="actionModalTitle">⚡ Action</h2><p>Output and paper commands</p></div><button aria-label="Close" class="terminal-icon-button" data-close-terminal-modal="" type="button">×</button></header>
-<div class="terminal-modal__body">
-<section class="terminal-control-section"><h3>Output</h3><div class="terminal-command-grid">
-<button class="terminal-command terminal-command--primary" data-command="print" type="button"><span>🖨</span><b>Color Print</b><small>Print using selected paper</small></button>
-<button class="terminal-command" data-command="image" type="button"><span>📷</span><b>A0 Image</b><small>Open high-resolution JPG export</small></button>
-</div></section>
-<section class="terminal-control-section"><h3>Paper size</h3><div class="terminal-segment" id="terminalPaperSegment">
-<button data-paper-command="a0" type="button">A0</button><button data-paper-command="a4" type="button">A4</button><button data-paper-command="a5" type="button">A5</button>
-</div></section>
-</div>
-</section>
-<section aria-labelledby="navigationModalTitle" aria-modal="true" class="terminal-modal terminal-modal--wide" hidden="" id="navigationModal" role="dialog">
-<header class="terminal-modal__header"><div><span class="terminal-modal__eyebrow">TERMINAL GROUP</span><h2 id="navigationModalTitle">🧭 Navigation</h2><p>Jump directly to an ebook page</p></div><button aria-label="Close" class="terminal-icon-button" data-close-terminal-modal="" type="button">×</button></header>
-<div class="terminal-modal__body">
-<section class="terminal-control-section"><h3>Ebook pages</h3><div class="terminal-command-grid terminal-command-grid--compact">
-<button class="terminal-command" data-page-index="0" type="button"><span>01</span><b>Cover</b><small>Book introduction</small></button>
-<button class="terminal-command" data-page-index="1" type="button"><span>02</span><b>Goals</b><small>Goals and principles</small></button>
-<button class="terminal-command" data-page-index="2" type="button"><span>03</span><b>Morning</b><small>Morning routine</small></button>
-<button class="terminal-command" data-page-index="3" type="button"><span>04</span><b>Evening</b><small>Afternoon and night</small></button>
-<button class="terminal-command" data-page-index="4" type="button"><span>05</span><b>Food I</b><small>Protein and whole grains</small></button>
-<button class="terminal-command" data-page-index="5" type="button"><span>06</span><b>Food II</b><small>Vegetables and limits</small></button>
-<button class="terminal-command" data-page-index="6" type="button"><span>07</span><b>Weekly</b><small>Weekly meal plan</small></button>
-<button class="terminal-command" data-page-index="7" type="button"><span>08</span><b>Tracking</b><small>Measurement and safety</small></button>
-<button class="terminal-command" data-page-index="8" type="button"><span>09</span><b>Checklist</b><small>Daily checklist</small></button>
-</div></section>
-</div>
-</section>
-<section aria-labelledby="exerciseModalTitle" aria-modal="true" class="terminal-modal" hidden="" id="exerciseModal" role="dialog">
-<header class="terminal-modal__header"><div><span class="terminal-modal__eyebrow">TERMINAL GROUP</span><h2 id="exerciseModalTitle">🏃 Exercise</h2><p>Open guided breathing and walking tools</p></div><button aria-label="Close" class="terminal-icon-button" data-close-terminal-modal="" type="button">×</button></header>
-<div class="terminal-modal__body">
-<section class="terminal-control-section"><h3>Exercise tools</h3><div class="terminal-command-grid">
-<a class="terminal-command terminal-command--primary" href="./exercise/breathing"><span>🫁</span><b>Breathing</b><small>Guided breathing timer and relaxation cycles</small></a>
-<a class="terminal-command" href="./exercise/walking"><span>🚶</span><b>Walking</b><small>Warm-up, power walk and cool-down timer</small></a>
-</div></section>
-</div>
-</section>
-<section aria-labelledby="interactionModalTitle" aria-modal="true" class="terminal-modal" hidden="" id="interactionModal" role="dialog">
-<header class="terminal-modal__header"><div><span class="terminal-modal__eyebrow">TERMINAL GROUP</span><h2 id="interactionModalTitle">✥ Interaction</h2><p>Reading and viewport controls</p></div><button aria-label="Close" class="terminal-icon-button" data-close-terminal-modal="" type="button">×</button></header>
-<div class="terminal-modal__body">
-<section class="terminal-control-section"><h3>Zoom</h3><div class="terminal-zoom-console"><button data-command="zoom-out" type="button">−</button><output id="terminalZoomLabel">100%</output><button data-command="zoom-in" type="button">+</button><button data-command="zoom-reset" type="button">Reset</button></div></section>
-<section class="terminal-control-section"><h3>Page movement</h3><div class="terminal-command-grid terminal-command-grid--compact">
-<button class="terminal-command" data-command="previous" type="button"><span>←</span><b>Previous</b><small>Previous ebook page</small></button>
-<button class="terminal-command" data-command="next" type="button"><span>→</span><b>Next</b><small>Next ebook page</small></button>
-<button class="terminal-command" data-command="top" type="button"><span>↑</span><b>Up</b><small>Go to first page</small></button>
-<button class="terminal-command" data-command="bottom" type="button"><span>↓</span><b>Down</b><small>Go to last page</small></button>
-</div></section>
-<section class="terminal-control-section"><h3>Reading modes</h3><div class="terminal-toggle-list">
-<label><span><b>Focus mode</b><small>Hide screen-only helper panels</small></span><input id="terminalFocusMode" type="checkbox"/><i></i></label>
-<label><span><b>Full screen</b><small>Use the full browser display</small></span><input id="terminalFullscreen" type="checkbox"/><i></i></label>
-</div></section>
-</div>
-</section>
-<section aria-labelledby="appearanceModalTitle" aria-modal="true" class="terminal-modal terminal-modal--wide" hidden="" id="appearanceModal" role="dialog">
-<header class="terminal-modal__header"><div><span class="terminal-modal__eyebrow">TERMINAL GROUP</span><h2 id="appearanceModalTitle">◉ Appearance</h2><p>Select a terminal theme; your choice is remembered</p></div><button aria-label="Close" class="terminal-icon-button" data-close-terminal-modal="" type="button">×</button></header>
-<div class="terminal-modal__body">
-<div class="terminal-theme-grid" id="terminalThemeGrid">
-<button data-theme-value="dark-glass" type="button"><span><i style="--sw:#07111f"></i><i style="--sw:#38bdf8"></i><i style="--sw:#a78bfa"></i></span><b>Dark Glass</b><small>Deep glass terminal</small></button>
-<button data-theme-value="classic-light" type="button"><span><i style="--sw:#eef3f8"></i><i style="--sw:#087f75"></i><i style="--sw:#2563eb"></i></span><b>Classic Light</b><small>Bright and clean</small></button>
-<button data-theme-value="sapphire" type="button"><span><i style="--sw:#061426"></i><i style="--sw:#60a5fa"></i><i style="--sw:#22d3ee"></i></span><b>Sapphire</b><small>Blue command center</small></button>
-<button data-theme-value="emerald" type="button"><span><i style="--sw:#061914"></i><i style="--sw:#34d399"></i><i style="--sw:#a3e635"></i></span><b>Emerald</b><small>Green market terminal</small></button>
-<button data-theme-value="royal-purple" type="button"><span><i style="--sw:#12091f"></i><i style="--sw:#c084fc"></i><i style="--sw:#f472b6"></i></span><b>Royal Purple</b><small>Premium violet glow</small></button>
-<button data-theme-value="carbon-oled" type="button"><span><i style="--sw:#000"></i><i style="--sw:#f8fafc"></i><i style="--sw:#22c55e"></i></span><b>Carbon OLED</b><small>Maximum contrast</small></button>
-<button data-theme-value="crimson" type="button"><span><i style="--sw:#19080d"></i><i style="--sw:#fb7185"></i><i style="--sw:#f59e0b"></i></span><b>Crimson</b><small>Warm red terminal</small></button>
-<button data-theme-value="coffee" type="button"><span><i style="--sw:#1a120d"></i><i style="--sw:#d6a46d"></i><i style="--sw:#facc15"></i></span><b>Coffee</b><small>Warm reading palette</small></button>
-<button data-theme-value="aurora" type="button"><span><i style="--sw:#06151a"></i><i style="--sw:#2dd4bf"></i><i style="--sw:#c084fc"></i></span><b>Aurora</b><small>Teal violet glow</small></button>
-</div>
-</div>
-</section>
-</div>
+<div id="terminalComponentMount"></div>
+<script src="assets/terminal/terminal-config.js"></script>
+<script src="assets/terminal/terminal-schema.js"></script>
+<script src="assets/terminal/terminal-component.js"></script>
 <aside class="print-help no-print">
 <b>প্রিন্ট সেটিং:</b> Background graphics ON · Headers/footers OFF · Margins None · Scale 100%। Border-এর চারদিকে নিরাপদ print gutter স্বয়ংক্রিয়ভাবে রাখা হয়েছে।
     <span id="layoutStatus" role="status"></span>
@@ -336,52 +239,81 @@ box-shadow:0 8px 20px rgba(0,0,0,.08);
 <article class="food-card caution"><div>🥛</div><h3>Spicy golden milk</h3><p>low-fat milk, চিনি-মধু ছাড়া</p><small>fasting-এর বাইরে</small></article>
 <article class="food-card avoid"><div>🍯</div><h3>Honey</h3><p>TG বেশি থাকলে আপাতত বাদ</p><small>natural হলেও sugar</small></article>
 </div>
-<section class="two-panels">
-<article class="panel"><div class="panel-head"><b>02</b><h3>রান্নার ব্যবহারিক নিয়ম</h3></div><ul class="check-list"><li>Olive + mustard oil মিলিয়ে দৈনিক added oil প্রায় ২–৩ চা-চামচের মধ্যে রাখুন।</li><li>ভাজা নয়—ঝোল, সেদ্ধ, grill, steam বা air-fry (অল্প তেল)।</li><li>মাছের ঝোলে অতিরিক্ত তেল ও আলু কমান।</li><li>মোট লবণ প্রায় ৫ গ্রামের কম রাখার চেষ্টা করুন।</li></ul></article>
-<article class="panel red"><div class="panel-head"><b>!</b><h3>কমান বা বাদ দিন</h3></div><ul class="cross-list"><li>চিনি, মিষ্টি, soft drink, packaged juice</li><li>সাদা ভাতের বড় portion, ময়দা, biscuit ও bakery</li><li>deep-fried খাবার, trans fat ও অতিরিক্ত ghee</li><li>এক বেলায় অনেক বাদাম বা তেল</li></ul></article>
-</section>
+
+<div class="page6-practical-wrap">
+<article class="page6-practical-card panel">
+<div class="panel-head"><h3><span>কমান বা বাদ দিন</span></h3></div>
+<ul class="cross-list"><li>চিনি, মিষ্টি, soft drink ও packaged juice</li><li>সাদা ভাতের বড় portion, ময়দা, biscuit ও bakery</li><li>Deep-fried খাবার, trans fat ও অতিরিক্ত ghee</li><li>এক বেলায় অনেক বাদাম, তেল বা উচ্চ-ক্যালরির খাবার</li></ul>
+</article>
+</div>
 </div>
 <footer class="folio"><span>খাবারের তালিকা ২</span><span class="folio-number"></span></footer>
 </div>
+
+
+
 </section>
-<!-- 7: MENU -->
-<section class="paper-page" data-title="নমুনা মেনু">
+<!-- 7: PRACTICAL HEALTH GUIDE -->
+<section class="paper-page practical-guide-page" data-title="ব্যবহারিক স্বাস্থ্য নির্দেশনা">
 <div class="page-art">
 <div class="frame frame-outer"></div><div class="frame frame-inner"></div>
 <div class="page-body">
-<header class="chapter-head"><span>অধ্যায় ৪</span><h2>একদিনের বাস্তব নমুনা মেনু</h2><p>ক্ষুধা, ওষুধ, কাজ ও চিকিৎসকের নির্দেশ অনুযায়ী portion সামঞ্জস্য করুন</p></header>
-<div class="menu-list">
-<article><time>৯:০০ AM</time><div>🥣</div><section><h3>প্রথম খাবার</h3><p>Plain yogurt ২০০ গ্রাম + ১টি ডিম + শসা + ½ কাপ ছোলা অথবা ২টি walnut।</p><small>লক্ষ্য: protein ও fiber দিয়ে fasting ভাঙা</small></section></article>
-<article><time>১২:৩০ PM</time><div>🐟</div><section><h3>দুপুর</h3><p>মাছ ১৫০ গ্রাম + দুই ধরনের সবজি + বড় সালাদ + ১–২টি ছোট আটার রুটি।</p><small>রুটি নেওয়ার আগে সবজি ও protein খান</small></section></article>
-<article><time>৫:১৫ PM</time><div>🥒</div><section><h3>হালকা নাস্তা</h3><p>শসা/Plain yogurt/৫টি almond—শুধু প্রকৃত ক্ষুধা থাকলে।</p><small>ক্ষুধা না থাকলে snack প্রয়োজন নেই</small></section></article>
-<article><time>৫:৪৫ PM</time><div>🍲</div><section><h3>শেষ খাবার</h3><p>মাছ/soybean/ডিম + প্রচুর সবজি; প্রয়োজন হলে ১টি ছোট রুটি।</p><small>৬টার মধ্যে শেষ করুন; তারপর পানি</small></section></article>
+<header class="chapter-head"><span>অধ্যায় ৪</span><h2>ব্যবহারিক স্বাস্থ্য নির্দেশনা</h2><p>খাবার, রান্না, নিরাপদ রোদ, শ্বাস ও হাঁটার সহজ প্রয়োগযোগ্য নিয়ম</p></header>
+
+<div class="practical-guide-grid page7-guide-shell">
+
+<div class="page7-fit-grid">
+<article class="page7-fit-card page7-fit-card--1 ">
+<div class="panel-head"><h3><span class="page7-guide-number">01</span><span>রান্নার ব্যবহারিক নিয়ম</span></h3></div>
+<ul class="check-list"><li>Olive ও mustard oil মিলিয়ে দৈনিক added oil প্রায় ২–৩ চা-চামচে রাখুন।</li><li>ভাজার বদলে ঝোল, সেদ্ধ, grill, steam বা অল্প তেলে air-fry করুন।</li><li>মাছের ঝোলে অতিরিক্ত তেল ও আলু কমান।</li><li>মোট লবণ দৈনিক প্রায় ৫ গ্রামের কম রাখার চেষ্টা করুন।</li></ul>
+</article>
+<article class="page7-fit-card page7-fit-card--2 page7-fit-card--food">
+<div class="panel-head"><h3><span class="page7-guide-number">02</span><span>খাবারের চারটি নিয়ম</span></h3>
+
 </div>
-<section class="plate-area">
-<div class="plate-diagram"><div class="veg"><b>½</b><span>সবজি ও সালাদ</span></div><div class="protein"><b>¼</b><span>মাছ/ডিম/ডাল/soy</span></div><div class="carb"><b>¼</b><span>রুটি/whole grain</span></div></div>
-<article class="panel"><div class="panel-head"><b>04</b><h3>খাবারের চারটি নিয়ম</h3></div><ol><li>প্রথমে সালাদ/সবজি, এরপর protein, শেষে রুটি।</li><li>ধীরে ১৫–২০ মিনিটে খাবার শেষ করুন।</li><li>পেট প্রায় ৮০% ভরলে থামুন।</li><li>খাওয়ার পরে সম্ভব হলে ১০–১৫ মিনিট হালকা হাঁটুন।</li></ol></article>
-</section>
+<ol class="practical-number-list"><li>প্রথমে সালাদ/সবজি, এরপর protein, শেষে রুটি বা whole grain।</li><li>ধীরে ১৫–২০ মিনিটে খাবার শেষ করুন।</li><li>পেট প্রায় ৮০% ভরলে থামুন।</li><li>খাওয়ার পরে সম্ভব হলে ১০–১৫ মিনিট হালকা হাঁটুন।</li></ol>
+</article>
+<article class="page7-fit-card page7-fit-card--plate">
+  <h3><span class="page7-guide-number">03</span><span>সুষম খাবারের প্লেট</span></h3>
+  <div class="page7-plate-card-body">
+    <figure class="practical-food-plate">
+  <img src="assets/images/balanced-food-plate.svg" alt="সুষম খাবারের প্লেট">
+  <figcaption>সুষম প্লেট: ½ সবজি, ¼ প্রোটিন, ¼ পরিমিত শর্করা</figcaption>
+</figure>
+  </div>
+</article>
+<article class="page7-fit-card page7-fit-card--3 ">
+<div class="panel-head"><h3><span class="page7-guide-number">04</span><span>ভিটামিন D-এর জন্য নিরাপদ রোদ</span></h3></div>
+<div class="compact-fact-grid"><div><b>সময়</b><span>সকাল ১০:৩০–দুপুর ২টার মধ্যে সুবিধাজনক সময়ে</span></div><div><b>সময়কাল</b><span>সাধারণত ৫–১৫ মিনিট</span></div><div><b>কীভাবে</b><span>খোলা আকাশে হাত ও পায়ের কিছু অংশে সরাসরি রোদ</span></div><div><b>সতর্কতা</b><span>ত্বক লাল, গরম বা জ্বালা করলে সঙ্গে সঙ্গে ছায়ায় যান</span></div></div>
+</article>
+<article class="page7-fit-card page7-fit-card--5 ">
+<div class="panel-head"><h3><span class="page7-guide-number">05</span><span>শ্বাস-প্রশ্বাস · ১৫ মিনিট</span></h3></div>
+<div class="compact-breath-grid"><div><strong>৬-৩-৯</strong><span>৬ সেকেন্ড নিন<br>৩ সেকেন্ড ধরে রাখুন<br>৯ সেকেন্ড ছাড়ুন</span></div><div><strong>৯-৩-১২</strong><span>৯ সেকেন্ড নিন<br>৩ সেকেন্ড ধরে রাখুন<br>১২ সেকেন্ড ছাড়ুন</span></div></div>
+<p class="compact-warning">মাথা ঘোরা, বুক ধড়ফড় বা অস্বস্তি হলে থামুন এবং স্বাভাবিক শ্বাস নিন।</p>
+</article>
+<article class="page7-fit-card page7-fit-card--6 ">
+<div class="panel-head"><h3><span class="page7-guide-number">06</span><span>হাঁটার কাঠামো</span></h3></div>
+<div class="compact-walk-grid"><div><b>সেশন ১</b><strong>৬০ মিনিট</strong><span>সকাল</span></div><div><b>সেশন ২</b><strong>৬০ মিনিট</strong><span>বিকাল</span></div><div><b>সেশন ৩</b><strong>৩০–৬০ মিনিট</strong><span>রাতের খাবারের পরে</span></div></div>
+<p class="compact-warning"><b>Talk test:</b> ছোট বাক্যে কথা বলতে না পারলে গতি কমান।</p>
+</article>
+</div></div>
 </div>
-<footer class="folio"><span>নমুনা মেনু</span><span class="folio-number"></span></footer>
+<footer class="folio"><span>ব্যবহারিক স্বাস্থ্য নির্দেশনা</span><span class="folio-number"></span></footer>
 </div>
 </section>
 <!-- 8: WALK BREATH BP -->
-<section class="paper-page" data-title="হাঁটা, শ্বাস ও BP">
+<section class="paper-page" data-title="রক্তচাপ ও নিরাপত্তা">
 <div class="page-art">
 <div class="frame frame-outer"></div><div class="frame frame-inner"></div>
 <div class="page-body">
-<header class="chapter-head"><span>অধ্যায় ৫</span><h2>হাঁটা, শ্বাস-প্রশ্বাস ও রক্তচাপ</h2><p>অতিরিক্ত নয়—নিয়মিত, নিরাপদ ও দীর্ঘদিন চালিয়ে যাওয়াই মূল লক্ষ্য</p></header>
-<section class="exercise-top">
-<article class="panel"><div class="panel-head"><b>05</b><h3>হাঁটার কাঠামো</h3></div><div class="walk-cards"><div><b>সেশন ১</b><strong>৬০ মিনিট</strong><span>সকাল</span></div><div><b>সেশন ২</b><strong>৬০ মিনিট</strong><span>বিকাল</span></div><div><b>সেশন ৩</b><strong>৩০–৬০ মিনিট</strong><span>রাতে খাবারের পরে</span></div></div><p class="yellow-note"><b>Talk test:</b> হাঁটার সময় ছোট বাক্যে কথা বলতে পারবেন; হাঁপিয়ে গেলে গতি কমান।</p></article>
-<article class="panel"><div class="panel-head"><b>06</b><h3>শ্বাস-প্রশ্বাস · ১৫ মিনিট</h3></div><div class="breath-cards"><div><strong>৬-৩-৯</strong><span>৬ সেকেন্ড নিন<br/>৩ সেকেন্ড ধরে রাখুন<br/>৯ সেকেন্ড ছাড়ুন</span></div><div><strong>৯-৩-১২</strong><span>৯ সেকেন্ড নিন<br/>৩ সেকেন্ড ধরে রাখুন<br/>১২ সেকেন্ড ছাড়ুন</span></div></div><p class="yellow-note">মাথা ঘোরা, বুক ধড়ফড় বা অস্বস্তি হলে বিরতি নিয়ে স্বাভাবিক শ্বাস নিন।</p></article>
-</section>
-<article class="panel sunbath-guide"><div class="panel-head"><b>☀</b><h3>ভিটামিন D-এর জন্য নিরাপদ রোদ</h3></div><div class="sunbath-guide__grid"><div><strong>সময়</strong><span>সকাল ১০:৩০–দুপুর ২টার মধ্যে সুবিধাজনক সময়ে</span></div><div><strong>সময়কাল</strong><span>সাধারণত ৫–১৫ মিনিট; ত্বকের ধরন ও রোদের তীব্রতা অনুযায়ী কম-বেশি হতে পারে</span></div><div><strong>কীভাবে</strong><span>খোলা আকাশে হাত ও পায়ের কিছু অংশে সরাসরি রোদ নিন; জানালার কাচের আড়াল নয়</span></div><div><strong>সতর্কতা</strong><span>ত্বক লাল, গরম বা জ্বালা করলে সঙ্গে সঙ্গে ছায়ায় যান; আলো-সংবেদনশীল ওষুধ বা ত্বকের রোগ থাকলে চিকিৎসকের পরামর্শ নিন</span></div></div></article>
+<header class="chapter-head"><span>অধ্যায় ৫</span><h2>রক্তচাপ, নিরাপত্তা ও জরুরি সংকেত</h2><p>সঠিকভাবে পরিমাপ করুন, শরীরের সতর্ক সংকেত চিনুন এবং প্রয়োজনমতো দ্রুত সাহায্য নিন</p></header>
 <section class="bp-box">
 <div class="bp-icon">BP</div>
 <div><h3>রক্তচাপ মাপার সঠিক নিয়ম</h3><ul class="check-list"><li>মাপার আগে ৫ মিনিট চুপচাপ বসুন।</li><li>পা মেঝেতে, পিঠ সমর্থিত, হাত হৃদ্‌যন্ত্রের সমতলে রাখুন।</li><li>সঠিক cuff; ১ মিনিট ব্যবধানে ২টি reading নিন।</li><li>সকাল ও সন্ধ্যায় ৭ দিনের average লিখুন।</li></ul></div>
 </section>
 <div class="stop-box"><b>হাঁটা থামিয়ে দ্রুত সাহায্য নিন:</b><span>বুকব্যথা</span><span>অস্বাভাবিক শ্বাসকষ্ট</span><span>অজ্ঞান/তীব্র মাথা ঘোরা</span><span>হঠাৎ দুর্বলতা</span></div>
 </div>
-<footer class="folio"><span>হাঁটা, শ্বাস ও BP</span><span class="folio-number"></span></footer>
+<footer class="folio"><span>রক্তচাপ ও নিরাপত্তা</span><span class="folio-number"></span></footer>
 </div>
 </section>
 <!-- 9: TRACKING -->
