@@ -4475,6 +4475,10 @@ svg[data-chart] {
 }
 </style>
 
+
+<style id="ait-history-priority-style">
+.ait-history-modal .ait-psa-terminal-modal__body{display:grid;gap:14px}.ait-history-scanner-body{align-content:start}.ait-history-guideline-section{margin:0!important}.ait-history-method{display:grid;grid-template-columns:repeat(3,minmax(220px,1fr));gap:10px}.ait-history-method>div{display:grid;gap:5px;padding:14px 16px;border:1px solid var(--v10-line,var(--line));border-radius:14px;background:var(--v10-card,var(--card));color:var(--v10-text,var(--text))}.ait-history-method span{color:var(--v10-muted,var(--muted));line-height:1.5}.ait-history-control-row{display:flex;justify-content:flex-end;align-items:center;margin:0}.ait-history-primary-actions{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}.ait-history-secondary-actions{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}.ait-history-summary{display:grid;grid-template-columns:repeat(4,minmax(150px,1fr));gap:10px}.ait-history-stat{padding:12px 14px;border:1px solid var(--v10-line,var(--line));border-radius:12px;background:var(--v10-card,var(--card));color:var(--v10-text,var(--text))}.ait-history-stat small{display:block;color:var(--v10-muted,var(--muted));margin-bottom:4px}.ait-history-stat strong{font-size:1.15rem}.ait-history-searchbar{margin:0}.ait-history-top-scroll{height:16px;overflow-x:auto;overflow-y:hidden;border:1px solid var(--v10-line,var(--line));border-radius:9px;background:var(--v10-bg-soft,var(--card));}.ait-history-top-scroll>div{height:1px}.ait-history-table-wrap{max-height:58vh;overflow:auto}.ait-history-table-wrap thead th{position:sticky;top:0;z-index:3;background:var(--v10-card,var(--card));color:var(--v10-text,var(--text));white-space:nowrap}.ait-history-table-wrap td{white-space:nowrap}.ait-history-delta.positive{color:var(--success,#16a34a);font-weight:700}.ait-history-delta.negative{color:var(--danger,#dc2626);font-weight:700}.ait-history-delta.neutral{color:var(--v10-muted,var(--muted))}@media(max-width:920px){.ait-history-method{grid-template-columns:1fr}.ait-history-summary{grid-template-columns:repeat(2,minmax(130px,1fr))}}@media(max-width:620px){.ait-history-control-row,.ait-history-secondary-actions{justify-content:stretch}.ait-history-primary-actions,.ait-history-secondary-actions{width:100%}.ait-history-primary-actions .btn,.ait-history-secondary-actions .btn{flex:1 1 auto}}
+</style>
 </head>
 <body>
 <div class="v10-mobile-bar">
@@ -6474,7 +6478,9 @@ document.addEventListener("DOMContentLoaded",()=>{
  };
  const rowsFor=code=>{
   const {history}=appState();
-  return Array.isArray(history[code])?history[code]:[];
+  const rows=Array.isArray(history[code])?history[code]:[];
+  const cutoff=window.__AIT_HISTORICAL_CUTOFF_DATE__||null;
+  return cutoff?rows.filter(row=>String(row?.date||"")<=cutoff):rows;
  };
  const codes=()=>{
   const {state,active,history,lists}=appState();
@@ -6950,6 +6956,18 @@ document.addEventListener("DOMContentLoaded",()=>{
   });
   return output.map((x,index)=>({...x,rank:index+1}));
  }
+ // Shared scanner-data bridge for modules declared outside this initialization scope.
+ window.AITScannerDataBridge={
+  appState,
+  rowsFor,
+  codes,
+  indicatorData,
+  vpaData,
+  comparisonDataset,
+  potentialDataset,
+  priorityDataset
+ };
+
  function renderPotentialRows(tbodyId,data,mode){
   const tbody=document.getElementById(tbodyId);if(!tbody)return data;
   if(mode==="priority"){
@@ -6985,6 +7003,10 @@ document.addEventListener("DOMContentLoaded",()=>{
   }
   if(mode==="priority"){
    return priorityDataset().map(x=>({code:x.code,ltp:x.ltp,score:Number(x.primaryScore||0),signal:x.signal||"Avoid",scoreLabel:"Primary Score",rank:x.rank}));
+  }
+  if(mode==="historical"){
+   const result=window.AitSignalPriorityHistory?.calculate?.();
+   return (result?.rows||[]).map(x=>({code:x.code,ltp:last(rowsFor(x.code))?.close??null,score:Number(x.historicalScore||0),signal:x.signal||"Avoid",scoreLabel:"Historical Score",rank:x.rank}));
   }
   return potentialDataset().map(x=>({
    code:x.code,ltp:x.ltp,score:Number(x.primaryScore||0),signal:x.signal||"Avoid",
@@ -7044,7 +7066,8 @@ document.addEventListener("DOMContentLoaded",()=>{
    comparison:{title:`Relative Strength Scanner — Ranked ${period}M Charts`,description:"Relative Score"},
    composite:{title:`AIT Composite Screener — Ranked ${period}M Charts`,description:"40/35/25 Combined Score"},
    potential:{title:`AIT Elite Screener — Ranked ${period}M Charts`,description:"50/50 Technical–Smart Money Primary Score; Relative Strength breaks close ties"},
-   priority:{title:`AIT Signal Priority Screener — Ranked ${period}M Charts`,description:"signal-priority order, then Primary Score"}
+   priority:{title:`AIT Signal Priority Screener — Ranked ${period}M Charts`,description:"signal-priority order, then Primary Score"},
+   historical:{title:`AIT Signal Priority Historical Performance — Ranked ${period}M Charts`,description:"Final Historical Score within Strong Buy → Buy → Watch → Avoid"}
   }[mode]||{title:`Ranked ${period}M Charts`,description:"score"};
   const data=rankedChartData(mode);
 
@@ -7096,6 +7119,8 @@ document.addEventListener("DOMContentLoaded",()=>{
    }));
   });
  }
+
+ window.AITOpenRankedCharts=openRankedCharts;
 
  function closeRankedCharts(){
   const modal=document.getElementById("v11RankedChartModal");
@@ -9243,10 +9268,32 @@ document.addEventListener("keydown",event=>{
  <section class="ait-psa-terminal-modal" id="aitPsaDataReportMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">DATA CENTER CATEGORY</span><h2>▥ Report</h2><p>Select a data review workspace.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaDataCenterLauncherModal" type="button">← Data Center</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" data-ait-data-action="viewListCharts" data-ait-data-group="report" type="button"><span>3M</span><b>Saved 3M Charts</b><small>Open saved three-month charts for the active list.</small></button><button class="ait-psa-terminal-command" data-ait-data-action="viewListCharts6" data-ait-data-group="report" type="button"><span>6M</span><b>Saved 6M Charts</b><small>Open saved six-month charts for the active list.</small></button><button class="ait-psa-terminal-command" data-ait-data-action="viewDownloadedData" data-ait-data-group="report" type="button"><span>⌗</span><b>Downloaded Data</b><small>Inspect stored OHLC records in a data table.</small></button><button class="ait-psa-terminal-command" data-ait-data-workspace="status" data-ait-data-group="report" type="button"><span>◉</span><b>Download Status</b><small>Open the Data Center workspace and current job status.</small></button></div></div></section>
  <section class="ait-psa-terminal-modal ait-psa-workspace-modal" id="aitPsaDownloadModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow" id="aitPsaDataCenterEyebrow">DATA CENTER TOOL</span><h2 id="aitPsaDataCenterTitle">⇩ Data Center</h2><p id="aitPsaDataCenterDescription">Selected data operation workspace.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" id="aitPsaDataCenterBack" type="button">← Data Center</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body ait-psa-workspace-host" id="aitPsaDownloadHost"></div></section>
  <section class="ait-psa-terminal-modal ait-psa-workspace-modal" id="aitPsaWatchlistModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">WORKSPACE TERMINAL</span><h2>★ Watch List</h2><p>Manage stock groups, trading codes and chart access.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaWorkspaceModal" type="button">← Workspace</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body ait-psa-workspace-host" id="aitPsaWatchlistHost"></div></section>
- <section class="ait-psa-terminal-modal" id="aitPsaTradingLauncherModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">TRADING WORKSPACE</span><h2>▥ Trading</h2><p>Choose a trading workspace category.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaWorkspaceModal" type="button">← Workspace</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid ait-psa-trading-launcher-grid"><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaPortfolioMenuModal" type="button"><span>◫</span><b>Portfolio</b><small>Positions, quantities, cost, value and profit or loss.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaReportMenuModal" type="button"><span>▥</span><b>Report</b><small>Charts, generated reports and historical data explorer.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaScannerMenuModal" type="button"><span>⌁</span><b>Scanner</b><small>Technical, Smart Money, Relative Strength and three AIT screening models.</small></button></div></div></section>
+ 
+<section class="ait-psa-terminal-modal" id="aitPsaSignalPriorityMenuModal" hidden role="dialog" aria-modal="true">
+ <header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">AIT SIGNAL PRIORITY</span><h2>★ Performance</h2><p>Choose the current scanner or day-to-day improvement history.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaScannerMenuModal" type="button">← Scanner</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header>
+ <div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid">
+  <button class="ait-psa-terminal-command" data-ait-trading-tab="potential-priority" data-ait-trading-group="scanner" type="button"><span>●</span><b>Latest Performance</b><small>Run today’s existing AIT Signal Priority scanner.</small></button>
+  <button class="ait-psa-terminal-command" id="aitOpenHistoricalPriority" type="button"><span>↗</span><b>Historical Performance</b><small>Rank stocks by day-to-day signal, score and rank improvement.</small></button>
+ </div></div>
+</section>
+
+<section class="ait-psa-terminal-modal ait-psa-workspace-modal" id="aitHistoricalPriorityModal" hidden role="dialog" aria-modal="true">
+ <header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">SCANNER TOOL</span><h2>AIT Signal Priority — Historical Performance</h2><p>Signal-first screening strengthened by internally calculated historical performance.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaSignalPriorityMenuModal" type="button">← Performance</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header>
+ <div class="ait-psa-terminal-modal__body ait-psa-workspace-host"><section class="v11-workspace active"><article class="v11-card v11-scanner-card">
+  <div class="v11-card-head"><div><h3>AIT Signal Priority Historical Screener</h3><small>Signal-first ranking using current Primary Score and internally calculated Historical Score</small></div><div class="v11-potential-actions"><button class="btn soft" id="aitHistoricalPriorityCharts6" type="button">View 6M Charts</button><button class="btn soft" id="aitHistoricalPriorityCharts3" type="button">View 3M Charts</button><button class="btn primary" id="aitHistoricalPriorityRun" type="button">Run historical screen</button></div></div>
+  <div class="v11-card-body"><section class="v11-potential-guideline"><div class="v11-potential-guideline-grid">
+   <div class="v11-potential-guide v11-potential-guide--strongest"><strong>First Priority</strong><span>Final signal order always remains Strong Buy → Buy → Watch → Avoid.</span></div>
+   <div class="v11-potential-guide v11-potential-guide--formula"><strong>Historical Engine</strong><span>Historical Score uses weighted 3-day, 6-day and 9-day Primary Score averages plus recent improvement consistency.</span></div>
+   <div class="v11-potential-guide v11-potential-guide--watch"><strong>Decision Formula</strong><span>Decision Score = 55% Primary Score + 45% Historical Score.</span></div>
+   <div class="v11-potential-guide v11-potential-guide--avoid"><strong>Internal History</strong><span>Daily scanner snapshots are stored and calculated silently; raw history is not shown.</span></div>
+  </div></section>
+  <div class="v11-scanner-table-region"><div class="v11-table-scrollbar" aria-label="Horizontal table scrollbar"><div></div></div><div class="v11-table-wrap v11-scanner-table-wrap"><table class="v11-table v11-potential-table"><thead><tr><th>Overall Rank</th><th>Signal Rank</th><th>Trading Code</th><th>LTP</th><th>Technical</th><th>Smart Money</th><th>Primary Score</th><th>Historical Score</th><th>Relative Rank</th><th>Signal</th></tr></thead><tbody id="aitHistoricalPriorityRows"><tr><td colspan="10">Run historical screen to calculate results.</td></tr></tbody></table></div></div>
+  </div></article></section></div>
+</section>
+<section class="ait-psa-terminal-modal" id="aitPsaTradingLauncherModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">TRADING WORKSPACE</span><h2>▥ Trading</h2><p>Choose a trading workspace category.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaWorkspaceModal" type="button">← Workspace</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid ait-psa-trading-launcher-grid"><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaPortfolioMenuModal" type="button"><span>◫</span><b>Portfolio</b><small>Positions, quantities, cost, value and profit or loss.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaReportMenuModal" type="button"><span>▥</span><b>Report</b><small>Charts, generated reports and historical data explorer.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaScannerMenuModal" type="button"><span>⌁</span><b>Scanner</b><small>Technical, Smart Money, Relative Strength and three AIT screening models.</small></button></div></div></section>
  <section class="ait-psa-terminal-modal" id="aitPsaPortfolioMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">TRADING CATEGORY</span><h2>◫ Portfolio</h2><p>Select the portfolio workspace.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaTradingLauncherModal" type="button">← Trading</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid ait-psa-trading-tool-grid"><button class="ait-psa-terminal-command" data-ait-trading-tab="portfolio" data-ait-trading-group="portfolio" type="button"><span>◫</span><b>Portfolio Manager</b><small>Manage holdings and review current portfolio performance.</small></button></div></div></section>
  <section class="ait-psa-terminal-modal" id="aitPsaReportMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">TRADING CATEGORY</span><h2>▥ Report</h2><p>Select a reporting and exploration workspace.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaTradingLauncherModal" type="button">← Trading</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid ait-psa-trading-tool-grid"><button class="ait-psa-terminal-command" data-ait-trading-tab="charts" data-ait-trading-group="report" type="button"><span>▥</span><b>Charts</b><small>Open the multi-chart analysis workspace.</small></button><button class="ait-psa-terminal-command" data-ait-trading-tab="reports" data-ait-trading-group="report" type="button"><span>≡</span><b>Report</b><small>Generate portfolio, scanner and comparison reports.</small></button><button class="ait-psa-terminal-command" data-ait-trading-tab="explorer" data-ait-trading-group="report" type="button"><span>⌕</span><b>Explorer</b><small>Explore saved OHLC history and local market data.</small></button></div></div></section>
- <section class="ait-psa-terminal-modal" id="aitPsaScannerMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">TRADING CATEGORY</span><h2>⌁ Scanner</h2><p>Select a market scanning workspace.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaTradingLauncherModal" type="button">← Trading</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid ait-psa-trading-tool-grid"><button class="ait-psa-terminal-command" data-ait-trading-tab="indicators" data-ait-trading-group="scanner" type="button"><span>∿</span><b>Technical Scanner</b><small>Screen trend, momentum, SMA, RSI and volume conditions.</small></button><button class="ait-psa-terminal-command" data-ait-trading-tab="vpa" data-ait-trading-group="scanner" type="button"><span>▥</span><b>Smart Money Scanner</b><small>Analyze VPA, volume, spread and effort versus result.</small></button><button class="ait-psa-terminal-command" data-ait-trading-tab="comparison" data-ait-trading-group="scanner" type="button"><span>⇄</span><b>Relative Strength Scanner</b><small>Rank active stocks against their peers without issuing buy signals.</small></button><button class="ait-psa-terminal-command" data-ait-trading-tab="potential-composite" data-ait-trading-group="scanner" type="button"><span>◇</span><b>AIT Composite Screener</b><small>40/35/25 weighted multi-factor score.</small></button><button class="ait-psa-terminal-command" data-ait-trading-tab="potential" data-ait-trading-group="scanner" type="button"><span>◆</span><b>AIT Elite Screener</b><small>Balanced 50/50 primary score with relative tie-breaking.</small></button><button class="ait-psa-terminal-command" data-ait-trading-tab="potential-priority" data-ait-trading-group="scanner" type="button"><span>★</span><b>AIT Signal Priority Screener</b><small>Signal-first ranking that keeps Strong Buy above Buy.</small></button></div></div></section>
+ <section class="ait-psa-terminal-modal" id="aitPsaScannerMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">TRADING CATEGORY</span><h2>⌁ Scanner</h2><p>Select a market scanning workspace.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaTradingLauncherModal" type="button">← Trading</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid ait-psa-trading-tool-grid"><button class="ait-psa-terminal-command" data-ait-trading-tab="indicators" data-ait-trading-group="scanner" type="button"><span>∿</span><b>Technical Scanner</b><small>Screen trend, momentum, SMA, RSI and volume conditions.</small></button><button class="ait-psa-terminal-command" data-ait-trading-tab="vpa" data-ait-trading-group="scanner" type="button"><span>▥</span><b>Smart Money Scanner</b><small>Analyze VPA, volume, spread and effort versus result.</small></button><button class="ait-psa-terminal-command" data-ait-trading-tab="comparison" data-ait-trading-group="scanner" type="button"><span>⇄</span><b>Relative Strength Scanner</b><small>Rank active stocks against their peers without issuing buy signals.</small></button><button class="ait-psa-terminal-command" data-ait-trading-tab="potential-composite" data-ait-trading-group="scanner" type="button"><span>◇</span><b>AIT Composite Screener</b><small>40/35/25 weighted multi-factor score.</small></button><button class="ait-psa-terminal-command" data-ait-trading-tab="potential" data-ait-trading-group="scanner" type="button"><span>◆</span><b>AIT Elite Screener</b><small>Balanced 50/50 primary score with relative tie-breaking.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaSignalPriorityMenuModal" type="button"><span>★</span><b>AIT Signal Priority Screener</b><small>Open latest or day-to-day historical performance.</small></button></div></div></section>
  <section class="ait-psa-terminal-modal ait-psa-workspace-modal" id="aitPsaTradingModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow" id="aitPsaTradingEyebrow">TRADING TOOL</span><h2 id="aitPsaTradingTitle">▥ Trading</h2><p id="aitPsaTradingDescription">Selected trading workspace.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" id="aitPsaTradingBack" type="button">← Trading</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body ait-psa-workspace-host" id="aitPsaTradingHost"></div></section>
 </div>
 
@@ -9815,5 +9862,91 @@ document.addEventListener('DOMContentLoaded', () => {
 })();
 </script>
 
+
+<script id="ait-history-priority-script">
+(()=>{"use strict";
+ const clamp=n=>Math.max(0,Math.min(100,Number(n)||0));
+ const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[c]));
+ const mean=values=>values.length?values.reduce((sum,value)=>sum+(Number(value)||0),0)/values.length:0;
+ const finalSignal=(score,technical,smartMoney)=>score>=75&&technical>=60&&smartMoney>=60?"Strong Buy":score>=62?"Buy":score>=48?"Watch":"Avoid";
+ let cache={signature:"",rows:[],dates:[]};
+
+ const scannerBridge=()=>window.AITScannerDataBridge||null;
+ const marketHistory=()=>{
+  try{return scannerBridge()?.appState?.()?.history||{}}catch(error){console.warn("Historical history lookup failed",error);return {}}
+ };
+ const availableDates=()=>[...new Set(Object.values(marketHistory()).flatMap(rows=>Array.isArray(rows)?rows.map(row=>String(row?.date||"")).filter(Boolean):[]))].sort();
+ const signatureFor=(dates,history)=>`${dates.at(-1)||"none"}|${dates.length}|${Object.keys(history).length}|${Object.values(history).reduce((sum,rows)=>sum+(Array.isArray(rows)?rows.length:0),0)}`;
+
+ const buildDailyPriority=dates=>{
+  const daily=[];
+  const previous=window.__AIT_HISTORICAL_CUTOFF_DATE__;
+  try{
+   dates.forEach(date=>{
+    window.__AIT_HISTORICAL_CUTOFF_DATE__=date;
+    const rows=scannerBridge()?.priorityDataset?.()||[];
+    daily.push({date,rows:rows.map(row=>({...row}))});
+   });
+  }finally{
+   if(previous)window.__AIT_HISTORICAL_CUTOFF_DATE__=previous;
+   else delete window.__AIT_HISTORICAL_CUTOFF_DATE__;
+  }
+  return daily;
+ };
+
+ const calculate=()=>{
+  const history=marketHistory(),allDates=availableDates();
+  if(allDates.length<9)return {rows:[],dates:allDates,required:9,available:allDates.length};
+  const calculationDates=allDates.slice(-9),signature=signatureFor(allDates,history);
+  if(cache.signature===signature&&cache.rows.length)return {rows:cache.rows,dates:cache.dates,required:9,available:allDates.length};
+
+  const daily=buildDailyPriority(calculationDates),latest=daily.at(-1);
+  if(!latest?.rows?.length)return {rows:[],dates:calculationDates,required:9,available:allDates.length};
+
+  const output=latest.rows.map(current=>{
+   const timeline=daily.map(snapshot=>snapshot.rows.find(row=>row.code===current.code)).filter(Boolean);
+   const scores=timeline.map(row=>Number(row.primaryScore)||0);
+   const avg3=mean(scores.slice(-3));
+   const avg6=mean(scores.slice(-6));
+   const avg9=mean(scores.slice(-9));
+   const historicalScore=clamp(avg3*.45+avg6*.35+avg9*.20);
+   const primaryScore=Number(current.primaryScore)||0;
+   const decisionScore=clamp(primaryScore*.55+historicalScore*.45);
+   const signal=finalSignal(decisionScore,Number(current.indicatorScore)||0,Number(current.vpaScore)||0);
+   return {...current,primaryScore,historicalScore,decisionScore,signal};
+  });
+
+  const groups={"Strong Buy":[],"Buy":[],"Watch":[],"Avoid":[]};
+  output.forEach(row=>(groups[row.signal]||groups.Avoid).push(row));
+  const ranked=[];
+  ["Strong Buy","Buy","Watch","Avoid"].forEach(signal=>{
+   groups[signal].sort((a,b)=>(b.decisionScore-a.decisionScore)||(b.historicalScore-a.historicalScore)||(b.primaryScore-a.primaryScore)||(b.comparisonScore-a.comparisonScore)||String(a.code).localeCompare(String(b.code)));
+   groups[signal].forEach((row,index)=>ranked.push({...row,signalRank:index+1}));
+  });
+  const rows=ranked.map((row,index)=>({...row,rank:index+1}));
+  cache={signature,rows,dates:calculationDates};
+  return {rows,dates:calculationDates,required:9,available:allDates.length};
+ };
+
+ const render=()=>{
+  const tbody=document.getElementById("aitHistoricalPriorityRows");
+  if(!tbody)return [];
+  const result=calculate(),rows=result.rows||[];
+  if(!rows.length){
+   tbody.innerHTML=`<tr><td colspan="10">${result.available<9?`Historical scanning requires at least 9 trading dates. ${result.available||0} are currently available in local OHLC storage.`:"No eligible securities could be calculated from the downloaded OHLC data."}</td></tr>`;
+   return [];
+  }
+  tbody.innerHTML=rows.map(row=>`<tr><td><strong>#${row.rank}</strong></td><td><strong>${esc(row.signal)} #${row.signalRank}</strong></td><td><strong>${esc(row.code)}</strong></td><td>${(Number(row.ltp)||0).toFixed(2)}</td><td><span class="v11-score">${(Number(row.indicatorScore)||0).toFixed(0)}</span></td><td><span class="v11-score">${(Number(row.vpaScore)||0).toFixed(0)}</span></td><td><span class="v11-score">${(Number(row.primaryScore)||0).toFixed(1)}</span></td><td><span class="v11-score">${(Number(row.historicalScore)||0).toFixed(1)}</span></td><td><span class="v11-score">${(Number(row.comparisonScore)||0).toFixed(1)}</span><small style="display:block">${esc(row.comparisonSignal||"Neutral")}</small></td><td><span class="v11-signal ${row.signal.toLowerCase().replace(/\s+/g,"-")}">${esc(row.signal)}</span></td></tr>`).join("");
+  return rows;
+ };
+
+ const run=()=>{cache={signature:"",rows:[],dates:[]};return render()};
+ document.getElementById("aitOpenHistoricalPriority")?.addEventListener("click",()=>{document.getElementById("aitPsaSignalPriorityMenuModal")?.setAttribute("hidden","");document.getElementById("aitHistoricalPriorityModal")?.removeAttribute("hidden");render()});
+ document.getElementById("aitHistoricalPriorityRun")?.addEventListener("click",run);
+ document.getElementById("aitHistoricalPriorityCharts3")?.addEventListener("click",()=>window.AITOpenRankedCharts?.("historical",3));
+ document.getElementById("aitHistoricalPriorityCharts6")?.addEventListener("click",()=>window.AITOpenRankedCharts?.("historical",6));
+ window.AitSignalPriorityHistory={calculate,render,run,clearCache:()=>{cache={signature:"",rows:[],dates:[]}}};
+})();
+</script>
 </body>
 </html>
