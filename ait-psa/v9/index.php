@@ -7008,6 +7008,10 @@ document.addEventListener("DOMContentLoaded",()=>{
    const result=window.AitSignalPriorityHistory?.calculate?.();
    return (result?.rows||[]).map(x=>({code:x.code,ltp:last(rowsFor(x.code))?.close??null,score:Number(x.historicalScore||0),signal:x.signal||"Avoid",scoreLabel:"Historical Score",rank:x.rank}));
   }
+  if(mode==="advanced"){
+   const result=window.AitAdvancedSignalPriority?.calculate?.();
+   return (result?.rows||[]).map(x=>({code:x.code,ltp:last(rowsFor(x.code))?.close??null,score:Number(x.advancedScore||0),signal:x.signal||"Avoid",scoreLabel:"Advanced Score",rank:x.rank}));
+  }
   return potentialDataset().map(x=>({
    code:x.code,ltp:x.ltp,score:Number(x.primaryScore||0),signal:x.signal||"Avoid",
    scoreLabel:"Primary score",rank:x.rank,comparisonScore:x.comparisonScore
@@ -7067,7 +7071,8 @@ document.addEventListener("DOMContentLoaded",()=>{
    composite:{title:`AIT Composite Screener — Ranked ${period}M Charts`,description:"40/35/25 Combined Score"},
    potential:{title:`AIT Elite Screener — Ranked ${period}M Charts`,description:"50/50 Technical–Smart Money Primary Score; Relative Strength breaks close ties"},
    priority:{title:`AIT Signal Priority Screener — Ranked ${period}M Charts`,description:"signal-priority order, then Primary Score"},
-   historical:{title:`AIT Signal Priority Historical Performance — Ranked ${period}M Charts`,description:"Final Historical Score within Strong Buy → Buy → Watch → Avoid"}
+   historical:{title:`AIT Signal Priority Historical Performance — Ranked ${period}M Charts`,description:"Final Historical Score within Strong Buy → Buy → Watch → Avoid"},
+   advanced:{title:`AIT Signal Priority Advanced Performance — Ranked ${period}M Charts`,description:"Advanced Score with momentum, stability, persistence and confirmation"}
   }[mode]||{title:`Ranked ${period}M Charts`,description:"score"};
   const data=rankedChartData(mode);
 
@@ -9274,6 +9279,7 @@ document.addEventListener("keydown",event=>{
  <div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid">
   <button class="ait-psa-terminal-command" data-ait-trading-tab="potential-priority" data-ait-trading-group="scanner" type="button"><span>●</span><b>Latest Performance</b><small>Run today’s existing AIT Signal Priority scanner.</small></button>
   <button class="ait-psa-terminal-command" id="aitOpenHistoricalPriority" type="button"><span>↗</span><b>Historical Performance</b><small>Rank stocks by day-to-day signal, score and rank improvement.</small></button>
+  <button class="ait-psa-terminal-command" id="aitOpenAdvancedPriority" type="button"><span>✦</span><b>Advanced Performance</b><small>Rank stocks using historical strength, momentum, stability, persistence and confirmation.</small></button>
  </div></div>
 </section>
 
@@ -9288,6 +9294,20 @@ document.addEventListener("keydown",event=>{
    <div class="v11-potential-guide v11-potential-guide--avoid"><strong>Internal History</strong><span>Daily scanner snapshots are stored and calculated silently; raw history is not shown.</span></div>
   </div></section>
   <div class="v11-scanner-table-region"><div class="v11-table-scrollbar" aria-label="Horizontal table scrollbar"><div></div></div><div class="v11-table-wrap v11-scanner-table-wrap"><table class="v11-table v11-potential-table"><thead><tr><th>Overall Rank</th><th>Signal Rank</th><th>Trading Code</th><th>LTP</th><th>Technical</th><th>Smart Money</th><th>Primary Score</th><th>Historical Score</th><th>Relative Rank</th><th>Signal</th></tr></thead><tbody id="aitHistoricalPriorityRows"><tr><td colspan="10">Run historical screen to calculate results.</td></tr></tbody></table></div></div>
+  </div></article></section></div>
+</section>
+
+<section class="ait-psa-terminal-modal ait-psa-workspace-modal" id="aitAdvancedPriorityModal" hidden role="dialog" aria-modal="true">
+ <header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">SCANNER TOOL</span><h2>AIT Signal Priority — Advanced Performance</h2><p>Multi-factor confirmation scanner combining current strength with historical quality and price-volume validation.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaSignalPriorityMenuModal" type="button">← Performance</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header>
+ <div class="ait-psa-terminal-modal__body ait-psa-workspace-host"><section class="v11-workspace active"><article class="v11-card v11-scanner-card">
+  <div class="v11-card-head"><div><h3>AIT Advanced Signal Priority Screener</h3><small>Signal-first ranking with historical momentum, stability, persistence and market confirmation</small></div><div class="v11-potential-actions"><button class="btn soft" id="aitAdvancedPriorityCharts6" type="button">View 6M Charts</button><button class="btn soft" id="aitAdvancedPriorityCharts3" type="button">View 3M Charts</button><button class="btn primary" id="aitAdvancedPriorityRun" type="button">Run advanced screen</button></div></div>
+  <div class="v11-card-body"><section class="v11-potential-guideline"><div class="v11-potential-guideline-grid">
+   <div class="v11-potential-guide v11-potential-guide--strongest"><strong>Signal Priority</strong><span>Final order remains Strong Buy → Buy → Watch → Avoid.</span></div>
+   <div class="v11-potential-guide v11-potential-guide--formula"><strong>Advanced Score</strong><span>25% Primary + 20% Historical + 15% Momentum + 12% Stability + 13% Persistence + 15% Confirmation.</span></div>
+   <div class="v11-potential-guide v11-potential-guide--watch"><strong>Trend Quality</strong><span>Momentum rewards improving scores; Stability penalizes erratic score changes.</span></div>
+   <div class="v11-potential-guide v11-potential-guide--avoid"><strong>Confirmation</strong><span>Price trend, recent volume participation and signal persistence validate the final rank.</span></div>
+  </div></section>
+  <div class="v11-scanner-table-region"><div class="v11-table-scrollbar" aria-label="Horizontal table scrollbar"><div></div></div><div class="v11-table-wrap v11-scanner-table-wrap"><table class="v11-table v11-potential-table"><thead><tr><th>Overall Rank</th><th>Signal Rank</th><th>Trading Code</th><th>LTP</th><th>Technical</th><th>Smart Money</th><th>Primary Score</th><th>Historical Score</th><th>Momentum</th><th>Stability</th><th>Persistence</th><th>Confirmation</th><th>Advanced Score</th><th>Signal</th></tr></thead><tbody id="aitAdvancedPriorityRows"><tr><td colspan="14">Run advanced screen to calculate results.</td></tr></tbody></table></div></div>
   </div></article></section></div>
 </section>
 <section class="ait-psa-terminal-modal" id="aitPsaTradingLauncherModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">TRADING WORKSPACE</span><h2>▥ Trading</h2><p>Choose a trading workspace category.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaWorkspaceModal" type="button">← Workspace</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid ait-psa-trading-launcher-grid"><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaPortfolioMenuModal" type="button"><span>◫</span><b>Portfolio</b><small>Positions, quantities, cost, value and profit or loss.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaReportMenuModal" type="button"><span>▥</span><b>Report</b><small>Charts, generated reports and historical data explorer.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaScannerMenuModal" type="button"><span>⌁</span><b>Scanner</b><small>Technical, Smart Money, Relative Strength and three AIT screening models.</small></button></div></div></section>
@@ -9946,6 +9966,31 @@ document.addEventListener('DOMContentLoaded', () => {
  document.getElementById("aitHistoricalPriorityCharts3")?.addEventListener("click",()=>window.AITOpenRankedCharts?.("historical",3));
  document.getElementById("aitHistoricalPriorityCharts6")?.addEventListener("click",()=>window.AITOpenRankedCharts?.("historical",6));
  window.AitSignalPriorityHistory={calculate,render,run,clearCache:()=>{cache={signature:"",rows:[],dates:[]}}};
+})();
+</script>
+
+<script id="ait-advanced-priority-script">
+(()=>{"use strict";
+ const clamp=n=>Math.max(0,Math.min(100,Number(n)||0));
+ const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[c]));
+ const mean=v=>v.length?v.reduce((a,b)=>a+(Number(b)||0),0)/v.length:0;
+ const std=v=>{if(v.length<2)return 0;const m=mean(v);return Math.sqrt(mean(v.map(x=>(Number(x)-m)**2)))};
+ const bridge=()=>window.AITScannerDataBridge||null;
+ const history=()=>{try{return bridge()?.appState?.()?.history||{}}catch{return {}}};
+ const dates=()=>[...new Set(Object.values(history()).flatMap(rows=>Array.isArray(rows)?rows.map(r=>String(r?.date||"")).filter(Boolean):[]))].sort();
+ const signalValue=s=>s==="Strong Buy"?100:s==="Buy"?76:s==="Watch"?48:18;
+ const finalSignal=(score,t,v,c)=>score>=76&&t>=60&&v>=60&&c>=52?"Strong Buy":score>=63?"Buy":score>=49?"Watch":"Avoid";
+ let cache={sig:"",rows:[],daily:[]};
+ const dailyPriority=calcDates=>{const out=[],prev=window.__AIT_HISTORICAL_CUTOFF_DATE__;try{calcDates.forEach(date=>{window.__AIT_HISTORICAL_CUTOFF_DATE__=date;out.push({date,rows:(bridge()?.priorityDataset?.()||[]).map(r=>({...r}))})})}finally{if(prev)window.__AIT_HISTORICAL_CUTOFF_DATE__=prev;else delete window.__AIT_HISTORICAL_CUTOFF_DATE__}return out};
+ const confirmationFor=(code,calcDates)=>{const rows=(history()[code]||[]).filter(r=>calcDates.includes(String(r?.date||""))).sort((a,b)=>String(a.date).localeCompare(String(b.date)));if(rows.length<3)return 35;const closes=rows.map(r=>Number(r.close)||0),vols=rows.map(r=>Number(r.volume)||0);const latest=closes.at(-1),avg3=mean(closes.slice(-3)),avg6=mean(closes.slice(-6));const ret=closes.length>1&&closes.at(-2)?((latest/closes.at(-2))-1)*100:0;const vol3=mean(vols.slice(-3)),vol6=mean(vols.slice(-6));let score=50;score+=latest>=avg3?12:-10;score+=avg3>=avg6?12:-10;score+=ret>0?Math.min(10,ret*3):Math.max(-10,ret*3);score+=vol6>0?Math.max(-10,Math.min(14,((vol3/vol6)-1)*25)):0;return clamp(score)};
+ const calculate=()=>{const all=dates();if(all.length<9)return {rows:[],available:all.length,required:9};const calcDates=all.slice(-9),sig=`${calcDates.join('|')}|${Object.keys(history()).length}`;if(cache.sig===sig&&cache.rows.length)return {rows:cache.rows,available:all.length,required:9};const daily=dailyPriority(calcDates),latest=daily.at(-1);if(!latest?.rows?.length)return {rows:[],available:all.length,required:9};const out=latest.rows.map(current=>{const timeline=daily.map(d=>d.rows.find(r=>r.code===current.code)).filter(Boolean);const scores=timeline.map(r=>Number(r.primaryScore)||0);const hist=window.AitSignalPriorityHistory?.calculate?.()?.rows?.find(r=>r.code===current.code)?.historicalScore??mean(scores);const diffs=scores.slice(1).map((v,i)=>v-scores[i]);const recent=mean(diffs.slice(-3)),older=mean(diffs.slice(0,Math.max(1,diffs.length-3)));const momentum=clamp(50+recent*7+(recent-older)*5);const stability=clamp(100-std(scores)*8);const persistence=clamp(mean(timeline.slice(-6).map(r=>signalValue(r.signal)))+Math.min(12,timeline.slice().reverse().findIndex(r=>!["Strong Buy","Buy"].includes(r.signal))===-1?12:0));const confirmation=confirmationFor(current.code,calcDates);const primary=Number(current.primaryScore)||0;const advancedScore=clamp(primary*.25+Number(hist)*.20+momentum*.15+stability*.12+persistence*.13+confirmation*.15);const signal=finalSignal(advancedScore,Number(current.indicatorScore)||0,Number(current.vpaScore)||0,confirmation);return {...current,primaryScore:primary,historicalScore:Number(hist)||0,momentumScore:momentum,stabilityScore:stability,persistenceScore:persistence,confirmationScore:confirmation,advancedScore,signal}});const groups={"Strong Buy":[],"Buy":[],"Watch":[],"Avoid":[]};out.forEach(r=>(groups[r.signal]||groups.Avoid).push(r));const ranked=[];["Strong Buy","Buy","Watch","Avoid"].forEach(signal=>{groups[signal].sort((a,b)=>(b.advancedScore-a.advancedScore)||(b.confirmationScore-a.confirmationScore)||(b.historicalScore-a.historicalScore)||(b.primaryScore-a.primaryScore)||String(a.code).localeCompare(String(b.code)));groups[signal].forEach((r,i)=>ranked.push({...r,signalRank:i+1}))});const rows=ranked.map((r,i)=>({...r,rank:i+1}));cache={sig,rows,daily};return {rows,available:all.length,required:9}};
+ const render=()=>{const tbody=document.getElementById("aitAdvancedPriorityRows");if(!tbody)return[];const result=calculate(),rows=result.rows||[];if(!rows.length){tbody.innerHTML=`<tr><td colspan="14">${result.available<9?`Advanced scanning requires at least 9 trading dates. ${result.available||0} are currently available.`:"No eligible securities could be calculated."}</td></tr>`;return[]}tbody.innerHTML=rows.map(r=>`<tr><td><strong>#${r.rank}</strong></td><td><strong>${esc(r.signal)} #${r.signalRank}</strong></td><td><strong>${esc(r.code)}</strong></td><td>${(Number(r.ltp)||0).toFixed(2)}</td><td><span class="v11-score">${(Number(r.indicatorScore)||0).toFixed(0)}</span></td><td><span class="v11-score">${(Number(r.vpaScore)||0).toFixed(0)}</span></td><td><span class="v11-score">${(Number(r.primaryScore)||0).toFixed(1)}</span></td><td><span class="v11-score">${(Number(r.historicalScore)||0).toFixed(1)}</span></td><td><span class="v11-score">${(Number(r.momentumScore)||0).toFixed(1)}</span></td><td><span class="v11-score">${(Number(r.stabilityScore)||0).toFixed(1)}</span></td><td><span class="v11-score">${(Number(r.persistenceScore)||0).toFixed(1)}</span></td><td><span class="v11-score">${(Number(r.confirmationScore)||0).toFixed(1)}</span></td><td><span class="v11-score">${(Number(r.advancedScore)||0).toFixed(1)}</span></td><td><span class="v11-signal ${r.signal.toLowerCase().replace(/\s+/g,"-")}">${esc(r.signal)}</span></td></tr>`).join("");return rows};
+ const run=()=>{cache={sig:"",rows:[],daily:[]};window.AitSignalPriorityHistory?.clearCache?.();return render()};
+ document.getElementById("aitOpenAdvancedPriority")?.addEventListener("click",()=>{document.getElementById("aitPsaSignalPriorityMenuModal")?.setAttribute("hidden","");document.getElementById("aitAdvancedPriorityModal")?.removeAttribute("hidden");render()});
+ document.getElementById("aitAdvancedPriorityRun")?.addEventListener("click",run);
+ document.getElementById("aitAdvancedPriorityCharts3")?.addEventListener("click",()=>window.AITOpenRankedCharts?.("advanced",3));
+ document.getElementById("aitAdvancedPriorityCharts6")?.addEventListener("click",()=>window.AITOpenRankedCharts?.("advanced",6));
+ window.AitAdvancedSignalPriority={calculate,render,run,clearCache:()=>{cache={sig:"",rows:[],daily:[]}}};
 })();
 </script>
 </body>
