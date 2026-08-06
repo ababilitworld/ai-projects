@@ -5,6 +5,8 @@ header('X-Content-Type-Options: nosniff');
 header('Cache-Control: no-store, max-age=0');
 
 const DSE_URL = 'https://dsebd.org/day_end_archive.php';
+const DSE_LIVE_URL = 'https://dsebd.org/latest_share_price_scroll_by_ltp.php';
+const AMARSTOCK_LIVE_URL = 'https://www.amarstock.com/latest-share-price';
 const MAX_RANGE_DAYS = 370;
 const CACHE_TTL = 21600; // 6 hours
 
@@ -414,6 +416,149 @@ function parseArchive(string $html, array $filterCodes): array
     return $result;
 }
 
+
+/**
+ * Parse AmarStock's latest-share-price table and return positive OpenP values.
+ * Only the opening price is consumed from this provider. All remaining live
+ * market fields continue to come from the official DSE table.
+ *
+ * @return array<string,float>
+ */
+function parseAmarstockOpenPrices(string $html, array $filterCodes): array
+{
+    $rows = extractRows($html);
+    $headerIndex = -1;
+    $codeIndex = null;
+    $openIndex = null;
+
+    foreach ($rows as $index => $row) {
+        foreach ($row as $column => $label) {
+            $header = cleanHeader((string) $label);
+            if (in_array($header, ['tradingcode', 'tradecode', 'code', 'symbol', 'instrument'], true)) {
+                $codeIndex = $column;
+            }
+            if (in_array($header, ['open', 'openp', 'openingprice', 'openprice'], true)) {
+                $openIndex = $column;
+            }
+        }
+        if ($codeIndex !== null && $openIndex !== null) {
+            $headerIndex = $index;
+            break;
+        }
+    }
+
+    if ($headerIndex < 0 || $codeIndex === null || $openIndex === null) {
+        throw new ApiError('Could not identify AmarStock Trading Code and OpenP columns.', 502);
+    }
+
+    $opens = [];
+    foreach (array_slice($rows, $headerIndex + 1) as $row) {
+        if (!isset($row[$codeIndex], $row[$openIndex])) {
+            continue;
+        }
+        $code = normalizeCode((string) $row[$codeIndex]);
+        if ($code === '' || ($filterCodes && !isset($filterCodes[$code]))) {
+            continue;
+        }
+        $open = numericValue((string) $row[$openIndex]);
+        if ($open !== null && $open > 0) {
+            $opens[$code] = $open;
+        }
+    }
+
+    if (!$opens) {
+        throw new ApiError('AmarStock latest-share-price page returned no usable OpenP values.', 502);
+    }
+
+    ksort($opens);
+    return $opens;
+}
+
+/**
+ * Parse the DSE latest-share-price page into provisional intraday OHLC rows.
+ * DSE does not publish an opening price on this table, so YCP (previous close)
+ * is used as the server-side opening reference. The browser replaces it with
+ * the last archived close when that value is available locally.
+ *
+ * @return array<string,array<int,array<string,mixed>>>
+ */
+function parseInstantMarket(string $html, array $filterCodes, array $amarstockOpens = []): array
+{
+    $rows = extractRows($html);
+    $headerIndex = -1;
+    $map = [];
+
+    foreach ($rows as $index => $row) {
+        $normalized = array_map('cleanHeader', $row);
+        $candidate = detectColumns($row);
+        foreach ($normalized as $column => $header) {
+            if (in_array($header, ['ycp', 'yesterdayclose', 'previousclose', 'prevclose'], true)) {
+                $candidate['ycp'] = $column;
+            }
+        }
+        if (isset($candidate['code'], $candidate['high'], $candidate['low'], $candidate['close'])) {
+            $headerIndex = $index;
+            $map = $candidate;
+            break;
+        }
+    }
+
+    if ($headerIndex < 0) {
+        throw new ApiError('Could not identify DSE latest-share-price columns.', 502);
+    }
+
+    $marketDate = (new DateTimeImmutable('now', new DateTimeZone('Asia/Dhaka')))->format('Y-m-d');
+    $result = [];
+    foreach (array_slice($rows, $headerIndex + 1) as $row) {
+        if (count($row) <= max($map)) {
+            continue;
+        }
+        $code = normalizeCode($row[$map['code']] ?? '');
+        if ($code === '' || ($filterCodes && !isset($filterCodes[$code]))) {
+            continue;
+        }
+        $close = numericValue($row[$map['close']] ?? '');
+        $high = numericValue($row[$map['high']] ?? '');
+        $low = numericValue($row[$map['low']] ?? '');
+        $dseOpen = isset($map['open']) ? numericValue($row[$map['open']] ?? '') : null;
+        $amarstockOpen = $amarstockOpens[$code] ?? null;
+        $ycp = isset($map['ycp']) ? numericValue($row[$map['ycp']] ?? '') : null;
+        $volume = isset($map['volume']) ? numericValue($row[$map['volume']] ?? '') : 0.0;
+
+        if ($close === null || $close <= 0) {
+            continue;
+        }
+        $open = ($amarstockOpen !== null && $amarstockOpen > 0)
+            ? $amarstockOpen
+            : (($dseOpen !== null && $dseOpen > 0)
+                ? $dseOpen
+                : (($ycp !== null && $ycp > 0) ? $ycp : $close));
+        $high = ($high !== null && $high > 0) ? max($high, $open, $close) : max($open, $close);
+        $low = ($low !== null && $low > 0) ? min($low, $open, $close) : min($open, $close);
+
+        $result[$code] = [[
+            'date' => $marketDate,
+            'open' => $open,
+            'high' => $high,
+            'low' => $low,
+            'close' => $close,
+            'volume' => $volume ?? 0.0,
+            'provisional' => true,
+            'source' => ($amarstockOpen !== null && $amarstockOpen > 0)
+                ? 'Hybrid: AmarStock OpenP + DSE live market'
+                : 'DSE live market (OpenP fallback)',
+            'openSource' => ($amarstockOpen !== null && $amarstockOpen > 0) ? 'AmarStock' : 'DSE/YCP fallback',
+            'marketSource' => 'DSE',
+        ]];
+    }
+
+    if (!$result) {
+        throw new ApiError('DSE latest-share-price page returned no usable live rows.', 502);
+    }
+    ksort($result);
+    return $result;
+}
+
 /**
  * @param array<string,array<int,array<string,float|string>>> $data
  */
@@ -491,6 +636,46 @@ ignore_user_abort(true);
 
 try {
     $requestStartedAt = microtime(true);
+    $action = strtolower(getString('action'));
+    if ($action === 'instant') {
+        $codes = requestedCodes();
+        $dseHtml = downloadHtml(DSE_LIVE_URL);
+        $amarstockOpens = [];
+        $amarstockError = null;
+        try {
+            $amarstockHtml = downloadHtml(AMARSTOCK_LIVE_URL);
+            $amarstockOpens = parseAmarstockOpenPrices($amarstockHtml, $codes);
+        } catch (Throwable $error) {
+            $amarstockError = $error->getMessage();
+        }
+
+        $instant = parseInstantMarket($dseHtml, $codes, $amarstockOpens);
+        $recordCount = array_sum(array_map('count', $instant));
+        $marketDate = (new DateTimeImmutable('now', new DateTimeZone('Asia/Dhaka')))->format('Y-m-d');
+        $amarstockMatched = 0;
+        foreach ($instant as $code => $records) {
+            if (isset($amarstockOpens[$code])) {
+                $amarstockMatched++;
+            }
+        }
+        jsonResponse([
+            'success' => true,
+            'mode' => 'instant',
+            'provisional' => true,
+            'sourceUrl' => DSE_LIVE_URL,
+            'openSourceUrl' => AMARSTOCK_LIVE_URL,
+            'sourcePolicy' => 'OpenP from AmarStock; High, Low, Close/LTP, Volume and other live fields from DSE.',
+            'marketDate' => $marketDate,
+            'symbolCount' => count($instant),
+            'recordCount' => $recordCount,
+            'amarstockOpenMatched' => $amarstockMatched,
+            'openFallbackCount' => max(0, count($instant) - $amarstockMatched),
+            'amarstockWarning' => $amarstockError,
+            'availableCodes' => array_keys($instant),
+            'completedAt' => date(DATE_ATOM),
+            'data' => $instant,
+        ]);
+    }
     $startText = getString('startDate');
     $endText = getString('endDate');
     $format = strtolower(getString('format', 'json'));

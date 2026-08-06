@@ -934,6 +934,10 @@ header h1{font-size:1.55rem!important}
 @media(max-width:820px){.v11-potential-chart-gallery{grid-template-columns:1fr}}
 @media(max-width:560px){.v11-potential-actions{width:100%;justify-content:stretch}.v11-potential-actions .btn{flex:1}.v11-potential-chart-box{height:225px}.v11-potential-chart-box canvas{height:225px}}
 
+
+
+.ait-fund-report-modal{position:fixed;inset:0;z-index:10080;display:none;align-items:stretch;justify-content:center;padding:18px;background:rgba(2,6,23,.72)}.ait-fund-report-modal.open{display:flex}.ait-fund-report-panel{width:min(1500px,100%);height:100%;overflow:hidden;border:1px solid var(--v10-line,var(--line));border-radius:18px;background:var(--v10-panel-solid,var(--panel));color:var(--v10-text,var(--text));box-shadow:0 24px 80px rgba(0,0,0,.35);display:flex;flex-direction:column}.ait-fund-report-head{display:flex;gap:16px;align-items:flex-start;justify-content:space-between;padding:18px 20px;border-bottom:1px solid var(--v10-line,var(--line));background:var(--v10-card,var(--card))}.ait-fund-report-head h2{margin:2px 0 4px}.ait-fund-report-body{padding:16px 20px 20px;overflow:auto}.ait-fund-report-search{display:grid;grid-template-columns:auto minmax(220px,1fr) auto auto;gap:10px;align-items:center;padding:12px;border:1px solid var(--v10-line,var(--line));border-radius:14px;background:var(--v10-card,var(--card));margin-bottom:12px}.ait-fund-report-search input{width:100%;min-width:0}.ait-fund-report-table-wrap{overflow:auto;border:1px solid var(--v10-line,var(--line));border-radius:14px}.ait-fund-report-table{width:100%;min-width:1250px;border-collapse:collapse}.ait-fund-report-table th,.ait-fund-report-table td{padding:10px 12px;border-bottom:1px solid var(--v10-line,var(--line));text-align:left;vertical-align:top}.ait-fund-report-table th{position:sticky;top:0;z-index:2;background:var(--v10-card,var(--card))}.ait-fund-report-empty{text-align:center;padding:28px;color:var(--v10-muted,var(--muted))}@media(max-width:700px){.ait-fund-report-search{grid-template-columns:1fr}.ait-fund-report-head{padding:14px}.ait-fund-report-body{padding:12px}}
+.ait-fundamental-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin:8px 0 10px}.ait-fundamental-item{min-width:0;padding:7px 8px;border:1px solid var(--v10-line,var(--line));border-radius:10px;background:color-mix(in srgb,var(--v10-card,var(--card)) 78%,transparent)}.ait-fundamental-item small{display:block;color:var(--v10-muted,var(--muted));font-size:.62rem;text-transform:uppercase;letter-spacing:.04em}.ait-fundamental-item b{display:block;margin-top:2px;font-size:.75rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ait-fundamental-strip--empty{grid-template-columns:1fr}.ait-fundamental-strip--empty .ait-fundamental-item{text-align:center}@media(max-width:560px){.ait-fundamental-strip{grid-template-columns:repeat(2,minmax(0,1fr))}}
 /* V11 ranked charts — aligned with the Watch List 3M gallery */
 .v11-ranked-chart-modal .dialog{
  width:min(1180px,calc(100vw - 28px));
@@ -3686,7 +3690,7 @@ try{
 
 
 <style id="aitPsaPhaTerminalStyles">
-/* AIT PSA v9 — PHA-style full-width terminal architecture */
+/* AIT PSA v10041 — PHA-style full-width terminal architecture */
 #v119TerminalMenu,#v119MenuBackdrop{display:none!important}
 body.ait-psa-terminal-open{overflow:hidden}
 .ait-psa-terminal-launcher{position:fixed;top:14px;right:14px;z-index:2147483600;display:flex;align-items:center;gap:9px;min-height:44px;padding:9px 14px;border:1px solid color-mix(in srgb,var(--v10-primary,var(--primary,#2563eb)) 62%,#fff 22%);border-radius:14px;background:linear-gradient(135deg,var(--v10-primary,var(--primary,#2563eb)),var(--v10-accent,var(--blue,#06b6d4)));color:#fff;font-weight:900;box-shadow:0 16px 38px rgba(0,0,0,.35);cursor:pointer}
@@ -3708,7 +3712,9 @@ body.ait-psa-terminal-open{overflow:hidden}
 .ait-psa-terminal-modal__head{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:15px 18px;border-bottom:1px solid var(--v10-line,var(--line,#334155));background:color-mix(in srgb,var(--v10-card,var(--card,#111827)) 96%,transparent)}
 .ait-psa-terminal-modal__eyebrow{display:block;color:var(--v10-primary,var(--primary,#60a5fa));font-size:.62rem;font-weight:950;letter-spacing:.15em}.ait-psa-terminal-modal__head h2{margin:3px 0 0;font-size:1.25rem}.ait-psa-terminal-modal__head p{margin:3px 0 0;color:var(--v10-muted,var(--muted,#94a3b8));font-size:.76rem}
 .ait-psa-terminal-modal__body{min-height:0;overflow:auto;padding:16px}
-.ait-psa-terminal-command-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.ait-psa-terminal-command{min-height:112px;padding:15px;border:1px solid var(--v10-line,var(--line,#334155));border-radius:16px;background:var(--v10-card,var(--card,#111827));color:inherit;text-align:left;cursor:pointer}.ait-psa-terminal-command:hover{border-color:var(--v10-primary,var(--primary,#60a5fa))}.ait-psa-terminal-command span,.ait-psa-terminal-command b,.ait-psa-terminal-command small{display:block}.ait-psa-terminal-command span{font-size:1.35rem}.ait-psa-terminal-command b{margin-top:10px}.ait-psa-terminal-command small{margin-top:4px;color:var(--v10-muted,var(--muted,#94a3b8));line-height:1.4}
+.ait-psa-terminal-command-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.ait-signal-priority-menu-grid{grid-template-columns:repeat(2,minmax(280px,1fr))!important;align-content:start}.ait-signal-priority-menu-grid .ait-psa-terminal-command{min-height:140px}.ait-signal-priority-menu-grid .ait-psa-terminal-command b{font-size:1rem}.ait-signal-priority-menu-grid .ait-psa-terminal-command:nth-child(3),.ait-signal-priority-menu-grid .ait-psa-terminal-command:nth-child(4){border-color:color-mix(in srgb,var(--v10-primary,var(--primary,#60a5fa)) 55%,var(--v10-line,var(--line,#334155)));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--v10-primary,var(--primary,#60a5fa)) 14%,transparent)}
+@media(max-width:800px){.ait-signal-priority-menu-grid{grid-template-columns:1fr!important}}.ait-psa-terminal-command{min-height:112px;padding:15px;border:1px solid var(--v10-line,var(--line,#334155));border-radius:16px;background:var(--v10-card,var(--card,#111827));color:inherit;text-align:left;cursor:pointer}.ait-psa-terminal-command:hover{border-color:var(--v10-primary,var(--primary,#60a5fa))}.ait-psa-terminal-command span,.ait-psa-terminal-command b,.ait-psa-terminal-command small{display:block}.ait-psa-terminal-command span{font-size:1.35rem}.ait-psa-terminal-command b{margin-top:10px}.ait-psa-terminal-command small{margin-top:4px;color:var(--v10-muted,var(--muted,#94a3b8));line-height:1.4}
 .ait-psa-terminal-head-actions{display:flex;align-items:center;gap:8px}.ait-psa-terminal-back{min-height:40px;padding:8px 12px;border:1px solid var(--v10-line,var(--line,#334155));border-radius:12px;background:var(--v10-card,var(--card,#111827));color:inherit;font-weight:850;cursor:pointer}.ait-psa-terminal-back:hover{border-color:var(--v10-primary,var(--primary,#60a5fa))}
 .ait-psa-workspace-host{min-width:0}.ait-psa-watchlist-layout{display:grid;grid-template-columns:minmax(260px,340px) minmax(0,1fr);gap:14px;align-items:start}.ait-psa-watchlist-layout>.sidebar{position:static!important;width:auto!important;display:block!important}.ait-psa-watchlist-layout>#marketWorkspace{display:grid!important;min-width:0}.ait-psa-workspace-host>#v11Terminal{display:block!important}.ait-psa-workspace-host>#downloadWorkspace{display:block!important}
 .ait-psa-workspace-host>#downloadWorkspace>.v1116-download-actions{display:none!important}
@@ -4479,6 +4485,13 @@ svg[data-chart] {
 <style id="ait-history-priority-style">
 .ait-history-modal .ait-psa-terminal-modal__body{display:grid;gap:14px}.ait-history-scanner-body{align-content:start}.ait-history-guideline-section{margin:0!important}.ait-history-method{display:grid;grid-template-columns:repeat(3,minmax(220px,1fr));gap:10px}.ait-history-method>div{display:grid;gap:5px;padding:14px 16px;border:1px solid var(--v10-line,var(--line));border-radius:14px;background:var(--v10-card,var(--card));color:var(--v10-text,var(--text))}.ait-history-method span{color:var(--v10-muted,var(--muted));line-height:1.5}.ait-history-control-row{display:flex;justify-content:flex-end;align-items:center;margin:0}.ait-history-primary-actions{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}.ait-history-secondary-actions{display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap}.ait-history-summary{display:grid;grid-template-columns:repeat(4,minmax(150px,1fr));gap:10px}.ait-history-stat{padding:12px 14px;border:1px solid var(--v10-line,var(--line));border-radius:12px;background:var(--v10-card,var(--card));color:var(--v10-text,var(--text))}.ait-history-stat small{display:block;color:var(--v10-muted,var(--muted));margin-bottom:4px}.ait-history-stat strong{font-size:1.15rem}.ait-history-searchbar{margin:0}.ait-history-top-scroll{height:16px;overflow-x:auto;overflow-y:hidden;border:1px solid var(--v10-line,var(--line));border-radius:9px;background:var(--v10-bg-soft,var(--card));}.ait-history-top-scroll>div{height:1px}.ait-history-table-wrap{max-height:58vh;overflow:auto}.ait-history-table-wrap thead th{position:sticky;top:0;z-index:3;background:var(--v10-card,var(--card));color:var(--v10-text,var(--text));white-space:nowrap}.ait-history-table-wrap td{white-space:nowrap}.ait-history-delta.positive{color:var(--success,#16a34a);font-weight:700}.ait-history-delta.negative{color:var(--danger,#dc2626);font-weight:700}.ait-history-delta.neutral{color:var(--v10-muted,var(--muted))}@media(max-width:920px){.ait-history-method{grid-template-columns:1fr}.ait-history-summary{grid-template-columns:repeat(2,minmax(130px,1fr))}}@media(max-width:620px){.ait-history-control-row,.ait-history-secondary-actions{justify-content:stretch}.ait-history-primary-actions,.ait-history-secondary-actions{width:100%}.ait-history-primary-actions .btn,.ait-history-secondary-actions .btn{flex:1 1 auto}}
 </style>
+
+<style id="ait-psa-instant-time-fields-style">
+.ait-psa-instant-time-fields{display:block!important;margin-top:14px;padding:16px;border:1px solid var(--line,#cbd5e1);border-radius:14px;background:var(--panel,#fff);box-shadow:inset 0 1px 0 rgba(255,255,255,.05)}
+.ait-psa-instant-time-fields[hidden]{display:none!important}
+.ait-psa-instant-time-fields input[type="time"]{display:block!important;width:100%;min-height:44px;opacity:1!important;visibility:visible!important;color:var(--ink,#111827);background:var(--input-bg,var(--panel,#fff));border:1px solid var(--line,#cbd5e1);border-radius:10px;padding:9px 11px;color-scheme:light dark}
+@media(max-width:640px){.ait-psa-instant-time-fields>div:nth-child(2){grid-template-columns:1fr!important}}
+</style>
 </head>
 <body>
 <div class="v10-mobile-bar">
@@ -4924,6 +4937,14 @@ svg[data-chart] {
     <span class="v1116-action-icon">OHLC</span>
     <span><strong>Import OHLC Archive</strong><small>Load historical market records from files, text, or URL</small></span>
    </button>
+   <button class="v1116-action-card" type="button" data-v1116-action="downloadFundamentals">
+    <span class="v1116-action-icon">FN</span>
+    <span><strong>Download Fundamentals</strong><small>Download DSE Category, Business Segment and Last AGM for the current watch list</small></span>
+   </button>
+   <button class="v1116-action-card" type="button" data-v1116-action="instantDseUpdate">
+    <span class="v1116-action-icon">LIVE</span>
+    <span><strong>Instant Hybrid OHLC Download</strong><small>Available 10:00 AM–2:10 PM only when today’s official archive row is absent; merges AmarStock OpenP + DSE live data</small></span>
+   </button>
    <button class="v1116-action-card" type="button" data-v1116-action="dse3mUpdate">
     <span class="v1116-action-icon">3M</span>
     <span><strong>Download DSE 3M</strong><small>Download active watch-list history and open charts</small></span>
@@ -4977,11 +4998,14 @@ svg[data-chart] {
  <button class="btn primary" id="motherImport">Import DSE Trading Codes</button>
  <button class="btn blue" id="quickMotherSync">Sync DSE Trading Codes</button>
  <button class="btn blue" id="archiveImport">Import OHLC Archive</button>
+ <button class="btn primary" id="downloadFundamentals">Download Fundamentals</button>
+ <button class="btn primary" id="instantDseUpdate">Instant Hybrid OHLC Download</button>
  <button class="btn primary" id="dse3mUpdate">Download DSE 3M</button>
  <button class="btn primary" id="dse6mUpdate">Download DSE 6M</button>
  <button class="btn primary" id="viewListCharts">View Saved 3M Charts</button>
  <button class="btn primary" id="viewListCharts6">View Saved 6M Charts</button>
  <button class="btn soft" id="viewDownloadedData">View Downloaded Data</button>
+ <button class="btn soft" id="emptyDownloadedData" type="button" hidden>Empty Downloaded Data</button>
  <button class="btn soft" id="exportBtn">Backup Dashboard</button>
  <button class="btn soft" id="importBtn">Restore Dashboard</button>
  <span class="small" id="saveStatus" style="align-self:center">Permanent autosave enabled</span>
@@ -5198,6 +5222,14 @@ svg[data-chart] {
   <div class="card" style="margin:0">
    <p id="downloadConfirmMessage" style="margin:0;line-height:1.65">Start this download?</p>
    <div class="note" id="downloadConfirmDetails" style="margin-top:12px">The operation may take several minutes depending on the number of trading codes and the selected period.</div>
+   <div id="instantTradingWindowFields" class="ait-psa-instant-time-fields" hidden>
+    <div style="font-weight:800;margin-bottom:10px">Instant trading-time window</div>
+    <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px">
+     <label style="display:grid;gap:6px"><span class="small">Trading start time</span><input class="input" id="instantTradingStartTime" type="time" value="10:00" step="60"></label>
+     <label style="display:grid;gap:6px"><span class="small">Trading end time</span><input class="input" id="instantTradingEndTime" type="time" value="14:10" step="60"></label>
+    </div>
+    <div class="small" id="instantTradingWindowHint" style="margin-top:9px">Bangladesh time (Asia/Dhaka). Start time must be earlier than end time.</div>
+   </div>
    <div class="form-actions" style="justify-content:flex-end;margin-top:18px">
     <button class="btn soft" id="downloadConfirmCancel" type="button">Cancel</button>
     <button class="btn primary" id="downloadConfirmProceed" type="button">Confirm &amp; Continue</button>
@@ -5241,8 +5273,8 @@ svg[data-chart] {
 class ID{static make(){return crypto?.randomUUID?.()||"id-"+Date.now().toString(36)+"-"+Math.random().toString(36).slice(2)}}
 class Store{
  static KEY="dse-watch-dashboard-v3";
- load(){try{const d=JSON.parse(localStorage.getItem(Store.KEY));if(d&&d.watchLists)return this.norm(d)}catch(e){}const id=ID.make();return{motherCodes:[],motherSource:"",lastMotherImport:null,autoMotherSync:true,watchLists:[{id,name:"My DSE Watch List",codes:[]}],activeId:id,history:{},activity:[],lastArchive:null}}
- norm(d){d.motherCodes=Array.isArray(d.motherCodes)?[...new Set(d.motherCodes.map(x=>String(x).toUpperCase()))].sort():[];d.history=d.history&&typeof d.history==="object"?d.history:{};d.motherSource=String(d.motherSource||"");d.lastMotherImport=d.lastMotherImport||null;d.autoMotherSync=d.autoMotherSync!==false;d.activity=Array.isArray(d.activity)?d.activity:[];if(!d.watchLists?.length){const id=ID.make();d.watchLists=[{id,name:"My DSE Watch List",codes:[]}];d.activeId=id}if(!d.watchLists.some(x=>x.id===d.activeId))d.activeId=d.watchLists[0].id;return d}
+ load(){try{const d=JSON.parse(localStorage.getItem(Store.KEY));if(d&&d.watchLists)return this.norm(d)}catch(e){}const id=ID.make();return{motherCodes:[],motherSource:"",lastMotherImport:null,autoMotherSync:true,watchLists:[{id,name:"My DSE Watch List",codes:[]}],activeId:id,history:{},fundamentals:{},lastFundamentalDownload:null,activity:[],lastArchive:null}}
+ norm(d){d.motherCodes=Array.isArray(d.motherCodes)?[...new Set(d.motherCodes.map(x=>String(x).toUpperCase()))].sort():[];d.history=d.history&&typeof d.history==="object"?d.history:{};d.fundamentals=d.fundamentals&&typeof d.fundamentals==="object"?d.fundamentals:{};const migratedFundamentals={};Object.entries(d.fundamentals).forEach(([key,row])=>{const raw=String(row?.code||key||"").trim().toUpperCase();const canonical=raw.replace(/[^A-Z0-9.-]/g,"");if(canonical)migratedFundamentals[canonical]={...(row||{}),code:canonical};});d.fundamentals=migratedFundamentals;d.lastFundamentalDownload=d.lastFundamentalDownload||null;d.motherSource=String(d.motherSource||"");d.lastMotherImport=d.lastMotherImport||null;d.autoMotherSync=d.autoMotherSync!==false;d.activity=Array.isArray(d.activity)?d.activity:[];if(!d.watchLists?.length){const id=ID.make();d.watchLists=[{id,name:"My DSE Watch List",codes:[]}];d.activeId=id}if(!d.watchLists.some(x=>x.id===d.activeId))d.activeId=d.watchLists[0].id;return d}
  save(d){localStorage.setItem(Store.KEY,JSON.stringify(d))}
 }
 class MotherParser{
@@ -5301,7 +5333,7 @@ class CandleChart{
 }
 class App{
  constructor(){this.store=new Store();this.s=this.store.load();this.editId=null;this.pending={};this.pendingMother=[];this.pendingMotherSource="";this.currentCode=null;this.searchTerm=""}
- init(){["lastArchive","sMother","sLists","sHistory","sRecords","lists","activity","newList","clearActivity","search","motherImport","quickMotherSync","saveStatus","motherModal","motherSourceSelect","motherUrl","autoMotherSync","openMotherSource","fetchMother","motherFiles","parseMotherFiles","motherPaste","parseMotherPaste","motherResult","motherCommitArea","mergeMother","replaceMother","archiveImport","dse3mUpdate","dse3mUpdate2","dse6mUpdate","dse6mUpdate2","viewListCharts","viewListCharts2","viewListCharts6","viewListCharts6_2","downloadStatusCard","downloadStatusTitle","downloadStatusPercent","downloadStatusBar","downloadStatusText","hideDownloadStatus","viewDownloadedData","exportBtn","importBtn","dashboardFile","mother","motherMeta","watch","watchTitle","watchMeta","watchCodeSearch","clearWatchCodeSearch","watchCodeSearchStatus","listModal","listModalTitle","listForm","listName","archiveModal","dseStartDate","dseEndDate","fetchDseRange","downloadDseCsv","ohlcFiles","parseFiles","pasteOhlc","parsePaste","archiveUrl","urlCode","fetchUrl","parseResult","commitArea","mergeHistory","replaceHistory","chartModal","chartTitle","chartSubtitle","chartRange","downloadChart","chartCanvas","chartInfo","galleryModal","galleryTitle","gallery","dataModal","dataSummary","dataTable","downloadConfirmModal","downloadConfirmTitle","downloadConfirmMessage","downloadConfirmDetails","downloadConfirmClose","downloadConfirmCancel","downloadConfirmProceed","operationResultModal","operationResultTitle","operationResultSubtitle","operationResultIcon","operationResultMessage","operationResultDetails","operationResultClose","operationResultSecondary","operationResultPrimary","toasts"].forEach(id=>this[id]=document.getElementById(id));this.bind();
+ init(){["lastArchive","sMother","sLists","sHistory","sRecords","lists","activity","newList","clearActivity","search","motherImport","quickMotherSync","saveStatus","motherModal","motherSourceSelect","motherUrl","autoMotherSync","openMotherSource","fetchMother","motherFiles","parseMotherFiles","motherPaste","parseMotherPaste","motherResult","motherCommitArea","mergeMother","replaceMother","archiveImport","downloadFundamentals","instantDseUpdate","dse3mUpdate","dse3mUpdate2","dse6mUpdate","dse6mUpdate2","viewListCharts","viewListCharts2","viewListCharts6","viewListCharts6_2","downloadStatusCard","downloadStatusTitle","downloadStatusPercent","downloadStatusBar","downloadStatusText","hideDownloadStatus","viewDownloadedData","emptyDownloadedData","exportBtn","importBtn","dashboardFile","mother","motherMeta","watch","watchTitle","watchMeta","watchCodeSearch","clearWatchCodeSearch","watchCodeSearchStatus","listModal","listModalTitle","listForm","listName","archiveModal","dseStartDate","dseEndDate","fetchDseRange","downloadDseCsv","ohlcFiles","parseFiles","pasteOhlc","parsePaste","archiveUrl","urlCode","fetchUrl","parseResult","commitArea","mergeHistory","replaceHistory","chartModal","chartTitle","chartSubtitle","chartRange","downloadChart","chartCanvas","chartInfo","galleryModal","galleryTitle","gallery","dataModal","dataSummary","dataTable","downloadConfirmModal","downloadConfirmTitle","downloadConfirmMessage","downloadConfirmDetails","instantTradingWindowFields","instantTradingStartTime","instantTradingEndTime","instantTradingWindowHint","downloadConfirmClose","downloadConfirmCancel","downloadConfirmProceed","operationResultModal","operationResultTitle","operationResultSubtitle","operationResultIcon","operationResultMessage","operationResultDetails","operationResultClose","operationResultSecondary","operationResultPrimary","toasts"].forEach(id=>this[id]=document.getElementById(id));this.bind();
  this.searchTerm="";
  if(this.search)this.search.value="";
  if(this.watchCodeSearch)this.watchCodeSearch.value="";
@@ -5324,7 +5356,27 @@ this.parseMotherPaste.onclick=()=>this.prepareMother(MotherParser.parse(this.mot
 this.mergeMother.onclick=()=>this.commitMother(false);
 this.replaceMother.onclick=()=>this.commitMother(true);
 this.hideDownloadStatus.onclick=()=>this.downloadStatusCard.style.display="none";
+this.downloadFundamentals.onclick=()=>this.startFundamentalDownload();
 this.archiveImport.onclick=()=>this.open("archiveModal");
+this.instantDseUpdate.onclick=async()=>{
+ const a=this.active();
+ if(!a?.codes?.length)return this.toast("The active watch list is empty.",true);
+ const initialState=this.instantDownloadEligibility(a,{
+  start:this.instantTradingStartTime?.value||"10:00",
+  end:this.instantTradingEndTime?.value||"14:10"
+ });
+ const refreshText=initialState.provisionalCodes.length
+  ?`${initialState.provisionalCodes.length} existing provisional row${initialState.provisionalCodes.length===1?"":"s"} will be replaced. `
+  :"";
+ const officialText=initialState.officialCodes.length
+  ?`${initialState.officialCodes.length} code${initialState.officialCodes.length===1?" has":"s have"} today’s official archive row and will block the operation unless the active watch list changes. `
+  :"";
+ const windowSelection=await this.confirmInstantDownload("Instant Hybrid OHLC Download",`Fetch today’s DSE market table plus AmarStock OpenP for ${a.name}?`,`${refreshText}${officialText}${a.codes.length} watch-list codes will be checked. Edit the Bangladesh trading-time window below, then continue.`);
+ if(!windowSelection)return;
+ const eligibility=this.instantDownloadEligibility(a,windowSelection);
+ if(!eligibility.allowed)return this.showInstantDownloadBlocked(eligibility);
+ this.fetchInstantDse(windowSelection);
+};
 this.dse3mUpdate.onclick=this.dse3mUpdate2.onclick=async()=>{
  const a=this.active();
  if(await this.confirmDownload("Download DSE 3M",`Download three months of DSE history for ${a?.name||"the active watch list"}?`,`${a?.codes?.length||0} trading codes will be requested. Progress will appear in Download Status.`))this.downloadActiveWatchlistMonths(3);
@@ -5343,7 +5395,7 @@ this.downloadDseCsv.onclick=async()=>{
  const p=new URLSearchParams({startDate:this.dseStartDate.value,endDate:this.dseEndDate.value,format:"csv"});
  window.location.href="dse_archive.php?"+p.toString()
 };
-this.viewListCharts.onclick=this.viewListCharts2.onclick=()=>this.openGallery(3);this.viewListCharts6.onclick=this.viewListCharts6_2.onclick=()=>this.openGallery(6);this.viewDownloadedData.onclick=()=>this.openDataPreview();this.parseFiles.onclick=()=>this.readFiles();this.parsePaste.onclick=()=>this.prepare(Parser.parse(this.pasteOhlc.value),"Pasted archive");this.fetchUrl.onclick=async()=>{if(await this.confirmDownload("Download archive URL","Download and parse the entered archive URL?","The remote source may block browser access; manual import remains available if it fails."))this.fetchArchive()};this.mergeHistory.onclick=()=>this.commit(false);this.replaceHistory.onclick=()=>this.commit(true);this.chartRange.onchange=()=>this.drawCurrent();this.downloadChart.onclick=()=>{const a=document.createElement("a");a.href=this.chartCanvas.toDataURL("image/png");a.download=`${this.currentCode||"DSE"}-candlestick.png`;a.click()};this.exportBtn.onclick=()=>this.export();this.importBtn.onclick=()=>this.dashboardFile.click();this.dashboardFile.onchange=e=>this.import(e);document.querySelectorAll("[data-close]").forEach(b=>b.onclick=()=>this.close(b.dataset.close));document.querySelectorAll(".modal").forEach(m=>m.onclick=e=>{if(e.target===m){if(m.id==="downloadConfirmModal")this.resolveDownloadConfirmation(false);else this.close(m.id)}});
+this.viewListCharts.onclick=this.viewListCharts2.onclick=()=>this.openGallery(3);this.viewListCharts6.onclick=this.viewListCharts6_2.onclick=()=>this.openGallery(6);this.viewDownloadedData.onclick=()=>this.openDataPreview();this.emptyDownloadedData.onclick=()=>this.clearDownloadedData();this.parseFiles.onclick=()=>this.readFiles();this.parsePaste.onclick=()=>this.prepare(Parser.parse(this.pasteOhlc.value),"Pasted archive");this.fetchUrl.onclick=async()=>{if(await this.confirmDownload("Download archive URL","Download and parse the entered archive URL?","The remote source may block browser access; manual import remains available if it fails."))this.fetchArchive()};this.mergeHistory.onclick=()=>this.commit(false);this.replaceHistory.onclick=()=>this.commit(true);this.chartRange.onchange=()=>this.drawCurrent();this.downloadChart.onclick=()=>{const a=document.createElement("a");a.href=this.chartCanvas.toDataURL("image/png");a.download=`${this.currentCode||"DSE"}-candlestick.png`;a.click()};this.exportBtn.onclick=()=>this.export();this.importBtn.onclick=()=>this.dashboardFile.click();this.dashboardFile.onchange=e=>this.import(e);document.querySelectorAll("[data-close]").forEach(b=>b.onclick=()=>this.close(b.dataset.close));document.querySelectorAll(".modal").forEach(m=>m.onclick=e=>{if(e.target===m){if(m.id==="downloadConfirmModal")this.resolveDownloadConfirmation(false);else this.close(m.id)}});
 this.downloadConfirmProceed.onclick=()=>this.resolveDownloadConfirmation(true);
 this.downloadConfirmCancel.onclick=this.downloadConfirmClose.onclick=()=>this.resolveDownloadConfirmation(false);
 this.operationResultClose.onclick=this.operationResultPrimary.onclick=()=>this.close("operationResultModal");
@@ -5545,6 +5597,156 @@ document.querySelectorAll("[data-mother-tab]").forEach(b=>b.onclick=()=>this.mot
   const p=new URLSearchParams({startDate:start,endDate:end,format:"json",v:"7"});
   return "dse_archive.php?"+p.toString()
  }
+ getDhakaMarketClock(){
+  const formatter=new Intl.DateTimeFormat("en-CA",{
+   timeZone:"Asia/Dhaka",year:"numeric",month:"2-digit",day:"2-digit",
+   hour:"2-digit",minute:"2-digit",second:"2-digit",hourCycle:"h23"
+  });
+  const parts=Object.fromEntries(formatter.formatToParts(new Date()).filter(part=>part.type!=="literal").map(part=>[part.type,part.value]));
+  const date=`${parts.year}-${parts.month}-${parts.day}`;
+  const hour=Number(parts.hour||0),minute=Number(parts.minute||0);
+  return {date,hour,minute,totalMinutes:(hour*60)+minute,time:`${String(hour).padStart(2,"0")}:${String(minute).padStart(2,"0")}`};
+ }
+ instantDownloadEligibility(active=this.active(),windowConfig={start:"10:00",end:"14:10"}){
+  const clock=this.getDhakaMarketClock();
+  const parseTime=value=>{const match=String(value||"").match(/^(\d{2}):(\d{2})$/);if(!match)return null;const hour=Number(match[1]),minute=Number(match[2]);return hour>=0&&hour<=23&&minute>=0&&minute<=59?(hour*60)+minute:null};
+  const start=String(windowConfig?.start||"10:00");
+  const end=String(windowConfig?.end||"14:10");
+  const startMinutes=parseTime(start);
+  const endMinutes=parseTime(end);
+  const validWindow=startMinutes!==null&&endMinutes!==null&&startMinutes<endMinutes;
+  const withinWindow=validWindow&&clock.totalMinutes>=startMinutes&&clock.totalMinutes<=endMinutes;
+  const normalizeCode=value=>String(value||"").trim().toUpperCase().replace(/[^A-Z0-9().&_-]/g,"");
+  const codes=(active?.codes||[]).map(normalizeCode).filter(Boolean);
+  const officialCodes=[];
+  const provisionalCodes=[];
+  for(const code of codes){
+   const rows=Array.isArray(this.s.history?.[code])?this.s.history[code]:[];
+   const todayRows=rows.filter(row=>String(row?.date||"").slice(0,10)===clock.date);
+   if(todayRows.some(row=>row?.provisional!==true))officialCodes.push(code);
+   else if(todayRows.some(row=>row?.provisional===true))provisionalCodes.push(code);
+  }
+  const archiveExists=officialCodes.length>0;
+  return {
+   allowed:validWindow&&withinWindow&&!archiveExists,
+   clock,withinWindow,validWindow,start,end,startMinutes,endMinutes,archiveExists,officialCodes,provisionalCodes,
+   reason:!validWindow
+    ?"Trading start time must be earlier than trading end time."
+    :!withinWindow
+     ?`Instant download is available only from ${start} to ${end} Bangladesh time. Current time: ${clock.time}.`
+     :archiveExists
+     ?`Official archive data for ${clock.date} already exists for ${officialCodes.length} active trading code${officialCodes.length===1?"":"s"}. Instant data will not replace official archive rows.`
+     :""
+  };
+ }
+ showInstantDownloadBlocked(result){
+  const detailLines=[];
+  if(!result.validWindow){
+   detailLines.push("Trading start time must be earlier than trading end time.");
+  }else if(!result.withinWindow){
+   detailLines.push(`Allowed market window: ${result.start}–${result.end}`);
+   detailLines.push(`Current Bangladesh time: ${result.clock.time}`);
+  }
+  if(result.archiveExists){
+   detailLines.push(`Official archive date: ${result.clock.date}`);
+   detailLines.push(`Archive rows detected: ${result.officialCodes.length}`);
+   const preview=result.officialCodes.slice(0,12).join(", ");
+   if(preview)detailLines.push(`Trading codes: ${preview}${result.officialCodes.length>12?" …":""}`);
+  }
+  this.showDownloadStatus("Instant download not available",result.reason,100,"error");
+  this.showOperationResult({
+   title:"Instant OHLC download not available",
+   subtitle:`${result.clock.date} • Bangladesh market-time validation`,
+   message:result.reason,
+   details:detailLines.join(" • "),
+   icon:"!",
+   showStatus:true
+  });
+  this.log(`Instant hybrid OHLC blocked: ${result.reason}`);
+  return false;
+ }
+ async fetchInstantDse(windowConfig={start:"10:00",end:"14:10"}){
+  const active=this.active();
+  if(!active?.codes?.length)return this.toast("The active watch list is empty.",true);
+  const eligibility=this.instantDownloadEligibility(active,windowConfig);
+  if(!eligibility.allowed)return this.showInstantDownloadBlocked(eligibility);
+  const startedAt=Date.now();
+  this.showDownloadStatus("Fetching instant DSE market data","Connecting to DSE live data and AmarStock OpenP…",12);
+  try{
+   const params=new URLSearchParams({action:"instant",format:"json",v:"8"});
+   const r=await fetch("dse_archive.php?"+params.toString(),{headers:{Accept:"application/json"},cache:"no-store"});
+   const rawText=await r.text();
+   let payload=null;
+   try{payload=JSON.parse(rawText)}catch(_){throw new Error(`Server returned invalid JSON: ${rawText.slice(0,180)}`)}
+   if(!r.ok||!payload?.success)throw new Error(payload?.message||`HTTP ${r.status}`);
+   this.showDownloadStatus("Matching live DSE rows",`DSE returned ${payload.symbolCount||0} symbols for ${payload.marketDate||"today"}.`,52);
+   const normalizeCode=value=>String(value||"").trim().toUpperCase().replace(/[^A-Z0-9().&_-]/g,"");
+   const wanted=new Set(active.codes.map(normalizeCode));
+   const parsed={},missing=[];
+   let replacedTodayCount=0;
+   let insertedTodayCount=0;
+   for(const [rawCode,rows] of Object.entries(payload.data||{})){
+    const code=normalizeCode(rawCode);
+    if(!wanted.has(code)||!Array.isArray(rows)||!rows.length)continue;
+    const live=rows[rows.length-1];
+    const old=(this.s.history[code]||[]).filter(x=>String(x.date||"")<String(live.date||"")).at(-1);
+    const priorClose=Number(old?.close);
+    const close=Number(live.close), rawOpen=Number(live.open), rawHigh=Number(live.high), rawLow=Number(live.low);
+    const open=Number.isFinite(priorClose)&&priorClose>0?priorClose:(Number.isFinite(rawOpen)?rawOpen:close);
+    const high=Math.max(Number.isFinite(rawHigh)?rawHigh:close,open,close);
+    const low=Math.min(Number.isFinite(rawLow)&&rawLow>0?rawLow:close,open,close);
+    if(!live.date||![open,high,low,close].every(Number.isFinite)||close<=0)continue;
+    const marketDate=String(live.date).slice(0,10);
+    const existingRows=Array.isArray(this.s.history[code])?this.s.history[code]:[];
+    const hadToday=existingRows.some(row=>String(row?.date||"").slice(0,10)===marketDate);
+    if(hadToday)replacedTodayCount++;else insertedTodayCount++;
+    this.s.history[code]=existingRows.filter(row=>String(row?.date||"").slice(0,10)!==marketDate);
+    parsed[code]=[{date:marketDate,open,high,low,close,volume:Number(live.volume||0),provisional:true,source:String(live.source||"Hybrid: AmarStock OpenP + DSE live")}];
+   }
+   for(const code of active.codes){if(!parsed[normalizeCode(code)])missing.push(code)}
+   const count=Object.keys(parsed).length;
+   if(!count)throw new Error(`The DSE live table returned ${payload.symbolCount||0} symbols, but none matched the active watch list.`);
+   this.showDownloadStatus("Merging today’s provisional OHLC",`Saving ${count} live rows into the existing 3M/6M history…`,82);
+   this.pending=parsed;
+   this.pendingSource=`Hybrid OHLC • AmarStock OpenP + DSE market • ${payload.marketDate||"today"}`;
+   this.commit(false,true);
+   const seconds=Math.max(1,Math.round((Date.now()-startedAt)/1000));
+   const detail=`Merged ${count} provisional live rows for ${payload.marketDate||"today"} in ${seconds}s.${missing.length?` ${missing.length} watch-list codes were not present in the live table.`:""}`;
+   const matchedOpen=Number(payload.amarstockMatched||0);
+   const fallbackOpen=Number(payload.openFallbackCount||0);
+   const warning=String(payload.amarstockWarning||payload.warning||"").trim();
+   this.showDownloadStatus("Download completed",detail,100,"success");
+   this.showOperationResult({
+    title:"Instant OHLC download completed",
+    subtitle:`${payload.marketDate||"Today"} • Hybrid market-data merge`,
+    message:`${count} trading-code rows were merged into local OHLC history.`,
+    details:[
+     `DSE live rows merged: ${count}`,
+     `Existing today rows replaced: ${replacedTodayCount}`,
+     `New today rows added: ${insertedTodayCount}`,
+     `AmarStock OpenP matched: ${matchedOpen}`,
+     `OpenP fallback used: ${fallbackOpen}`,
+     `Missing watch-list codes: ${missing.length}`,
+     `Duration: ${seconds}s`,
+     `Scanner opened automatically: No`,
+     warning?`Warning: ${warning}`:""
+    ].filter(Boolean).join(" • "),
+    icon:"✓",
+    showStatus:true
+   });
+   this.log(`Instant hybrid OHLC merged for ${count} codes`);
+   this.persist();
+   window.dispatchEvent(new CustomEvent("ait:instant-dse-merged",{detail:{marketDate:payload.marketDate,codes:Object.keys(parsed),missing,replacedTodayCount,insertedTodayCount}}));
+   this.toast("Instant hybrid OHLC download completed.");
+   return true;
+  }catch(e){
+   console.error(e);
+   const message=e?.message||String(e);
+   this.failDownloadStatus(message);
+   this.toast(`Instant hybrid OHLC download failed: ${message}`,true);
+   return false;
+  }
+ }
  async fetchDseArchive(start,end,watchOnly=true,openCharts=false){
   if(!start||!end)return this.toast("Select DSE start and end dates.",true);
   if(start>end)return this.toast("Start date must be before end date.",true);
@@ -5689,14 +5891,19 @@ document.querySelectorAll("[data-mother-tab]").forEach(b=>b.onclick=()=>this.mot
  async readFiles(){const files=[...this.ohlcFiles.files];if(!files.length)return this.toast("Select archive files.",true);let all={};for(const f of files){const code=Parser.cleanCode(f.name.replace(/\.[^.]+$/,""));const parsed=Parser.parse(await f.text(),files.length>1?code:"");Object.entries(parsed).forEach(([c,r])=>(all[c]??=[]).push(...r))}this.prepare(all,files.map(f=>f.name).join(", "))}
  async fetchArchive(){const url=this.archiveUrl.value.trim();if(!url)return this.toast("Enter an archive URL.",true);try{const r=await fetch(url);if(!r.ok)throw Error();this.prepare(Parser.parse(await r.text(),Parser.cleanCode(this.urlCode.value)),url)}catch(e){this.toast("Archive download was blocked. Download the file manually and import it.",true)}}
  prepare(data,source){Object.keys(data).forEach(c=>{const m=new Map(data[c].map(x=>[x.date,x]));data[c]=[...m.values()].sort((a,b)=>a.date.localeCompare(b.date))});this.pending=data;const sy=Object.keys(data).length,rc=Object.values(data).reduce((n,a)=>n+a.length,0);this.parseResult.style.display="block";this.parseResult.textContent=sy?`Parsed ${rc.toLocaleString()} OHLC records for ${sy} trading codes from ${source}.`:"No valid OHLC rows detected.";this.commitArea.style.display=sy?"flex":"none"}
- commit(replace,silent=false){if(replace)this.s.history={};for(const [c,r] of Object.entries(this.pending)){const old=replace?[]:(this.s.history[c]||[]);const m=new Map([...old,...r].map(x=>[x.date,x]));this.s.history[c]=[...m.values()].sort((a,b)=>a.date.localeCompare(b.date));if(!this.s.motherCodes.includes(c))this.s.motherCodes.push(c)}this.s.motherCodes=[...new Set(this.s.motherCodes)].sort();this.s.lastArchive=new Date().toISOString();this.s.lastArchiveSource=this.pendingSource||"Imported archive";this.log(`${replace?"Replaced":"Merged"} OHLC archive data`);this.persist();if(!silent)this.close("archiveModal");this.render();if(!silent)this.toast("Historical archive saved locally.")}
+ commit(replace,silent=false){if(replace)this.s.history={};for(const [c,r] of Object.entries(this.pending)){const old=replace?[]:(this.s.history[c]||[]);const normalized=[...old,...r].filter(Boolean).map(x=>({...x,date:String(x.date||"").slice(0,10)})).filter(x=>x.date);const m=new Map(normalized.map(x=>[x.date,x]));this.s.history[c]=[...m.values()].sort((a,b)=>a.date.localeCompare(b.date));if(!this.s.motherCodes.includes(c))this.s.motherCodes.push(c)}this.s.motherCodes=[...new Set(this.s.motherCodes)].sort();this.s.lastArchive=new Date().toISOString();this.s.lastArchiveSource=this.pendingSource||"Imported archive";this.log(`${replace?"Replaced":"Merged"} OHLC archive data`);this.persist();if(!silent)this.close("archiveModal");this.render();if(!silent)this.toast("Historical archive saved locally.")}
  openChart(code,months=3){this.currentCode=code;this.chartTitle.textContent=`${code} Candlestick Chart`;if(this.chartRange)this.chartRange.value=String(Number(months)===6?6:3);this.open("chartModal");setTimeout(()=>this.drawCurrent(),50)}
  rangeData(code,months){const a=this.s.history[code]||[];if(!a.length)return[];const last=new Date(a[a.length-1].date+"T00:00:00"),cut=new Date(last);cut.setMonth(cut.getMonth()-months);return a.filter(x=>new Date(x.date+"T00:00:00")>=cut)}
  drawCurrent(){const data=this.rangeData(this.currentCode,Number(this.chartRange.value));CandleChart.draw(this.chartCanvas,data);if(data.length){const f=data[0],l=data[data.length-1],chg=(l.close/f.close-1)*100;this.chartSubtitle.textContent=`${data.length} sessions • ${f.date} to ${l.date}`;this.chartInfo.innerHTML=`<span>Open: <b>${f.open.toFixed(2)}</b></span><span>Last close: <b>${l.close.toFixed(2)}</b></span><span>Change: <b>${chg.toFixed(2)}%</b></span><span>Total volume: <b>${data.reduce((n,x)=>n+x.volume,0).toLocaleString()}</b></span>`}else{this.chartSubtitle.textContent="No local OHLC data";this.chartInfo.innerHTML=""}}
+ fundamentalStore(){const merged={};const absorb=(source)=>{if(!source||typeof source!=="object")return;Object.entries(source).forEach(([key,row])=>{if(!row||typeof row!=="object")return;const raw=String(row.code||key||"").trim().toUpperCase();const canonical=raw.replace(/[^A-Z0-9.-]/g,"");const compact=canonical.replace(/[^A-Z0-9]/g,"");if(canonical){merged[canonical]={...row,code:canonical};merged[compact]=merged[canonical];}})};absorb(this.s?.fundamentals);try{absorb(JSON.parse(localStorage.getItem("ait-psa-fundamentals-v1")||"{}"))}catch(_){ }try{const root=JSON.parse(localStorage.getItem(Store.KEY)||"{}");absorb(root?.fundamentals)}catch(_){ }return merged}
+ fundamental(code){const raw=String(code||"").trim().toUpperCase();const canonical=raw.replace(/[^A-Z0-9.-]/g,"");const compact=canonical.replace(/[^A-Z0-9]/g,"");const store=this.fundamentalStore();return store[canonical]||store[compact]||store[raw]||null}
+ cleanFundamentalRecord(row){if(!row||typeof row!=="object")return null;const text=(value,max=240)=>{const v=String(value??"").replace(/\s+/g," ").trim();return v&&v.length<=max?v:null};const date=value=>{const v=String(value??"");const m=v.match(/\b(?:\d{1,2}[-\/.]\d{1,2}[-\/.]\d{2,4}|\d{4}-\d{2}-\d{2})\b/);return m?m[0]:null};const cat=text(row.category,10);return {...row,category:cat&&/^[A-Z]$/i.test(cat)?cat.toUpperCase():null,businessSegment:text(row.businessSegment||row.sector||row.industry),lastAgmDate:date(row.lastAgmDate||row.lastAgm),eps:null,priceNav:null,dividendYield:null}}
+ fundamentalHtml(code){const f=this.cleanFundamentalRecord(this.fundamental(code));if(!f)return `<div class="ait-fundamental-strip ait-fundamental-strip--empty"><div class="ait-fundamental-item"><b>Fundamentals not downloaded</b></div></div>`;const item=(label,value)=>{const shown=value===null||value===undefined||value===""?"—":value;return `<div class="ait-fundamental-item"><small>${this.esc(label)}</small><b title="${this.esc(String(shown))}">${this.esc(String(shown))}</b></div>`};return `<div class="ait-fundamental-strip">${item("Cat",f.category)}${item("Business",f.businessSegment)}${item("Last AGM",f.lastAgmDate)}</div>`}
+ async startFundamentalDownload(){const activeList=this.active();const codes=[...new Set((activeList?.codes||[]).map(x=>String(x).trim().toUpperCase()).filter(Boolean))];if(!activeList)return this.toast("Select an active watch list first.",true);if(!codes.length)return this.toast("The current watch list has no trading codes.",true);const listName=String(activeList.name||"Current Watch List");const ok=await this.confirmDownload("Download Fundamentals",`Download DSE Category, Business Segment and Last AGM for ${codes.length} trading codes in “${listName}”?`,`Only the current watch list will be processed. Previous fundamental data will be cleared before the new DSE download.`);if(!ok)return;const latestActive=this.active();const latestCodes=[...new Set((latestActive?.codes||[]).map(x=>String(x).trim().toUpperCase()).filter(Boolean))];if(!latestActive||latestActive.id!==activeList.id)return this.toast("The active watch list changed. Open Download Fundamentals again.",true);if(!latestCodes.length)return this.toast("The current watch list has no trading codes.",true);if(latestCodes.join("|")!==codes.join("|"))return this.toast("The current watch list changed. Open Download Fundamentals again.",true);this.s.fundamentals={};try{localStorage.removeItem("ait-psa-fundamentals-v1")}catch(_){ }this.persist();this.render();window.AITRefreshFundamentalsReport?.();this.showDownloadStatus("Downloading fundamentals","Previous fundamentals cleared. Preparing DSE company-profile requests…",1,"working");const started=Date.now();let saved=0,failed=[],errors={};for(let i=0;i<codes.length;i+=20){const batch=codes.slice(i,i+20);try{const r=await fetch(`dse_fundamentals.php?_=${Date.now()}`,{method:"POST",cache:"no-store",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify({codes:batch})});const raw=await r.text();let j={};try{j=JSON.parse(raw)}catch(_){throw new Error(`Invalid server response: ${raw.slice(0,120)}`)}if(!r.ok||!j.ok)throw new Error(j.message||`Request failed with HTTP ${r.status}`);Object.entries(j.data||{}).forEach(([code,row])=>{const canonical=String(row?.code||code||"").trim().toUpperCase().replace(/[^A-Z0-9.-]/g,"");if(!canonical||!row||typeof row!=="object")return;this.s.fundamentals[canonical]={...row,code:canonical};saved++;});failed.push(...(Array.isArray(j.failed)?j.failed:[]));Object.assign(errors,j.errors||{})}catch(e){batch.forEach(code=>{failed.push(code);errors[code]=String(e?.message||e)})}const pct=Math.round(((i+batch.length)/codes.length)*100);this.showDownloadStatus("Downloading fundamentals",`${Math.min(i+batch.length,codes.length)} of ${codes.length} codes processed • ${saved} saved`,pct,"working");await new Promise(res=>setTimeout(res,120))}failed=[...new Set(failed.map(x=>String(x).toUpperCase()))];if(saved===0){this.showDownloadStatus("Fundamental download failed","No DSE fundamental records were saved.",100,"error");const sample=Object.entries(errors).slice(0,5).map(([c,m])=>`${c}: ${m}`).join("\n");this.showOperationResult({title:"Fundamental Download Failed",subtitle:"No records were committed",icon:"!",message:"DSE did not return Category, Business Segment or Last AGM data.",details:`Watch list: ${listName}\nTrading codes requested: ${codes.length}\nSaved: 0\nFailed: ${failed.length||codes.length}\nDuration: ${Math.max(1,Math.round((Date.now()-started)/1000))} seconds${sample?`\n\nError sample:\n${sample}`:""}`});return}this.s.lastFundamentalDownload=new Date().toISOString();try{localStorage.setItem("ait-psa-fundamentals-v1",JSON.stringify(this.s.fundamentals))}catch(_){ }this.persist();this.log(`Downloaded fundamentals for ${saved} trading codes in ${listName}`);this.render();if(this.galleryModal?.classList.contains("open")){const months=Number(this.galleryModal.dataset?.months||3);this.openGallery(months)}if(document.getElementById("v11RankedChartModal")?.classList.contains("open")&&window.AITRefreshRankedCharts)window.AITRefreshRankedCharts();window.dispatchEvent(new CustomEvent("ait:fundamentals-updated",{detail:{saved,failed:failed.length}}));this.showDownloadStatus("Fundamental download completed",`${saved} records saved${failed.length?`, ${failed.length} failed`:""}.`,100,"success");this.showOperationResult({title:"Fundamental Download Completed",subtitle:"DSE fundamental summary saved locally",icon:"✓",message:`${saved} DSE fundamental records from “${listName}” were saved.`,details:`Watch list: ${listName}\nTrading codes requested: ${codes.length}\nSaved: ${saved}\nFailed: ${failed.length}\nDuration: ${Math.max(1,Math.round((Date.now()-started)/1000))} seconds${failed.length?`\nFailed sample: ${failed.slice(0,10).join(", ")}`:""}`})}
  openGallery(months=3){
   const period=Number(months)===6?6:3;
   const a=this.active();
-  this.galleryTitle.textContent=`${a.name} — ${period}M Charts`;
+  this.galleryTitle.textContent=`${a.name} — ${period}M Charts`;this.galleryModal.dataset.months=String(period);
   this.gallery.innerHTML="";
   if(window.AITChartGallerySearch)window.AITChartGallerySearch.reset("gallery");
   this.open("galleryModal");
@@ -5705,7 +5912,7 @@ document.querySelectorAll("[data-mother-tab]").forEach(b=>b.onclick=()=>this.mot
    a.codes.forEach(c=>{
     const data=this.rangeData(c,period);
     const card=document.createElement("div");card.className="mini-card";
-    card.innerHTML=`<div class="row"><h3>${this.esc(c)}</h3><button class="btn blue" data-open="${c}" ${data.length?"":"disabled"}>Open</button></div><div class="chart-box mini-chart"><canvas></canvas></div><div class="small">${data.length?`${data.length} sessions • ${data[0].date} to ${data[data.length-1].date}`:"No archive data for this code"}</div>`;
+    card.innerHTML=`<div class="row"><h3>${this.esc(c)}</h3><button class="btn blue" data-open="${c}" ${data.length?"":"disabled"}>Open</button></div>${this.fundamentalHtml(c)}<div class="chart-box mini-chart"><canvas></canvas></div><div class="small">${data.length?`${data.length} sessions • ${data[0].date} to ${data[data.length-1].date}`:"No archive data for this code"}</div>`;
     this.gallery.appendChild(card);
     requestAnimationFrame(()=>CandleChart.draw(card.querySelector("canvas"),data));
     card.querySelector("[data-open]").onclick=()=>{this.close("galleryModal");this.openChart(c,period)}
@@ -5723,8 +5930,44 @@ document.querySelectorAll("[data-mother-tab]").forEach(b=>b.onclick=()=>this.mot
   this.open("dataModal")
  }
  tab(name){document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x.dataset.tab===name));document.querySelectorAll(".tab-panel").forEach(x=>x.classList.toggle("active",x.dataset.panel===name))}
+ confirmInstantDownload(title,message,details=""){
+  if(this._downloadConfirmResolver)this.resolveDownloadConfirmation(false);
+  this.downloadConfirmTitle.textContent=title||"Confirm instant download";
+  this.downloadConfirmMessage.textContent=message||"Start this instant download?";
+  this.downloadConfirmDetails.textContent=details||"The selected trading-time window will be validated before download.";
+  this.instantTradingWindowFields.hidden=false;
+  this.instantTradingWindowFields.style.removeProperty("display");
+  this.instantTradingStartTime.value=this.instantTradingStartTime.value||"10:00";
+  this.instantTradingEndTime.value=this.instantTradingEndTime.value||"14:10";
+  this.open("downloadConfirmModal");
+  setTimeout(()=>this.instantTradingStartTime?.focus(),0);
+  return new Promise(resolve=>{this._downloadConfirmResolver=confirmed=>{
+   if(!confirmed)return resolve(false);
+   const start=this.instantTradingStartTime.value||"10:00";
+   const end=this.instantTradingEndTime.value||"14:10";
+   const result=this.instantDownloadEligibility(this.active(),{start,end});
+   if(!result.validWindow){
+    this.instantTradingWindowHint.textContent="Start time must be earlier than end time.";
+    this.instantTradingWindowHint.style.color="#dc2626";
+    this.open("downloadConfirmModal");
+    this._downloadConfirmResolver=confirmedAgain=>{
+     if(!confirmedAgain)return resolve(false);
+     const retryStart=this.instantTradingStartTime.value||"10:00";
+     const retryEnd=this.instantTradingEndTime.value||"14:10";
+     const retry=this.instantDownloadEligibility(this.active(),{start:retryStart,end:retryEnd});
+     if(!retry.validWindow){this.showInstantDownloadBlocked(retry);return resolve(false)}
+     resolve({start:retryStart,end:retryEnd});
+    };
+    return;
+   }
+   this.instantTradingWindowHint.textContent="Bangladesh time (Asia/Dhaka). Start time must be earlier than end time.";
+   this.instantTradingWindowHint.style.color="";
+   resolve({start,end});
+  }});
+ }
  confirmDownload(title,message,details=""){
   if(this._downloadConfirmResolver)this.resolveDownloadConfirmation(false);
+  if(this.instantTradingWindowFields)this.instantTradingWindowFields.hidden=true;
   this.downloadConfirmTitle.textContent=title||"Confirm download";
   this.downloadConfirmMessage.textContent=message||"Start this download?";
   this.downloadConfirmDetails.textContent=details||"The operation will start only after confirmation.";
@@ -5747,6 +5990,33 @@ document.querySelectorAll("[data-mother-tab]").forEach(b=>b.onclick=()=>this.mot
   this.operationResultSecondary.style.display=showStatus?"inline-flex":"none";
   this.open("operationResultModal");
   setTimeout(()=>this.operationResultPrimary?.focus(),0);
+ }
+ async clearDownloadedData(){
+  const codes=Object.keys(this.s.history||{}).length;
+  const records=Object.values(this.s.history||{}).reduce((total,rows)=>total+(Array.isArray(rows)?rows.length:0),0);
+  if(!records){
+   this.showOperationResult({title:"Downloaded data is already empty",subtitle:"No OHLC records were found",message:"There is no downloaded market data to remove.",details:"Watch lists, portfolio data, DSE trading codes and terminal settings remain unchanged.",icon:"ℹ"});
+   return;
+  }
+  const confirmed=await this.confirmDownload("Empty downloaded data",`Permanently remove ${records.toLocaleString()} OHLC record${records===1?"":"s"} across ${codes.toLocaleString()} trading code${codes===1?"":"s"}?`,"This cannot be undone unless you have a backup. Watch lists, portfolio positions, DSE codes, themes and settings will be preserved.");
+  if(!confirmed)return;
+  this.s.history={};
+  this.s.lastArchive=null;
+  this.persist();
+  this.render();
+  this.downloadStatusCard.style.display="none";
+  try{
+   window.dispatchEvent(new CustomEvent("ait:ohlc-data-cleared",{detail:{codes,records}}));
+   window.dispatchEvent(new Event("storage"));
+  }catch(_){ }
+  this.toast(`${records.toLocaleString()} downloaded OHLC records removed.`);
+  this.showOperationResult({
+   title:"Downloaded data emptied",
+   subtitle:"Local OHLC storage cleared successfully",
+   message:`Removed ${records.toLocaleString()} OHLC record${records===1?"":"s"} for ${codes.toLocaleString()} trading code${codes===1?"":"s"}.`,
+   details:"Watch lists, portfolio positions, DSE trading codes, activity history, themes and terminal settings were preserved.",
+   icon:"✓"
+  });
  }
  async export(){
   const portfolioData=(()=>{try{const value=JSON.parse(localStorage.getItem("ababil-dse-v11-portfolio")||"[]");return Array.isArray(value)?value:[]}catch{return[]}})();
@@ -7012,6 +7282,10 @@ document.addEventListener("DOMContentLoaded",()=>{
    const result=window.AitAdvancedSignalPriority?.calculate?.();
    return (result?.rows||[]).map(x=>({code:x.code,ltp:last(rowsFor(x.code))?.close??null,score:Number(x.advancedScore||0),signal:x.signal||"Avoid",scoreLabel:"Advanced Score",rank:x.rank}));
   }
+  if(mode==="elite-priority"){
+   const result=window.AitEliteSignalPriority?.calculate?.();
+   return (result?.rows||[]).map(x=>({code:x.code,ltp:last(rowsFor(x.code))?.close??null,score:Number(x.eliteScore||0),signal:x.signal||"Avoid",scoreLabel:"Elite Score",rank:x.rank}));
+  }
   return potentialDataset().map(x=>({
    code:x.code,ltp:x.ltp,score:Number(x.primaryScore||0),signal:x.signal||"Avoid",
    scoreLabel:"Primary score",rank:x.rank,comparisonScore:x.comparisonScore
@@ -7072,7 +7346,8 @@ document.addEventListener("DOMContentLoaded",()=>{
    potential:{title:`AIT Elite Screener — Ranked ${period}M Charts`,description:"50/50 Technical–Smart Money Primary Score; Relative Strength breaks close ties"},
    priority:{title:`AIT Signal Priority Screener — Ranked ${period}M Charts`,description:"signal-priority order, then Primary Score"},
    historical:{title:`AIT Signal Priority Historical Performance — Ranked ${period}M Charts`,description:"Final Historical Score within Strong Buy → Buy → Watch → Avoid"},
-   advanced:{title:`AIT Signal Priority Advanced Performance — Ranked ${period}M Charts`,description:"Advanced Score with momentum, stability, persistence and confirmation"}
+   advanced:{title:`AIT Signal Priority Advanced Performance — Ranked ${period}M Charts`,description:"Advanced Score with momentum, stability, persistence and confirmation"},
+   "elite-priority":{title:`AIT Signal Priority Elite Scanner — Ranked ${period}M Charts`,description:"Elite Score with liquidity, volatility, breakout, support and entry-quality validation"}
   }[mode]||{title:`Ranked ${period}M Charts`,description:"score"};
   const data=rankedChartData(mode);
 
@@ -7095,12 +7370,13 @@ document.addEventListener("DOMContentLoaded",()=>{
      <span>${esc(x.scoreLabel)} <b>${fmt(x.score,1)}</b></span>
      <span class="v11-signal ${String(x.signal).toLowerCase()}">${esc(x.signal)}</span>
     </div>
+    ${(window.app&&typeof window.app.fundamentalHtml==="function")?window.app.fundamentalHtml(x.code):""}
     <div class="chart-box mini-chart"><canvas></canvas></div>
     <div class="small v11-ranked-coverage">${coverage}</div>
    </div>`;
   }).join(""):'<div class="empty">No sufficient local data for ranked charts.</div>';
 
-  modal.classList.add("open");
+  modal.dataset.mode=mode;modal.dataset.period=String(period);modal.classList.add("open");
   modal.setAttribute("aria-hidden","false");
   document.body.classList.add("v11-ranked-modal-open");
 
@@ -7125,7 +7401,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   });
  }
 
- window.AITOpenRankedCharts=openRankedCharts;
+ window.AITOpenRankedCharts=openRankedCharts;window.AITRefreshRankedCharts=()=>{const modal=document.getElementById("v11RankedChartModal");if(!modal?.classList.contains("open"))return;const mode=modal.dataset.mode||"potential";const period=Number(modal.dataset.period||3);openRankedCharts(mode,period);};
 
  function closeRankedCharts(){
   const modal=document.getElementById("v11RankedChartModal");
@@ -9257,6 +9533,10 @@ document.addEventListener("keydown",event=>{
   <button class="ait-psa-terminal-group" id="aitPsaOpenWorkspace" data-ait-psa-open="aitPsaWorkspaceModal" type="button"><span class="ait-psa-terminal-group__icon">▦</span><span><b>Workspace</b><small>Data Center, Watch List and Trading</small></span><i>→</i></button>
  </div>
 </aside>
+
+.ait-psa-terminal-command--danger{border-color:color-mix(in srgb,#ef4444 52%,var(--v10-line,var(--line,#334155)))!important;background:color-mix(in srgb,#ef4444 9%,var(--v10-card,var(--card,#0f172a)))!important}
+.ait-psa-terminal-command--danger:hover{border-color:#ef4444!important;box-shadow:0 14px 34px rgba(239,68,68,.16)!important}
+.ait-psa-terminal-command--danger span{color:#ef4444!important}
 <div class="ait-psa-terminal-modal-shell" id="aitPsaTerminalModalShell" aria-hidden="true"><button class="ait-psa-terminal-modal-backdrop" id="aitPsaTerminalModalBackdrop" type="button" aria-label="Close modal"></button>
  <section class="ait-psa-terminal-modal" id="aitPsaAppearanceModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">TERMINAL GROUP</span><h2>◉ Appearance</h2><p>Choose an appearance setting to configure.</p></div><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" id="aitPsaOpenThemeMenu" type="button"><span>◐</span><b>Theme</b><small>Open the terminal theme selection menu.</small></button></div></div></section>
  <section class="ait-psa-terminal-modal" id="aitPsaThemeModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">APPEARANCE ITEM</span><h2>◐ Theme</h2><p>Select a theme to apply it immediately.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" id="aitPsaBackToAppearance" type="button">← Appearance</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body ait-psa-theme-host" id="aitPsaThemeHost"></div></section>
@@ -9264,22 +9544,24 @@ document.addEventListener("keydown",event=>{
  <section class="ait-psa-terminal-modal" id="aitPsaRecentActivityModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">INTERACTION ITEM</span><h2>◷ Recent Activity</h2><p>Review actions performed across the terminal.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" id="aitPsaBackToInteraction" type="button">← Interaction</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-activity-toolbar"><div><strong>Activity timeline</strong><small id="aitPsaRecentActivityCount">0 activities</small></div><button class="ait-psa-terminal-back" id="aitPsaClearRecentActivity" type="button">Clear Activity</button></div><div class="ait-psa-activity-list v105-list" id="aitPsaRecentActivityList"><div class="v105-empty">Your recent actions will appear here.</div></div></div></section>
  <section class="ait-psa-terminal-modal" id="aitPsaNavigationModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">TERMINAL GROUP</span><h2>🧭 Navigation</h2><p>Navigate the simplified index page.</p></div><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" data-ait-nav="v105Dashboard" type="button"><span>01</span><b>Dashboard</b><small>Operations overview and terminal health.</small></button><button class="ait-psa-terminal-command" data-ait-nav="overviewWorkspace" type="button"><span>02</span><b>Summaries</b><small>DSE codes, watch lists and OHLC totals.</small></button><button class="ait-psa-terminal-command" data-ait-nav="aitPsaHomeNotifications" type="button"><span>03</span><b>Notifications</b><small>Recent terminal events and alerts.</small></button></div></div></section>
  <section class="ait-psa-terminal-modal" id="aitPsaNotificationModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">TERMINAL GROUP</span><h2>♢ Notification</h2><p>Review terminal events and alerts.</p></div><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></header><div class="ait-psa-terminal-modal__body"><div class="v105-list" id="aitPsaModalNotificationList"></div></div></section>
- <section class="ait-psa-terminal-modal" id="aitPsaWorkspaceModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">TERMINAL GROUP</span><h2>▦ Workspace</h2><p>Open a full-width workspace terminal.</p></div><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" id="aitPsaOpenDownload" data-ait-psa-open="aitPsaDataCenterLauncherModal" type="button"><span>⇩</span><b>Data Center</b><small>Download, sync, import, backup and reporting operations.</small></button><button class="ait-psa-terminal-command" id="aitPsaOpenWatchlist" data-ait-psa-open="aitPsaWatchlistModal" type="button"><span>★</span><b>Watch List</b><small>Manage watch lists and DSE trading codes.</small></button><button class="ait-psa-terminal-command" id="aitPsaOpenTrading" data-ait-psa-open="aitPsaTradingModal" type="button"><span>▥</span><b>Trading</b><small>Open the complete trading workspace.</small></button></div></div></section>
- <section class="ait-psa-terminal-modal" id="aitPsaDataCenterLauncherModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">DATA WORKSPACE</span><h2>⇩ Data Center</h2><p>Choose a data operation category.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaWorkspaceModal" type="button">← Workspace</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaDownloadMenuModal" type="button"><span>⇩</span><b>Download</b><small>Download DSE history and custom archive ranges.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaSyncMenuModal" type="button"><span>↻</span><b>Sync</b><small>Synchronize the latest available market-code directory.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaImportMenuModal" type="button"><span>⇧</span><b>Import</b><small>Import codes, OHLC archives and dashboard backups.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaBackupMenuModal" type="button"><span>◆</span><b>Backup</b><small>Export a portable terminal data backup.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaDataReportMenuModal" type="button"><span>▥</span><b>Report</b><small>Review saved charts, downloaded records and job status.</small></button></div></div></section>
- <section class="ait-psa-terminal-modal" id="aitPsaDownloadMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">DATA CENTER CATEGORY</span><h2>⇩ Download</h2><p>Select a download operation.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaDataCenterLauncherModal" type="button">← Data Center</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" data-ait-data-action="dse3mUpdate" data-ait-data-group="download" type="button"><span>3M</span><b>Download DSE 3M</b><small>Download active watch-list history.</small></button><button class="ait-psa-terminal-command" data-ait-data-action="dse6mUpdate" data-ait-data-group="download" type="button"><span>6M</span><b>Download DSE 6M</b><small>Download six months of active watch-list history.</small></button><button class="ait-psa-terminal-command" data-ait-data-action="archiveImport" data-ait-data-group="download" type="button"><span>↧</span><b>Custom Archive Range</b><small>Open the archive workspace for a chosen date range.</small></button></div></div></section>
+ <section class="ait-fund-report-modal" id="aitFundamentalsReportModal" aria-hidden="true"><div class="ait-fund-report-panel"><header class="ait-fund-report-head"><div><small>DATA CENTER REPORT</small><h2>Downloaded Fundamentals</h2><p id="aitFundamentalsReportMeta">Saved DSE category, business segment and last AGM data.</p></div><button class="btn soft" type="button" id="aitFundamentalsReportClose">Close</button></header><div class="ait-fund-report-body"><div class="ait-fund-report-search"><span>⌕</span><input id="aitFundamentalsReportSearch" type="search" placeholder="Search trading code, company, category, sector or business segment"><button class="btn soft" type="button" id="aitFundamentalsReportClear">Clear</button><span id="aitFundamentalsReportCount">0 shown</span></div><div class="ait-fund-report-table-wrap"><table class="ait-fund-report-table"><thead><tr><th>Code</th><th>Company</th><th>Cat</th><th>Business Segment</th><th>Last AGM</th><th>Status</th><th>Downloaded</th></tr></thead><tbody id="aitFundamentalsReportBody"></tbody></table></div></div></div></section>
+<section class="ait-psa-terminal-modal" id="aitPsaWorkspaceModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">TERMINAL GROUP</span><h2>▦ Workspace</h2><p>Open a full-width workspace terminal.</p></div><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" id="aitPsaOpenDownload" data-ait-psa-open="aitPsaDataCenterLauncherModal" type="button"><span>⇩</span><b>Data Center</b><small>Download, sync, import, backup and reporting operations.</small></button><button class="ait-psa-terminal-command" id="aitPsaOpenWatchlist" data-ait-psa-open="aitPsaWatchlistModal" type="button"><span>★</span><b>Watch List</b><small>Manage watch lists and DSE trading codes.</small></button><button class="ait-psa-terminal-command" id="aitPsaOpenTrading" data-ait-psa-open="aitPsaTradingModal" type="button"><span>▥</span><b>Trading</b><small>Open the complete trading workspace.</small></button></div></div></section>
+ <section class="ait-psa-terminal-modal" id="aitPsaDataCenterLauncherModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">DATA WORKSPACE</span><h2>⇩ Data Center</h2><p>Choose a data operation category.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaWorkspaceModal" type="button">← Workspace</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaDownloadMenuModal" type="button"><span>⇩</span><b>Download</b><small>Download DSE history and custom archive ranges.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaSyncMenuModal" type="button"><span>↻</span><b>Sync</b><small>Synchronize the latest available market-code directory.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaImportMenuModal" type="button"><span>⇧</span><b>Import</b><small>Import codes, OHLC archives and dashboard backups.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaBackupMenuModal" type="button"><span>◆</span><b>Backup</b><small>Export a portable terminal data backup.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaDataReportMenuModal" type="button"><span>▥</span><b>Report</b><small>Review saved charts, downloaded records and job status.</small></button><button class="ait-psa-terminal-command ait-psa-terminal-command--danger" data-ait-data-action="emptyDownloadedData" data-ait-data-group="empty" type="button"><span>⌫</span><b>Empty Downloaded Data</b><small>Remove all locally stored OHLC records while preserving watch lists, portfolio and settings.</small></button></div></div></section>
+ <section class="ait-psa-terminal-modal" id="aitPsaDownloadMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">DATA CENTER CATEGORY</span><h2>⇩ Download</h2><p>Select a download operation.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaDataCenterLauncherModal" type="button">← Data Center</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" data-ait-data-action="downloadFundamentals" data-ait-data-group="download" type="button"><span>FN</span><b>Download Fundamentals</b><small>Download DSE Category, Business Segment and Last AGM for the current watch list only.</small></button><button class="ait-psa-terminal-command" data-ait-data-action="instantDseUpdate" data-ait-data-group="download" type="button"><span>LIVE</span><b>Instant Hybrid OHLC Download</b><small>Available 10:00 AM–2:10 PM when today’s official archive data is absent; merges today’s live DSE table and AmarStock OpenP.</small></button><button class="ait-psa-terminal-command" data-ait-data-action="dse3mUpdate" data-ait-data-group="download" type="button"><span>3M</span><b>Download DSE 3M</b><small>Download active watch-list history.</small></button><button class="ait-psa-terminal-command" data-ait-data-action="dse6mUpdate" data-ait-data-group="download" type="button"><span>6M</span><b>Download DSE 6M</b><small>Download six months of active watch-list history.</small></button><button class="ait-psa-terminal-command" data-ait-data-action="archiveImport" data-ait-data-group="download" type="button"><span>↧</span><b>Custom Archive Range</b><small>Open the archive workspace for a chosen date range.</small></button></div></div></section>
  <section class="ait-psa-terminal-modal" id="aitPsaSyncMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">DATA CENTER CATEGORY</span><h2>↻ Sync</h2><p>Select a synchronization operation.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaDataCenterLauncherModal" type="button">← Data Center</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" data-ait-data-action="quickMotherSync" data-ait-data-group="sync" type="button"><span>↻</span><b>Sync DSE Codes</b><small>Refresh the latest available DSE trading-code list.</small></button></div></div></section>
  <section class="ait-psa-terminal-modal" id="aitPsaImportMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">DATA CENTER CATEGORY</span><h2>⇧ Import</h2><p>Select an import or restore operation.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaDataCenterLauncherModal" type="button">← Data Center</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" data-ait-data-action="motherImport" data-ait-data-group="import" type="button"><span>DSE</span><b>Import DSE Codes</b><small>Import or replace the complete trading-code directory.</small></button><button class="ait-psa-terminal-command" data-ait-data-action="archiveImport" data-ait-data-group="import" type="button"><span>OHLC</span><b>Import OHLC Archive</b><small>Load historical records from files, pasted data or URL.</small></button><button class="ait-psa-terminal-command" data-ait-data-action="importBtn" data-ait-data-group="import" type="button"><span>⇧</span><b>Restore Dashboard</b><small>Restore a complete or legacy dashboard backup, including portfolio data.</small></button></div></div></section>
  <section class="ait-psa-terminal-modal" id="aitPsaBackupMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">DATA CENTER CATEGORY</span><h2>◆ Backup</h2><p>Select a backup operation.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaDataCenterLauncherModal" type="button">← Data Center</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" data-ait-data-action="exportBtn" data-ait-data-group="backup" type="button"><span>⇩</span><b>Backup Dashboard</b><small>Export watch lists, codes, history and settings.</small></button></div></div></section>
- <section class="ait-psa-terminal-modal" id="aitPsaDataReportMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">DATA CENTER CATEGORY</span><h2>▥ Report</h2><p>Select a data review workspace.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaDataCenterLauncherModal" type="button">← Data Center</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" data-ait-data-action="viewListCharts" data-ait-data-group="report" type="button"><span>3M</span><b>Saved 3M Charts</b><small>Open saved three-month charts for the active list.</small></button><button class="ait-psa-terminal-command" data-ait-data-action="viewListCharts6" data-ait-data-group="report" type="button"><span>6M</span><b>Saved 6M Charts</b><small>Open saved six-month charts for the active list.</small></button><button class="ait-psa-terminal-command" data-ait-data-action="viewDownloadedData" data-ait-data-group="report" type="button"><span>⌗</span><b>Downloaded Data</b><small>Inspect stored OHLC records in a data table.</small></button><button class="ait-psa-terminal-command" data-ait-data-workspace="status" data-ait-data-group="report" type="button"><span>◉</span><b>Download Status</b><small>Open the Data Center workspace and current job status.</small></button></div></div></section>
+ <section class="ait-psa-terminal-modal" id="aitPsaDataReportMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">DATA CENTER CATEGORY</span><h2>▥ Report</h2><p>Select a data review workspace.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaDataCenterLauncherModal" type="button">← Data Center</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" data-ait-data-action="viewListCharts" data-ait-data-group="report" type="button"><span>3M</span><b>Saved 3M Charts</b><small>Open saved three-month charts for the active list.</small></button><button class="ait-psa-terminal-command" data-ait-data-action="viewListCharts6" data-ait-data-group="report" type="button"><span>6M</span><b>Saved 6M Charts</b><small>Open saved six-month charts for the active list.</small></button><button class="ait-psa-terminal-command" data-ait-data-action="viewDownloadedData" data-ait-data-group="report" type="button"><span>⌗</span><b>Downloaded Data</b><small>Inspect stored OHLC records in a data table.</small></button><button class="ait-psa-terminal-command" id="aitPsaOpenFundamentalsReport" type="button"><span>FN</span><b>Downloaded Fundamentals</b><small>Review saved DSE category, business segment and last AGM data with scanner-style search.</small></button><button class="ait-psa-terminal-command" data-ait-data-workspace="status" data-ait-data-group="report" type="button"><span>◉</span><b>Download Status</b><small>Open the Data Center workspace and current job status.</small></button></div></div></section>
  <section class="ait-psa-terminal-modal ait-psa-workspace-modal" id="aitPsaDownloadModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow" id="aitPsaDataCenterEyebrow">DATA CENTER TOOL</span><h2 id="aitPsaDataCenterTitle">⇩ Data Center</h2><p id="aitPsaDataCenterDescription">Selected data operation workspace.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" id="aitPsaDataCenterBack" type="button">← Data Center</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body ait-psa-workspace-host" id="aitPsaDownloadHost"></div></section>
  <section class="ait-psa-terminal-modal ait-psa-workspace-modal" id="aitPsaWatchlistModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">WORKSPACE TERMINAL</span><h2>★ Watch List</h2><p>Manage stock groups, trading codes and chart access.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaWorkspaceModal" type="button">← Workspace</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body ait-psa-workspace-host" id="aitPsaWatchlistHost"></div></section>
  
 <section class="ait-psa-terminal-modal" id="aitPsaSignalPriorityMenuModal" hidden role="dialog" aria-modal="true">
- <header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">AIT SIGNAL PRIORITY</span><h2>★ Performance</h2><p>Choose the current scanner or day-to-day improvement history.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaScannerMenuModal" type="button">← Scanner</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header>
- <div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid">
+ <header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">AIT SIGNAL PRIORITY</span><h2>★ AIT Signal Priority Scanner</h2><p>Choose Latest, Historical, Advanced, or Advanced Elite performance scanning.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaScannerMenuModal" type="button">← Scanner</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header>
+ <div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid ait-signal-priority-menu-grid">
   <button class="ait-psa-terminal-command" data-ait-trading-tab="potential-priority" data-ait-trading-group="scanner" type="button"><span>●</span><b>Latest Performance</b><small>Run today’s existing AIT Signal Priority scanner.</small></button>
   <button class="ait-psa-terminal-command" id="aitOpenHistoricalPriority" type="button"><span>↗</span><b>Historical Performance</b><small>Rank stocks by day-to-day signal, score and rank improvement.</small></button>
-  <button class="ait-psa-terminal-command" id="aitOpenAdvancedPriority" type="button"><span>✦</span><b>Advanced Performance</b><small>Rank stocks using historical strength, momentum, stability, persistence and confirmation.</small></button>
+  <button class="ait-psa-terminal-command" id="aitOpenAdvancedPriority" type="button"><span>✦</span><b>AIT Advanced Performance Scanner</b><small>Historical strength, momentum, stability, persistence, and price-volume confirmation.</small></button>
+  <button class="ait-psa-terminal-command" id="aitOpenElitePriority" type="button"><span>✹</span><b>AIT Advanced Elite Scanner</b><small>Final decision scanner with liquidity, volatility, breakout, support, entry quality, and risk controls.</small></button>
  </div></div>
 </section>
 
@@ -9310,10 +9592,23 @@ document.addEventListener("keydown",event=>{
   <div class="v11-scanner-table-region"><div class="v11-table-scrollbar" aria-label="Horizontal table scrollbar"><div></div></div><div class="v11-table-wrap v11-scanner-table-wrap"><table class="v11-table v11-potential-table"><thead><tr><th>Overall Rank</th><th>Signal Rank</th><th>Trading Code</th><th>LTP</th><th>Technical</th><th>Smart Money</th><th>Primary Score</th><th>Historical Score</th><th>Momentum</th><th>Stability</th><th>Persistence</th><th>Confirmation</th><th>Advanced Score</th><th>Signal</th></tr></thead><tbody id="aitAdvancedPriorityRows"><tr><td colspan="14">Run advanced screen to calculate results.</td></tr></tbody></table></div></div>
   </div></article></section></div>
 </section>
+<section class="ait-psa-terminal-modal ait-psa-workspace-modal" id="aitElitePriorityModal" hidden role="dialog" aria-modal="true">
+ <header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">SCANNER TOOL</span><h2>AIT Signal Priority — Elite Scanner</h2><p>Final multi-factor decision scanner combining current, historical and execution-quality evidence.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaSignalPriorityMenuModal" type="button">← Performance</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header>
+ <div class="ait-psa-terminal-modal__body ait-psa-workspace-host"><section class="v11-workspace active"><article class="v11-card v11-scanner-card">
+  <div class="v11-card-head"><div><h3>AIT Elite Signal Priority Scanner</h3><small>Final signal-first ranking with quality, liquidity and risk confirmation</small></div><div class="v11-potential-actions"><button class="btn soft" id="aitElitePriorityCharts6" type="button">View 6M Charts</button><button class="btn soft" id="aitElitePriorityCharts3" type="button">View 3M Charts</button><button class="btn primary" id="aitElitePriorityRun" type="button">Run elite screen</button></div></div>
+  <div class="v11-card-body"><section class="v11-potential-guideline"><div class="v11-potential-guideline-grid">
+   <div class="v11-potential-guide v11-potential-guide--strongest"><strong>Final Decision Layer</strong><span>Combines Advanced Score with liquidity, volatility risk, breakout quality, support structure and entry quality.</span></div>
+   <div class="v11-potential-guide v11-potential-guide--formula"><strong>Elite Score</strong><span>35% Advanced + 15% Liquidity + 12% Volatility Safety + 14% Breakout + 12% Support + 12% Entry Quality.</span></div>
+   <div class="v11-potential-guide v11-potential-guide--watch"><strong>Execution Quality</strong><span>Rewards tradable volume, controlled volatility and prices that are not excessively extended.</span></div>
+   <div class="v11-potential-guide v11-potential-guide--avoid"><strong>Risk Gate</strong><span>Strong Buy requires broad confirmation; weak liquidity or unsafe volatility can downgrade the result.</span></div>
+  </div></section>
+  <div class="v11-scanner-table-region"><div class="v11-table-scrollbar" aria-label="Horizontal table scrollbar"><div></div></div><div class="v11-table-wrap v11-scanner-table-wrap"><table class="v11-table v11-potential-table"><thead><tr><th>Overall Rank</th><th>Signal Rank</th><th>Trading Code</th><th>LTP</th><th>Primary</th><th>Historical</th><th>Advanced</th><th>Liquidity</th><th>Volatility Safety</th><th>Breakout</th><th>Support</th><th>Entry Quality</th><th>Elite Score</th><th>Signal</th></tr></thead><tbody id="aitElitePriorityRows"><tr><td colspan="14">Run elite screen to calculate results.</td></tr></tbody></table></div></div>
+  </div></article></section></div>
+</section>
 <section class="ait-psa-terminal-modal" id="aitPsaTradingLauncherModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">TRADING WORKSPACE</span><h2>▥ Trading</h2><p>Choose a trading workspace category.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaWorkspaceModal" type="button">← Workspace</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid ait-psa-trading-launcher-grid"><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaPortfolioMenuModal" type="button"><span>◫</span><b>Portfolio</b><small>Positions, quantities, cost, value and profit or loss.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaReportMenuModal" type="button"><span>▥</span><b>Report</b><small>Charts, generated reports and historical data explorer.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaScannerMenuModal" type="button"><span>⌁</span><b>Scanner</b><small>Technical, Smart Money, Relative Strength and three AIT screening models.</small></button></div></div></section>
  <section class="ait-psa-terminal-modal" id="aitPsaPortfolioMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">TRADING CATEGORY</span><h2>◫ Portfolio</h2><p>Select the portfolio workspace.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaTradingLauncherModal" type="button">← Trading</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid ait-psa-trading-tool-grid"><button class="ait-psa-terminal-command" data-ait-trading-tab="portfolio" data-ait-trading-group="portfolio" type="button"><span>◫</span><b>Portfolio Manager</b><small>Manage holdings and review current portfolio performance.</small></button></div></div></section>
  <section class="ait-psa-terminal-modal" id="aitPsaReportMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">TRADING CATEGORY</span><h2>▥ Report</h2><p>Select a reporting and exploration workspace.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaTradingLauncherModal" type="button">← Trading</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid ait-psa-trading-tool-grid"><button class="ait-psa-terminal-command" data-ait-trading-tab="charts" data-ait-trading-group="report" type="button"><span>▥</span><b>Charts</b><small>Open the multi-chart analysis workspace.</small></button><button class="ait-psa-terminal-command" data-ait-trading-tab="reports" data-ait-trading-group="report" type="button"><span>≡</span><b>Report</b><small>Generate portfolio, scanner and comparison reports.</small></button><button class="ait-psa-terminal-command" data-ait-trading-tab="explorer" data-ait-trading-group="report" type="button"><span>⌕</span><b>Explorer</b><small>Explore saved OHLC history and local market data.</small></button></div></div></section>
- <section class="ait-psa-terminal-modal" id="aitPsaScannerMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">TRADING CATEGORY</span><h2>⌁ Scanner</h2><p>Select a market scanning workspace.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaTradingLauncherModal" type="button">← Trading</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid ait-psa-trading-tool-grid"><button class="ait-psa-terminal-command" data-ait-trading-tab="indicators" data-ait-trading-group="scanner" type="button"><span>∿</span><b>Technical Scanner</b><small>Screen trend, momentum, SMA, RSI and volume conditions.</small></button><button class="ait-psa-terminal-command" data-ait-trading-tab="vpa" data-ait-trading-group="scanner" type="button"><span>▥</span><b>Smart Money Scanner</b><small>Analyze VPA, volume, spread and effort versus result.</small></button><button class="ait-psa-terminal-command" data-ait-trading-tab="comparison" data-ait-trading-group="scanner" type="button"><span>⇄</span><b>Relative Strength Scanner</b><small>Rank active stocks against their peers without issuing buy signals.</small></button><button class="ait-psa-terminal-command" data-ait-trading-tab="potential-composite" data-ait-trading-group="scanner" type="button"><span>◇</span><b>AIT Composite Screener</b><small>40/35/25 weighted multi-factor score.</small></button><button class="ait-psa-terminal-command" data-ait-trading-tab="potential" data-ait-trading-group="scanner" type="button"><span>◆</span><b>AIT Elite Screener</b><small>Balanced 50/50 primary score with relative tie-breaking.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaSignalPriorityMenuModal" type="button"><span>★</span><b>AIT Signal Priority Screener</b><small>Open latest or day-to-day historical performance.</small></button></div></div></section>
+ <section class="ait-psa-terminal-modal" id="aitPsaScannerMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">TRADING CATEGORY</span><h2>⌁ Scanner</h2><p>Select a market scanning workspace.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaTradingLauncherModal" type="button">← Trading</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid ait-psa-trading-tool-grid"><button class="ait-psa-terminal-command" data-ait-trading-tab="indicators" data-ait-trading-group="scanner" type="button"><span>∿</span><b>Technical Scanner</b><small>Screen trend, momentum, SMA, RSI and volume conditions.</small></button><button class="ait-psa-terminal-command" data-ait-trading-tab="vpa" data-ait-trading-group="scanner" type="button"><span>▥</span><b>Smart Money Scanner</b><small>Analyze VPA, volume, spread and effort versus result.</small></button><button class="ait-psa-terminal-command" data-ait-trading-tab="comparison" data-ait-trading-group="scanner" type="button"><span>⇄</span><b>Relative Strength Scanner</b><small>Rank active stocks against their peers without issuing buy signals.</small></button><button class="ait-psa-terminal-command" data-ait-trading-tab="potential-composite" data-ait-trading-group="scanner" type="button"><span>◇</span><b>AIT Composite Screener</b><small>40/35/25 weighted multi-factor score.</small></button><button class="ait-psa-terminal-command" data-ait-trading-tab="potential" data-ait-trading-group="scanner" type="button"><span>◆</span><b>AIT Elite Screener</b><small>Balanced 50/50 primary score with relative tie-breaking.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaSignalPriorityMenuModal" type="button"><span>★</span><b>AIT Signal Priority Screener</b><small>Open Latest, Historical, Advanced, or Advanced Elite performance scanners.</small></button></div></div></section>
  <section class="ait-psa-terminal-modal ait-psa-workspace-modal" id="aitPsaTradingModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow" id="aitPsaTradingEyebrow">TRADING TOOL</span><h2 id="aitPsaTradingTitle">▥ Trading</h2><p id="aitPsaTradingDescription">Selected trading workspace.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" id="aitPsaTradingBack" type="button">← Trading</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body ait-psa-workspace-host" id="aitPsaTradingHost"></div></section>
 </div>
 
@@ -9520,9 +9815,11 @@ document.addEventListener('DOMContentLoaded', () => {
     sync: 'aitPsaSyncMenuModal',
     import: 'aitPsaImportMenuModal',
     backup: 'aitPsaBackupMenuModal',
-    report: 'aitPsaDataReportMenuModal'
+    report: 'aitPsaDataReportMenuModal',
+    empty: 'aitPsaDataCenterLauncherModal'
   };
   const dataCenterDefinitions = {
+    instantDseUpdate: ['LIVE', 'Instant Hybrid OHLC Download', 'Available 10:00 AM–2:10 PM when today’s official archive data is absent; merges today’s live DSE table and AmarStock OpenP.'],
     dse3mUpdate: ['3M', 'Download DSE 3M', 'Download three months of active watch-list history.'],
     dse6mUpdate: ['6M', 'Download DSE 6M', 'Download six months of active watch-list history.'],
     archiveImport: ['OHLC', 'Archive Workspace', 'Download or import historical OHLC archive records.'],
@@ -9533,7 +9830,8 @@ document.addEventListener('DOMContentLoaded', () => {
     viewListCharts: ['3M', 'Saved 3M Charts', 'Review saved three-month charts for the active watch list.'],
     viewListCharts6: ['6M', 'Saved 6M Charts', 'Review saved six-month charts for the active watch list.'],
     viewDownloadedData: ['⌗', 'Downloaded Data', 'Inspect stored OHLC records in a data table.'],
-    status: ['◉', 'Download Status', 'Review Data Center operations and current download status.']
+    status: ['◉', 'Download Status', 'Review Data Center operations and current download status.'],
+    emptyDownloadedData: ['⌫', 'Empty Downloaded Data', 'Permanently remove all locally stored OHLC records while preserving watch lists, portfolio and settings.']
   };
   let activeDataCenterGroup = 'download';
 
@@ -9547,7 +9845,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (title) title.textContent = `${definition[0]} ${definition[1]}`;
     if (description) description.textContent = definition[2];
     if (eyebrow) eyebrow.textContent = `${activeDataCenterGroup.toUpperCase()} TOOL`;
-    if (back) back.textContent = `← ${activeDataCenterGroup.charAt(0).toUpperCase()+activeDataCenterGroup.slice(1)}`;
+    if (back) back.textContent = activeDataCenterGroup==='empty'?'← Data Center':`← ${activeDataCenterGroup.charAt(0).toUpperCase()+activeDataCenterGroup.slice(1)}`;
     openModal('aitPsaDownloadModal');
     if (execute && actionName !== 'status') {
       requestAnimationFrame(() => {
@@ -9991,6 +10289,64 @@ document.addEventListener('DOMContentLoaded', () => {
  document.getElementById("aitAdvancedPriorityCharts3")?.addEventListener("click",()=>window.AITOpenRankedCharts?.("advanced",3));
  document.getElementById("aitAdvancedPriorityCharts6")?.addEventListener("click",()=>window.AITOpenRankedCharts?.("advanced",6));
  window.AitAdvancedSignalPriority={calculate,render,run,clearCache:()=>{cache={sig:"",rows:[],daily:[]}}};
+})();
+</script>
+
+<script id="ait-elite-priority-script">
+(()=>{"use strict";
+ const clamp=n=>Math.max(0,Math.min(100,Number(n)||0));
+ const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[c]));
+ const mean=v=>v.length?v.reduce((a,b)=>a+(Number(b)||0),0)/v.length:0;
+ const bridge=()=>window.AITScannerDataBridge||null;
+ const history=()=>{try{return bridge()?.appState?.()?.history||{}}catch{return {}}};
+ const rowsFor=code=>{try{return bridge()?.rowsFor?.(code)||history()[code]||[]}catch{return history()[code]||[]}};
+ const signal=(score,liquidity,safety,breakout)=>score>=78&&liquidity>=45&&safety>=42&&breakout>=48?"Strong Buy":score>=65?"Buy":score>=50?"Watch":"Avoid";
+ let cache={sig:"",rows:[]};
+ const metrics=code=>{
+  const rows=rowsFor(code).slice(-60).filter(r=>Number.isFinite(Number(r?.close)));
+  if(rows.length<9)return {liquidity:0,safety:0,breakout:0,support:0,entry:0};
+  const closes=rows.map(r=>Number(r.close)||0), highs=rows.map(r=>Number(r.high)||Number(r.close)||0), lows=rows.map(r=>Number(r.low)||Number(r.close)||0), vols=rows.map(r=>Number(r.volume)||0);
+  const latest=closes.at(-1), avgVol20=mean(vols.slice(-20)), avgVol5=mean(vols.slice(-5));
+  const liquidity=clamp(25+Math.log10(Math.max(1,avgVol20))*11+(avgVol20>0?Math.min(18,(avgVol5/avgVol20)*9):0));
+  const returns=closes.slice(1).map((v,i)=>closes[i]?((v/closes[i])-1)*100:0);
+  const volStd=Math.sqrt(mean(returns.map(x=>(x-mean(returns))**2)));
+  const safety=clamp(100-volStd*18);
+  const priorHigh=Math.max(...highs.slice(-21,-1));
+  const avg20=mean(closes.slice(-20)), avg9=mean(closes.slice(-9));
+  const breakout=clamp(50+(priorHigh>0?((latest/priorHigh)-1)*180:0)+(avgVol20>0?((avgVol5/avgVol20)-1)*18:0)+(latest>=avg9?8:-8));
+  const recentLow=Math.min(...lows.slice(-20));
+  const supportDistance=latest>0?((latest-recentLow)/latest)*100:100;
+  const support=clamp(88-supportDistance*5+(latest>=avg20?10:-8));
+  const extension=avg20>0?((latest/avg20)-1)*100:0;
+  const entry=clamp(82-Math.max(0,extension-6)*5-Math.max(0,-extension)*3+(avg9>=avg20?12:-6));
+  return {liquidity,safety,breakout,support,entry};
+ };
+ const calculate=()=>{
+  const advanced=window.AitAdvancedSignalPriority?.calculate?.()||{rows:[],available:0,required:9};
+  const sig=`${advanced.rows?.map(r=>`${r.code}:${Number(r.advancedScore||0).toFixed(2)}`).join('|')||''}|${Object.keys(history()).length}`;
+  if(cache.sig===sig&&cache.rows.length)return {rows:cache.rows,available:advanced.available,required:advanced.required};
+  const out=(advanced.rows||[]).map(r=>{const m=metrics(r.code);const eliteScore=clamp((Number(r.advancedScore)||0)*.35+m.liquidity*.15+m.safety*.12+m.breakout*.14+m.support*.12+m.entry*.12);return {...r,liquidityScore:m.liquidity,volatilitySafetyScore:m.safety,breakoutScore:m.breakout,supportScore:m.support,entryQualityScore:m.entry,eliteScore,signal:signal(eliteScore,m.liquidity,m.safety,m.breakout)}});
+  const groups={"Strong Buy":[],"Buy":[],"Watch":[],"Avoid":[]};out.forEach(r=>(groups[r.signal]||groups.Avoid).push(r));const ranked=[];
+  ["Strong Buy","Buy","Watch","Avoid"].forEach(name=>{groups[name].sort((a,b)=>(b.eliteScore-a.eliteScore)||(b.advancedScore-a.advancedScore)||(b.liquidityScore-a.liquidityScore)||(b.breakoutScore-a.breakoutScore)||String(a.code).localeCompare(String(b.code)));groups[name].forEach((r,i)=>ranked.push({...r,signalRank:i+1}))});
+  const rows=ranked.map((r,i)=>({...r,rank:i+1}));cache={sig,rows};return {rows,available:advanced.available,required:advanced.required};
+ };
+ const render=()=>{const tbody=document.getElementById("aitElitePriorityRows");if(!tbody)return[];const result=calculate(),rows=result.rows||[];if(!rows.length){tbody.innerHTML=`<tr><td colspan="14">${result.available<9?`Elite scanning requires at least 9 trading dates. ${result.available||0} are currently available.`:"No eligible securities could be calculated."}</td></tr>`;return[]}tbody.innerHTML=rows.map(r=>`<tr><td><strong>#${r.rank}</strong></td><td><strong>${esc(r.signal)} #${r.signalRank}</strong></td><td><strong>${esc(r.code)}</strong></td><td>${(Number(r.ltp)||0).toFixed(2)}</td><td><span class="v11-score">${(Number(r.primaryScore)||0).toFixed(1)}</span></td><td><span class="v11-score">${(Number(r.historicalScore)||0).toFixed(1)}</span></td><td><span class="v11-score">${(Number(r.advancedScore)||0).toFixed(1)}</span></td><td><span class="v11-score">${(Number(r.liquidityScore)||0).toFixed(1)}</span></td><td><span class="v11-score">${(Number(r.volatilitySafetyScore)||0).toFixed(1)}</span></td><td><span class="v11-score">${(Number(r.breakoutScore)||0).toFixed(1)}</span></td><td><span class="v11-score">${(Number(r.supportScore)||0).toFixed(1)}</span></td><td><span class="v11-score">${(Number(r.entryQualityScore)||0).toFixed(1)}</span></td><td><span class="v11-score">${(Number(r.eliteScore)||0).toFixed(1)}</span></td><td><span class="v11-signal ${r.signal.toLowerCase().replace(/\s+/g,"-")}">${esc(r.signal)}</span></td></tr>`).join("");return rows};
+ const run=()=>{cache={sig:"",rows:[]};window.AitAdvancedSignalPriority?.clearCache?.();window.AitSignalPriorityHistory?.clearCache?.();return render()};
+ document.getElementById("aitOpenElitePriority")?.addEventListener("click",()=>{document.getElementById("aitPsaSignalPriorityMenuModal")?.setAttribute("hidden","");document.getElementById("aitElitePriorityModal")?.removeAttribute("hidden");render()});
+ document.getElementById("aitElitePriorityRun")?.addEventListener("click",run);
+ document.getElementById("aitElitePriorityCharts3")?.addEventListener("click",()=>window.AITOpenRankedCharts?.("elite-priority",3));
+ document.getElementById("aitElitePriorityCharts6")?.addEventListener("click",()=>window.AITOpenRankedCharts?.("elite-priority",6));
+ window.AitEliteSignalPriority={calculate,render,run,clearCache:()=>{cache={sig:"",rows:[]}}};
+})();
+
+(function(){
+ const modal=document.getElementById("aitFundamentalsReportModal"),body=document.getElementById("aitFundamentalsReportBody"),search=document.getElementById("aitFundamentalsReportSearch"),count=document.getElementById("aitFundamentalsReportCount"),meta=document.getElementById("aitFundamentalsReportMeta");
+ const esc=v=>String(v??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]));
+ const rows=()=>{const app=window.app;const store=app&&typeof app.fundamentalStore==="function"?app.fundamentalStore():{};const byCode=new Map();Object.values(store||{}).forEach(r=>{if(!r||typeof r!=="object")return;const clean=app&&typeof app.cleanFundamentalRecord==="function"?app.cleanFundamentalRecord(r):r;const c=String(clean?.code||"").trim().toUpperCase();if(c)byCode.set(c,{...clean,code:c,status:"Saved"})});const active=app&&typeof app.active==="function"?app.active():null;const codes=[...new Set((active?.codes||[]).map(c=>String(c).trim().toUpperCase()).filter(Boolean))];return codes.map(code=>byCode.get(code)||{code,status:"Missing",allFundamentals:{}}).sort((a,b)=>String(a.code).localeCompare(String(b.code)))};
+ function render(){const q=String(search?.value||"").trim().toLowerCase();const all=rows();const filtered=all.filter(r=>[r.code,r.companyName,r.category,r.businessSegment].some(v=>String(v||"").toLowerCase().includes(q)));if(count)count.textContent=`${filtered.length} of ${all.length} shown`;if(meta)meta.textContent=all.length?`${all.filter(r=>r.status==="Saved").length} saved of ${all.length} active watch-list codes${window.app?.s?.lastFundamentalDownload?` • Last download ${new Date(window.app.s.lastFundamentalDownload).toLocaleString()}`:""}`:"No saved DSE fundamental records were found.";if(body)body.innerHTML=filtered.length?filtered.map(r=>`<tr><td><b>${esc(r.code)}</b></td><td>${esc(r.companyName||"—")}</td><td>${esc(r.category||"—")}</td><td>${esc(r.businessSegment||"—")}</td><td>${esc(r.lastAgmDate||"—")}</td><td>${esc(r.status||"Saved")}</td><td>${esc(r.downloadedAt?new Date(r.downloadedAt).toLocaleString():"—")}</td></tr>`).join(""):`<tr><td colspan="7" class="ait-fund-report-empty">${all.length?"No fundamentals match the search.":"No fundamentals are stored. Run Download Fundamentals first."}</td></tr>`}
+ function open(){render();modal?.classList.add("open");modal?.setAttribute("aria-hidden","false");setTimeout(()=>search?.focus(),50)}
+ function close(){modal?.classList.remove("open");modal?.setAttribute("aria-hidden","true")}
+ document.getElementById("aitPsaOpenFundamentalsReport")?.addEventListener("click",open);document.getElementById("aitFundamentalsReportClose")?.addEventListener("click",close);document.getElementById("aitFundamentalsReportClear")?.addEventListener("click",()=>{if(search)search.value="";render();search?.focus()});search?.addEventListener("input",render);modal?.addEventListener("click",e=>{if(e.target===modal)close()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&modal?.classList.contains("open"))close()});window.AITRefreshFundamentalsReport=render;
 })();
 </script>
 </body>
