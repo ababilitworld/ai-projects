@@ -1749,3 +1749,80 @@ html.print-foil-layer .paper-page:first-child{outline:.3mm dashed #000;outline-o
   html.poster-crop-marks .paper-page{outline:.3mm solid #000;outline-offset:-3mm}
   html.poster-registration-marks .paper-page::after{content:"✚  ✚  ✚  ✚";position:absolute;inset:2mm;display:flex;justify-content:space-between;align-items:flex-start;color:#000;font:8pt sans-serif;pointer-events:none}
 }
+
+/* eBook CSV import preview — isolated, full-width, theme-aware surface. */
+@media screen{
+  body.ait-ebook-preview-open{overflow:hidden}
+  .ait-ebook-preview[hidden]{display:none!important}
+  .ait-ebook-preview{
+    position:fixed;
+    inset:0;
+    z-index:2147483647;
+    display:grid;
+    grid-template-rows:auto minmax(0,1fr);
+    width:100vw;
+    height:100vh;
+    height:100dvh;
+    color:var(--terminal-text);
+    background:
+      radial-gradient(circle at 8% 0%,color-mix(in srgb,var(--terminal-primary) 15%,transparent),transparent 34%),
+      radial-gradient(circle at 100% 8%,color-mix(in srgb,var(--terminal-accent) 12%,transparent),transparent 30%),
+      linear-gradient(145deg,var(--terminal-bg),var(--terminal-bg-2));
+    font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+    isolation:isolate;
+  }
+  .ait-ebook-preview__header{
+    position:relative;
+    z-index:2;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:18px;
+    width:100%;
+    min-height:78px;
+    padding:12px clamp(14px,2.2vw,30px);
+    border-bottom:1px solid var(--terminal-line);
+    background:linear-gradient(135deg,color-mix(in srgb,var(--terminal-panel) 97%,transparent),color-mix(in srgb,var(--terminal-card) 96%,transparent));
+    box-shadow:0 12px 34px rgba(0,0,0,.24);
+  }
+  .ait-ebook-preview__heading{min-width:0}
+  .ait-ebook-preview__eyebrow{display:block;margin-bottom:3px;color:var(--terminal-primary);font-size:.62rem;font-weight:900;letter-spacing:.15em}
+  .ait-ebook-preview__heading h2{margin:0;color:var(--terminal-text);font-size:1.18rem;line-height:1.2}
+  .ait-ebook-preview__heading p{margin:4px 0 0;color:var(--terminal-muted);font-size:.74rem;line-height:1.35}
+  .ait-ebook-preview__actions{display:flex;align-items:center;gap:9px;flex:0 0 auto}
+  .ait-ebook-preview__back,
+  .ait-ebook-preview__print,
+  .ait-ebook-preview__close{
+    min-height:44px;
+    border:1px solid var(--terminal-line);
+    border-radius:13px;
+    font:inherit;
+    font-weight:900;
+    cursor:pointer;
+    transition:transform .18s ease,filter .18s ease,border-color .18s ease;
+  }
+  .ait-ebook-preview__back{display:inline-flex;align-items:center;gap:7px;padding:9px 14px;color:var(--terminal-text);background:var(--terminal-card)}
+  .ait-ebook-preview__print{display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-color:transparent;color:#fff;background:linear-gradient(135deg,var(--terminal-primary),var(--terminal-primary-2));box-shadow:0 9px 22px color-mix(in srgb,var(--terminal-primary-2) 28%,transparent)}
+  .ait-ebook-preview__close{display:grid;width:44px;min-width:44px;padding:0;place-items:center;color:var(--terminal-text);background:var(--terminal-card);font-size:1.4rem}
+  .ait-ebook-preview__back:hover,.ait-ebook-preview__print:hover,.ait-ebook-preview__close:hover{transform:translateY(-1px);filter:brightness(1.08)}
+  .ait-ebook-preview__back:focus-visible,.ait-ebook-preview__print:focus-visible,.ait-ebook-preview__close:focus-visible{outline:3px solid color-mix(in srgb,var(--terminal-primary) 55%,#fff);outline-offset:2px}
+  .ait-ebook-preview__back[hidden],.ait-ebook-preview__print[hidden],.ait-ebook-preview__viewport[hidden],.ait-ebook-preview__workspace[hidden],.ait-ebook-preview__heading p[hidden]{display:none!important}
+  .ait-ebook-preview__viewport{width:100%;min-width:0;min-height:0;overflow:auto;overscroll-behavior:contain;padding:clamp(14px,2.2vw,30px)}
+  .ait-ebook-preview__book{display:grid;width:100%;min-width:0;justify-items:center;gap:18px;padding-bottom:24px}
+  .ait-ebook-preview__book>.paper-page{margin:0 auto!important;flex:0 0 auto}
+  .ait-ebook-preview__workspace{width:100%;min-width:0;min-height:0;height:100%;overflow:hidden;background:var(--terminal-bg)}
+  .ait-ebook-preview__workspace-frame{display:block;width:100%;height:100%;min-height:0;border:0;background:var(--terminal-bg)}
+}
+
+@media screen and (max-width:700px){
+  .ait-ebook-preview__header{min-height:68px;padding:9px 10px;gap:10px}
+  .ait-ebook-preview__heading p{display:none}
+  .ait-ebook-preview__heading h2{font-size:1rem}
+  .ait-ebook-preview__eyebrow{font-size:.54rem}
+  .ait-ebook-preview__actions{gap:6px}
+  .ait-ebook-preview__back,
+  .ait-ebook-preview__print{min-height:42px;padding:8px 11px;font-size:.78rem}
+  .ait-ebook-preview__close{width:42px;min-width:42px;min-height:42px}
+  .ait-ebook-preview__viewport{padding:10px 8px 18px}
+  .ait-ebook-preview__book{gap:12px}
+}

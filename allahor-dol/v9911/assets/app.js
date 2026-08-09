@@ -1,0 +1,669 @@
+(() => {
+  "use strict";
+
+  const HIGHLIGHTS = Object.freeze({
+    trust: Object.freeze({
+      title: "আল্লহর দল",
+      text: "আল্লহ তাঁর নিজের দলের লোকদের অদৃশ্য উপায়ে সাহায্য করেন ও তাদের দায়িত্ব আল্লহর নিকটে থাকে। কাজেই তাদের হারানোর কিছু নেই। তারা জীবনের প্রতিটি ক্ষেত্রে আল্লহর উপর ভরসা রাখে এবং জীবনের প্রতিটি ক্ষেত্রে তাঁর নির্দেশনা মেনে চলার সর্বোচ্চ চেষ্টা করে।",
+    }),
+    unity: Object.freeze({
+      title: "একতাবদ্ধ থাকা",
+      text: "আপনি চেষ্টা করবেন যেন সকল মুসলিমদের মধ্যে ঐক্য, একতা বজায় থাকে।",
+    }),
+    benefit: Object.freeze({
+      title: "পারস্পরিক উপকার করা",
+      text: "তারাই সৃষ্টির সেরা, যারা মানবজাতির জন্য সবচেয়ে উপকারী।",
+    }),
+    patience: Object.freeze({
+      title: "ভরসা ও ধৈর্য",
+      text: "সকল ক্ষেত্রে আল্লহর উপর পূর্ণ ভরসা করা এবং ধৈর্য ধারণ করা। আল্লহ তাদের ভালোবাসেন -  যারা তাদের কাজ সঠিকভাবে সম্পন্ন করে।",
+    }),
+  });
+
+  class Aod2PreferenceStore {
+    constructor(key = "aod2-reader-preferences-v3") {
+      this.key = key;
+      this.defaults = Object.freeze({
+        theme: "noor",
+        font: "modern",
+        fontSize: 20,
+        lineHeight: 2,
+        focus: false,
+        motion: true,
+        progress: true,
+      });
+    }
+
+    load() {
+      try {
+        const value = window.localStorage.getItem(this.key);
+        return value ? { ...this.defaults, ...JSON.parse(value) } : { ...this.defaults };
+      } catch {
+        return { ...this.defaults };
+      }
+    }
+
+    save(preferences) {
+      try {
+        window.localStorage.setItem(this.key, JSON.stringify(preferences));
+      } catch {
+        // The reader stays functional when browser storage is unavailable.
+      }
+    }
+  }
+
+  class Aod2ReaderController {
+    constructor({ onChange }) {
+      this.sections = [...document.querySelectorAll("[data-aod2-section]")];
+      this.railButtons = [...document.querySelectorAll(".aod2-rail [data-aod2-go]")];
+      this.currentIndex = 0;
+      this.onChange = onChange;
+      this.progressBar = document.getElementById("aod2-progress-bar");
+      this.titleNode = document.getElementById("aod2-current-title");
+      this.countNode = document.getElementById("aod2-current-count");
+      this.handleScroll = this.handleScroll.bind(this);
+    }
+
+    init() {
+      window.addEventListener("scroll", this.handleScroll, { passive: true });
+      window.addEventListener("resize", this.handleScroll, { passive: true });
+      this.handleScroll();
+    }
+
+    handleScroll() {
+      const maximum = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = maximum > 0 ? Math.min(100, Math.max(0, (window.scrollY / maximum) * 100)) : 0;
+      if (this.progressBar) this.progressBar.style.width = `${progress}%`;
+
+      const marker = window.scrollY + window.innerHeight * 0.37;
+      let visibleIndex = 0;
+      this.sections.forEach((section, index) => {
+        if (section.offsetTop <= marker) visibleIndex = index;
+      });
+      if (visibleIndex !== this.currentIndex || !this.titleNode?.textContent) {
+        this.setCurrent(visibleIndex);
+      }
+    }
+
+    setCurrent(index) {
+      this.currentIndex = Math.min(this.sections.length - 1, Math.max(0, index));
+      const section = this.sections[this.currentIndex];
+      const title = section?.dataset.aod2Title || "আল্লহর দল";
+      if (this.titleNode) this.titleNode.textContent = title;
+      if (this.countNode) {
+        this.countNode.textContent = `${String(this.currentIndex + 1).padStart(2, "0")} / ${String(this.sections.length).padStart(2, "0")}`;
+      }
+      this.railButtons.forEach((button) => {
+        button.classList.toggle("is-active", button.dataset.aod2Go === section?.id);
+      });
+      document.querySelectorAll(".aod2-contents-grid [data-aod2-go]").forEach((button) => {
+        button.classList.toggle("is-active", button.dataset.aod2Go === section?.id);
+      });
+      if (typeof this.onChange === "function") this.onChange(section, this.currentIndex);
+    }
+
+    goTo(id) {
+      const index = this.sections.findIndex((section) => section.id === id);
+      if (index < 0) return;
+      this.setCurrent(index);
+      this.sections[index].scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    previous() {
+      this.goTo(this.sections[Math.max(0, this.currentIndex - 1)]?.id);
+    }
+
+    next() {
+      this.goTo(this.sections[Math.min(this.sections.length - 1, this.currentIndex + 1)]?.id);
+    }
+
+    currentSection() {
+      return this.sections[this.currentIndex] || this.sections[0];
+    }
+  }
+
+  class Aod2TerminalController {
+    constructor({ onAction }) {
+      this.panel = document.getElementById("aod2-terminal");
+      this.backdrop = document.getElementById("aod2-terminal-backdrop");
+      this.trigger = document.getElementById("aod2-terminal-trigger");
+      this.closeButton = document.getElementById("aod2-terminal-close");
+      this.groups = [...document.querySelectorAll(".aod2-term-group")];
+      this.onAction = onAction;
+    }
+
+    init() {
+      this.trigger?.addEventListener("click", () => this.open());
+      this.closeButton?.addEventListener("click", () => this.close());
+      this.backdrop?.addEventListener("click", () => this.close());
+      this.groups.forEach((group) => {
+        const trigger = group.querySelector(".aod2-term-group__trigger");
+        trigger?.addEventListener("click", () => this.toggleGroup(group));
+      });
+      this.panel?.querySelectorAll("[data-aod2-report],[data-aod2-appearance],[data-aod2-nav]").forEach((button) => {
+        button.addEventListener("click", () => {
+          this.close();
+          if (typeof this.onAction === "function") this.onAction(button);
+        });
+      });
+    }
+
+    toggleGroup(target) {
+      const willOpen = !target.classList.contains("is-open");
+      this.groups.forEach((group) => {
+        const open = group === target && willOpen;
+        group.classList.toggle("is-open", open);
+        const trigger = group.querySelector(".aod2-term-group__trigger");
+        const panel = group.querySelector(".aod2-term-group__panel");
+        trigger?.setAttribute("aria-expanded", String(open));
+        if (panel) panel.inert = !open;
+      });
+    }
+
+    open() {
+      if (!this.panel || !this.backdrop) return;
+      this.backdrop.hidden = false;
+      this.panel.classList.add("is-open");
+      this.panel.setAttribute("aria-hidden", "false");
+      this.trigger?.setAttribute("aria-expanded", "true");
+      window.setTimeout(() => this.closeButton?.focus(), 60);
+    }
+
+    close() {
+      if (!this.panel || !this.backdrop) return;
+      this.panel.classList.remove("is-open");
+      this.panel.setAttribute("aria-hidden", "true");
+      this.trigger?.setAttribute("aria-expanded", "false");
+      window.setTimeout(() => {
+        if (!this.panel.classList.contains("is-open")) this.backdrop.hidden = true;
+      }, 310);
+    }
+
+    toggle() {
+      this.panel?.classList.contains("is-open") ? this.close() : this.open();
+    }
+  }
+
+  class Aod2ArtworkRenderer {
+    roundedRect(context, x, y, width, height, radius) {
+      const r = Math.min(radius, width / 2, height / 2);
+      context.beginPath();
+      context.moveTo(x + r, y);
+      context.lineTo(x + width - r, y);
+      context.quadraticCurveTo(x + width, y, x + width, y + r);
+      context.lineTo(x + width, y + height - r);
+      context.quadraticCurveTo(x + width, y + height, x + width - r, y + height);
+      context.lineTo(x + r, y + height);
+      context.quadraticCurveTo(x, y + height, x, y + height - r);
+      context.lineTo(x, y + r);
+      context.quadraticCurveTo(x, y, x + r, y);
+      context.closePath();
+    }
+
+    wrapText(context, text, maxWidth) {
+      const words = text.split(/\s+/);
+      const lines = [];
+      let line = "";
+      words.forEach((word) => {
+        const test = line ? `${line} ${word}` : word;
+        if (line && context.measureText(test).width > maxWidth) {
+          lines.push(line);
+          line = word;
+        } else {
+          line = test;
+        }
+      });
+      if (line) lines.push(line);
+      return lines;
+    }
+
+    ornament(context, x, y, radius, color) {
+      context.save();
+      context.translate(x, y);
+      context.strokeStyle = color;
+      context.globalAlpha = 0.32;
+      context.lineWidth = Math.max(1, radius * 0.012);
+      for (let index = 0; index < 12; index += 1) {
+        context.rotate(Math.PI / 6);
+        context.beginPath();
+        context.ellipse(0, radius * 0.42, radius * 0.18, radius * 0.54, 0, 0, Math.PI * 2);
+        context.stroke();
+      }
+      context.restore();
+    }
+
+    renderPoster(canvas, item, palette, width, height) {
+      canvas.width = width;
+      canvas.height = height;
+      const context = canvas.getContext("2d");
+      if (!context) return;
+      const colors = {
+        emerald: { base: "#073a30", deep: "#031f1b", accent: "#d8b15d", text: "#fff8e7" },
+        ink: { base: "#182b48", deep: "#080f1e", accent: "#d4aa50", text: "#f7ead0" },
+        ivory: { base: "#f0e5cf", deep: "#d7c4a0", accent: "#92691f", text: "#173b32" },
+      }[palette];
+      const gradient = context.createLinearGradient(0, 0, width, height);
+      gradient.addColorStop(0, colors.base);
+      gradient.addColorStop(1, colors.deep);
+      context.fillStyle = gradient;
+      context.fillRect(0, 0, width, height);
+      const unit = Math.min(width, height);
+      this.ornament(context, width * 0.83, height * 0.16, unit * 0.27, colors.accent);
+      this.ornament(context, width * 0.08, height * 0.91, unit * 0.20, colors.accent);
+      const margin = width * 0.072;
+      context.strokeStyle = colors.accent;
+      context.globalAlpha = 0.68;
+      context.lineWidth = Math.max(2, unit * 0.002);
+      this.roundedRect(context, margin, margin, width - margin * 2, height - margin * 2, unit * 0.016);
+      context.stroke();
+      context.globalAlpha = 1;
+      context.fillStyle = colors.accent;
+      context.font = `700 ${Math.round(unit * 0.026)}px "Nirmala UI", sans-serif`;
+      context.fillText("আল্লহর দল", margin * 1.45, margin * 1.55);
+      context.fillStyle = colors.text;
+      context.font = `700 ${Math.round(unit * 0.072)}px "Nirmala UI", sans-serif`;
+      let cursor = height * 0.34;
+      this.wrapText(context, item.title, width - margin * 3).slice(0, 2).forEach((line) => {
+        context.fillText(line, margin * 1.45, cursor);
+        cursor += unit * 0.084;
+      });
+      context.fillStyle = colors.accent;
+      context.fillRect(margin * 1.45, cursor + unit * 0.01, unit * 0.14, unit * 0.006);
+      cursor += unit * 0.09;
+      context.fillStyle = colors.text;
+      context.globalAlpha = 0.94;
+      context.font = `400 ${Math.round(unit * 0.033)}px "Nirmala UI", sans-serif`;
+      const lineHeight = unit * 0.051;
+      this.wrapText(context, item.text, width - margin * 3).slice(0, 11).forEach((line) => {
+        context.fillText(line, margin * 1.45, cursor);
+        cursor += lineHeight;
+      });
+      context.globalAlpha = 1;
+      context.fillStyle = colors.accent;
+      context.beginPath();
+      context.arc(width - margin * 1.55, height - margin * 1.45, unit * 0.025, 0, Math.PI * 2);
+      context.fill();
+      context.fillStyle = colors.deep;
+      context.textAlign = "center";
+      context.font = `700 ${Math.round(unit * 0.023)}px Georgia, serif`;
+      context.fillText("AIT-PHA", width - margin * 2.45, height - margin * 1.45 + unit * 0.008);
+      context.textAlign = "left";
+    }
+
+    renderDslr(canvas, item, palette, width, height) {
+      canvas.width = width;
+      canvas.height = height;
+      const context = canvas.getContext("2d");
+      if (!context) return;
+      const colors = {
+        golden: { top: "#3c2819", bottom: "#071713", glow: "#efd18a", ink: "#26352f" },
+        forest: { top: "#12483c", bottom: "#051d19", glow: "#95d7b4", ink: "#1f3931" },
+        midnight: { top: "#18305a", bottom: "#070b18", glow: "#a8bee8", ink: "#263348" },
+      }[palette];
+      const background = context.createLinearGradient(0, 0, width, height);
+      background.addColorStop(0, colors.top);
+      background.addColorStop(1, colors.bottom);
+      context.fillStyle = background;
+      context.fillRect(0, 0, width, height);
+      const maxEdge = Math.max(width, height);
+      [[.13,.17,.16,.22],[.82,.21,.20,.16],[.76,.78,.26,.12],[.2,.86,.18,.1]].forEach(([x, y, radius, alpha]) => {
+        const glow = context.createRadialGradient(width * x, height * y, 0, width * x, height * y, maxEdge * radius);
+        glow.addColorStop(0, colors.glow);
+        glow.addColorStop(1, "transparent");
+        context.save();
+        context.globalAlpha = alpha;
+        context.fillStyle = glow;
+        context.fillRect(0, 0, width, height);
+        context.restore();
+      });
+      const unit = Math.min(width, height);
+      const cardWidth = width * 0.72;
+      const cardHeight = height * 0.69;
+      const x = (width - cardWidth) / 2;
+      const y = (height - cardHeight) / 2;
+      context.save();
+      context.shadowColor = "rgba(0,0,0,.48)";
+      context.shadowBlur = unit * 0.05;
+      context.shadowOffsetY = unit * 0.025;
+      this.roundedRect(context, x, y, cardWidth, cardHeight, unit * 0.023);
+      context.fillStyle = "rgba(255,251,235,.96)";
+      context.fill();
+      context.restore();
+      context.strokeStyle = colors.glow;
+      context.globalAlpha = 0.58;
+      context.lineWidth = unit * 0.0024;
+      this.roundedRect(context, x + unit * 0.024, y + unit * 0.024, cardWidth - unit * 0.048, cardHeight - unit * 0.048, unit * 0.014);
+      context.stroke();
+      context.globalAlpha = 1;
+      const textX = x + cardWidth * 0.10;
+      const textWidth = cardWidth * 0.80;
+      context.fillStyle = colors.top;
+      context.font = `700 ${Math.round(unit * 0.058)}px "Nirmala UI", sans-serif`;
+      let cursor = y + cardHeight * 0.27;
+      this.wrapText(context, item.title, textWidth).slice(0, 2).forEach((line) => {
+        context.fillText(line, textX, cursor);
+        cursor += unit * 0.073;
+      });
+      context.fillStyle = colors.glow;
+      context.fillRect(textX, cursor + unit * 0.006, unit * 0.12, unit * 0.005);
+      cursor += unit * 0.078;
+      context.fillStyle = colors.ink;
+      context.font = `400 ${Math.round(unit * 0.028)}px "Nirmala UI", sans-serif`;
+      this.wrapText(context, item.text, textWidth).slice(0, 11).forEach((line) => {
+        context.fillText(line, textX, cursor);
+        cursor += unit * 0.044;
+      });
+      context.fillStyle = colors.top;
+      context.font = `700 ${Math.round(unit * 0.023)}px "Nirmala UI", sans-serif`;
+      context.fillText("আল্লহর দল", x + cardWidth * 0.72, y + cardHeight * 0.9);
+    }
+
+    download(canvas, fileName, type, quality = 1) {
+      canvas.toBlob((blob) => {
+        if (!blob) return;
+        const link = document.createElement("a");
+        link.download = fileName;
+        link.href = URL.createObjectURL(blob);
+        link.click();
+        window.setTimeout(() => URL.revokeObjectURL(link.href), 1200);
+      }, type, quality);
+    }
+  }
+
+  class Aod2ReportController {
+    constructor({ reader }) {
+      this.reader = reader;
+      this.dialog = document.getElementById("aod2-report-dialog");
+      this.views = [...document.querySelectorAll("[data-aod2-report-view]")];
+      this.title = document.getElementById("aod2-report-title");
+      this.icon = document.getElementById("aod2-report-icon");
+      this.renderer = new Aod2ArtworkRenderer();
+      this.state = {
+        printScope: "all", paper: "a4", orientation: "portrait", tone: "color",
+        posterContent: "trust", posterFormat: "portrait", posterPalette: "emerald",
+        dslrContent: "trust", resolution: "4k", ratio: "3:2", dslrPalette: "golden",
+      };
+    }
+
+    init() {
+      document.getElementById("aod2-print-button")?.addEventListener("click", () => this.print());
+      document.getElementById("aod2-poster-download")?.addEventListener("click", () => this.downloadPoster());
+      document.getElementById("aod2-dslr-download")?.addEventListener("click", () => this.downloadDslr());
+      document.getElementById("aod2-poster-content")?.addEventListener("change", (event) => { this.state.posterContent = event.target.value; this.renderPosterPreview(); });
+      document.getElementById("aod2-dslr-content")?.addEventListener("change", (event) => { this.state.dslrContent = event.target.value; this.renderDslrPreview(); });
+      this.bindChoice("data-aod2-print-scope", "printScope", () => this.updatePrintPreview());
+      this.bindChoice("data-aod2-paper", "paper", () => this.updatePrintPreview());
+      this.bindChoice("data-aod2-orientation", "orientation", () => this.updatePrintPreview());
+      this.bindChoice("data-aod2-tone", "tone", () => this.updatePrintPreview());
+      this.bindChoice("data-aod2-poster-format", "posterFormat", () => this.renderPosterPreview());
+      this.bindChoice("data-aod2-poster-palette", "posterPalette", () => this.renderPosterPreview());
+      this.bindChoice("data-aod2-resolution", "resolution", () => this.updateDslrMeta());
+      this.bindChoice("data-aod2-ratio", "ratio", () => this.renderDslrPreview());
+      this.bindChoice("data-aod2-dslr-palette", "dslrPalette", () => this.renderDslrPreview());
+    }
+
+    bindChoice(attribute, stateKey, afterChange) {
+      const buttons = [...document.querySelectorAll(`[${attribute}]`)];
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+          this.state[stateKey] = button.getAttribute(attribute);
+          buttons.forEach((candidate) => candidate.classList.toggle("is-active", candidate === button));
+          afterChange();
+        });
+      });
+    }
+
+    open(view) {
+      const meta = {
+        print: ["Professional Print", "▤"],
+        poster: ["Professional Poster", "▧"],
+        dslr: ["DSLR Image", "◉"],
+      }[view];
+      if (!meta || !this.dialog) return;
+      this.title.textContent = meta[0];
+      this.icon.textContent = meta[1];
+      this.views.forEach((panel) => { panel.hidden = panel.dataset.aod2ReportView !== view; });
+      if (!this.dialog.open) this.dialog.showModal();
+      if (view === "print") this.updatePrintPreview();
+      if (view === "poster") window.setTimeout(() => this.renderPosterPreview(), 40);
+      if (view === "dslr") window.setTimeout(() => this.renderDslrPreview(), 40);
+    }
+
+    updatePrintPreview() {
+      const current = this.reader.currentSection();
+      const heading = current?.querySelector("h2,h1")?.textContent?.trim() || "আল্লহর দল";
+      const paragraph = current?.querySelector("p")?.textContent?.trim() || "মহাবিশ্বে দল মূলত দুটি।";
+      const all = this.state.printScope === "all";
+      document.getElementById("aod2-print-preview-title").textContent = all ? "আল্লহর দল" : heading;
+      document.getElementById("aod2-print-preview-text").textContent = all ? "মহাবিশ্বে দল মূলত দুটি।" : paragraph;
+      document.getElementById("aod2-print-meta-paper").textContent = this.state.paper.toUpperCase();
+      document.getElementById("aod2-print-meta-orientation").textContent = this.state.orientation.toUpperCase();
+      document.getElementById("aod2-print-meta-tone").textContent = this.state.tone.toUpperCase();
+      const sheet = document.querySelector(".aod2-mini-sheet");
+      if (sheet) {
+        sheet.style.aspectRatio = this.state.orientation === "landscape" ? "297 / 210" : "210 / 297";
+        sheet.style.filter = this.state.tone === "mono" ? "grayscale(1)" : "none";
+      }
+    }
+
+    print() {
+      const root = document.documentElement;
+      const current = this.reader.currentSection();
+      current?.setAttribute("data-aod2-print-target", "true");
+      root.dataset.aod2PrintScope = this.state.printScope;
+      root.dataset.aod2PrintTone = this.state.tone;
+      const dynamic = document.createElement("style");
+      dynamic.id = "aod2-dynamic-page-size";
+      dynamic.textContent = `@page{size:${this.state.paper.toUpperCase()} ${this.state.orientation};margin:${this.state.paper === "a5" ? "11mm" : "14mm"}}`;
+      document.getElementById(dynamic.id)?.remove();
+      document.head.appendChild(dynamic);
+      const cleanup = () => {
+        delete root.dataset.aod2PrintScope;
+        delete root.dataset.aod2PrintTone;
+        current?.removeAttribute("data-aod2-print-target");
+        dynamic.remove();
+        window.removeEventListener("afterprint", cleanup);
+      };
+      window.addEventListener("afterprint", cleanup);
+      window.print();
+    }
+
+    posterDimensions(preview = true) {
+      const map = preview ? { portrait: [800, 1000], landscape: [1120, 630], a3: [720, 1018] } : { portrait: [2160, 2700], landscape: [3840, 2160], a3: [3508, 4961] };
+      return map[this.state.posterFormat];
+    }
+
+    renderPosterPreview() {
+      const canvas = document.getElementById("aod2-poster-canvas");
+      if (!canvas) return;
+      const [width, height] = this.posterDimensions(true);
+      this.renderer.renderPoster(canvas, HIGHLIGHTS[this.state.posterContent], this.state.posterPalette, width, height);
+      document.getElementById("aod2-poster-meta").textContent = { portrait: "4:5", landscape: "16:9", a3: "A3" }[this.state.posterFormat];
+    }
+
+    downloadPoster() {
+      const [width, height] = this.posterDimensions(false);
+      const canvas = document.createElement("canvas");
+      this.renderer.renderPoster(canvas, HIGHLIGHTS[this.state.posterContent], this.state.posterPalette, width, height);
+      this.renderer.download(canvas, `allahor-dol-${this.state.posterContent}-poster.png`, "image/png");
+    }
+
+    dslrPreviewDimensions() {
+      return { "3:2": [1080, 720], "4:3": [1080, 810], "16:9": [1080, 608] }[this.state.ratio];
+    }
+
+    renderDslrPreview() {
+      const canvas = document.getElementById("aod2-dslr-canvas");
+      if (!canvas) return;
+      const [width, height] = this.dslrPreviewDimensions();
+      this.renderer.renderDslr(canvas, HIGHLIGHTS[this.state.dslrContent], this.state.dslrPalette, width, height);
+      this.updateDslrMeta();
+    }
+
+    updateDslrMeta() {
+      document.getElementById("aod2-dslr-meta-res").textContent = this.state.resolution.toUpperCase();
+      document.getElementById("aod2-dslr-meta-ratio").textContent = this.state.ratio;
+      document.getElementById("aod2-dslr-download").innerHTML = `<span>↓</span> Download ${this.state.resolution.toUpperCase()} JPG`;
+    }
+
+    downloadDslr() {
+      const longEdge = { "4k": 3840, "6k": 6144, "8k": 7680 }[this.state.resolution];
+      const ratio = { "3:2": 3 / 2, "4:3": 4 / 3, "16:9": 16 / 9 }[this.state.ratio];
+      const canvas = document.createElement("canvas");
+      this.renderer.renderDslr(canvas, HIGHLIGHTS[this.state.dslrContent], this.state.dslrPalette, longEdge, Math.round(longEdge / ratio));
+      this.renderer.download(canvas, `allahor-dol-${this.state.dslrContent}-${this.state.resolution}.jpg`, "image/jpeg", 0.96);
+    }
+  }
+
+  class Aod2AppearanceController {
+    constructor({ store, preferences }) {
+      this.store = store;
+      this.preferences = preferences;
+      this.dialog = document.getElementById("aod2-appearance-dialog");
+      this.title = document.getElementById("aod2-appearance-title");
+      this.views = [...document.querySelectorAll("[data-aod2-appearance-view]")];
+    }
+
+    init() {
+      this.apply();
+      document.querySelectorAll(".aod2-theme-grid [data-aod2-theme]").forEach((button) => {
+        button.addEventListener("click", () => { this.preferences.theme = button.dataset.aod2Theme; this.apply(); });
+      });
+      document.querySelectorAll(".aod2-font-grid [data-aod2-font]").forEach((button) => {
+        button.addEventListener("click", () => { this.preferences.font = button.dataset.aod2Font; this.apply(); });
+      });
+      const size = document.getElementById("aod2-font-size");
+      const leading = document.getElementById("aod2-line-height");
+      size?.addEventListener("input", () => { this.preferences.fontSize = Number(size.value); this.apply(); });
+      leading?.addEventListener("input", () => { this.preferences.lineHeight = Number(leading.value); this.apply(); });
+      document.getElementById("aod2-focus")?.addEventListener("change", (event) => { this.preferences.focus = event.target.checked; this.apply(); });
+      document.getElementById("aod2-motion")?.addEventListener("change", (event) => { this.preferences.motion = event.target.checked; this.apply(); });
+      document.getElementById("aod2-progress-toggle")?.addEventListener("change", (event) => { this.preferences.progress = event.target.checked; this.apply(); });
+    }
+
+    open(view) {
+      if (!this.dialog) return;
+      this.title.textContent = view === "theme" ? "Theme" : "Typography";
+      this.views.forEach((panel) => { panel.hidden = panel.dataset.aod2AppearanceView !== view; });
+      if (!this.dialog.open) this.dialog.showModal();
+    }
+
+    apply() {
+      const root = document.documentElement;
+      root.dataset.aod2Theme = this.preferences.theme;
+      root.dataset.aod2Font = this.preferences.font;
+      root.dataset.aod2Focus = this.preferences.focus ? "on" : "off";
+      root.dataset.aod2Motion = this.preferences.motion ? "on" : "off";
+      root.style.setProperty("--aod2-reader-size", `${this.preferences.fontSize}px`);
+      root.style.setProperty("--aod2-reader-leading", String(this.preferences.lineHeight));
+      const progress = document.querySelector(".aod2-progress");
+      if (progress) progress.hidden = !this.preferences.progress;
+      const size = document.getElementById("aod2-font-size");
+      const leading = document.getElementById("aod2-line-height");
+      if (size) size.value = String(this.preferences.fontSize);
+      if (leading) leading.value = String(this.preferences.lineHeight);
+      const sizeOutput = document.getElementById("aod2-font-size-output");
+      const lineOutput = document.getElementById("aod2-line-height-output");
+      if (sizeOutput) sizeOutput.textContent = `${this.preferences.fontSize}px`;
+      if (lineOutput) lineOutput.textContent = `${this.preferences.lineHeight.toFixed(1)}×`;
+      const focus = document.getElementById("aod2-focus");
+      const motion = document.getElementById("aod2-motion");
+      const progressToggle = document.getElementById("aod2-progress-toggle");
+      if (focus) focus.checked = this.preferences.focus;
+      if (motion) motion.checked = this.preferences.motion;
+      if (progressToggle) progressToggle.checked = this.preferences.progress;
+      document.querySelectorAll(".aod2-theme-grid [data-aod2-theme]").forEach((button) => {
+        const active = button.dataset.aod2Theme === this.preferences.theme;
+        button.classList.toggle("is-active", active);
+        const mark = button.querySelector("em");
+        if (mark) mark.textContent = active ? "✓" : "";
+      });
+      document.querySelectorAll(".aod2-font-grid [data-aod2-font]").forEach((button) => button.classList.toggle("is-active", button.dataset.aod2Font === this.preferences.font));
+      this.store.save(this.preferences);
+    }
+  }
+
+  class Aod2EbookApplication {
+    constructor() {
+      this.store = new Aod2PreferenceStore();
+      this.preferences = this.store.load();
+      this.reader = new Aod2ReaderController({ onChange: () => this.report?.updatePrintPreview() });
+      this.appearance = new Aod2AppearanceController({ store: this.store, preferences: this.preferences });
+      this.report = new Aod2ReportController({ reader: this.reader });
+      this.terminal = new Aod2TerminalController({ onAction: (button) => this.handleTerminalAction(button) });
+      this.contentsDialog = document.getElementById("aod2-contents-dialog");
+    }
+
+    init() {
+      this.reader.init();
+      this.appearance.init();
+      this.report.init();
+      this.terminal.init();
+      this.bindNavigation();
+      this.bindDialogs();
+      this.bindKeyboard();
+      this.configureDownload();
+    }
+
+    bindNavigation() {
+      document.querySelectorAll("[data-aod2-go]").forEach((button) => {
+        button.addEventListener("click", () => {
+          this.contentsDialog?.close();
+          this.reader.goTo(button.dataset.aod2Go);
+        });
+      });
+      document.getElementById("aod2-prev")?.addEventListener("click", () => this.reader.previous());
+      document.getElementById("aod2-next")?.addEventListener("click", () => this.reader.next());
+      document.getElementById("aod2-contents")?.addEventListener("click", () => this.openContents());
+    }
+
+    bindDialogs() {
+      document.querySelectorAll("[data-aod2-dialog-close]").forEach((button) => {
+        button.addEventListener("click", () => button.closest("dialog")?.close());
+      });
+      document.querySelectorAll("dialog.aod2-dialog").forEach((dialog) => {
+        dialog.addEventListener("click", (event) => {
+          if (event.target === dialog) dialog.close();
+        });
+      });
+    }
+
+    bindKeyboard() {
+      window.addEventListener("keydown", (event) => {
+        const tag = event.target?.tagName;
+        if (["INPUT", "SELECT", "TEXTAREA"].includes(tag)) return;
+        if (event.key.toLowerCase() === "t") {
+          event.preventDefault();
+          this.terminal.toggle();
+        }
+        if (event.key === "ArrowLeft") this.reader.previous();
+        if (event.key === "ArrowRight") this.reader.next();
+        if (event.key === "Escape") this.terminal.close();
+      });
+    }
+
+    handleTerminalAction(button) {
+      if (button.dataset.aod2Report) this.report.open(button.dataset.aod2Report);
+      if (button.dataset.aod2Appearance) this.appearance.open(button.dataset.aod2Appearance);
+      if (button.dataset.aod2Nav === "contents") this.openContents();
+      if (button.dataset.aod2Nav === "prev") this.reader.previous();
+      if (button.dataset.aod2Nav === "next") this.reader.next();
+      if (button.dataset.aod2Nav === "top") this.reader.goTo("aod2-cover");
+    }
+
+    openContents() {
+      if (this.contentsDialog && !this.contentsDialog.open) this.contentsDialog.showModal();
+    }
+
+    configureDownload() {
+      const download = document.getElementById("aod2-download-zip");
+      if (download && window.location.protocol === "file:") download.hidden = true;
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", () => {
+    const application = new Aod2EbookApplication();
+    application.init();
+    window.aod2Ebook = application;
+  });
+})();

@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en" data-asw-theme="dark-glass" data-asw-font="system" data-asw-density="comfortable">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark light">
+  <meta name="description" content="A configuration-driven software starter with a reusable terminal control center.">
+  <title>Software Starter</title>
+  <link rel="stylesheet" href="assets/css/asw-starter.css">
+</head>
+<body class="asw-app">
+  <a class="asw-skip-link" href="#aswMain">Skip to workspace</a>
+
+  <header class="asw-header">
+    <a class="asw-brand" href="#home" data-asw-nav-target="home" aria-label="Software Starter home">
+      <span class="asw-brand__mark" aria-hidden="true">S</span>
+      <span class="asw-brand__copy">
+        <strong data-asw-brand-title>Software Starter</strong>
+        <small data-asw-brand-subtitle>Generic application foundation</small>
+      </span>
+    </a>
+    <div class="asw-header__status" aria-label="Application status">
+      <span class="asw-status-dot" aria-hidden="true"></span>
+      <span>Starter ready</span>
+    </div>
+  </header>
+
+  <main class="asw-workspace" id="aswMain" tabindex="-1">
+    <section class="asw-view" data-asw-view="home" aria-labelledby="aswHomeTitle">
+      <div class="asw-dashboard">
+        <header class="asw-dashboard__hero">
+          <div class="asw-dashboard__hero-copy">
+            <span class="asw-kicker">SOFTWARE CONTROL CENTER</span>
+            <h1 id="aswHomeTitle">Dashboard</h1>
+            <p>A live overview of your starter—recent work, notifications, appearance, storage, and the reusable controls behind the application.</p>
+          </div>
+          <div class="asw-dashboard__clock" aria-label="Current application status">
+            <span class="asw-dashboard__live"><i class="asw-status-dot" aria-hidden="true"></i> System ready</span>
+            <strong data-asw-dashboard-time>--:--</strong>
+            <small data-asw-dashboard-date>Loading date…</small>
+          </div>
+        </header>
+
+        <section class="asw-dashboard__metrics" aria-label="Dashboard summary">
+          <article class="asw-dashboard-metric">
+            <span class="asw-dashboard-metric__icon" aria-hidden="true">A</span>
+            <div><small>Activity</small><strong data-asw-dashboard-stat="activity">0</strong><span data-asw-dashboard-detail="activity">Starter events</span></div>
+          </article>
+          <article class="asw-dashboard-metric">
+            <span class="asw-dashboard-metric__icon" aria-hidden="true">N</span>
+            <div><small>Notifications</small><strong data-asw-dashboard-stat="notifications">0</strong><span data-asw-dashboard-detail="notifications">Unread</span></div>
+          </article>
+          <article class="asw-dashboard-metric">
+            <span class="asw-dashboard-metric__icon" aria-hidden="true">T</span>
+            <div><small>Active theme</small><strong data-asw-dashboard-stat="theme">Dark Glass</strong><span>Synced everywhere</span></div>
+          </article>
+          <article class="asw-dashboard-metric">
+            <span class="asw-dashboard-metric__icon" aria-hidden="true">D</span>
+            <div><small>Local state</small><strong data-asw-dashboard-stat="storage">0 B</strong><span>Starter namespace</span></div>
+          </article>
+        </section>
+
+        <div class="asw-dashboard__main-grid">
+          <section class="asw-dashboard-panel asw-dashboard-panel--activity" aria-labelledby="aswDashboardActivityTitle">
+            <header class="asw-dashboard-panel__head">
+              <div><span class="asw-dashboard-panel__eyebrow">LIVE FEED</span><h2 id="aswDashboardActivityTitle">Latest Activities</h2></div>
+              <button class="asw-dashboard-panel__link" type="button" data-asw-terminal-path="settings:activity">View all <span aria-hidden="true">→</span></button>
+            </header>
+            <ol class="asw-dashboard-feed" id="aswDashboardActivityList" aria-live="polite"></ol>
+          </section>
+
+          <section class="asw-dashboard-panel asw-dashboard-panel--notification" aria-labelledby="aswDashboardNotificationTitle">
+            <header class="asw-dashboard-panel__head">
+              <div><span class="asw-dashboard-panel__eyebrow">MESSAGE CENTER</span><h2 id="aswDashboardNotificationTitle">Latest Notifications</h2></div>
+              <span class="asw-dashboard-badge" data-asw-dashboard-unread>0 unread</span>
+            </header>
+            <ol class="asw-dashboard-notifications" id="aswDashboardNotificationList" aria-live="polite"></ol>
+            <footer class="asw-dashboard-panel__footer">
+              <button class="asw-dashboard-panel__link" type="button" data-asw-terminal-path="settings:notification">Notification settings</button>
+              <button class="asw-dashboard-panel__link" type="button" data-asw-action="mark-notifications-read">Mark all read</button>
+            </footer>
+          </section>
+        </div>
+
+        <div class="asw-dashboard__secondary-grid">
+          <section class="asw-dashboard-panel asw-dashboard-panel--appearance" aria-labelledby="aswDashboardAppearanceTitle">
+            <header class="asw-dashboard-panel__head">
+              <div><span class="asw-dashboard-panel__eyebrow">LIVE APPEARANCE</span><h2 id="aswDashboardAppearanceTitle">Theme & Typography</h2></div>
+              <button class="asw-dashboard-panel__link" type="button" data-asw-terminal-path="settings:appearance">Customize <span aria-hidden="true">→</span></button>
+            </header>
+            <div class="asw-dashboard-appearance">
+              <div class="asw-dashboard-appearance__visual" aria-hidden="true"><i></i><i></i><i></i></div>
+              <dl class="asw-dashboard-appearance__details">
+                <div><dt>Theme</dt><dd data-asw-dashboard-appearance="theme">Dark Glass</dd></div>
+                <div><dt>Typography</dt><dd data-asw-dashboard-appearance="font">System UI</dd></div>
+                <div><dt>Type scale</dt><dd data-asw-dashboard-appearance="scale">100%</dd></div>
+                <div><dt>Density</dt><dd data-asw-dashboard-appearance="density">Comfortable</dd></div>
+              </dl>
+            </div>
+          </section>
+
+          <section class="asw-dashboard-panel asw-dashboard-panel--quick" aria-labelledby="aswDashboardQuickTitle">
+            <header class="asw-dashboard-panel__head">
+              <div><span class="asw-dashboard-panel__eyebrow">QUICK ACCESS</span><h2 id="aswDashboardQuickTitle">Open a Workspace</h2></div>
+            </header>
+            <div class="asw-dashboard-quick-grid">
+              <button type="button" data-asw-terminal-path="workspace"><span>W</span><b>Workspace</b><small>Data, backup & reports</small><i aria-hidden="true">→</i></button>
+              <button type="button" data-asw-nav-target="data-center"><span>D</span><b>Data Center</b><small>Repository overview</small><i aria-hidden="true">→</i></button>
+              <button type="button" data-asw-terminal-path="workspace:report"><span>R</span><b>Report</b><small>Print, poster & image</small><i aria-hidden="true">→</i></button>
+              <button type="button" data-asw-terminal-path="settings"><span>S</span><b>Settings</b><small>Application controls</small><i aria-hidden="true">→</i></button>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <section class="asw-view" data-asw-view="data-center" aria-labelledby="aswDataCenterTitle" hidden>
+      <div class="asw-page-head">
+        <div><span class="asw-kicker">WORKSPACE / DATA CENTER</span><h1 id="aswDataCenterTitle">Data Center</h1><p>A neutral home for the data sources and repositories your next product needs.</p></div>
+        <button class="asw-button" type="button" data-asw-terminal-path="workspace:data-center">Data Center controls</button>
+      </div>
+      <div class="asw-metric-grid">
+        <article><span>Stored keys</span><strong data-asw-data-stat="keys">0</strong><small>Starter namespace</small></article>
+        <article><span>Local size</span><strong data-asw-data-stat="bytes">0 B</strong><small>Approximate storage</small></article>
+        <article><span>Activities</span><strong data-asw-data-stat="activities">0</strong><small>Recent events</small></article>
+        <article><span>Last backup</span><strong data-asw-data-stat="backup">Never</strong><small>Local export</small></article>
+      </div>
+      <div class="asw-card-grid asw-card-grid--two">
+        <article class="asw-surface-card"><span class="asw-chip">ADAPTER SLOT</span><h2>Primary data source</h2><p>Connect REST, WordPress, Laravel, a database API, or another repository here without changing the terminal shell.</p><code>window.dispatchEvent(new CustomEvent('asw:data:refresh'))</code></article>
+        <article class="asw-surface-card"><span class="asw-chip">STATE</span><h2>Local application state</h2><p>Starter preferences and activity use a namespaced repository. Your domain data can use the same contract or its own adapter.</p><button class="asw-text-button" type="button" data-asw-action="refresh-data-center">Refresh overview →</button></article>
+      </div>
+    </section>
+
+    <section class="asw-view" data-asw-view="reports" aria-labelledby="aswReportsTitle" hidden>
+      <div class="asw-page-head">
+        <div><span class="asw-kicker">WORKSPACE / REPORT</span><h1 id="aswReportsTitle">Report Output</h1><p>One generic route for printed documents, posters, and image summaries.</p></div>
+        <button class="asw-button" type="button" data-asw-terminal-path="workspace:report">Open Report controls</button>
+      </div>
+      <div class="asw-card-grid asw-card-grid--three">
+        <article class="asw-surface-card"><span class="asw-output-mark">P</span><h2>Print</h2><p>Paper size, orientation, and browser print preparation.</p><button class="asw-text-button" type="button" data-asw-terminal-path="workspace:report:print">Configure print →</button></article>
+        <article class="asw-surface-card"><span class="asw-output-mark">O</span><h2>Poster</h2><p>Large-format page setup for A3 through A0 output.</p><button class="asw-text-button" type="button" data-asw-terminal-path="workspace:report:poster">Configure poster →</button></article>
+        <article class="asw-surface-card"><span class="asw-output-mark">I</span><h2>Image</h2><p>Dependency-free PNG summary with a replaceable export hook.</p><button class="asw-text-button" type="button" data-asw-terminal-path="workspace:report:image">Configure image →</button></article>
+      </div>
+    </section>
+
+    <section class="asw-view" data-asw-view="settings" aria-labelledby="aswSettingsTitle" hidden>
+      <div class="asw-page-head">
+        <div><span class="asw-kicker">STARTER / SETTINGS</span><h1 id="aswSettingsTitle">Starter Settings</h1><p>A quick view of the reusable preferences that are currently active.</p></div>
+        <button class="asw-button asw-button--primary" type="button" data-asw-terminal-path="settings:appearance">Appearance</button>
+      </div>
+      <dl class="asw-settings-list">
+        <div><dt>Theme</dt><dd data-asw-setting="theme">Dark Glass</dd></div>
+        <div><dt>Typography</dt><dd data-asw-setting="font">System UI</dd></div>
+        <div><dt>Typography scale</dt><dd data-asw-setting="font-scale">100%</dd></div>
+        <div><dt>Density</dt><dd data-asw-setting="density">Comfortable</dd></div>
+        <div><dt>Interface zoom</dt><dd data-asw-setting="zoom">100%</dd></div>
+        <div><dt>Notifications</dt><dd data-asw-setting="notifications">Enabled</dd></div>
+      </dl>
+    </section>
+  </main>
+
+  <footer class="asw-footer">
+    <span>Software Starter</span>
+    <span>Configuration-driven • responsive • reusable</span>
+  </footer>
+
+  <div id="aswTerminalMount"></div>
+  <div class="asw-toast-region" id="aswToastRegion" aria-live="polite" aria-atomic="false"></div>
+  <input id="aswBackupImport" type="file" accept="application/json,.json" hidden>
+
+  <noscript><p class="asw-noscript">This starter requires JavaScript for its terminal controls.</p></noscript>
+  <script src="assets/js/asw-config.js" defer></script>
+  <script src="assets/js/asw-app.js" defer></script>
+</body>
+</html>

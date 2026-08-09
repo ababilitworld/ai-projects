@@ -1,0 +1,15 @@
+{
+  "name": "ababilitworld/allahor-dol-ebook",
+  "description": "Standalone interactive Bengali eBook with AIT-PHA style reader terminal.",
+  "type": "project",
+  "license": "proprietary",
+  "require": {},
+  "authors": [
+    {
+      "name": "Md Shafiul Alam"
+    }
+  ],
+  "config": {
+    "sort-packages": true
+  }
+}

@@ -1,5 +1,456 @@
 (() => {
   'use strict';
+
+  /**
+   * Owns the portable CSV backup format for the rendered eBook.
+   * Imported content is persisted locally and restored before the rest of the
+   * application captures its page collection, keeping print/export in sync.
+   */
+  class EbookCsvBackupManager {
+    constructor(options = {}) {
+      this.book = document.getElementById(options.bookId || 'book');
+      this.storageKey = options.storageKey || 'ait-ebook-csv-backup-v1';
+      this.previewFlagKey = options.previewFlagKey || 'ait-ebook-import-preview-pending';
+      this.format = 'ait-ebook-csv-backup';
+      this.version = '1';
+      this.columns = [
+        'format',
+        'version',
+        'exported_at',
+        'page_number',
+        'page_title',
+        'page_classes',
+        'page_html'
+      ];
+
+      if (!this.book) return;
+
+      this.applyStoredBackup();
+      this.importInput = this.createImportInput();
+      this.previewPanel = this.createPreviewPanel();
+      this.scheduleImportedPreview();
+    }
+
+    getPages() {
+      return Array.from(this.book.children).filter((element) => element.classList.contains('paper-page'));
+    }
+
+    createImportInput() {
+      let input = document.getElementById('terminalEbookCsvImportFile');
+      if (!input) {
+        input = document.createElement('input');
+        input.id = 'terminalEbookCsvImportFile';
+        input.type = 'file';
+        input.accept = '.csv,text/csv';
+        input.hidden = true;
+        document.body.appendChild(input);
+      }
+
+      input.addEventListener('change', async (event) => {
+        const [file] = event.target.files || [];
+        event.target.value = '';
+        if (file) await this.importFromFile(file);
+      });
+
+      return input;
+    }
+
+    createPreviewPanel() {
+      let panel = document.getElementById('aitEbookImportPreview');
+      if (!panel) {
+        panel = document.createElement('section');
+        panel.id = 'aitEbookImportPreview';
+        panel.className = 'ait-ebook-preview no-print';
+        panel.hidden = true;
+        panel.setAttribute('role', 'dialog');
+        panel.setAttribute('aria-modal', 'true');
+        panel.setAttribute('aria-hidden', 'true');
+        panel.setAttribute('aria-labelledby', 'aitEbookPreviewTitle');
+        panel.innerHTML = `
+          <header class="ait-ebook-preview__header">
+            <div class="ait-ebook-preview__heading">
+              <span class="ait-ebook-preview__eyebrow" data-ait-ebook-preview-eyebrow>CSV IMPORT COMPLETE</span>
+              <h2 id="aitEbookPreviewTitle" data-ait-ebook-preview-title>eBook Preview</h2>
+              <p data-ait-ebook-preview-summary><span data-ait-ebook-preview-count>0 pages</span> · Review the imported eBook before continuing</p>
+              <p data-ait-ebook-workspace-summary hidden>Configure the complete print workflow for this imported eBook</p>
+            </div>
+            <div class="ait-ebook-preview__actions">
+              <button class="ait-ebook-preview__back" data-ait-ebook-preview-back hidden type="button"><span aria-hidden="true">←</span> Back to Preview</button>
+              <button class="ait-ebook-preview__print" data-ait-ebook-preview-print type="button"><span aria-hidden="true">🖨</span> Print</button>
+              <button class="ait-ebook-preview__close" data-ait-ebook-preview-close type="button" aria-label="Close eBook preview">×</button>
+            </div>
+          </header>
+          <div class="ait-ebook-preview__viewport" data-ait-ebook-preview-viewport>
+            <div class="ait-ebook-preview__book" data-ait-ebook-preview-book></div>
+          </div>
+          <div class="ait-ebook-preview__workspace" data-ait-ebook-print-workspace hidden>
+            <iframe class="ait-ebook-preview__workspace-frame" data-ait-ebook-print-frame title="eBook Print Workspace" loading="eager"></iframe>
+          </div>`;
+        document.body.appendChild(panel);
+      }
+
+      this.previewBook = panel.querySelector('[data-ait-ebook-preview-book]');
+      this.previewViewport = panel.querySelector('[data-ait-ebook-preview-viewport]');
+      this.previewCount = panel.querySelector('[data-ait-ebook-preview-count]');
+      this.previewEyebrow = panel.querySelector('[data-ait-ebook-preview-eyebrow]');
+      this.previewTitle = panel.querySelector('[data-ait-ebook-preview-title]');
+      this.previewSummary = panel.querySelector('[data-ait-ebook-preview-summary]');
+      this.workspaceSummary = panel.querySelector('[data-ait-ebook-workspace-summary]');
+      this.previewPrintButton = panel.querySelector('[data-ait-ebook-preview-print]');
+      this.previewBackButton = panel.querySelector('[data-ait-ebook-preview-back]');
+      this.previewPrintWorkspace = panel.querySelector('[data-ait-ebook-print-workspace]');
+      this.previewPrintFrame = panel.querySelector('[data-ait-ebook-print-frame]');
+      this.bindPreviewEvents(panel);
+      return panel;
+    }
+
+    bindPreviewEvents(panel) {
+      panel.addEventListener('click', (event) => {
+        if (event.target.closest('[data-ait-ebook-preview-close]')) {
+          this.closePreview();
+          return;
+        }
+        if (event.target.closest('[data-ait-ebook-preview-back]')) {
+          this.backToPreview();
+          return;
+        }
+        if (event.target.closest('[data-ait-ebook-preview-print]')) this.openPrintWorkspace();
+      });
+      this.previewPrintFrame?.addEventListener('load', () => this.syncPrintWorkspaceTheme());
+      document.addEventListener('keydown', (event) => {
+        if (event.key !== 'Escape' || !this.previewPanel || this.previewPanel.hidden) return;
+        if (this.previewPanel.classList.contains('is-print-workspace')) {
+          this.backToPreview();
+          return;
+        }
+        this.closePreview();
+      });
+    }
+
+    scheduleImportedPreview() {
+      if (localStorage.getItem(this.previewFlagKey) !== '1') return;
+      localStorage.removeItem(this.previewFlagKey);
+      window.setTimeout(() => this.openPreview(), 0);
+    }
+
+    openPreview() {
+      if (!this.previewPanel || !this.previewBook) return;
+      const pages = this.getPages();
+      if (!pages.length) return;
+
+      const clones = pages.map((page, index) => {
+        const clone = page.cloneNode(true);
+        clone.removeAttribute('id');
+        clone.querySelectorAll('[id]').forEach((element) => element.removeAttribute('id'));
+        clone.setAttribute('aria-label', `Page ${index + 1}: ${page.dataset.title || `Page ${index + 1}`}`);
+        return clone;
+      });
+      this.previewBook.replaceChildren(...clones);
+      if (this.previewCount) this.previewCount.textContent = `${pages.length} ${pages.length === 1 ? 'page' : 'pages'}`;
+      this.previousFocus = document.activeElement;
+      this.previewPanel.hidden = false;
+      this.previewPanel.setAttribute('aria-hidden', 'false');
+      this.previewPanel.classList.add('is-open');
+      document.body.classList.add('ait-ebook-preview-open');
+      this.backToPreview({ focus: false });
+      if (this.previewViewport) this.previewViewport.scrollTop = 0;
+      this.previewPrintButton?.focus();
+    }
+
+    openPrintWorkspace() {
+      if (!this.previewPanel || !this.previewPrintWorkspace || !this.previewPrintFrame) return;
+      this.previewPanel.classList.add('is-print-workspace');
+      if (this.previewViewport) this.previewViewport.hidden = true;
+      this.previewPrintWorkspace.hidden = false;
+      if (this.previewEyebrow) this.previewEyebrow.textContent = 'EBOOK / PRINT';
+      if (this.previewTitle) this.previewTitle.textContent = 'Print Workspace';
+      if (this.previewSummary) this.previewSummary.hidden = true;
+      if (this.workspaceSummary) this.workspaceSummary.hidden = false;
+      if (this.previewPrintButton) this.previewPrintButton.hidden = true;
+      if (this.previewBackButton) this.previewBackButton.hidden = false;
+
+      if (!this.previewPrintFrame.getAttribute('src')) this.previewPrintFrame.setAttribute('src', 'print/index.html');
+      this.previewBackButton?.focus();
+    }
+
+    backToPreview({ focus = true } = {}) {
+      if (!this.previewPanel) return;
+      this.previewPanel.classList.remove('is-print-workspace');
+      if (this.previewViewport) this.previewViewport.hidden = false;
+      if (this.previewPrintWorkspace) this.previewPrintWorkspace.hidden = true;
+      if (this.previewEyebrow) this.previewEyebrow.textContent = 'CSV IMPORT COMPLETE';
+      if (this.previewTitle) this.previewTitle.textContent = 'eBook Preview';
+      if (this.previewSummary) this.previewSummary.hidden = false;
+      if (this.workspaceSummary) this.workspaceSummary.hidden = true;
+      if (this.previewPrintButton) this.previewPrintButton.hidden = false;
+      if (this.previewBackButton) this.previewBackButton.hidden = true;
+      if (focus) this.previewPrintButton?.focus();
+    }
+
+    syncPrintWorkspaceTheme() {
+      const theme = document.documentElement.dataset.theme || localStorage.getItem('heart-routine-theme') || 'dark-glass';
+      this.previewPrintFrame?.contentWindow?.postMessage({ type: 'ait-pha-theme', theme }, '*');
+    }
+
+    closePreview() {
+      if (!this.previewPanel || this.previewPanel.hidden) return;
+      this.backToPreview({ focus: false });
+      this.previewPanel.classList.remove('is-open');
+      this.previewPanel.hidden = true;
+      this.previewPanel.setAttribute('aria-hidden', 'true');
+      document.body.classList.remove('ait-ebook-preview-open');
+      this.previewBook?.replaceChildren();
+      this.previewPrintFrame?.removeAttribute('src');
+      this.previousFocus?.focus?.();
+    }
+
+    openImportPicker() {
+      if (!this.importInput) return;
+      this.importInput.value = '';
+      this.importInput.click();
+    }
+
+    exportToCsv() {
+      const pages = this.getPages();
+      if (!pages.length) {
+        window.alert('No eBook pages are available to export.');
+        return;
+      }
+
+      const exportedAt = new Date().toISOString();
+      const rows = pages.map((page, index) => [
+        this.format,
+        this.version,
+        exportedAt,
+        String(index + 1),
+        page.dataset.title || `Page ${index + 1}`,
+        page.className,
+        page.innerHTML.trim()
+      ]);
+      const csv = [this.columns, ...rows]
+        .map((row) => row.map((value) => this.escapeCsvCell(value)).join(','))
+        .join('\r\n');
+      const blob = new Blob([`\uFEFF${csv}`], { type: 'text/csv;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.hidden = true;
+      link.href = url;
+      link.download = `ait-ebook-backup-${exportedAt.slice(0, 10)}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.setTimeout(() => URL.revokeObjectURL(url), 0);
+    }
+
+    async importFromFile(file) {
+      try {
+        if (!file || !/\.csv$/i.test(file.name || '')) {
+          throw new Error('Please select a CSV backup file.');
+        }
+
+        const records = this.parseBackupCsv(await file.text());
+        const currentPageCount = this.getPages().length;
+        if (records.length !== currentPageCount) {
+          throw new Error(`This project requires ${currentPageCount} eBook pages; the CSV contains ${records.length}.`);
+        }
+
+        const approved = window.confirm(
+          `Import ${records.length} eBook pages from “${file.name}”? This replaces the current eBook content in this browser.`
+        );
+        if (!approved) return;
+
+        const payload = {
+          format: this.format,
+          version: this.version,
+          importedAt: new Date().toISOString(),
+          pages: records
+        };
+        localStorage.setItem(this.storageKey, JSON.stringify(payload));
+        localStorage.setItem(this.previewFlagKey, '1');
+        window.alert('eBook CSV imported successfully. The book will reload and open a full-width preview.');
+        window.location.reload();
+      } catch (error) {
+        window.alert(`eBook CSV import failed: ${error.message || 'Invalid CSV backup.'}`);
+      }
+    }
+
+    parseBackupCsv(csvText) {
+      const rows = this.parseCsv(String(csvText || '').replace(/^\uFEFF/, ''));
+      if (rows.length < 2) throw new Error('The CSV backup contains no eBook pages.');
+
+      const header = rows.shift().map((value) => value.trim());
+      const indexes = Object.fromEntries(this.columns.map((column) => [column, header.indexOf(column)]));
+      const missing = this.columns.filter((column) => indexes[column] < 0);
+      if (missing.length) throw new Error(`Missing CSV column(s): ${missing.join(', ')}.`);
+
+      const records = rows
+        .filter((row) => row.some((value) => value !== ''))
+        .map((row, rowIndex) => {
+          const format = row[indexes.format] || '';
+          const version = row[indexes.version] || '';
+          if (format !== this.format || version !== this.version) {
+            throw new Error(`Unsupported backup format on CSV row ${rowIndex + 2}.`);
+          }
+
+          return this.normalizeRecord({
+            pageNumber: Number(row[indexes.page_number]),
+            title: row[indexes.page_title] || '',
+            classes: row[indexes.page_classes] || '',
+            html: row[indexes.page_html] || ''
+          }, rowIndex + 2);
+        });
+
+      if (!records.length) throw new Error('The CSV backup contains no eBook pages.');
+      records.sort((left, right) => left.pageNumber - right.pageNumber);
+
+      const pageNumbers = records.map((record) => record.pageNumber);
+      if (new Set(pageNumbers).size !== pageNumbers.length) throw new Error('Duplicate page numbers were found in the CSV backup.');
+      if (!pageNumbers.every((number, index) => number === index + 1)) {
+        throw new Error('Page numbers must be consecutive and start at 1.');
+      }
+
+      return records;
+    }
+
+    normalizeRecord(record, csvRow = 0) {
+      if (!Number.isInteger(record.pageNumber) || record.pageNumber < 1) {
+        throw new Error(`Invalid page number${csvRow ? ` on CSV row ${csvRow}` : ''}.`);
+      }
+
+      const html = this.sanitizePageHtml(record.html);
+      const template = document.createElement('template');
+      template.innerHTML = html;
+      if (!template.content.querySelector('.page-art') || !template.content.querySelector('.page-body')) {
+        throw new Error(`Page ${record.pageNumber} is missing the required page structure.`);
+      }
+
+      return {
+        pageNumber: record.pageNumber,
+        title: String(record.title || `Page ${record.pageNumber}`).trim() || `Page ${record.pageNumber}`,
+        classes: this.sanitizeClassName(record.classes),
+        html
+      };
+    }
+
+    sanitizeClassName(value) {
+      const classes = String(value || '')
+        .split(/\s+/)
+        .filter((className) => /^[A-Za-z0-9_-]+$/.test(className));
+      if (!classes.includes('paper-page')) classes.unshift('paper-page');
+      return [...new Set(classes)].join(' ');
+    }
+
+    sanitizePageHtml(value) {
+      const template = document.createElement('template');
+      template.innerHTML = String(value || '');
+      template.content
+        .querySelectorAll('script,iframe,object,embed,base,meta,link')
+        .forEach((element) => element.remove());
+      template.content.querySelectorAll('*').forEach((element) => {
+        Array.from(element.attributes).forEach((attribute) => {
+          const name = attribute.name.toLowerCase();
+          const content = attribute.value.trim();
+          if (name.startsWith('on') || name === 'srcdoc') {
+            element.removeAttribute(attribute.name);
+            return;
+          }
+          if (['href', 'src', 'xlink:href', 'formaction'].includes(name) && /^(?:javascript:|data:text\/html)/i.test(content)) {
+            element.removeAttribute(attribute.name);
+          }
+        });
+      });
+      return template.innerHTML.trim();
+    }
+
+    applyStoredBackup() {
+      const saved = localStorage.getItem(this.storageKey);
+      if (!saved) return;
+
+      try {
+        const payload = JSON.parse(saved);
+        if (payload?.format !== this.format || payload?.version !== this.version || !Array.isArray(payload.pages)) {
+          throw new Error('Unsupported saved eBook backup.');
+        }
+
+        const currentPageCount = this.getPages().length;
+        const records = payload.pages
+          .map((record) => this.normalizeRecord(record))
+          .sort((left, right) => left.pageNumber - right.pageNumber);
+        if (records.length !== currentPageCount) throw new Error('Saved eBook page count does not match this project.');
+
+        const pageNumbers = records.map((record) => record.pageNumber);
+        if (!pageNumbers.every((number, index) => number === index + 1)) throw new Error('Saved eBook pages are out of sequence.');
+
+        const fragment = document.createDocumentFragment();
+        records.forEach((record) => {
+          const page = document.createElement('section');
+          page.className = record.classes;
+          page.dataset.title = record.title;
+          page.innerHTML = record.html;
+          fragment.appendChild(page);
+        });
+        this.book.replaceChildren(fragment);
+      } catch (error) {
+        console.warn('Saved eBook CSV backup could not be applied.', error);
+      }
+    }
+
+    parseCsv(text) {
+      const rows = [];
+      let row = [];
+      let field = '';
+      let quoted = false;
+
+      for (let index = 0; index < text.length; index += 1) {
+        const character = text[index];
+        if (quoted) {
+          if (character === '"') {
+            if (text[index + 1] === '"') {
+              field += '"';
+              index += 1;
+            } else {
+              quoted = false;
+            }
+          } else {
+            field += character;
+          }
+          continue;
+        }
+
+        if (character === '"' && field === '') {
+          quoted = true;
+        } else if (character === ',') {
+          row.push(field);
+          field = '';
+        } else if (character === '\r' || character === '\n') {
+          if (character === '\r' && text[index + 1] === '\n') index += 1;
+          row.push(field);
+          rows.push(row);
+          row = [];
+          field = '';
+        } else {
+          field += character;
+        }
+      }
+
+      if (quoted) throw new Error('The CSV contains an unterminated quoted field.');
+      if (field !== '' || row.length) {
+        row.push(field);
+        rows.push(row);
+      }
+      return rows;
+    }
+
+    escapeCsvCell(value) {
+      return `"${String(value ?? '').replace(/"/g, '""')}"`;
+    }
+  }
+
+  window.AITEbookCsvBackupManager = new EbookCsvBackupManager();
+})();
+
+(() => {
+  'use strict';
 const AIT_PRINT_PAPER_SIZES={"a0":{"label":"A0","width":841,"height":1189,"unit":"mm","dimensions":"841 × 1189 mm","group":"ISO A"},"a1":{"label":"A1","width":594,"height":841,"unit":"mm","dimensions":"594 × 841 mm","group":"ISO A"},"a2":{"label":"A2","width":420,"height":594,"unit":"mm","dimensions":"420 × 594 mm","group":"ISO A"},"a3":{"label":"A3","width":297,"height":420,"unit":"mm","dimensions":"297 × 420 mm","group":"ISO A"},"a4":{"label":"A4","width":210,"height":297,"unit":"mm","dimensions":"210 × 297 mm","group":"ISO A"},"a5":{"label":"A5","width":148,"height":210,"unit":"mm","dimensions":"148 × 210 mm","group":"ISO A"},"a6":{"label":"A6","width":105,"height":148,"unit":"mm","dimensions":"105 × 148 mm","group":"ISO A"},"a7":{"label":"A7","width":74,"height":105,"unit":"mm","dimensions":"74 × 105 mm","group":"ISO A"},"a8":{"label":"A8","width":52,"height":74,"unit":"mm","dimensions":"52 × 74 mm","group":"ISO A"},"a9":{"label":"A9","width":37,"height":52,"unit":"mm","dimensions":"37 × 52 mm","group":"ISO A"},"a10":{"label":"A10","width":26,"height":37,"unit":"mm","dimensions":"26 × 37 mm","group":"ISO A"},"b0":{"label":"B0","width":1000,"height":1414,"unit":"mm","dimensions":"1000 × 1414 mm","group":"ISO B"},"b1":{"label":"B1","width":707,"height":1000,"unit":"mm","dimensions":"707 × 1000 mm","group":"ISO B"},"b2":{"label":"B2","width":500,"height":707,"unit":"mm","dimensions":"500 × 707 mm","group":"ISO B"},"b3":{"label":"B3","width":353,"height":500,"unit":"mm","dimensions":"353 × 500 mm","group":"ISO B"},"b4":{"label":"B4","width":250,"height":353,"unit":"mm","dimensions":"250 × 353 mm","group":"ISO B"},"b5":{"label":"B5","width":176,"height":250,"unit":"mm","dimensions":"176 × 250 mm","group":"ISO B"},"b6":{"label":"B6","width":125,"height":176,"unit":"mm","dimensions":"125 × 176 mm","group":"ISO B"},"b7":{"label":"B7","width":88,"height":125,"unit":"mm","dimensions":"88 × 125 mm","group":"ISO B"},"b8":{"label":"B8","width":62,"height":88,"unit":"mm","dimensions":"62 × 88 mm","group":"ISO B"},"b9":{"label":"B9","width":44,"height":62,"unit":"mm","dimensions":"44 × 62 mm","group":"ISO B"},"b10":{"label":"B10","width":31,"height":44,"unit":"mm","dimensions":"31 × 44 mm","group":"ISO B"},"c0":{"label":"C0","width":917,"height":1297,"unit":"mm","dimensions":"917 × 1297 mm","group":"ISO C"},"c1":{"label":"C1","width":648,"height":917,"unit":"mm","dimensions":"648 × 917 mm","group":"ISO C"},"c2":{"label":"C2","width":458,"height":648,"unit":"mm","dimensions":"458 × 648 mm","group":"ISO C"},"c3":{"label":"C3","width":324,"height":458,"unit":"mm","dimensions":"324 × 458 mm","group":"ISO C"},"c4":{"label":"C4","width":229,"height":324,"unit":"mm","dimensions":"229 × 324 mm","group":"ISO C"},"c5":{"label":"C5","width":162,"height":229,"unit":"mm","dimensions":"162 × 229 mm","group":"ISO C"},"c6":{"label":"C6","width":114,"height":162,"unit":"mm","dimensions":"114 × 162 mm","group":"ISO C"},"c7":{"label":"C7","width":81,"height":114,"unit":"mm","dimensions":"81 × 114 mm","group":"ISO C"},"c8":{"label":"C8","width":57,"height":81,"unit":"mm","dimensions":"57 × 81 mm","group":"ISO C"},"c9":{"label":"C9","width":40,"height":57,"unit":"mm","dimensions":"40 × 57 mm","group":"ISO C"},"c10":{"label":"C10","width":28,"height":40,"unit":"mm","dimensions":"28 × 40 mm","group":"ISO C"},"business-card":{"label":"Business Card","width":85,"height":55,"unit":"mm","dimensions":"85 × 55 mm","group":"Card"},"letter":{"label":"Letter","width":8.5,"height":11,"unit":"in","dimensions":"8.5 × 11 in","group":"North America"},"legal":{"label":"Legal","width":8.5,"height":14,"unit":"in","dimensions":"8.5 × 14 in","group":"North America"},"tabloid":{"label":"Tabloid","width":11,"height":17,"unit":"in","dimensions":"11 × 17 in","group":"North America"},"ledger":{"label":"Ledger","width":17,"height":11,"unit":"in","dimensions":"17 × 11 in","group":"North America"},"executive":{"label":"Executive","width":7.25,"height":10.5,"unit":"in","dimensions":"7.25 × 10.5 in","group":"North America"},"statement":{"label":"Statement","width":5.5,"height":8.5,"unit":"in","dimensions":"5.5 × 8.5 in","group":"North America"},"folio":{"label":"Folio","width":8.5,"height":13,"unit":"in","dimensions":"8.5 × 13 in","group":"North America"},"quarto":{"label":"Quarto","width":8.5,"height":10.83,"unit":"in","dimensions":"8.5 × 10.83 in","group":"North America"},"government-letter":{"label":"Government Letter","width":8,"height":10.5,"unit":"in","dimensions":"8 × 10.5 in","group":"North America"},"government-legal":{"label":"Government Legal","width":8.5,"height":13,"unit":"in","dimensions":"8.5 × 13 in","group":"North America"},"junior-legal":{"label":"Junior Legal","width":5,"height":8,"unit":"in","dimensions":"5 × 8 in","group":"North America"},"ansi-c":{"label":"ANSI C","width":17,"height":22,"unit":"in","dimensions":"17 × 22 in","group":"ANSI"},"ansi-d":{"label":"ANSI D","width":22,"height":34,"unit":"in","dimensions":"22 × 34 in","group":"ANSI"},"ansi-e":{"label":"ANSI E","width":34,"height":44,"unit":"in","dimensions":"34 × 44 in","group":"ANSI"},"arch-a":{"label":"ARCH A","width":9,"height":12,"unit":"in","dimensions":"9 × 12 in","group":"Architectural"},"arch-b":{"label":"ARCH B","width":12,"height":18,"unit":"in","dimensions":"12 × 18 in","group":"Architectural"},"arch-c":{"label":"ARCH C","width":18,"height":24,"unit":"in","dimensions":"18 × 24 in","group":"Architectural"},"arch-d":{"label":"ARCH D","width":24,"height":36,"unit":"in","dimensions":"24 × 36 in","group":"Architectural"},"arch-e":{"label":"ARCH E","width":36,"height":48,"unit":"in","dimensions":"36 × 48 in","group":"Architectural"},"4x6":{"label":"Photo 4×6","width":4,"height":6,"unit":"in","dimensions":"4 × 6 in","group":"Photo"},"5x7":{"label":"Photo 5×7","width":5,"height":7,"unit":"in","dimensions":"5 × 7 in","group":"Photo"},"8x10":{"label":"Photo 8×10","width":8,"height":10,"unit":"in","dimensions":"8 × 10 in","group":"Photo"},"square-5":{"label":"Square 5×5","width":5,"height":5,"unit":"in","dimensions":"5 × 5 in","group":"Photo"},"square-8":{"label":"Square 8×8","width":8,"height":8,"unit":"in","dimensions":"8 × 8 in","group":"Photo"},"index-3x5":{"label":"Index Card 3×5","width":3,"height":5,"unit":"in","dimensions":"3 × 5 in","group":"Card"},"index-4x6":{"label":"Index Card 4×6","width":4,"height":6,"unit":"in","dimensions":"4 × 6 in","group":"Card"},"index-5x8":{"label":"Index Card 5×8","width":5,"height":8,"unit":"in","dimensions":"5 × 8 in","group":"Card"}};
   const body = document.body;
   const book = document.getElementById('book');
@@ -1035,6 +1486,8 @@ const AIT_PRINT_PAPER_SIZES={"a0":{"label":"A0","width":841,"height":1189,"unit"
       if(a.type==='workspace'){workspaceNavigator.open({src:a.route,title:a.title||item.label,breadcrumb:a.breadcrumb||[...this.stack.map(x=>x.label),item.label],parentModal:'toolsModal',parentLabel:this.stack.at(-1)?.label||'Terminal'});setDock(false);return;}
       if(a.type==='modal'){openModal(a.modalId);return;}
       if(a.type==='command'){
+        if(a.command==='ebook-export-csv'){window.AITEbookCsvBackupManager?.exportToCsv();setDock(false);}
+        if(a.command==='ebook-import-csv'){window.AITEbookCsvBackupManager?.openImportPicker();setDock(false);}
         if(a.command==='backup')downloadPlannerBackup();
         if(a.command==='sync'){localStorage.setItem('ait-health-planner-last-sync',new Date().toISOString());alert('Local planner data synchronized.');}
         if(a.command==='import')document.getElementById('terminalDataImportFile')?.click();

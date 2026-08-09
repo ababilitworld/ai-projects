@@ -2,7 +2,17 @@ window.AIT_TERMINAL_SCHEMA={
   brand:{title:'AIT – PHA',subtitle:'Personal Health Assistant',icon:'⌘'},
   launcher:{title:'Terminal',icon:'>_'},
   menu:[
-    {id:'workspace',label:'Workspace',icon:'⚡',description:'Data Center and reports',children:[
+    {id:'workspace',label:'Workspace',icon:'⚡',description:'eBook, Data Center and reports',children:[
+      {id:'ebook',label:'eBook',icon:'📖',description:'eBook content and backup tools',children:[
+        {id:'ebook-data-center',label:'Data Center',icon:'🗄',description:'Manage eBook data',children:[
+          {id:'ebook-data',label:'Data',icon:'🧾',description:'eBook content data',children:[
+            {id:'ebook-backup',label:'Backup',icon:'💾',description:'Export or import eBook CSV backup',children:[
+              {id:'ebook-export',label:'Export',icon:'📤',description:'Export the complete eBook as CSV',action:{type:'command',command:'ebook-export-csv'}},
+              {id:'ebook-import',label:'Import',icon:'📥',description:'Import eBook content from CSV',action:{type:'command',command:'ebook-import-csv'}}
+            ]}
+          ]}
+        ]}
+      ]},
       {id:'data-center',label:'Data Center',icon:'🗄',description:'Data, backup, sync and import',children:[
         {id:'data',label:'Data',icon:'🧾',description:'Food and profile records',children:[
           {id:'food',label:'Food',icon:'🥗',description:'Food Data workspace',action:{type:'workspace',route:'data-center/food/index.html',title:'Food Data Workspace',breadcrumb:['Workspace','Data Center','Data','Food']}},

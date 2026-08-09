@@ -219,6 +219,7 @@ final class DseFundamentalProvider
         $companyName = $this->findText($fields, ['Company Name']);
         $category = $this->findCategory($fields);
         $business = $this->findBusinessSegment($fields);
+        $yearEnd = $this->findText($fields, ['Year End', 'Financial Year End', 'Financial Year Ended', 'Accounting Year End']);
         $lastAgm = $this->findDate($fields, ['Last AGM Held on', 'Last AGM Held On', 'Last AGM Date', 'Last AGM']);
 
         return [
@@ -226,15 +227,17 @@ final class DseFundamentalProvider
             'companyName' => $companyName,
             'category' => $category,
             'businessSegment' => $business,
+            'yearEnd' => $yearEnd,
             'lastAgmDate' => $lastAgm,
             'allFundamentals' => [
                 'Company Name' => $companyName,
                 'Category' => $category,
                 'Business Segment' => $business,
+                'Year End' => $yearEnd,
                 'Last AGM' => $lastAgm,
             ],
             'source' => 'DSE company profile',
-            'sourcePolicy' => 'DSE-only: Category, Business Segment, Last AGM',
+            'sourcePolicy' => 'DSE-only: Category, Business Segment, Year End, Last AGM',
             'downloadedAt' => gmdate(DATE_ATOM),
         ];
     }
@@ -296,7 +299,7 @@ final class DseFundamentalProvider
         $normalized = $this->normalizeLabel($value);
         return in_array($normalized, [
             'company name', 'market category', 'category', 'sector', 'industry',
-            'nature of business', 'business segment', 'last agm held on',
+            'nature of business', 'business segment', 'year end', 'financial year end', 'financial year ended', 'accounting year end', 'last agm held on',
             'last agm date', 'last agm',
         ], true);
     }
@@ -362,6 +365,7 @@ final class DseFundamentalProvider
     {
         return ($record['category'] ?? null) !== null
             || ($record['businessSegment'] ?? null) !== null
+            || ($record['yearEnd'] ?? null) !== null
             || ($record['lastAgmDate'] ?? null) !== null;
     }
 }
