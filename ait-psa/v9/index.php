@@ -4501,6 +4501,78 @@ svg[data-chart] {
 #aitEliteDecisionDetailModal .ait-elite-detail-card{background:transparent;border:0;box-shadow:none}
 #aitEliteDecisionDetailModal .ait-fundamental-item b{white-space:normal;overflow:visible;text-overflow:clip;line-height:1.35}
 </style>
+
+<style id="ait-elite-calculation-cursor-v10092">
+.ait-elite-calc-layer{
+  position:fixed;inset:0;z-index:2147483000;display:none;
+  place-items:center;pointer-events:all;
+  background:color-mix(in srgb,var(--panel,#101827) 48%,transparent);
+  backdrop-filter:blur(7px) saturate(1.15);
+  -webkit-backdrop-filter:blur(7px) saturate(1.15);
+  cursor:progress;
+}
+.ait-elite-calc-layer.is-active{display:grid}
+.ait-elite-calc-card{
+  width:min(430px,calc(100vw - 32px));padding:24px 24px 20px;
+  border:1px solid color-mix(in srgb,var(--accent,#38bdf8) 35%,var(--border,#475569));
+  border-radius:22px;
+  background:color-mix(in srgb,var(--panel,#111827) 94%,transparent);
+  box-shadow:0 24px 80px rgba(0,0,0,.34),inset 0 1px 0 rgba(255,255,255,.08);
+  text-align:center;color:var(--text,#e5e7eb);
+}
+.ait-elite-calc-orbit{
+  position:relative;width:92px;height:92px;margin:0 auto 18px;
+}
+.ait-elite-calc-orbit::before,
+.ait-elite-calc-orbit::after{
+  content:"";position:absolute;border-radius:50%;inset:0;
+  border:2px solid color-mix(in srgb,var(--accent,#38bdf8) 24%,transparent);
+}
+.ait-elite-calc-orbit::before{
+  border-top-color:var(--accent,#38bdf8);
+  border-right-color:var(--accent-2,#8b5cf6);
+  animation:aitEliteOrbit 1.05s linear infinite;
+}
+.ait-elite-calc-orbit::after{
+  inset:12px;border-left-color:var(--accent,#38bdf8);
+  border-bottom-color:var(--accent-2,#8b5cf6);
+  animation:aitEliteOrbitReverse .78s linear infinite;
+}
+.ait-elite-calc-core{
+  position:absolute;inset:28px;border-radius:50%;display:grid;place-items:center;
+  font-weight:900;font-size:17px;letter-spacing:.04em;
+  background:color-mix(in srgb,var(--accent,#38bdf8) 16%,var(--panel,#111827));
+  border:1px solid color-mix(in srgb,var(--accent,#38bdf8) 52%,transparent);
+  box-shadow:0 0 28px color-mix(in srgb,var(--accent,#38bdf8) 28%,transparent);
+}
+.ait-elite-calc-kicker{
+  font-size:11px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--accent,#38bdf8);margin-bottom:5px;
+}
+.ait-elite-calc-title{font-size:20px;font-weight:850;line-height:1.2;margin:0}
+.ait-elite-calc-text{font-size:13px;line-height:1.55;opacity:.78;margin:8px 0 15px}
+.ait-elite-calc-track{
+  height:6px;border-radius:999px;overflow:hidden;
+  background:color-mix(in srgb,var(--text,#e5e7eb) 10%,transparent);
+}
+.ait-elite-calc-bar{
+  width:42%;height:100%;border-radius:inherit;
+  background:linear-gradient(90deg,var(--accent,#38bdf8),var(--accent-2,#8b5cf6),var(--accent,#38bdf8));
+  animation:aitEliteScan 1.15s ease-in-out infinite;
+}
+body.ait-elite-is-calculating,
+body.ait-elite-is-calculating *{cursor:progress!important}
+@keyframes aitEliteOrbit{to{transform:rotate(360deg)}}
+@keyframes aitEliteOrbitReverse{to{transform:rotate(-360deg)}}
+@keyframes aitEliteScan{
+  0%{transform:translateX(-110%);width:38%}
+  50%{width:62%}
+  100%{transform:translateX(270%);width:38%}
+}
+@media (prefers-reduced-motion:reduce){
+ .ait-elite-calc-orbit::before,.ait-elite-calc-orbit::after,.ait-elite-calc-bar{animation-duration:2.5s}
+}
+</style>
 </head>
 <body>
 <div class="v10-mobile-bar">
@@ -10450,6 +10522,37 @@ document.addEventListener('DOMContentLoaded', () => {
 })();
 </script>
 
+
+<script id="ait-elite-calculation-cursor-script">
+(()=>{"use strict";
+ const layer=()=>document.getElementById("aitEliteCalculationLayer");
+ const setText=(id,value)=>{const el=document.getElementById(id);if(el&&value)el.textContent=value};
+ let depth=0;
+ const show=(options={})=>{
+  depth++;
+  setText("aitEliteCalculationKicker",options.kicker||"AIT ELITE ENGINE");
+  setText("aitEliteCalculationTitle",options.title||"Calculating Elite signals");
+  setText("aitEliteCalculationText",options.text||"Analyzing ranking, confirmation, risk and decision evidence…");
+  layer()?.classList.add("is-active");
+  layer()?.setAttribute("aria-hidden","false");
+  document.body.classList.add("ait-elite-is-calculating");
+ };
+ const hide=()=>{
+  depth=Math.max(0,depth-1);
+  if(depth>0)return;
+  layer()?.classList.remove("is-active");
+  layer()?.setAttribute("aria-hidden","true");
+  document.body.classList.remove("ait-elite-is-calculating");
+ };
+ const nextPaint=()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
+ const execute=async(options,task)=>{
+  show(options);
+  try{await nextPaint();return await task()}finally{hide()}
+ };
+ const update=(options={})=>{setText("aitEliteCalculationKicker",options.kicker);setText("aitEliteCalculationTitle",options.title);setText("aitEliteCalculationText",options.text)};
+ window.AITEliteBusy={show,hide,update,execute,nextPaint,isActive:()=>depth>0};
+})();
+</script>
 <script id="ait-elite-priority-script">
 (()=>{"use strict";
  const clamp=n=>Math.max(0,Math.min(100,Number(n)||0));
@@ -10627,9 +10730,9 @@ document.addEventListener('DOMContentLoaded', () => {
  };
  const render=()=>{const tbody=document.getElementById("aitElitePriorityRows");if(!tbody)return[];const result=calculate(),rows=result.rows||[];if(!rows.length){tbody.innerHTML=`<tr><td colspan="10">${result.available<9?`Elite scanning requires at least 9 trading dates. ${result.available||0} are currently available.`:"No eligible securities could be calculated."}</td></tr>`;updateDecisionSummary([]);return[]}updateDecisionSummary(rows);tbody.innerHTML=rows.map(r=>`<tr><td><strong>${esc(r.finalSignal||"Avoid")} #${r.signalRank}</strong><small style="display:block">Overall #${r.rank}</small></td><td><strong>${esc(r.code)}</strong></td><td>${(Number(r.ltp)||0).toFixed(2)}</td><td><span class="v11-signal ${String(r.finalSignal||"watch").toLowerCase().replace(/\s+/g,"-")}">${esc(r.finalSignal||"Watch")}</span></td><td><span class="v11-signal ${String(r.tradeAction||"watch").toLowerCase().replace(/\s+/g,"-")}"><strong>${esc(r.tradeAction||"Watch")}</strong></span></td><td><strong>${esc(simpleWhen(r))}</strong></td><td><strong>${esc(bestHorizon(r))}</strong><small style="display:block">${esc(r.shortTerm||"Watch")} / ${esc(r.midTerm||"Watch")}</small></td><td><strong>${esc(r.modelState||"Unverified")}</strong></td><td style="min-width:260px">${esc(plainReason(r))}</td><td><button class="btn soft ait-elite-details" data-code="${esc(r.code)}" type="button">View Details</button></td></tr>`).join("");tbody.querySelectorAll(".ait-elite-details").forEach(btn=>btn.addEventListener("click",()=>showDetails(btn.dataset.code)));return rows};
  const run=()=>{cache={sig:"",rows:[]};window.AitAdvancedSignalPriority?.clearCache?.();window.AitSignalPriorityHistory?.clearCache?.();return render()};
- const ensurePerformanceState=()=>{try{window.AitElitePerformance?.ensureCurrent?.()}catch(_){}};
- document.getElementById("aitOpenElitePriority")?.addEventListener("click",()=>{document.getElementById("aitPsaSignalPriorityEngineModal")?.setAttribute("hidden","");document.getElementById("aitElitePriorityModal")?.removeAttribute("hidden");ensurePerformanceState();cache={sig:"",rows:[]};render()});
- document.getElementById("aitElitePriorityRun")?.addEventListener("click",()=>{ensurePerformanceState();run()});
+ const ensurePerformanceState=async()=>{try{return await window.AitElitePerformance?.ensureCurrent?.()}catch(_){return false}};
+ document.getElementById("aitOpenElitePriority")?.addEventListener("click",()=>{document.getElementById("aitPsaSignalPriorityEngineModal")?.setAttribute("hidden","");document.getElementById("aitElitePriorityModal")?.removeAttribute("hidden");window.AITEliteBusy?.execute?.({kicker:"AIT ELITE SCANNER",title:"Building your decision list",text:"Checking performance state, ranking stocks, validating risk and preparing actions…"},async()=>{await ensurePerformanceState();cache={sig:"",rows:[]};return render()})});
+ document.getElementById("aitElitePriorityRun")?.addEventListener("click",()=>window.AITEliteBusy?.execute?.({kicker:"AIT ELITE SCANNER",title:"Recalculating Elite signals",text:"Refreshing calibrated ranks, horizons, entry state and trade actions…"},async()=>{await ensurePerformanceState();return run()}));
  document.getElementById("aitElitePriorityCharts3")?.addEventListener("click",()=>window.AITOpenRankedCharts?.("elite-priority",3));
  document.getElementById("aitElitePriorityCharts6")?.addEventListener("click",()=>window.AITOpenRankedCharts?.("elite-priority",6));
  window.AitEliteSignalPriority={calculate,render,run,clearCache:()=>{cache={sig:"",rows:[]}}};
@@ -10650,18 +10753,39 @@ document.addEventListener('DOMContentLoaded', () => {
  const mean=a=>a.length?a.reduce((s,v)=>s+v,0)/a.length:null;
  const median=a=>{if(!a.length)return null;const b=[...a].sort((x,y)=>x-y),m=Math.floor(b.length/2);return b.length%2?b[m]:(b[m-1]+b[m])/2};
  const allDates=()=>[...new Set(Object.values(history()).flatMap(rows=>Array.isArray(rows)?rows.map(r=>String(r?.date||"").slice(0,10)).filter(Boolean):[]))].sort();
- const signature=()=>{const h=history(),dates=allDates();return `${dates.at(-1)||"none"}|${dates.length}|${Object.keys(h).length}|${Object.values(h).reduce((n,r)=>n+(Array.isArray(r)?r.length:0),0)}`};
+ const signature=()=>{const h=history(),dates=allDates(),tail=new Set(dates.slice(-3));let hash=2166136261,rows=0;Object.keys(h).sort().forEach(code=>{(Array.isArray(h[code])?h[code]:[]).forEach(r=>{rows++;const d=String(r?.date||"").slice(0,10);if(!tail.has(d))return;const token=`${code}|${d}|${r?.open??""}|${r?.high??""}|${r?.low??""}|${r?.close??""}|${r?.volume??""}`;for(let i=0;i<token.length;i++){hash^=token.charCodeAt(i);hash=Math.imul(hash,16777619)}})});return `${dates.at(-1)||"none"}|${dates.length}|${Object.keys(h).length}|${rows}|${(hash>>>0).toString(36)}`};
  const load=()=>{try{const x=JSON.parse(localStorage.getItem(KEY)||"null");return x&&typeof x==="object"?x:null}catch{return null}};
  const save=x=>{try{localStorage.setItem(KEY,JSON.stringify(x))}catch(_){}};
  const confidence=n=>n<=0?{label:"Insufficient",score:0}:n>=300?{label:"Very High",score:100}:n>=100?{label:"High",score:82}:n>=30?{label:"Medium",score:62}:n>=10?{label:"Low",score:38}:{label:"Very Low",score:20};
  function clearScannerCaches(){window.AitEliteSignalPriority?.clearCache?.();window.AitAdvancedSignalPriority?.clearCache?.();window.AitSignalPriorityHistory?.clearCache?.()}
  function closeAt(code,date){const rows=(history()[code]||[]).filter(r=>String(r?.date||"").slice(0,10)<=date&&num(r?.close)!=null).sort((a,b)=>String(a.date).localeCompare(String(b.date)));return rows.length?num(rows.at(-1).close):null}
- function reconstruct(){
-  const dates=allDates(),sig=signature(),cached=load();if(cached?.signature===sig&&Array.isArray(cached.records))return cached;
-  const records=[],previous=window.__AIT_HISTORICAL_CUTOFF_DATE__,eligible=dates.slice(Math.min(MIN_LOOKBACK-1,dates.length));
-  try{eligible.forEach(date=>{window.__AIT_HISTORICAL_CUTOFF_DATE__=date;clearScannerCaches();const result=window.AitEliteSignalPriority?.calculate?.();(result?.rows||[]).forEach(r=>{const entryClose=closeAt(r.code,date);if(entryClose==null)return;records.push({date,code:String(r.code||"").toUpperCase(),rank:Number(r.rank)||0,signalRank:Number(r.signalRank)||0,signal:r.signal||"Avoid",finalSignal:r.finalSignal||"Avoid",calibratedPriority:r.calibratedPriority||"Watch",rankPercentile:Number(r.rankPercentile)||100,eliteScore:Number(r.eliteScore)||0,advancedScore:Number(r.advancedScore)||0,entryClose})})})}
-  finally{if(previous)window.__AIT_HISTORICAL_CUTOFF_DATE__=previous;else delete window.__AIT_HISTORICAL_CUTOFF_DATE__;clearScannerCaches()}
-  const data={version:7,signature:sig,builtAt:new Date().toISOString(),dates:eligible,records};save(data);return data;
+ function setBusyProgress(title,text){try{window.AITEliteBusy?.update?.({title,text})}catch(_){}}
+ const yieldBrowser=()=>new Promise(resolve=>setTimeout(resolve,0));
+ async function reconstructAsync(force=false){
+  const dates=allDates(),sig=signature(),cached=load(),eligible=dates.slice(Math.min(MIN_LOOKBACK-1,dates.length));
+  if(!force&&cached?.signature===sig&&Array.isArray(cached.records)&&Array.isArray(cached.dates))return cached;
+  let records=[],startIndex=0,mode="Full reconstruction";
+  if(!force&&cached&&Array.isArray(cached.records)&&Array.isArray(cached.dates)&&cached.dates.length){
+   const common=Math.min(cached.dates.length,eligible.length);
+   let prefix=0;while(prefix<common&&cached.dates[prefix]===eligible[prefix])prefix++;
+   if(prefix===cached.dates.length&&eligible.length>=cached.dates.length){
+    startIndex=Math.max(0,cached.dates.length-2);
+    const keepDates=new Set(eligible.slice(0,startIndex));
+    records=cached.records.filter(r=>keepDates.has(r.date));
+    mode=eligible.length>cached.dates.length?"Incremental reconstruction":"Tail refresh";
+   }
+  }
+  const pending=eligible.slice(startIndex),previous=window.__AIT_HISTORICAL_CUTOFF_DATE__;
+  try{
+   for(let i=0;i<pending.length;i++){
+    const date=pending[i];window.__AIT_HISTORICAL_CUTOFF_DATE__=date;clearScannerCaches();
+    const result=window.AitEliteSignalPriority?.calculate?.();
+    (result?.rows||[]).forEach(r=>{const entryClose=closeAt(r.code,date);if(entryClose==null)return;records.push({date,code:String(r.code||"").toUpperCase(),rank:Number(r.rank)||0,signalRank:Number(r.signalRank)||0,signal:r.signal||"Avoid",finalSignal:r.finalSignal||"Avoid",calibratedPriority:r.calibratedPriority||"Watch",rankPercentile:Number(r.rankPercentile)||100,eliteScore:Number(r.eliteScore)||0,advancedScore:Number(r.advancedScore)||0,entryClose})});
+    setBusyProgress(`${mode} • ${i+1}/${pending.length||1} dates`,`Reconstructing ${date}. Cached history is being reused wherever possible.`);
+    await yieldBrowser();
+   }
+  }finally{if(previous)window.__AIT_HISTORICAL_CUTOFF_DATE__=previous;else delete window.__AIT_HISTORICAL_CUTOFF_DATE__;clearScannerCaches()}
+  const data={version:9,signature:sig,builtAt:new Date().toISOString(),dates:eligible,records};save(data);return data;
  }
  function evaluateRaw(r){const data=(history()[r.code]||[]).filter(x=>x?.date&&num(x.close)!=null).sort((a,b)=>String(a.date).localeCompare(String(b.date)));const idx=data.findIndex(x=>String(x.date).slice(0,10)===r.date);if(idx<0||!r.entryClose)return {...r,returns:{},mfe:null,mae:null};const base=Number(r.entryClose),returns={};H.forEach(h=>{const x=data[idx+h];returns[h]=x?((Number(x.close)/base)-1)*100:null});const future=data.slice(idx+1,Math.min(data.length,idx+21));return {...r,returns,mfe:future.length?Math.max(...future.map(x=>((Number(x.high??x.close)/base)-1)*100)):null,mae:future.length?Math.min(...future.map(x=>((Number(x.low??x.close)/base)-1)*100)):null}}
  function attachBenchmark(rows){const byDate=new Map();rows.forEach(r=>{if(!byDate.has(r.date))byDate.set(r.date,[]);byDate.get(r.date).push(r)});return rows.map(r=>{const peers=byDate.get(r.date)||[],benchmark={},excess={};H.forEach(h=>{const vals=peers.map(x=>x.returns?.[h]).filter(v=>v!=null&&Number.isFinite(v));benchmark[h]=mean(vals);excess[h]=r.returns?.[h]!=null&&benchmark[h]!=null?r.returns[h]-benchmark[h]:null});return {...r,benchmark,excess}})}
@@ -10743,9 +10867,24 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   return {overall,windows};
  }
- function evaluated(){const built=reconstruct(),raw=(built.records||[]).map(evaluateRaw);return {built,all:attachBenchmark(raw)}}
- function render(){
-  const status=document.getElementById("aitElitePerformanceAutoStatus");if(status)status.textContent="Analyzing OHLC…";const {built,all}=evaluated();
+ async function evaluateRecordsAsync(records){
+  const out=[],chunk=220,total=records.length;
+  for(let i=0;i<total;i+=chunk){
+   const part=records.slice(i,i+chunk);for(const r of part)out.push(evaluateRaw(r));
+   setBusyProgress(`Evaluating forward performance • ${Math.min(i+chunk,total)}/${total}`,`Calculating returns, MFE and MAE while keeping the browser responsive.`);
+   await yieldBrowser();
+  }
+  return out;
+ }
+ async function evaluatedAsync(force=false){
+  const built=await reconstructAsync(force);
+  const raw=await evaluateRecordsAsync(built.records||[]);
+  setBusyProgress("Building benchmark & validation","Calculating excess returns, percentile ranking and rolling calibration health.");
+  await yieldBrowser();
+  return {built,all:attachBenchmark(raw)};
+ }
+ async function render(force=false){
+  const status=document.getElementById("aitElitePerformanceAutoStatus");if(status)status.textContent="Analyzing OHLC…";const {built,all}=await evaluatedAsync(force);
   document.getElementById("aitElitePerfSnapshots")?.replaceChildren(document.createTextNode(String((built.dates||[]).length)));
   document.getElementById("aitElitePerfSignals")?.replaceChildren(document.createTextNode(String(all.filter(r=>Object.values(r.excess||{}).some(v=>v!=null)).length)));
   const sb9=stats(all.filter(r=>(r.finalSignal||"Avoid")==="Strong Buy"),9),global=globalValidation(all),rankQuality=rankingQuality(all),health=calibrationHealth(all);
@@ -10754,7 +10893,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById("aitElitePerfRankingQuality")?.replaceChildren(document.createTextNode(rankQuality.score==null?"N/A":`${rankQuality.score.toFixed(1)} • ${rankQuality.label}`));
   document.getElementById("aitElitePerfCalibrationHealth")?.replaceChildren(document.createTextNode(health.overall));
   try{localStorage.setItem("ait-psa-elite-model-state-v1",JSON.stringify({overall:health.overall,updatedAt:new Date().toISOString(),dates:(built.dates||[]).length,signature:signature()}))}catch{}
-  if(status)status.textContent=`On-demand v3.1 • ${(built.dates||[]).length} dates • ${health.overall}`;
+  if(status)status.textContent=`On-demand v3.2 async • ${(built.dates||[]).length} dates • ${health.overall}`;
   const rollingBody=document.getElementById("aitElitePerformanceRollingRows");if(rollingBody){rollingBody.innerHTML=health.windows.map(w=>`<tr><td><strong>${w.label}</strong></td><td>${w.dates}</td><td>${w.samples}</td><td>${pct(w.sb.excessAvg)}</td><td>${pct(w.buy.excessAvg)}</td><td>${pct(w.watch.excessAvg)}</td><td>${pct(w.avoid.excessAvg)}</td><td>${pct(w.spread20)}</td><td>${w.rq.score==null?"N/A":w.rq.score.toFixed(1)+" • "+w.rq.label}</td><td>${w.ordering.label}</td><td><strong>${w.health}</strong></td></tr>`).join("")}
   const tbody=document.getElementById("aitElitePerformanceRows");
   if(tbody){if(!all.length)tbody.innerHTML=`<tr><td colspan="15">No eligible Elite history could be reconstructed. At least ${MIN_LOOKBACK} downloaded trading dates are required.</td></tr>`;else tbody.innerHTML=ORDER.map(sig=>{const rows=all.filter(r=>r.signal===sig),v=validation(rows),s3=stats(rows,3),s6=stats(rows,6),s9=stats(rows,9),s15=stats(rows,15),s20=stats(rows,20),mfe=mean(rows.map(r=>r.mfe).filter(x=>x!=null)),mae=mean(rows.map(r=>r.mae).filter(x=>x!=null));return `<tr><td><strong>${sig}</strong></td><td>${v.n}</td><td>${v.confidence.label}</td><td>${pct(s3.rawAvg)}</td><td>${pct(s3.excessAvg)}</td><td>${pct(s6.rawAvg)}</td><td>${pct(s6.excessAvg)}</td><td>${pct(s9.rawAvg)}</td><td>${pct(s9.excessAvg)}</td><td>${s9.excessWin==null?"—":s9.excessWin.toFixed(1)+"%"}</td><td>${pct(s15.excessAvg)}</td><td>${pct(s20.excessAvg)}</td><td>${pct(mfe)}</td><td>${pct(mae)}</td><td><strong>${v.score==null?"N/A":v.score.toFixed(1)}</strong></td></tr>`}).join("")}
@@ -10764,16 +10903,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const horizonBody=document.getElementById("aitElitePerformanceHorizonRows");if(horizonBody){horizonBody.innerHTML=H.map(h=>{const st=stats(all,h);return `<tr><td><strong>${h}D</strong></td><td>${st.n}</td><td>${pct(st.rawAvg)}</td><td>${pct(st.benchAvg)}</td><td>${pct(st.excessAvg)}</td><td>${st.excessWin==null?"—":st.excessWin.toFixed(1)+"%"}</td></tr>`}).join("")}
   return all;
  }
- let lastObservedSignature="";
- function runOnDemand(){
-  try{lastObservedSignature=signature();return render()}catch(_){return []}
+ let lastObservedSignature="",activeRun=null;
+ async function runOnDemand(force=false){
+  if(activeRun&&!force)return activeRun;
+  activeRun=(async()=>{try{lastObservedSignature=signature();return await render(force)}catch(e){console.error("AIT Elite performance:",e);return []}finally{activeRun=null}})();
+  return activeRun;
  }
  document.querySelectorAll('[data-ait-psa-open="aitElitePerformanceModal"]').forEach(button=>{
-  button.addEventListener("click",()=>setTimeout(runOnDemand,0));
+  button.addEventListener("click",()=>window.AITEliteBusy?.execute?.({kicker:"AIT ELITE PERFORMANCE",title:"Reconstructing performance history",text:"Replaying downloaded OHLC, evaluating rolling windows and measuring calibration health…"},()=>runOnDemand()));
  });
  const storedModelSignature=()=>{try{const v=JSON.parse(localStorage.getItem("ait-psa-elite-model-state-v1")||"null");return v&&typeof v==="object"?String(v.signature||""):""}catch{return ""}};
- function ensureCurrent(){const current=signature();if(!current||current.startsWith("none|"))return false;if(storedModelSignature()!==current){runOnDemand();return true}return false}
- window.AitElitePerformance={rebuild:()=>{try{localStorage.removeItem(KEY)}catch(_){}lastObservedSignature="";return runOnDemand()},evaluate:()=>evaluated().all,render:runOnDemand,ensureCurrent,currentSignature:signature,storageKey:KEY};
+ async function ensureCurrent(){const current=signature();if(!current||current.startsWith("none|"))return false;if(storedModelSignature()!==current){await runOnDemand(false);return true}return false}
+ window.AitElitePerformance={rebuild:()=>{try{localStorage.removeItem(KEY)}catch(_){}lastObservedSignature="";return runOnDemand(true)},evaluate:async()=>{const x=await evaluatedAsync(false);return x.all},render:runOnDemand,ensureCurrent,currentSignature:signature,storageKey:KEY};
 })();
 </script>
 <script>
@@ -10787,5 +10928,15 @@ document.addEventListener('DOMContentLoaded', () => {
  document.getElementById("aitPsaOpenFundamentalsReport")?.addEventListener("click",open);document.getElementById("aitFundamentalsReportClose")?.addEventListener("click",close);document.getElementById("aitFundamentalsReportClear")?.addEventListener("click",()=>{if(search)search.value="";render();search?.focus()});search?.addEventListener("input",render);modal?.addEventListener("click",e=>{if(e.target===modal)close()});document.addEventListener("keydown",e=>{if(e.key==="Escape"&&modal?.classList.contains("open"))close()});window.AITRefreshFundamentalsReport=render;
 })();
 </script>
+
+<div class="ait-elite-calc-layer" id="aitEliteCalculationLayer" aria-hidden="true" aria-live="polite">
+ <div class="ait-elite-calc-card" role="status">
+  <div class="ait-elite-calc-orbit"><div class="ait-elite-calc-core">AIT</div></div>
+  <div class="ait-elite-calc-kicker" id="aitEliteCalculationKicker">AIT ELITE ENGINE</div>
+  <h3 class="ait-elite-calc-title" id="aitEliteCalculationTitle">Calculating Elite signals</h3>
+  <p class="ait-elite-calc-text" id="aitEliteCalculationText">Analyzing ranking, confirmation, risk and decision evidence…</p>
+  <div class="ait-elite-calc-track"><div class="ait-elite-calc-bar"></div></div>
+ </div>
+</div>
 </body>
 </html>
