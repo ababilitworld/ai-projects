@@ -4493,40 +4493,13 @@ svg[data-chart] {
 @media(max-width:640px){.ait-psa-instant-time-fields>div:nth-child(2){grid-template-columns:1fr!important}}
 </style>
 
-<style id="ait-elite-grid-layout-v10088">
-#aitElitePriorityModal .ait-elite-summary-grid,
-#aitEliteDecisionDetailModal .ait-elite-detail-summary,
-#aitEliteDecisionDetailModal .ait-elite-detail-grid{
-  width:min(100%,1120px);
-  margin-inline:auto;
-}
-#aitElitePriorityModal .ait-elite-summary-grid .v11-potential-guideline-grid,
-#aitEliteDecisionDetailModal .v11-potential-guideline-grid{
-  display:grid;
-  grid-template-columns:repeat(4,minmax(0,1fr));
-  gap:12px;
-}
-#aitEliteDecisionDetailModal .ait-elite-detail-card{
-  width:min(100%,1160px);
-  margin-inline:auto;
-}
-#aitEliteDecisionDetailModal .v11-potential-guide,
-#aitElitePriorityModal .ait-elite-summary-grid .v11-potential-guide{
-  min-width:0;
-  height:100%;
-}
-@media (max-width:1100px){
-  #aitElitePriorityModal .ait-elite-summary-grid .v11-potential-guideline-grid,
-  #aitEliteDecisionDetailModal .v11-potential-guideline-grid{
-    grid-template-columns:repeat(2,minmax(0,1fr));
-  }
-}
-@media (max-width:640px){
-  #aitElitePriorityModal .ait-elite-summary-grid .v11-potential-guideline-grid,
-  #aitEliteDecisionDetailModal .v11-potential-guideline-grid{
-    grid-template-columns:1fr;
-  }
-}
+<style id="ait-elite-fundamental-card-layout-v10089">
+#aitElitePriorityModal .ait-elite-summary-block,
+#aitEliteDecisionDetailModal .ait-elite-detail-card{width:min(100%,1160px);margin-inline:auto}
+#aitElitePriorityModal .ait-elite-summary-block .ait-fundamental-strip,
+#aitEliteDecisionDetailModal .ait-fundamental-strip{margin-top:0;margin-bottom:12px}
+#aitEliteDecisionDetailModal .ait-elite-detail-card{background:transparent;border:0;box-shadow:none}
+#aitEliteDecisionDetailModal .ait-fundamental-item b{white-space:normal;overflow:visible;text-overflow:clip;line-height:1.35}
 </style>
 </head>
 <body>
@@ -5037,7 +5010,7 @@ svg[data-chart] {
  <button class="btn primary" id="downloadFundamentals">Download DSE Fundamentals</button><button class="btn primary" id="amarstockFundamentals" hidden>Download AmarStock Fundamentals</button>
  <button class="btn primary" id="instantDseUpdate">Instant Hybrid OHLC Download</button>
  <button class="btn primary" id="dse3mUpdate">Download DSE 3M</button>
- <button class="btn primary" id="dse6mUpdate">Download DSE 6M</button>
+ <button class="btn primary" id="dse6mUpdate">Download DSE 6M</button><button class="btn soft" id="incrementalOhlcDownload" type="button" hidden>Incremental OHLC Download</button><button class="btn soft" id="forceFullOhlc3M" type="button" hidden>Force Full OHLC 3M</button><button class="btn soft" id="forceFullOhlcDownload" type="button" hidden>Force Full OHLC 6M</button><button class="btn soft" id="forceFullOhlc1Y" type="button" hidden>Force Full OHLC 1Y</button>
  <button class="btn primary" id="viewListCharts">View Saved 3M Charts</button>
  <button class="btn primary" id="viewListCharts6">View Saved 6M Charts</button>
  <button class="btn soft" id="viewDownloadedData">View Downloaded Data</button>
@@ -5369,7 +5342,7 @@ class CandleChart{
 }
 class App{
  constructor(){this.store=new Store();this.s=this.store.load();this.editId=null;this.pending={};this.pendingMother=[];this.pendingMotherSource="";this.currentCode=null;this.searchTerm=""}
- init(){["lastArchive","sMother","sLists","sHistory","sRecords","lists","activity","newList","clearActivity","search","motherImport","quickMotherSync","saveStatus","motherModal","motherSourceSelect","motherUrl","autoMotherSync","openMotherSource","fetchMother","motherFiles","parseMotherFiles","motherPaste","parseMotherPaste","motherResult","motherCommitArea","mergeMother","replaceMother","archiveImport","downloadFundamentals","amarstockFundamentals","instantDseUpdate","dse3mUpdate","dse3mUpdate2","dse6mUpdate","dse6mUpdate2","viewListCharts","viewListCharts2","viewListCharts6","viewListCharts6_2","downloadStatusCard","downloadStatusTitle","downloadStatusPercent","downloadStatusBar","downloadStatusText","hideDownloadStatus","viewDownloadedData","emptyDownloadedData","exportBtn","importBtn","dashboardFile","mother","motherMeta","watch","watchTitle","watchMeta","watchCodeSearch","clearWatchCodeSearch","watchCodeSearchStatus","listModal","listModalTitle","listForm","listName","archiveModal","dseStartDate","dseEndDate","fetchDseRange","downloadDseCsv","ohlcFiles","parseFiles","pasteOhlc","parsePaste","archiveUrl","urlCode","fetchUrl","parseResult","commitArea","mergeHistory","replaceHistory","chartModal","chartTitle","chartSubtitle","chartRange","downloadChart","chartCanvas","chartInfo","galleryModal","galleryTitle","gallery","dataModal","dataSummary","dataTable","downloadConfirmModal","downloadConfirmTitle","downloadConfirmMessage","downloadConfirmDetails","instantTradingWindowFields","instantTradingStartTime","instantTradingEndTime","instantTradingWindowHint","downloadConfirmClose","downloadConfirmCancel","downloadConfirmProceed","operationResultModal","operationResultTitle","operationResultSubtitle","operationResultIcon","operationResultMessage","operationResultDetails","operationResultClose","operationResultSecondary","operationResultPrimary","toasts"].forEach(id=>this[id]=document.getElementById(id));this.bind();
+ init(){["lastArchive","sMother","sLists","sHistory","sRecords","lists","activity","newList","clearActivity","search","motherImport","quickMotherSync","saveStatus","motherModal","motherSourceSelect","motherUrl","autoMotherSync","openMotherSource","fetchMother","motherFiles","parseMotherFiles","motherPaste","parseMotherPaste","motherResult","motherCommitArea","mergeMother","replaceMother","archiveImport","downloadFundamentals","amarstockFundamentals","instantDseUpdate","dse3mUpdate","dse3mUpdate2","dse6mUpdate","dse6mUpdate2","incrementalOhlcDownload","forceFullOhlc3M","forceFullOhlcDownload","forceFullOhlc1Y","viewListCharts","viewListCharts2","viewListCharts6","viewListCharts6_2","downloadStatusCard","downloadStatusTitle","downloadStatusPercent","downloadStatusBar","downloadStatusText","hideDownloadStatus","viewDownloadedData","emptyDownloadedData","exportBtn","importBtn","dashboardFile","mother","motherMeta","watch","watchTitle","watchMeta","watchCodeSearch","clearWatchCodeSearch","watchCodeSearchStatus","listModal","listModalTitle","listForm","listName","archiveModal","dseStartDate","dseEndDate","fetchDseRange","downloadDseCsv","ohlcFiles","parseFiles","pasteOhlc","parsePaste","archiveUrl","urlCode","fetchUrl","parseResult","commitArea","mergeHistory","replaceHistory","chartModal","chartTitle","chartSubtitle","chartRange","downloadChart","chartCanvas","chartInfo","galleryModal","galleryTitle","gallery","dataModal","dataSummary","dataTable","downloadConfirmModal","downloadConfirmTitle","downloadConfirmMessage","downloadConfirmDetails","instantTradingWindowFields","instantTradingStartTime","instantTradingEndTime","instantTradingWindowHint","downloadConfirmClose","downloadConfirmCancel","downloadConfirmProceed","operationResultModal","operationResultTitle","operationResultSubtitle","operationResultIcon","operationResultMessage","operationResultDetails","operationResultClose","operationResultSecondary","operationResultPrimary","toasts"].forEach(id=>this[id]=document.getElementById(id));this.bind();
  this.searchTerm="";
  if(this.search)this.search.value="";
  if(this.watchCodeSearch)this.watchCodeSearch.value="";
@@ -5414,12 +5387,37 @@ this.instantDseUpdate.onclick=async()=>{
  this.fetchInstantDse(windowSelection);
 };
 this.dse3mUpdate.onclick=this.dse3mUpdate2.onclick=async()=>{
- const a=this.active();
- if(await this.confirmDownload("Download DSE 3M",`Download three months of DSE history for ${a?.name||"the active watch list"}?`,`${a?.codes?.length||0} trading codes will be requested. Progress will appear in Download Status.`))this.downloadActiveWatchlistMonths(3);
+ const a=this.active(),plan=this.planIncrementalOhlcRange(3,false);
+ const mode=plan.incremental?"Incremental sync":"Initial 3M download";
+ const details=plan.incremental
+  ?`Latest stored date: ${plan.latest}. Only ${plan.start} to ${plan.end} will be requested. The overlapping latest date is intentionally re-downloaded, then replaced/deduplicated by Trading Code + Date.`
+  :`${a?.codes?.length||0} trading codes will be requested from ${plan.start} to ${plan.end}. Progress will appear in Download Status.`;
+ if(await this.confirmDownload("Sync DSE 3M",`${mode} for ${a?.name||"the active watch list"}?`,details))this.downloadActiveWatchlistMonths(3,false);
 };
 this.dse6mUpdate.onclick=this.dse6mUpdate2.onclick=async()=>{
- const a=this.active();
- if(await this.confirmDownload("Download DSE 6M",`Download six months of DSE history for ${a?.name||"the active watch list"}?`,`${a?.codes?.length||0} trading codes will be requested. Progress will appear in Download Status.`))this.downloadActiveWatchlistMonths(6);
+ const a=this.active(),plan=this.planIncrementalOhlcRange(6,false);
+ const mode=plan.incremental?"Incremental sync":"Initial 6M download";
+ const details=plan.incremental
+  ?`Latest stored date: ${plan.latest}. Only ${plan.start} to ${plan.end} will be requested. Existing historical data is preserved; the overlapping latest date is replaced and duplicates are removed.`
+  :`${a?.codes?.length||0} trading codes will be requested from ${plan.start} to ${plan.end}. Progress will appear in Download Status.`;
+ if(await this.confirmDownload("Sync DSE 6M",`${mode} for ${a?.name||"the active watch list"}?`,details))this.downloadActiveWatchlistMonths(6,false);
+};
+this.incrementalOhlcDownload.onclick=async()=>{
+ const a=this.active(),plan=this.planStrictIncrementalOhlcRange();
+ if(!plan.latest)return this.toast("No stored OHLC exists for this watch list. Use OHLC → Force for the initial download.",true);
+ if(await this.confirmDownload("Incremental OHLC Sync",`Download only the latest missing/recent OHLC range for ${a?.name||"the active watch list"}?`,`Latest stored date: ${plan.latest}. Requested range: ${plan.start} to ${plan.end}. The overlapping latest date will be re-downloaded, replaced, and deduplicated by Trading Code + Date.`))this.downloadIncrementalOhlc();
+};
+this.forceFullOhlc3M.onclick=async()=>{
+ const a=this.active(),plan=this.planIncrementalOhlcRange(3,true);
+ if(await this.confirmDownload("Force Full DSE 3M Download",`Re-download the complete three-month OHLC range for ${a?.name||"the active watch list"}?`,`Force mode: ${plan.start} to ${plan.end}. Existing rows outside the downloaded range remain preserved; overlapping Trading Code + Date rows are replaced.`))this.downloadActiveWatchlistMonths(3,true);
+};
+this.forceFullOhlcDownload.onclick=async()=>{
+ const a=this.active(),plan=this.planIncrementalOhlcRange(6,true);
+ if(await this.confirmDownload("Force Full DSE 6M Download",`Re-download the complete six-month OHLC range for ${a?.name||"the active watch list"}?`,`Force mode: ${plan.start} to ${plan.end}. Existing rows outside the downloaded range remain preserved; overlapping Trading Code + Date rows are replaced.`))this.downloadActiveWatchlistMonths(6,true);
+};
+this.forceFullOhlc1Y.onclick=async()=>{
+ const a=this.active(),plan=this.planIncrementalOhlcRange(12,true);
+ if(await this.confirmDownload("Force Full DSE 1Y Download",`Re-download the complete one-year OHLC range for ${a?.name||"the active watch list"}?`,`Force mode: ${plan.start} to ${plan.end}. Existing rows outside the downloaded range remain preserved; overlapping Trading Code + Date rows are replaced.`))this.downloadActiveWatchlistMonths(12,true);
 };
 this.fetchDseRange.onclick=async()=>{
  if(!this.dseStartDate.value||!this.dseEndDate.value)return this.toast("Select dates first.",true);
@@ -5910,20 +5908,55 @@ document.querySelectorAll("[data-mother-tab]").forEach(b=>b.onclick=()=>this.mot
    return false
   }
  }
- async downloadActiveWatchlistMonths(months=3){
+ latestStoredOhlcDate(codes=[]){
+  let latest="";
+  for(const rawCode of (codes||[])){
+   const code=String(rawCode||"").trim().toUpperCase();
+   for(const row of (this.s.history?.[code]||[])){
+    const date=String(row?.date||"").slice(0,10);
+    if(/^\d{4}-\d{2}-\d{2}$/.test(date)&&date>latest)latest=date;
+   }
+  }
+  return latest;
+ }
+ planIncrementalOhlcRange(months=3,forceFull=false){
+  const a=this.active(),requested=Number(months),period=[3,6,12].includes(requested)?requested:3;
+  const endDate=new Date(),fullStart=new Date(endDate);fullStart.setMonth(fullStart.getMonth()-period);
+  const iso=d=>d.toISOString().slice(0,10),end=iso(endDate),latest=this.latestStoredOhlcDate(a?.codes||[]);
+  const incremental=!forceFull&&!!latest;
+  const start=incremental?(latest>end?end:latest):iso(fullStart);
+  return {period,start,end,latest,incremental,forceFull};
+ }
+ planStrictIncrementalOhlcRange(){
+  const a=this.active(),end=new Date().toISOString().slice(0,10),latest=this.latestStoredOhlcDate(a?.codes||[]);
+  return {start:latest?(latest>end?end:latest):"",end,latest,incremental:!!latest};
+ }
+ async downloadActiveWatchlistMonths(months=3,forceFull=false){
   const a=this.active();
   if(!a.codes.length)return this.toast("The active watch list is empty.",true);
-  const period=Number(months)===6?6:3;
-  const end=new Date(),start=new Date(end);
-  start.setMonth(start.getMonth()-period);
-  const iso=d=>d.toISOString().slice(0,10);
-  this.dseStartDate.value=iso(start);
-  this.dseEndDate.value=iso(end);
-  this.showDownloadStatus(`Preparing DSE ${period}M download`,`Active watch list: ${a.name} • ${a.codes.length} codes`,2);
-  return await this.fetchDseArchive(iso(start),iso(end),true,false)
+  const plan=this.planIncrementalOhlcRange(months,forceFull);
+  this.dseStartDate.value=plan.start;
+  this.dseEndDate.value=plan.end;
+  const label=plan.incremental?"incremental sync":`full ${plan.period}M download`;
+  this.showDownloadStatus(`Preparing DSE ${label}`,`Active watch list: ${a.name} • ${a.codes.length} codes • ${plan.start} to ${plan.end}`,2);
+  const ok=await this.fetchDseArchive(plan.start,plan.end,true,false);
+  if(ok){
+   this.log(`${plan.incremental?"Incremental":"Full"} OHLC sync ${plan.start} to ${plan.end}; duplicate Trading Code + Date rows replaced`);
+  }
+  return ok;
  }
- async downloadActiveWatchlist3M(){return this.downloadActiveWatchlistMonths(3)}
- async downloadActiveWatchlist6M(){return this.downloadActiveWatchlistMonths(6)}
+ async downloadActiveWatchlist3M(){return this.downloadActiveWatchlistMonths(3,false)}
+ async downloadActiveWatchlist6M(){return this.downloadActiveWatchlistMonths(6,false)}
+ async downloadIncrementalOhlc(){
+  const a=this.active();if(!a.codes.length)return this.toast("The active watch list is empty.",true);
+  const plan=this.planStrictIncrementalOhlcRange();
+  if(!plan.latest){this.toast("No stored OHLC date was found. Use OHLC → Force for the initial 3M, 6M, 1Y or Range download.",true);return false}
+  this.dseStartDate.value=plan.start;this.dseEndDate.value=plan.end;
+  this.showDownloadStatus("Preparing incremental OHLC sync",`Active watch list: ${a.name} • ${a.codes.length} codes • ${plan.start} to ${plan.end}`,2);
+  const ok=await this.fetchDseArchive(plan.start,plan.end,true,false);
+  if(ok)this.log(`Incremental OHLC sync ${plan.start} to ${plan.end}; overlapping Trading Code + Date rows replaced and duplicates removed`);
+  return ok;
+ }
  async readFiles(){const files=[...this.ohlcFiles.files];if(!files.length)return this.toast("Select archive files.",true);let all={};for(const f of files){const code=Parser.cleanCode(f.name.replace(/\.[^.]+$/,""));const parsed=Parser.parse(await f.text(),files.length>1?code:"");Object.entries(parsed).forEach(([c,r])=>(all[c]??=[]).push(...r))}this.prepare(all,files.map(f=>f.name).join(", "))}
  async fetchArchive(){const url=this.archiveUrl.value.trim();if(!url)return this.toast("Enter an archive URL.",true);try{const r=await fetch(url);if(!r.ok)throw Error();this.prepare(Parser.parse(await r.text(),Parser.cleanCode(this.urlCode.value)),url)}catch(e){this.toast("Archive download was blocked. Download the file manually and import it.",true)}}
  prepare(data,source){Object.keys(data).forEach(c=>{const m=new Map(data[c].map(x=>[x.date,x]));data[c]=[...m.values()].sort((a,b)=>a.date.localeCompare(b.date))});this.pending=data;const sy=Object.keys(data).length,rc=Object.values(data).reduce((n,a)=>n+a.length,0);this.parseResult.style.display="block";this.parseResult.textContent=sy?`Parsed ${rc.toLocaleString()} OHLC records for ${sy} trading codes from ${source}.`:"No valid OHLC rows detected.";this.commitArea.style.display=sy?"flex":"none"}
@@ -9593,10 +9626,11 @@ document.addEventListener("keydown",event=>{
  <section class="ait-fund-report-modal" id="aitFundamentalsReportModal" aria-hidden="true"><div class="ait-fund-report-panel"><header class="ait-fund-report-head"><div><small>DATA CENTER REPORT</small><h2>Downloaded Fundamentals</h2><p id="aitFundamentalsReportMeta">Merged DSE and AmarStock fundamental data for the active watch list.</p></div><button class="btn soft" type="button" id="aitFundamentalsReportClose">Close</button></header><div class="ait-fund-report-body"><div class="ait-fund-report-search"><span>⌕</span><input id="aitFundamentalsReportSearch" type="search" placeholder="Search trading code, company, category, sector or business segment"><button class="btn soft" type="button" id="aitFundamentalsReportClear">Clear</button><span id="aitFundamentalsReportCount">0 shown</span></div><div class="ait-fund-report-table-wrap"><table class="ait-fund-report-table"><thead><tr><th>Code</th><th>Company</th><th>Cat</th><th>Business Segment</th><th>Year End</th><th>Last AGM</th><th>P/E</th><th>EPS</th><th>Price/NAV</th><th>Free Float</th><th>Beta</th><th>Dividend Yield</th><th>Status</th><th>Downloaded</th></tr></thead><tbody id="aitFundamentalsReportBody"></tbody></table></div></div></div></section>
 <section class="ait-psa-terminal-modal" id="aitPsaWorkspaceModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">TERMINAL GROUP</span><h2>▦ Workspace</h2><p>Open a full-width workspace terminal.</p></div><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" id="aitPsaOpenDownload" data-ait-psa-open="aitPsaDataCenterLauncherModal" type="button"><span>⇩</span><b>Data Center</b><small>Download, sync, import, backup and reporting operations.</small></button><button class="ait-psa-terminal-command" id="aitPsaOpenWatchlist" data-ait-psa-open="aitPsaWatchlistModal" type="button"><span>★</span><b>Watch List</b><small>Manage watch lists and DSE trading codes.</small></button><button class="ait-psa-terminal-command" id="aitPsaOpenTrading" data-ait-psa-open="aitPsaTradingModal" type="button"><span>▥</span><b>Trading</b><small>Open the complete trading workspace.</small></button></div></div></section>
  <section class="ait-psa-terminal-modal" id="aitPsaDataCenterLauncherModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">DATA WORKSPACE</span><h2>⇩ Data Center</h2><p>Choose a data operation category.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaWorkspaceModal" type="button">← Workspace</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaDownloadMenuModal" type="button"><span>⇩</span><b>Download</b><small>Download DSE history and custom archive ranges.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaSyncMenuModal" type="button"><span>↻</span><b>Sync</b><small>Synchronize the latest available market-code directory.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaImportMenuModal" type="button"><span>⇧</span><b>Import</b><small>Import codes, OHLC archives and dashboard backups.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaBackupMenuModal" type="button"><span>◆</span><b>Backup</b><small>Export a portable terminal data backup.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaDataReportMenuModal" type="button"><span>▥</span><b>Report</b><small>Review saved charts, downloaded records and job status.</small></button><button class="ait-psa-terminal-command ait-psa-terminal-command--danger" data-ait-data-action="emptyDownloadedData" data-ait-data-group="empty" type="button"><span>⌫</span><b>Empty Downloaded Data</b><small>Remove all locally stored OHLC records while preserving watch lists, portfolio and settings.</small></button></div></div></section>
- <section class="ait-psa-terminal-modal" id="aitPsaDownloadMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">DATA CENTER CATEGORY</span><h2>⇩ Download</h2><p>Select a download data group.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaDataCenterLauncherModal" type="button">← Data Center</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaFundamentalsDownloadMenuModal" type="button"><span>FN</span><b>Fundamentals</b><small>Download fundamental data from DSE or AmarStock.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaOhlcDownloadMenuModal" type="button"><span>OHLC</span><b>OHLC</b><small>Instant, 3M, 6M and custom archive-range market data.</small></button></div></div></section>
+ <section class="ait-psa-terminal-modal" id="aitPsaDownloadMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">DATA CENTER CATEGORY</span><h2>⇩ Download</h2><p>Select a download data group.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaDataCenterLauncherModal" type="button">← Data Center</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaFundamentalsDownloadMenuModal" type="button"><span>FN</span><b>Fundamentals</b><small>Download fundamental data from DSE or AmarStock.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaOhlcDownloadMenuModal" type="button"><span>OHLC</span><b>OHLC</b><small>Instant, incremental and force-range market data.</small></button></div></div></section>
 <section class="ait-psa-terminal-modal" id="aitPsaFundamentalsDownloadMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">DOWNLOAD GROUP</span><h2>FN Fundamentals</h2><p>Select the fundamentals source.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaDownloadMenuModal" type="button">← Download</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" data-ait-data-action="downloadFundamentals" data-ait-data-group="fundamentals" type="button"><span>DSE</span><b>DSE</b><small>Download Category, Business Segment, Year End and Last AGM for the current watch list.</small></button><button class="ait-psa-terminal-command" data-ait-data-action="amarstockFundamentals" data-ait-data-group="fundamentals" type="button"><span>AS</span><b>AmarStock</b><small>Download P/E Ratio, EPS, Price/NAV, Free Float, Beta and Dividend Yield.</small></button></div></div></section>
-<section class="ait-psa-terminal-modal" id="aitPsaOhlcDownloadMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">DOWNLOAD GROUP</span><h2>OHLC</h2><p>Select an OHLC download mode.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaDownloadMenuModal" type="button">← Download</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" data-ait-data-action="instantDseUpdate" data-ait-data-group="ohlc" type="button"><span>LIVE</span><b>Instant</b><small>Download today’s provisional OHLC snapshot using the existing instant workflow.</small></button><button class="ait-psa-terminal-command" data-ait-data-action="dse3mUpdate" data-ait-data-group="ohlc" type="button"><span>3M</span><b>3M</b><small>Download three months of DSE OHLC history.</small></button><button class="ait-psa-terminal-command" data-ait-data-action="dse6mUpdate" data-ait-data-group="ohlc" type="button"><span>6M</span><b>6M</b><small>Download six months of DSE OHLC history.</small></button><button class="ait-psa-terminal-command" data-ait-data-action="archiveImport" data-ait-data-group="ohlc" type="button"><span>↧</span><b>Custom Archive Range</b><small>Choose a custom start and end date for DSE archive data.</small></button></div></div></section>
- <section class="ait-psa-terminal-modal" id="aitPsaSyncMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">DATA CENTER CATEGORY</span><h2>↻ Sync</h2><p>Select a synchronization operation.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaDataCenterLauncherModal" type="button">← Data Center</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" data-ait-data-action="quickMotherSync" data-ait-data-group="sync" type="button"><span>↻</span><b>Sync DSE Codes</b><small>Refresh the latest available DSE trading-code list.</small></button></div></div></section>
+<section class="ait-psa-terminal-modal" id="aitPsaOhlcDownloadMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">DOWNLOAD GROUP</span><h2>OHLC</h2><p>Instant • Incremental • Force</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaDownloadMenuModal" type="button">← Download</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" data-ait-data-action="instantDseUpdate" data-ait-data-group="ohlc" type="button"><span>LIVE</span><b>Instant</b><small>Download today’s provisional OHLC snapshot during the configured trading window.</small></button><button class="ait-psa-terminal-command" data-ait-data-action="incrementalOhlcDownload" data-ait-data-group="ohlc" type="button"><span>↻</span><b>Incremental</b><small>Normal daily update: latest stored OHLC date → today, with overlap replacement and deduplication.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaOhlcForceMenuModal" type="button"><span>⇩</span><b>Force</b><small>Bootstrap or repair a complete 3M, 6M, 1Y or custom historical range.</small></button></div></div></section>
+<section class="ait-psa-terminal-modal" id="aitPsaOhlcForceMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">OHLC FORCE DOWNLOAD</span><h2>⇩ Force</h2><p>Choose a complete archive range.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaOhlcDownloadMenuModal" type="button">← OHLC</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" data-ait-data-action="forceFullOhlc3M" data-ait-data-group="ohlcforce" type="button"><span>3M</span><b>3M</b><small>Force-download the full previous three months.</small></button><button class="ait-psa-terminal-command" data-ait-data-action="forceFullOhlcDownload" data-ait-data-group="ohlcforce" type="button"><span>6M</span><b>6M</b><small>Force-download the full previous six months.</small></button><button class="ait-psa-terminal-command" data-ait-data-action="forceFullOhlc1Y" data-ait-data-group="ohlcforce" type="button"><span>1Y</span><b>1Y</b><small>Force-download the full previous one year.</small></button><button class="ait-psa-terminal-command" data-ait-data-action="archiveImport" data-ait-data-group="ohlcforce" type="button"><span>↧</span><b>Range</b><small>Open the archive workspace and choose an exact start and end date.</small></button></div></div></section>
+<section class="ait-psa-terminal-modal" id="aitPsaSyncMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">DATA CENTER CATEGORY</span><h2>↻ Sync</h2><p>Select a synchronization operation.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaDataCenterLauncherModal" type="button">← Data Center</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" data-ait-data-action="quickMotherSync" data-ait-data-group="sync" type="button"><span>↻</span><b>Sync DSE Codes</b><small>Refresh the latest available DSE trading-code list.</small></button></div></div></section>
  <section class="ait-psa-terminal-modal" id="aitPsaImportMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">DATA CENTER CATEGORY</span><h2>⇧ Import</h2><p>Select an import or restore operation.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaDataCenterLauncherModal" type="button">← Data Center</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" data-ait-data-action="motherImport" data-ait-data-group="import" type="button"><span>DSE</span><b>Import DSE Codes</b><small>Import or replace the complete trading-code directory.</small></button><button class="ait-psa-terminal-command" data-ait-data-action="archiveImport" data-ait-data-group="import" type="button"><span>OHLC</span><b>Import OHLC Archive</b><small>Load historical records from files, pasted data or URL.</small></button><button class="ait-psa-terminal-command" data-ait-data-action="importBtn" data-ait-data-group="import" type="button"><span>⇧</span><b>Restore Dashboard</b><small>Restore a complete or legacy dashboard backup, including portfolio data.</small></button></div></div></section>
  <section class="ait-psa-terminal-modal" id="aitPsaBackupMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">DATA CENTER CATEGORY</span><h2>◆ Backup</h2><p>Select a backup operation.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaDataCenterLauncherModal" type="button">← Data Center</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" data-ait-data-action="exportBtn" data-ait-data-group="backup" type="button"><span>⇩</span><b>Backup Dashboard</b><small>Export watch lists, codes, history and settings.</small></button></div></div></section>
  <section class="ait-psa-terminal-modal" id="aitPsaDataReportMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">DATA CENTER CATEGORY</span><h2>▥ Report</h2><p>Select a report category.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaDataCenterLauncherModal" type="button">← Data Center</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaDataReportDownloadedModal" type="button"><span>⇩</span><b>Downloaded</b><small>Review downloaded Fundamentals and OHLC data.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaDataReportChartsModal" type="button"><span>▥</span><b>Charts</b><small>Open saved 3M and 6M chart galleries.</small></button></div></div></section>
@@ -9658,7 +9692,7 @@ document.addEventListener("keydown",event=>{
   </div></article></section></div>
 </section>
 <section class="ait-psa-terminal-modal ait-psa-workspace-modal" id="aitElitePriorityModal" hidden role="dialog" aria-modal="true">
- <header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">DECISION ENGINE V1.3</span><h2>AIT Elite</h2><p>Self-checking multi-factor decision scanner: refreshes Elite performance state only when downloaded OHLC has changed, then combines current, historical and execution-quality evidence.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaSignalPriorityEngineModal" type="button">← Engine</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header>
+ <header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">DECISION ENGINE V1.4</span><h2>AIT Elite</h2><p>Self-checking multi-factor decision scanner: refreshes Elite performance state only when downloaded OHLC has changed, then combines current, historical and execution-quality evidence.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaSignalPriorityEngineModal" type="button">← Engine</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header>
  <div class="ait-psa-terminal-modal__body ait-psa-workspace-host"><section class="v11-workspace active"><article class="v11-card v11-scanner-card">
   <div class="v11-card-head"><div><h3>AIT Elite</h3><small>Simple decision-first scanner: what to do, when to act, preferred horizon, model state and plain-language reason</small></div><div class="v11-potential-actions"><button class="btn soft" id="aitElitePriorityCharts6" type="button">View 6M Charts</button><button class="btn soft" id="aitElitePriorityCharts3" type="button">View 3M Charts</button><button class="btn primary" id="aitElitePriorityRun" type="button">Run elite screen</button></div></div>
   <div class="v11-card-body"><section class="v11-potential-guideline"><div class="v11-potential-guideline-grid">
@@ -9667,12 +9701,12 @@ document.addEventListener("keydown",event=>{
    <div class="v11-potential-guide v11-potential-guide--watch"><strong>3. How long?</strong><span>Short Term = 3–6 trading days. Mid Term = 9–20 trading days. Long Term remains unvalidated until longer history is available.</span></div>
    <div class="v11-potential-guide v11-potential-guide--avoid"><strong>4. Model State</strong><span>Healthy = normal confidence. Caution = stricter confirmation. Degraded = avoid aggressive new entries. Recalibration Required = suspend new buys.</span></div>
   </div></section>
-  <section class="v11-potential-guideline ait-elite-summary-grid" id="aitEliteDecisionSummary" style="margin-top:14px">
-   <div class="v11-potential-guideline-grid">
-    <div class="v11-potential-guide v11-potential-guide--strongest"><strong>Buy Now</strong><span><b id="aitEliteCountBuyNow">0</b> ready new entries</span></div>
-    <div class="v11-potential-guide v11-potential-guide--formula"><strong>Wait / Confirm</strong><span><b id="aitEliteCountWait">0</b> good candidates, not ready</span></div>
-    <div class="v11-potential-guide v11-potential-guide--watch"><strong>Hold / Review</strong><span><b id="aitEliteCountHold">0</b> portfolio actions</span></div>
-    <div class="v11-potential-guide v11-potential-guide--avoid"><strong>Avoid / Exit</strong><span><b id="aitEliteCountAvoid">0</b> risk or weak setup</span></div>
+  <section class="ait-elite-summary-block" id="aitEliteDecisionSummary" style="margin-top:14px">
+   <div class="ait-fundamental-strip">
+    <div class="ait-fundamental-item"><small>Buy Now</small><b><span id="aitEliteCountBuyNow">0</span> ready new entries</b></div>
+    <div class="ait-fundamental-item"><small>Wait / Confirm</small><b><span id="aitEliteCountWait">0</span> good candidates, not ready</b></div>
+    <div class="ait-fundamental-item"><small>Hold / Review</small><b><span id="aitEliteCountHold">0</span> portfolio actions</b></div>
+    <div class="ait-fundamental-item"><small>Avoid / Exit</small><b><span id="aitEliteCountAvoid">0</span> risk or weak setup</b></div>
    </div>
   </section>
   <div class="v11-scanner-table-region" style="margin-top:14px"><div class="v11-table-scrollbar" aria-label="Horizontal table scrollbar"><div></div></div><div class="v11-table-wrap v11-scanner-table-wrap"><table class="v11-table v11-potential-table"><thead><tr><th>Priority</th><th>Trading Code</th><th>LTP</th><th>Signal</th><th>Your Action</th><th>When</th><th>Best Horizon</th><th>Model State</th><th>Why</th><th>Details</th></tr></thead><tbody id="aitElitePriorityRows"><tr><td colspan="10">Open AIT Elite to calculate your decision list.</td></tr></tbody></table></div></div>
@@ -9934,14 +9968,18 @@ document.addEventListener('DOMContentLoaded', () => {
     report: 'aitPsaDataReportMenuModal',
     empty: 'aitPsaDataCenterLauncherModal',
     fundamentals: 'aitPsaFundamentalsDownloadMenuModal',
-    ohlc: 'aitPsaOhlcDownloadMenuModal'
+    ohlc: 'aitPsaOhlcDownloadMenuModal',     ohlcforce: 'aitPsaOhlcForceMenuModal'
   };
   const dataCenterDefinitions = {
     downloadFundamentals: ['DSE', 'DSE Fundamentals', 'Download Category, Business Segment, Year End and Last AGM for the current watch list.'],
     amarstockFundamentals: ['AS', 'AmarStock Fundamentals', 'Download P/E Ratio, EPS, Price/NAV, Free Float, Beta and Dividend Yield for the current watch list.'],
-    instantDseUpdate: ['LIVE', 'Instant Hybrid OHLC Download', 'Available 10:00 AM–2:10 PM when today’s official archive data is absent; merges today’s live DSE table and AmarStock OpenP.'],
-    dse3mUpdate: ['3M', 'Download DSE 3M', 'Download three months of active watch-list history.'],
-    dse6mUpdate: ['6M', 'Download DSE 6M', 'Download six months of active watch-list history.'],
+    instantDseUpdate: ['LIVE', 'Instant Hybrid OHLC Download', 'Available during the configured trading window when today’s official archive data is absent.'],
+    incrementalOhlcDownload: ['↻', 'Incremental OHLC Sync', 'Normal daily update from the latest stored OHLC date through today.'],
+    dse3mUpdate: ['3M', 'Legacy DSE 3M Sync', 'Compatibility action for the existing 3M workflow.'],
+    dse6mUpdate: ['6M', 'Legacy DSE 6M Sync', 'Compatibility action for the existing 6M workflow.'],
+    forceFullOhlc3M: ['3M', 'Force Full DSE 3M', 'Bootstrap/repair mode: re-download the full three-month OHLC range.'],
+    forceFullOhlcDownload: ['6M', 'Force Full DSE 6M', 'Bootstrap/repair mode: re-download the full six-month OHLC range.'],
+    forceFullOhlc1Y: ['1Y', 'Force Full DSE 1Y', 'Bootstrap/repair mode: re-download the full one-year OHLC range.'],
     archiveImport: ['OHLC', 'Archive Workspace', 'Download or import historical OHLC archive records.'],
     quickMotherSync: ['↻', 'Sync DSE Codes', 'Synchronize the latest available DSE code directory.'],
     motherImport: ['DSE', 'Import DSE Codes', 'Import or replace the complete trading-code directory.'],
@@ -10039,7 +10077,7 @@ document.addEventListener('DOMContentLoaded', () => {
       event.preventDefault();
       event.stopPropagation();
       const actionName=dataTool.dataset.aitDataAction;
-      if(actionName==='dse3mUpdate'||actionName==='dse6mUpdate'){
+      if(['dse3mUpdate','dse6mUpdate','incrementalOhlcDownload','forceFullOhlc3M','forceFullOhlcDownload','forceFullOhlc1Y'].includes(actionName)){
         closeModal();
         const target=document.getElementById(actionName);
         if(target)target.click();
@@ -10565,24 +10603,25 @@ document.addEventListener('DOMContentLoaded', () => {
   const r=(cache.rows||[]).find(x=>String(x.code)===String(code));if(!r)return;
   const title=document.getElementById("aitEliteDetailTitle"),body=document.getElementById("aitEliteDetailBody");
   if(title)title.textContent=`${r.code} — ${r.tradeAction||"Watch"}`;
-  if(body)body.innerHTML=`<section class="v11-potential-guideline ait-elite-detail-summary">
-   <div class="v11-potential-guideline-grid">
-    <div class="v11-potential-guide v11-potential-guide--strongest"><strong>Signal</strong><span><b>${esc(r.finalSignal||"Avoid")} #${r.signalRank}</b><small style="display:block">calibrated signal rank</small></span></div>
-    <div class="v11-potential-guide v11-potential-guide--formula"><strong>Elite Score</strong><span><b>${(Number(r.eliteScore)||0).toFixed(1)}</b><small style="display:block">Top ${(Number(r.rankPercentile)||100).toFixed(1)}%</small></span></div>
-    <div class="v11-potential-guide v11-potential-guide--watch"><strong>Short Term</strong><span><b>${esc(r.shortTerm||"Watch")}</b><small style="display:block">3–6 trading days</small></span></div>
-    <div class="v11-potential-guide v11-potential-guide--watch"><strong>Mid Term</strong><span><b>${esc(r.midTerm||"Watch")}</b><small style="display:block">9–20 trading days</small></span></div>
-   </div>
-  </section>
-  <section class="v11-potential-guideline ait-elite-detail-grid" style="margin-top:14px">
-   <div class="v11-potential-guideline-grid">
-    <div class="v11-potential-guide"><strong>Primary / Historical / Advanced</strong><span>${(Number(r.primaryScore)||0).toFixed(1)} / ${(Number(r.historicalScore)||0).toFixed(1)} / ${(Number(r.advancedScore)||0).toFixed(1)}</span></div>
-    <div class="v11-potential-guide"><strong>Liquidity / Volatility Safety</strong><span>${(Number(r.liquidityScore)||0).toFixed(1)} / ${(Number(r.volatilitySafetyScore)||0).toFixed(1)}</span></div>
-    <div class="v11-potential-guide"><strong>Breakout / Support</strong><span>${(Number(r.breakoutScore)||0).toFixed(1)} / ${(Number(r.supportScore)||0).toFixed(1)}</span></div>
-    <div class="v11-potential-guide"><strong>Entry Quality</strong><span>${(Number(r.entryQualityScore)||0).toFixed(1)} • ${esc(r.entryState||"No Entry")}</span></div>
-    <div class="v11-potential-guide"><strong>Model State</strong><span>${esc(r.modelState||"Unverified")}</span></div>
-    <div class="v11-potential-guide v11-potential-guide--strongest"><strong>Plain-language Decision</strong><span>${esc(plainReason(r))}</span></div>
-   </div>
-  </section>`;
+  if(body)body.innerHTML=`<div class="ait-fundamental-strip ait-elite-detail-summary-strip">
+   <div class="ait-fundamental-item"><small>Signal</small><b>${esc(r.finalSignal||"Avoid")} #${r.signalRank}</b></div>
+   <div class="ait-fundamental-item"><small>Elite Score</small><b>${(Number(r.eliteScore)||0).toFixed(1)} • Top ${(Number(r.rankPercentile)||100).toFixed(1)}%</b></div>
+   <div class="ait-fundamental-item"><small>Short Term</small><b>${esc(r.shortTerm||"Watch")} • 3–6D</b></div>
+   <div class="ait-fundamental-item"><small>Mid Term</small><b>${esc(r.midTerm||"Watch")} • 9–20D</b></div>
+   <div class="ait-fundamental-item"><small>Model State</small><b>${esc(r.modelState||"Unverified")}</b></div>
+   <div class="ait-fundamental-item"><small>Trade Action</small><b>${esc(r.tradeAction||"Watch")}</b></div>
+  </div>
+  <div class="ait-fundamental-strip ait-elite-detail-metrics-strip">
+   <div class="ait-fundamental-item"><small>Primary</small><b>${(Number(r.primaryScore)||0).toFixed(1)}</b></div>
+   <div class="ait-fundamental-item"><small>Historical</small><b>${(Number(r.historicalScore)||0).toFixed(1)}</b></div>
+   <div class="ait-fundamental-item"><small>Advanced</small><b>${(Number(r.advancedScore)||0).toFixed(1)}</b></div>
+   <div class="ait-fundamental-item"><small>Liquidity</small><b>${(Number(r.liquidityScore)||0).toFixed(1)}</b></div>
+   <div class="ait-fundamental-item"><small>Volatility Safety</small><b>${(Number(r.volatilitySafetyScore)||0).toFixed(1)}</b></div>
+   <div class="ait-fundamental-item"><small>Breakout</small><b>${(Number(r.breakoutScore)||0).toFixed(1)}</b></div>
+   <div class="ait-fundamental-item"><small>Support</small><b>${(Number(r.supportScore)||0).toFixed(1)}</b></div>
+   <div class="ait-fundamental-item"><small>Entry Quality</small><b>${(Number(r.entryQualityScore)||0).toFixed(1)} • ${esc(r.entryState||"No Entry")}</b></div>
+   <div class="ait-fundamental-item"><small>Decision</small><b title="${esc(plainReason(r))}">${esc(plainReason(r))}</b></div>
+  </div>`
   document.getElementById("aitElitePriorityModal")?.setAttribute("hidden","");
   document.getElementById("aitEliteDecisionDetailModal")?.removeAttribute("hidden");
  };
