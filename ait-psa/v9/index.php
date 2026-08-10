@@ -4573,6 +4573,22 @@ body.ait-elite-is-calculating *{cursor:progress!important}
  .ait-elite-calc-orbit::before,.ait-elite-calc-orbit::after,.ait-elite-calc-bar{animation-duration:2.5s}
 }
 </style>
+
+<style id="ait-amarstock-details-v10094">
+#gallery .mini-card .row > .actions,
+#v11RankedChartGallery .mini-card .row > .actions{
+  display:flex;
+  align-items:center;
+  justify-content:flex-end;
+  gap:8px;
+  flex-wrap:wrap;
+}
+#gallery .mini-card a.btn,
+#v11RankedChartGallery .mini-card a.btn{
+  text-decoration:none;
+  white-space:nowrap;
+}
+</style>
 </head>
 <body>
 <div class="v10-mobile-bar">
@@ -6055,7 +6071,7 @@ document.querySelectorAll("[data-mother-tab]").forEach(b=>b.onclick=()=>this.mot
    a.codes.forEach(c=>{
     const data=this.rangeData(c,period);
     const card=document.createElement("div");card.className="mini-card";
-    card.innerHTML=`<div class="row"><h3>${this.esc(c)}</h3><button class="btn blue" data-open="${c}" ${data.length?"":"disabled"}>Open</button></div>${this.fundamentalHtml(c)}<div class="chart-box mini-chart"><canvas></canvas></div><div class="small">${data.length?`${data.length} sessions • ${data[0].date} to ${data[data.length-1].date}`:"No archive data for this code"}</div>`;
+    card.innerHTML=`<div class="row"><h3>${this.esc(c)}</h3><div class="actions"><button class="btn blue" data-open="${c}" ${data.length?"":"disabled"}>Open</button><a class="btn soft" href="https://www.amarstock.com/stock/${encodeURIComponent(c)}" target="_blank" rel="noopener noreferrer" title="View ${this.esc(c)} on AmarStock">Details</a></div></div>${this.fundamentalHtml(c)}<div class="chart-box mini-chart"><canvas></canvas></div><div class="small">${data.length?`${data.length} sessions • ${data[0].date} to ${data[data.length-1].date}`:"No archive data for this code"}</div>`;
     this.gallery.appendChild(card);
     requestAnimationFrame(()=>CandleChart.draw(card.querySelector("canvas"),data));
     card.querySelector("[data-open]").onclick=()=>{this.close("galleryModal");this.openChart(c,period)}
@@ -7514,7 +7530,10 @@ document.addEventListener("DOMContentLoaded",()=>{
    return `<div class="mini-card v11-ranked-mini-card" data-ranked-chart="${esc(x.code)}">
     <div class="row">
      <h3><span class="v11-ranked-number">#${index+1}</span> ${esc(x.code)}</h3>
-     <button class="btn blue" type="button" data-open-ranked-code="${esc(x.code)}" ${rows.length?"":"disabled"}>Open</button>
+     <div class="actions">
+      <button class="btn blue" type="button" data-open-ranked-code="${esc(x.code)}" ${rows.length?"":"disabled"}>Open</button>
+      <a class="btn soft" href="https://www.amarstock.com/stock/${encodeURIComponent(x.code)}" target="_blank" rel="noopener noreferrer" title="View ${esc(x.code)} on AmarStock">Details</a>
+     </div>
     </div>
     <div class="v11-ranked-summary-line">
      <span>LTP <b>${fmt(x.ltp,2)}</b></span>
