@@ -5907,7 +5907,7 @@ this.dse1yUpdate2.onclick=async()=>{
 this.incrementalOhlcDownload.onclick=async()=>{
  const a=this.active(),plan=this.planStrictIncrementalOhlcRange();
  if(!plan.latest)return this.toast("No stored OHLC exists for this watch list. Use OHLC → Force for the initial download.",true);
- if(await this.confirmDownload("Incremental OHLC Sync",`Download only the latest missing/recent OHLC range for ${a?.name||"the active watch list"}?`,`Latest stored date: ${plan.latest}. Requested range: ${plan.start} to ${plan.end}. The overlapping latest date will be re-downloaded, replaced, and deduplicated by Trading Code + Date.`))this.downloadIncrementalOhlc();
+ if(await this.confirmDownload("Incremental OHLC Sync",`Download only the latest missing/recent OHLC range for ${a?.name||"the active watch list"}?`,`Latest stored date: ${plan.latest}. Requested range: ${plan.start} to ${plan.end}. The latest stored date is intentionally downloaded again. If DSE returns that same Trading Code + Date, the existing row (including an Instant row) is replaced by the downloaded archive row; if DSE does not return it, the existing row is preserved.`))this.downloadIncrementalOhlc();
 };
 this.forceFullOhlc3M.onclick=async()=>{
  const a=this.active(),plan=this.planIncrementalOhlcRange(3,true);
@@ -6195,8 +6195,9 @@ document.querySelectorAll("[data-mother-tab]").forEach(b=>b.onclick=()=>this.mot
   this.dseStartDate.value=iso(start);
   this.dseEndDate.value=iso(end)
  }
- dseApiUrl(start,end){
-  const p=new URLSearchParams({startDate:start,endDate:end,format:"json",v:"7"});
+ dseApiUrl(start,end,forceRefresh=false){
+  const p=new URLSearchParams({startDate:start,endDate:end,format:"json",v:"8"});
+  if(forceRefresh)p.set("refresh","1");
   return "dse_archive.php?"+p.toString()
  }
  getDhakaMarketClock(){
@@ -6349,7 +6350,7 @@ document.querySelectorAll("[data-mother-tab]").forEach(b=>b.onclick=()=>this.mot
    return false;
   }
  }
- async fetchDseArchive(start,end,watchOnly=true,openCharts=false){
+ async fetchDseArchive(start,end,watchOnly=true,openCharts=false,allowNoUpdate=false,forceRefresh=false){
   if(!start||!end)return this.toast("Select DSE start and end dates.",true);
   if(start>end)return this.toast("Start date must be before end date.",true);
 
@@ -6370,7 +6371,7 @@ document.querySelectorAll("[data-mother-tab]").forEach(b=>b.onclick=()=>this.mot
     20
    );
 
-   const r=await fetch(this.dseApiUrl(start,end),{
+   const r=await fetch(this.dseApiUrl(start,end,forceRefresh),{
     headers:{Accept:"application/json"},
     cache:"no-store"
    });
@@ -6390,7 +6391,26 @@ document.querySelectorAll("[data-mother-tab]").forEach(b=>b.onclick=()=>this.mot
    }
 
    if(!r.ok||!payload?.success){
-    throw new Error(payload?.message||`HTTP ${r.status}`);
+    const serverMessage=String(payload?.message||`HTTP ${r.status}`);
+    const noArchiveUpdate=allowNoUpdate&&/(no usable dse records|no usable records|no records were returned|no archive records|no data returned|no records found)/i.test(serverMessage);
+    if(noArchiveUpdate){
+     const seconds=Math.max(1,Math.round((Date.now()-startedAt)/1000));
+     const message=`No finalized DSE archive update is available yet for ${start}${end!==start?` to ${end}`:""}. Existing local OHLC, including Instant data, was preserved.`;
+     this.showDownloadStatus("No finalized archive update yet",message,100,"success");
+     this.showOperationResult({
+      title:"Incremental OHLC is already up to date",
+      subtitle:`Checked ${start}${end!==start?` to ${end}`:""}`,
+      message:"DSE has not returned a newer finalized archive row yet. Nothing was deleted or replaced.",
+      details:`Existing latest date preserved: ${start} • Instant/local row preserved: Yes • Duration: ${seconds}s • Try Incremental again after DSE publishes the finalized archive.`,
+      icon:"✓",
+      showStatus:true
+     });
+     this.lastDownloadReport={requested:[...activeCodes],matched:[],missing:[],totalServerSymbols:0,records:0,csvFile:"",elapsedMs:Date.now()-startedAt,noUpdate:true,start,end};
+     this.log(`Incremental OHLC checked ${start} to ${end}; no finalized DSE archive update yet, existing data preserved`);
+     this.toast("No finalized DSE archive update yet. Existing OHLC was preserved.");
+     return true;
+    }
+    throw new Error(serverMessage);
    }
 
    this.showDownloadStatus(
@@ -6443,6 +6463,16 @@ document.querySelectorAll("[data-mother-tab]").forEach(b=>b.onclick=()=>this.mot
    };
 
    if(!count){
+    if(allowNoUpdate&&Object.keys(normalizedAll).length===0){
+     const seconds=Math.max(1,Math.round((Date.now()-startedAt)/1000));
+     const message=`No finalized DSE archive update is available yet for ${start}${end!==start?` to ${end}`:""}. Existing local OHLC, including Instant data, was preserved.`;
+     this.showDownloadStatus("No finalized archive update yet",message,100,"success");
+     this.showOperationResult({title:"Incremental OHLC is already up to date",subtitle:`Checked ${start}${end!==start?` to ${end}`:""}`,message:"No finalized DSE archive rows were returned. Existing local OHLC remains unchanged.",details:`Instant/local latest row preserved: Yes • Duration: ${seconds}s`,icon:"✓",showStatus:true});
+     this.lastDownloadReport={requested:[...activeCodes],matched:[],missing:[],totalServerSymbols:0,records:0,csvFile:payload.csvFile||"",elapsedMs:Date.now()-startedAt,noUpdate:true,start,end};
+     this.log(`Incremental OHLC checked ${start} to ${end}; zero finalized rows returned, existing data preserved`);
+     this.toast("No finalized DSE archive update yet. Existing OHLC was preserved.");
+     return true;
+    }
     const examples=Object.keys(normalizedAll).slice(0,25).join(", ");
     throw new Error(`DSE parsed ${Object.keys(normalizedAll).length} symbols, but none matched this watch list. Available examples: ${examples}`);
    }
@@ -6490,14 +6520,21 @@ document.querySelectorAll("[data-mother-tab]").forEach(b=>b.onclick=()=>this.mot
  planIncrementalOhlcRange(months=3,forceFull=false){
   const a=this.active(),requested=Number(months),period=[3,6,12].includes(requested)?requested:3;
   const endDate=new Date(),fullStart=new Date(endDate);fullStart.setMonth(fullStart.getMonth()-period);
-  const iso=d=>d.toISOString().slice(0,10),end=iso(endDate),latest=this.latestStoredOhlcDate(a?.codes||[]);
+  const iso=d=>d.toISOString().slice(0,10),end=this.dhakaTodayDate(),latest=this.latestStoredOhlcDate(a?.codes||[]);
   const incremental=!forceFull&&!!latest;
   const start=incremental?(latest>end?end:latest):iso(fullStart);
   return {period,start,end,latest,incremental,forceFull};
  }
+ dhakaTodayDate(){
+  try{
+   const parts=new Intl.DateTimeFormat("en-CA",{timeZone:"Asia/Dhaka",year:"numeric",month:"2-digit",day:"2-digit"}).formatToParts(new Date());
+   const get=type=>parts.find(part=>part.type===type)?.value||"";
+   return `${get("year")}-${get("month")}-${get("day")}`;
+  }catch(_){return new Date().toISOString().slice(0,10)}
+ }
  planStrictIncrementalOhlcRange(){
-  const a=this.active(),end=new Date().toISOString().slice(0,10),latest=this.latestStoredOhlcDate(a?.codes||[]);
-  return {start:latest?(latest>end?end:latest):"",end,latest,incremental:!!latest};
+  const a=this.active(),end=this.dhakaTodayDate(),latest=this.latestStoredOhlcDate(a?.codes||[]);
+  return {start:latest?(latest>end?end:latest):"",end,latest,incremental:!!latest,replaceOverlap:true};
  }
  async downloadActiveWatchlistMonths(months=3,forceFull=false){
   const a=this.active();
@@ -6520,15 +6557,41 @@ document.querySelectorAll("[data-mother-tab]").forEach(b=>b.onclick=()=>this.mot
   const plan=this.planStrictIncrementalOhlcRange();
   if(!plan.latest){this.toast("No stored OHLC date was found. Use OHLC → Force for the initial 3M, 6M, 1Y or Range download.",true);return false}
   this.dseStartDate.value=plan.start;this.dseEndDate.value=plan.end;
-  this.showDownloadStatus("Preparing incremental OHLC sync",`Active watch list: ${a.name} • ${a.codes.length} codes • ${plan.start} to ${plan.end}`,2);
-  const ok=await this.fetchDseArchive(plan.start,plan.end,true,false);
-  if(ok)this.log(`Incremental OHLC sync ${plan.start} to ${plan.end}; overlapping Trading Code + Date rows replaced and duplicates removed`);
+  this.showDownloadStatus("Preparing incremental OHLC sync",`Active watch list: ${a.name} • ${a.codes.length} codes • ${plan.start} to ${plan.end} • latest DSE archive cache will be refreshed`,2);
+  const ok=await this.fetchDseArchive(plan.start,plan.end,true,false,true,true);
+  if(ok&&!this.lastDownloadReport?.noUpdate)this.log(`Incremental OHLC sync ${plan.start} to ${plan.end}; overlapping Trading Code + Date rows replaced and duplicates removed`);
   return ok;
  }
  async readFiles(){const files=[...this.ohlcFiles.files];if(!files.length)return this.toast("Select archive files.",true);let all={};for(const f of files){const code=Parser.cleanCode(f.name.replace(/\.[^.]+$/,""));const parsed=Parser.parse(await f.text(),files.length>1?code:"");Object.entries(parsed).forEach(([c,r])=>(all[c]??=[]).push(...r))}this.prepare(all,files.map(f=>f.name).join(", "))}
  async fetchArchive(){const url=this.archiveUrl.value.trim();if(!url)return this.toast("Enter an archive URL.",true);try{const r=await fetch(url);if(!r.ok)throw Error();this.prepare(Parser.parse(await r.text(),Parser.cleanCode(this.urlCode.value)),url)}catch(e){this.toast("Archive download was blocked. Download the file manually and import it.",true)}}
  prepare(data,source){Object.keys(data).forEach(c=>{const m=new Map(data[c].map(x=>[x.date,x]));data[c]=[...m.values()].sort((a,b)=>a.date.localeCompare(b.date))});this.pending=data;const sy=Object.keys(data).length,rc=Object.values(data).reduce((n,a)=>n+a.length,0);this.parseResult.style.display="block";this.parseResult.textContent=sy?`Parsed ${rc.toLocaleString()} OHLC records for ${sy} trading codes from ${source}.`:"No valid OHLC rows detected.";this.commitArea.style.display=sy?"flex":"none"}
- commit(replace,silent=false){if(replace)this.s.history={};for(const [c,r] of Object.entries(this.pending)){const old=replace?[]:(this.s.history[c]||[]);const normalized=[...old,...r].filter(Boolean).map(x=>({...x,date:String(x.date||"").slice(0,10)})).filter(x=>x.date);const m=new Map(normalized.map(x=>[x.date,x]));this.s.history[c]=[...m.values()].sort((a,b)=>a.date.localeCompare(b.date));if(!this.s.motherCodes.includes(c))this.s.motherCodes.push(c)}this.s.motherCodes=[...new Set(this.s.motherCodes)].sort();this.s.lastArchive=new Date().toISOString();this.s.lastArchiveSource=this.pendingSource||"Imported archive";this.log(`${replace?"Replaced":"Merged"} OHLC archive data`);this.persist();if(!silent)this.close("archiveModal");this.render();if(!silent)this.toast("Historical archive saved locally.")}
+ mergeOhlcIncomingWins(existingRows=[],incomingRows=[]){
+  const existing=(Array.isArray(existingRows)?existingRows:[]).filter(Boolean).map(row=>({...row,date:String(row?.date||"").slice(0,10)})).filter(row=>row.date);
+  const incoming=(Array.isArray(incomingRows)?incomingRows:[]).filter(Boolean).map(row=>({...row,date:String(row?.date||"").slice(0,10)})).filter(row=>row.date);
+  const incomingDates=new Set(incoming.map(row=>row.date));
+  const preserved=existing.filter(row=>!incomingDates.has(row.date));
+  const incomingByDate=new Map(incoming.map(row=>[row.date,row]));
+  return [...preserved,...incomingByDate.values()].sort((a,b)=>a.date.localeCompare(b.date));
+ }
+ commit(replace,silent=false){
+  if(replace)this.s.history={};
+  let replacedRows=0;
+  for(const [c,r] of Object.entries(this.pending)){
+   const old=replace?[]:(this.s.history[c]||[]);
+   const incomingDates=new Set((Array.isArray(r)?r:[]).map(x=>String(x?.date||"").slice(0,10)).filter(Boolean));
+   replacedRows+=old.filter(x=>incomingDates.has(String(x?.date||"").slice(0,10))).length;
+   this.s.history[c]=this.mergeOhlcIncomingWins(old,r);
+   if(!this.s.motherCodes.includes(c))this.s.motherCodes.push(c);
+  }
+  this.s.motherCodes=[...new Set(this.s.motherCodes)].sort();
+  this.s.lastArchive=new Date().toISOString();
+  this.s.lastArchiveSource=this.pendingSource||"Imported archive";
+  this.log(`${replace?"Replaced":"Merged"} OHLC archive data${!replace&&replacedRows?` • ${replacedRows} overlapping Trading Code + Date rows replaced by downloaded data`:""}`);
+  this.persist();
+  if(!silent)this.close("archiveModal");
+  this.render();
+  if(!silent)this.toast("Historical archive saved locally.");
+ }
  openChart(code,months=3){this.currentCode=code;this.chartTitle.textContent=`${code} Candlestick Chart`;if(this.chartRange)this.chartRange.value=String([3,6,12].includes(Number(months))?Number(months):3);this.open("chartModal");setTimeout(()=>this.drawCurrent(),50)}
  rangeData(code,months){const a=this.s.history[code]||[];if(!a.length)return[];const last=new Date(a[a.length-1].date+"T00:00:00"),cut=new Date(last);cut.setMonth(cut.getMonth()-months);return a.filter(x=>new Date(x.date+"T00:00:00")>=cut)}
  drawCurrent(){const data=this.rangeData(this.currentCode,Number(this.chartRange.value));CandleChart.draw(this.chartCanvas,data);if(data.length){const f=data[0],l=data[data.length-1],chg=(l.close/f.close-1)*100;this.chartSubtitle.textContent=`${data.length} sessions • ${f.date} to ${l.date}`;this.chartInfo.innerHTML=`<span>Open: <b>${f.open.toFixed(2)}</b></span><span>Last close: <b>${l.close.toFixed(2)}</b></span><span>Change: <b>${chg.toFixed(2)}%</b></span><span>Total volume: <b>${data.reduce((n,x)=>n+x.volume,0).toLocaleString()}</b></span>`}else{this.chartSubtitle.textContent="No local OHLC data";this.chartInfo.innerHTML=""}}
