@@ -20,14 +20,20 @@
     }),
   });
 
+  const APPEARANCE_PRESETS = Object.freeze({
+    "ait-pha": Object.freeze({ theme: "ait-pha", font: "ait-pha", fontSize: 15, lineHeight: 1.65 }),
+    "noor-classic": Object.freeze({ theme: "noor", font: "classic", fontSize: 20, lineHeight: 2 }),
+    "emerald-book": Object.freeze({ theme: "emerald", font: "book", fontSize: 19, lineHeight: 1.9 }),
+  });
+
   class Aod2PreferenceStore {
-    constructor(key = "aod2-reader-preferences-v3") {
+    constructor(key = "aod2-reader-preferences-v4") {
       this.key = key;
       this.defaults = Object.freeze({
-        theme: "noor",
-        font: "modern",
-        fontSize: 20,
-        lineHeight: 2,
+        theme: "ait-pha",
+        font: "ait-pha",
+        fontSize: 15,
+        lineHeight: 1.65,
         focus: false,
         motion: true,
         progress: true,
@@ -49,6 +55,34 @@
       } catch {
         // The reader stays functional when browser storage is unavailable.
       }
+    }
+  }
+
+  class Aod2PageNumberingController {
+    constructor({ pageSelector = "[data-aod2-section]", numberSelector = ".aod2-folio-number" } = {}) {
+      this.pageSelector = pageSelector;
+      this.numberSelector = numberSelector;
+      this.formatter = new Intl.NumberFormat("bn-BD", { useGrouping: false });
+    }
+
+    init() {
+      const pages = [...document.querySelectorAll(this.pageSelector)];
+      const total = this.formatter.format(pages.length);
+
+      pages.forEach((page, index) => {
+        const numberNode = page.querySelector(this.numberSelector);
+        if (!numberNode) return;
+
+        const current = this.formatter.format(index + 1);
+        const visibleCurrent = String(index + 1).padStart(2, "0");
+        const visibleTotal = String(pages.length).padStart(2, "0");
+        const visibleNumber = `${visibleCurrent} / ${visibleTotal}`;
+        const accessibleLabel = `পৃষ্ঠা ${current}, মোট ${total} পৃষ্ঠা`;
+        numberNode.textContent = visibleNumber;
+        numberNode.setAttribute("aria-label", accessibleLabel);
+        page.dataset.aod2PageNumber = String(index + 1);
+        page.dataset.aod2PageSide = (index + 1) % 2 === 0 ? "left" : "right";
+      });
     }
   }
 
@@ -379,22 +413,21 @@
       this.icon = document.getElementById("aod2-report-icon");
       this.renderer = new Aod2ArtworkRenderer();
       this.state = {
-        printScope: "all", paper: "a4", orientation: "portrait", tone: "color",
+        printScope: "all", paper: "a5", orientation: "portrait", tone: "color",
         posterContent: "trust", posterFormat: "portrait", posterPalette: "emerald",
         dslrContent: "trust", resolution: "4k", ratio: "3:2", dslrPalette: "golden",
       };
     }
 
     init() {
-      document.getElementById("aod2-print-button")?.addEventListener("click", () => this.print());
+      window.addEventListener("message", (event) => {
+        if (event.data?.type !== "ait-pha-print-request") return;
+        this.applyProfessionalPrint(event.data.config || {}, Boolean(event.data.print));
+      });
       document.getElementById("aod2-poster-download")?.addEventListener("click", () => this.downloadPoster());
       document.getElementById("aod2-dslr-download")?.addEventListener("click", () => this.downloadDslr());
       document.getElementById("aod2-poster-content")?.addEventListener("change", (event) => { this.state.posterContent = event.target.value; this.renderPosterPreview(); });
       document.getElementById("aod2-dslr-content")?.addEventListener("change", (event) => { this.state.dslrContent = event.target.value; this.renderDslrPreview(); });
-      this.bindChoice("data-aod2-print-scope", "printScope", () => this.updatePrintPreview());
-      this.bindChoice("data-aod2-paper", "paper", () => this.updatePrintPreview());
-      this.bindChoice("data-aod2-orientation", "orientation", () => this.updatePrintPreview());
-      this.bindChoice("data-aod2-tone", "tone", () => this.updatePrintPreview());
       this.bindChoice("data-aod2-poster-format", "posterFormat", () => this.renderPosterPreview());
       this.bindChoice("data-aod2-poster-palette", "posterPalette", () => this.renderPosterPreview());
       this.bindChoice("data-aod2-resolution", "resolution", () => this.updateDslrMeta());
@@ -424,12 +457,16 @@
       this.icon.textContent = meta[1];
       this.views.forEach((panel) => { panel.hidden = panel.dataset.aod2ReportView !== view; });
       if (!this.dialog.open) this.dialog.showModal();
-      if (view === "print") this.updatePrintPreview();
+      if (view === "print") {
+        const frame = document.getElementById("aod2-print-workspace");
+        if (frame && !frame.getAttribute("src")) frame.setAttribute("src", frame.dataset.src);
+      }
       if (view === "poster") window.setTimeout(() => this.renderPosterPreview(), 40);
       if (view === "dslr") window.setTimeout(() => this.renderDslrPreview(), 40);
     }
 
     updatePrintPreview() {
+      if (!document.getElementById("aod2-print-preview-title")) return;
       const current = this.reader.currentSection();
       const heading = current?.querySelector("h2,h1")?.textContent?.trim() || "আল্লহর দল";
       const paragraph = current?.querySelector("p")?.textContent?.trim() || "মহাবিশ্বে দল মূলত দুটি।";
@@ -444,6 +481,118 @@
         sheet.style.aspectRatio = this.state.orientation === "landscape" ? "297 / 210" : "210 / 297";
         sheet.style.filter = this.state.tone === "mono" ? "grayscale(1)" : "none";
       }
+    }
+
+    printPaper(paper, orientation) {
+      const sizes = {
+        a0:[841,1189],a1:[594,841],a2:[420,594],a3:[297,420],a4:[210,297],a5:[148,210],a6:[105,148],
+        letter:[215.9,279.4],legal:[215.9,355.6],tabloid:[279.4,431.8],ledger:[431.8,279.4],executive:[184.15,266.7],statement:[139.7,215.9],folio:[215.9,330.2]
+      };
+      const dimensions = sizes[paper] || sizes.a4;
+      const landscape = orientation === "landscape";
+      return { width: landscape ? dimensions[1] : dimensions[0], height: landscape ? dimensions[0] : dimensions[1] };
+    }
+
+    clearProfessionalPrint() {
+      document.getElementById("aod2-booklet-stage")?.remove();
+      document.getElementById("aod2-professional-page-size")?.remove();
+      document.documentElement.classList.remove("aod2-print-preparing","aod2-print-crop-marks","aod2-print-hide-numbers");
+      document.documentElement.removeAttribute("data-aod2-print-mode");
+      document.documentElement.removeAttribute("data-aod2-book-binding");
+    }
+
+    prepareSaddleStitch(paper, orientation) {
+      const saddleSizes = {
+        a6:{width:105,height:148,sheetWidth:210},
+        a5:{width:148.5,height:210,sheetWidth:297},
+        a4:{width:210,height:297,sheetWidth:420},
+        a3:{width:297,height:420,sheetWidth:594},
+        a2:{width:420.5,height:594,sheetWidth:841},
+        a1:{width:594.5,height:841,sheetWidth:1189}
+      };
+      const mapped = saddleSizes[paper];
+      const requested = this.printPaper(paper, orientation);
+      const finalPage = mapped ? { width:mapped.width, height:mapped.height } : requested;
+      const sheetWidth = mapped?.sheetWidth || finalPage.width * 2;
+      const sourceWidth = 210;
+      const sourceHeight = 297;
+      const scale = Math.min(finalPage.width / sourceWidth, finalPage.height / sourceHeight);
+      const stage = document.createElement("section");
+      stage.id = "aod2-booklet-stage";
+      stage.className = "aod2-booklet-stage";
+      stage.setAttribute("aria-label", "Saddle-stitch imposed print sheets");
+      const pages = [...document.querySelectorAll("#aod2-reader > .aod2-sheet")].map((page) => {
+        const clone = page.cloneNode(true);
+        clone.dataset.aod2SourcePage = page.id || "";
+        clone.removeAttribute("id");
+        clone.querySelectorAll("[id]").forEach((node) => node.removeAttribute("id"));
+        clone.classList.add("aod2-booklet-page");
+        return clone;
+      });
+      while (pages.length % 4) {
+        const blank = document.createElement("section");
+        blank.className = "aod2-sheet aod2-booklet-page aod2-booklet-blank";
+        pages.push(blank);
+      }
+      const addSheet = (left, right, side, sheetNumber) => {
+        const sheet = document.createElement("div");
+        sheet.className = "aod2-booklet-sheet";
+        sheet.dataset.side = side;
+        sheet.dataset.sheet = String(sheetNumber);
+        [left, right].forEach((page) => {
+          const slot = document.createElement("div");
+          slot.className = "aod2-booklet-slot";
+          slot.append(page);
+          sheet.append(slot);
+        });
+        stage.append(sheet);
+      };
+      let first = 0, last = pages.length - 1, sheetNumber = 1;
+      while (first < last) {
+        addSheet(pages[last--], pages[first++], "front", sheetNumber);
+        addSheet(pages[first++], pages[last--], "back", sheetNumber++);
+      }
+      const root = document.documentElement;
+      root.style.setProperty("--aod2-booklet-page-width", `${finalPage.width}mm`);
+      root.style.setProperty("--aod2-booklet-page-height", `${finalPage.height}mm`);
+      root.style.setProperty("--aod2-booklet-sheet-width", `${sheetWidth}mm`);
+      root.style.setProperty("--aod2-booklet-sheet-height", `${finalPage.height}mm`);
+      root.style.setProperty("--aod2-booklet-scale", String(scale));
+      document.body.append(stage);
+      return { width: sheetWidth, height: finalPage.height };
+    }
+
+    applyProfessionalPrint(config, shouldPrint) {
+      this.clearProfessionalPrint();
+      const root = document.documentElement;
+      const mode = config.mode === "normal" ? "normal" : "book";
+      const orientation = config.orientation === "landscape" ? "landscape" : "portrait";
+      const paper = config.paper || "a5";
+      const binding = ["saddle-stitch","perfect-binding","wire-o"].includes(config.binding) ? config.binding : "saddle-stitch";
+      root.dataset.aod2PrintMode = mode;
+      if (mode === "book") root.dataset.aod2BookBinding = binding;
+      root.classList.toggle("aod2-print-crop-marks", Boolean(config.cropMarks));
+      root.classList.toggle("aod2-print-hide-numbers", config.pageNumbers === false);
+      root.style.setProperty("--aod2-print-bleed", `${Math.max(0, Number(config.bleed || 0))}mm`);
+      root.style.setProperty("--aod2-print-safe", `${Math.max(0, Number(config.safeMargin || 10))}mm`);
+      root.style.setProperty("--aod2-print-spine", `${Math.max(0, Number(config.spineWidth || 0))}mm`);
+      root.dataset.aod2PrinterType = config.printerType || "digital-press";
+      root.dataset.aod2PrintQuality = config.printQuality || "high";
+      let page = this.printPaper(paper, orientation);
+      if (mode === "book" && binding === "saddle-stitch") page = this.prepareSaddleStitch(paper, orientation);
+      const dynamic = document.createElement("style");
+      dynamic.id = "aod2-professional-page-size";
+      dynamic.textContent = `@page{size:${page.width}mm ${page.height}mm;margin:0}`;
+      document.head.append(dynamic);
+      root.style.setProperty("--aod2-selected-print-width", `${this.printPaper(paper, orientation).width}mm`);
+      root.style.setProperty("--aod2-selected-print-height", `${this.printPaper(paper, orientation).height}mm`);
+      try { localStorage.setItem("allahor-dol-print-config", JSON.stringify(config)); } catch (_) {}
+      if (!shouldPrint) return;
+      root.classList.add("aod2-print-preparing");
+      this.dialog?.close();
+      document.getElementById("aod2-terminal")?.setAttribute("aria-hidden", "true");
+      document.getElementById("aod2-terminal-backdrop")?.setAttribute("hidden", "");
+      window.setTimeout(() => window.print(), 150);
     }
 
     print() {
@@ -532,6 +681,14 @@
       document.querySelectorAll(".aod2-font-grid [data-aod2-font]").forEach((button) => {
         button.addEventListener("click", () => { this.preferences.font = button.dataset.aod2Font; this.apply(); });
       });
+      document.querySelectorAll("[data-aod2-preset]").forEach((button) => {
+        button.addEventListener("click", () => {
+          const preset = APPEARANCE_PRESETS[button.dataset.aod2Preset];
+          if (!preset) return;
+          Object.assign(this.preferences, preset);
+          this.apply();
+        });
+      });
       const size = document.getElementById("aod2-font-size");
       const leading = document.getElementById("aod2-line-height");
       size?.addEventListener("input", () => { this.preferences.fontSize = Number(size.value); this.apply(); });
@@ -543,7 +700,7 @@
 
     open(view) {
       if (!this.dialog) return;
-      this.title.textContent = view === "theme" ? "Theme" : "Typography";
+      this.title.textContent = { theme: "Theme", type: "Typography", preset: "Predefined Sets" }[view] || "Appearance";
       this.views.forEach((panel) => { panel.hidden = panel.dataset.aod2AppearanceView !== view; });
       if (!this.dialog.open) this.dialog.showModal();
     }
@@ -579,6 +736,13 @@
         if (mark) mark.textContent = active ? "✓" : "";
       });
       document.querySelectorAll(".aod2-font-grid [data-aod2-font]").forEach((button) => button.classList.toggle("is-active", button.dataset.aod2Font === this.preferences.font));
+      document.querySelectorAll("[data-aod2-preset]").forEach((button) => {
+        const preset = APPEARANCE_PRESETS[button.dataset.aod2Preset];
+        const active = preset && Object.entries(preset).every(([key, value]) => this.preferences[key] === value);
+        button.classList.toggle("is-active", Boolean(active));
+        const mark = button.querySelector("em");
+        if (mark) mark.textContent = active ? "✓" : "";
+      });
       this.store.save(this.preferences);
     }
   }
@@ -587,6 +751,7 @@
     constructor() {
       this.store = new Aod2PreferenceStore();
       this.preferences = this.store.load();
+      this.pageNumbering = new Aod2PageNumberingController();
       this.reader = new Aod2ReaderController({ onChange: () => this.report?.updatePrintPreview() });
       this.appearance = new Aod2AppearanceController({ store: this.store, preferences: this.preferences });
       this.report = new Aod2ReportController({ reader: this.reader });
@@ -595,6 +760,7 @@
     }
 
     init() {
+      this.pageNumbering.init();
       this.reader.init();
       this.appearance.init();
       this.report.init();

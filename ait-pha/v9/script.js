@@ -476,7 +476,12 @@ const AIT_PRINT_PAPER_SIZES={"a0":{"label":"A0","width":841,"height":1189,"unit"
 
   pages.forEach((page, i) => {
     const n = page.querySelector('.folio-number');
-    if (n) n.textContent = `পৃষ্ঠা ${i + 1} / ${pages.length}`;
+    if (n) {
+      const currentPage = String(i + 1).padStart(2, '0');
+      const totalPages = String(pages.length).padStart(2, '0');
+      n.textContent = `${currentPage} / ${totalPages}`;
+      n.setAttribute('aria-label', `পৃষ্ঠা ${i + 1}, মোট ${pages.length}`);
+    }
   });
   if (pageCount) pageCount.textContent = `${pages.length} পৃষ্ঠা`;
 

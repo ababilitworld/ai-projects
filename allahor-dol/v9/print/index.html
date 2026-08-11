@@ -1,0 +1,298 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Allahor Dol — Professional Print Workspace</title>
+<link rel="stylesheet" href="print-workspace.css">
+</head>
+<body>
+<main class="pw-shell">
+<header class="pw-hero">
+  <div>
+    <span class="pw-kicker">ALLAHOR DOL / REPORT / PRINT</span>
+    <h1>Professional Print Workspace</h1>
+    <p>Configure normal printing or book production from one professional workspace.</p>
+  </div>
+  <div class="pw-hero__icon">🖨</div>
+</header>
+
+<section class="pw-layout">
+<form class="pw-panel pw-config" id="printConfigForm">
+  <section class="pw-section">
+    <div class="pw-section__head"><span class="pw-section__step">01</span><div><h2>Print mode</h2><p>Choose standard pages or a bound-book workflow.</p></div></div>
+    <div class="pw-choice-grid pw-choice-grid--2">
+      <label class="pw-choice"><input type="radio" name="mode" value="normal"><span class="pw-choice__icon">📄</span><span><b>Normal</b><small>Sequential document pages</small></span></label>
+      <label class="pw-choice"><input type="radio" name="mode" value="book" checked><span class="pw-choice__icon">📚</span><span><b>Book</b><small>Booklet and binding workflows</small></span></label>
+    </div>
+  </section>
+
+  <section class="pw-section">
+    <div class="pw-section__head"><span class="pw-section__step">02</span><div><h2>Paper size</h2><p>Select from ISO, North American, architectural, photo and card sizes.</p></div></div>
+    <div class="pw-paper-toolbar">
+      <label class="pw-paper-select">
+        <span>Paper size</span>
+        <select id="paperSizeSelect" name="paper" aria-label="Paper size">
+          <optgroup label="ISO A">
+            <option value="a0">A0 — 841 × 1189 mm</option>
+            <option value="a1">A1 — 594 × 841 mm</option>
+            <option value="a2">A2 — 420 × 594 mm</option>
+            <option value="a3">A3 — 297 × 420 mm</option>
+            <option value="a4">A4 — 210 × 297 mm</option>
+            <option value="a5" selected>A5 — 148 × 210 mm</option>
+            <option value="a6">A6 — 105 × 148 mm</option>
+            <option value="a7">A7 — 74 × 105 mm</option>
+            <option value="a8">A8 — 52 × 74 mm</option>
+            <option value="a9">A9 — 37 × 52 mm</option>
+            <option value="a10">A10 — 26 × 37 mm</option>
+          </optgroup>
+          <optgroup label="ISO B">
+            <option value="b0">B0 — 1000 × 1414 mm</option>
+            <option value="b1">B1 — 707 × 1000 mm</option>
+            <option value="b2">B2 — 500 × 707 mm</option>
+            <option value="b3">B3 — 353 × 500 mm</option>
+            <option value="b4">B4 — 250 × 353 mm</option>
+            <option value="b5">B5 — 176 × 250 mm</option>
+            <option value="b6">B6 — 125 × 176 mm</option>
+            <option value="b7">B7 — 88 × 125 mm</option>
+            <option value="b8">B8 — 62 × 88 mm</option>
+            <option value="b9">B9 — 44 × 62 mm</option>
+            <option value="b10">B10 — 31 × 44 mm</option>
+          </optgroup>
+          <optgroup label="ISO C">
+            <option value="c0">C0 — 917 × 1297 mm</option>
+            <option value="c1">C1 — 648 × 917 mm</option>
+            <option value="c2">C2 — 458 × 648 mm</option>
+            <option value="c3">C3 — 324 × 458 mm</option>
+            <option value="c4">C4 — 229 × 324 mm</option>
+            <option value="c5">C5 — 162 × 229 mm</option>
+            <option value="c6">C6 — 114 × 162 mm</option>
+            <option value="c7">C7 — 81 × 114 mm</option>
+            <option value="c8">C8 — 57 × 81 mm</option>
+            <option value="c9">C9 — 40 × 57 mm</option>
+            <option value="c10">C10 — 28 × 40 mm</option>
+          </optgroup>
+          <optgroup label="North America">
+            <option value="letter">Letter — 8.5 × 11 in</option>
+            <option value="legal">Legal — 8.5 × 14 in</option>
+            <option value="tabloid">Tabloid — 11 × 17 in</option>
+            <option value="ledger">Ledger — 17 × 11 in</option>
+            <option value="executive">Executive — 7.25 × 10.5 in</option>
+            <option value="statement">Statement — 5.5 × 8.5 in</option>
+            <option value="folio">Folio — 8.5 × 13 in</option>
+            <option value="quarto">Quarto — 8.5 × 10.83 in</option>
+            <option value="government-letter">Government Letter — 8 × 10.5 in</option>
+            <option value="government-legal">Government Legal — 8.5 × 13 in</option>
+            <option value="junior-legal">Junior Legal — 5 × 8 in</option>
+          </optgroup>
+          <optgroup label="ANSI">
+            <option value="ansi-c">ANSI C — 17 × 22 in</option>
+            <option value="ansi-d">ANSI D — 22 × 34 in</option>
+            <option value="ansi-e">ANSI E — 34 × 44 in</option>
+          </optgroup>
+          <optgroup label="Architectural">
+            <option value="arch-a">ARCH A — 9 × 12 in</option>
+            <option value="arch-b">ARCH B — 12 × 18 in</option>
+            <option value="arch-c">ARCH C — 18 × 24 in</option>
+            <option value="arch-d">ARCH D — 24 × 36 in</option>
+            <option value="arch-e">ARCH E — 36 × 48 in</option>
+          </optgroup>
+          <optgroup label="Photo">
+            <option value="4x6">Photo 4×6 — 4 × 6 in</option>
+            <option value="5x7">Photo 5×7 — 5 × 7 in</option>
+            <option value="8x10">Photo 8×10 — 8 × 10 in</option>
+            <option value="square-5">Square 5×5 — 5 × 5 in</option>
+            <option value="square-8">Square 8×8 — 8 × 8 in</option>
+          </optgroup>
+          <optgroup label="Card">
+            <option value="business-card">Business Card — 85 × 55 mm</option>
+            <option value="index-3x5">Index Card 3×5 — 3 × 5 in</option>
+            <option value="index-4x6">Index Card 4×6 — 4 × 6 in</option>
+            <option value="index-5x8">Index Card 5×8 — 5 × 8 in</option>
+          </optgroup>
+        </select>
+      </label>
+      <div class="pw-paper-meta">
+        <span id="paperFamilyValue">ISO A</span>
+        <strong id="paperDimensionsValue">148 × 210 mm</strong>
+      </div>
+    </div>
+    <div class="pw-choice-grid pw-choice-grid--4 pw-paper-presets">
+      <button class="pw-paper-preset" type="button" data-paper-preset="a4"><b>A4</b><small>210 × 297 mm</small></button>
+      <button class="pw-paper-preset is-active" type="button" data-paper-preset="a5"><b>A5</b><small>148 × 210 mm</small></button>
+      <button class="pw-paper-preset" type="button" data-paper-preset="letter"><b>Letter</b><small>8.5 × 11 in</small></button>
+      <button class="pw-paper-preset" type="button" data-paper-preset="legal"><b>Legal</b><small>8.5 × 14 in</small></button>
+    </div>
+  </section>
+
+  <section class="pw-section">
+    <div class="pw-section__head"><span class="pw-section__step">03</span><div><h2>Orientation</h2><p>Choose portrait or landscape.</p></div></div>
+    <div class="pw-choice-grid pw-choice-grid--2">
+      <label class="pw-choice"><input type="radio" name="orientation" value="portrait" checked><span class="pw-choice__icon">▯</span><span><b>Portrait</b><small>Vertical page</small></span></label>
+      <label class="pw-choice"><input type="radio" name="orientation" value="landscape"><span class="pw-choice__icon">▭</span><span><b>Landscape</b><small>Horizontal page</small></span></label>
+    </div>
+  </section>
+
+  <section class="pw-section pw-book-only" id="bookTypeSection">
+    <div class="pw-section__head"><span class="pw-section__step">04</span><div><h2>Book type</h2><p>Select the pagination style.</p></div></div>
+    <div class="pw-choice-grid pw-choice-grid--3">
+      <label class="pw-choice"><input type="radio" name="bookType" value="booklet" checked><span class="pw-choice__icon">📖</span><span><b>Booklet</b><small>Folded signatures</small></span></label>
+      <label class="pw-choice"><input type="radio" name="bookType" value="standard-book"><span class="pw-choice__icon">📘</span><span><b>Standard Book</b><small>Sequential facing pages</small></span></label>
+      <label class="pw-choice"><input type="radio" name="bookType" value="manual"><span class="pw-choice__icon">📗</span><span><b>Manual</b><small>Wide reference margins</small></span></label>
+    </div>
+  </section>
+
+  <section class="pw-section pw-book-only" id="bindingSection">
+    <div class="pw-section__head"><span class="pw-section__step">05</span><div><h2>Binding method</h2><p>Select how the book will be assembled.</p></div></div>
+    <div class="pw-choice-grid pw-choice-grid--3">
+      <label class="pw-choice"><input type="radio" name="binding" value="saddle-stitch" checked><span class="pw-choice__icon">📖</span><span><b>Saddle-Stitch</b><small>Fold and staple</small></span></label>
+      <label class="pw-choice"><input type="radio" name="binding" value="perfect-binding"><span class="pw-choice__icon">📕</span><span><b>Perfect Binding</b><small>Glued spine</small></span></label>
+      <label class="pw-choice"><input type="radio" name="binding" value="wire-o"><span class="pw-choice__icon">🗒</span><span><b>Wire-O</b><small>Punched binding edge</small></span></label>
+    </div>
+  </section>
+
+  <section class="pw-section">
+    <div class="pw-section__head"><span class="pw-section__step">06</span><div><h2>Additional options</h2><p>Fine-tune the output.</p></div></div>
+    <div class="pw-toggle-grid">
+      <label class="pw-toggle"><input type="checkbox" name="duplex" checked><span><b>Double-sided</b><small>Front and back printing</small></span></label>
+      <label class="pw-toggle"><input type="checkbox" name="cropMarks"><span><b>Crop marks</b><small>Add trim guides</small></span></label>
+      <label class="pw-toggle"><input type="checkbox" name="pageNumbers" checked><span><b>Page numbers</b><small>Keep pagination visible</small></span></label>
+    </div>
+  </section>
+
+  
+  <section class="pw-section">
+    <div class="pw-section__head"><span class="pw-section__step">07</span><div><h2>Print quality & device</h2><p>Choose the intended printer and output quality.</p></div></div>
+    <div class="pw-field-grid pw-field-grid--3">
+      <label class="pw-field"><span>Print quality</span><select name="printQuality"><option value="draft">Draft</option><option value="standard">Standard</option><option value="high" selected>High</option><option value="press">Press Quality</option></select></label>
+      <label class="pw-field"><span>Printer type</span><select name="printerType"><option value="home-inkjet">Home Inkjet</option><option value="laser">Laser Printer</option><option value="digital-press" selected>Digital Press</option><option value="offset-press">Offset Press</option></select></label>
+      <label class="pw-field"><span>Resolution</span><select name="resolution"><option value="150">150 DPI</option><option value="300" selected>300 DPI</option><option value="600">600 DPI</option><option value="1200">1200 DPI</option></select></label>
+    </div>
+  </section>
+
+  <section class="pw-section">
+    <div class="pw-section__head"><span class="pw-section__step">08</span><div><h2>Color & PDF profile</h2><p>Set the intended production profile and PDF standard.</p></div></div>
+    <div class="pw-field-grid pw-field-grid--3">
+      <label class="pw-field"><span>Color intent</span><select name="colorProfile"><option value="srgb">sRGB</option><option value="adobe-rgb">Adobe RGB</option><option value="cmyk-fogra39" selected>CMYK · FOGRA39</option><option value="cmyk-swop">CMYK · US Web Coated SWOP</option><option value="japan-color">CMYK · Japan Color</option></select></label>
+      <label class="pw-field"><span>PDF standard</span><select name="pdfStandard"><option value="print-pdf">Print PDF</option><option value="pdfx-1a">PDF/X-1a</option><option value="pdfx-3">PDF/X-3</option><option value="pdfx-4" selected>PDF/X-4</option></select></label>
+      <label class="pw-field"><span>Rendering intent</span><select name="renderingIntent"><option value="relative" selected>Relative Colorimetric</option><option value="perceptual">Perceptual</option><option value="absolute">Absolute Colorimetric</option><option value="saturation">Saturation</option></select></label>
+    </div>
+    <div class="pw-capability-note"><b>Browser limitation:</b> these values are saved as prepress instructions. Browser printing cannot create certified PDF/X or perform true CMYK conversion.</div>
+  </section>
+
+  <section class="pw-section">
+    <div class="pw-section__head"><span class="pw-section__step">09</span><div><h2>Bleed, safe margin & spine</h2><p>Control trim allowance, safe content area and binding spine.</p></div></div>
+    <div class="pw-field-grid pw-field-grid--4">
+      <label class="pw-field"><span>Bleed</span><select name="bleed"><option value="0" selected>None</option><option value="3">3 mm</option><option value="5">5 mm</option></select></label>
+      <label class="pw-field"><span>Safe margin</span><select name="safeMargin"><option value="5">5 mm</option><option value="8" selected>8 mm</option><option value="10">10 mm</option><option value="12">12 mm</option><option value="15">15 mm</option></select></label>
+      <label class="pw-field"><span>Spine mode</span><select name="spineMode"><option value="auto" selected>Auto</option><option value="manual">Manual</option></select></label>
+      <label class="pw-field"><span>Manual spine</span><div class="pw-input-suffix"><input name="spineWidth" type="number" min="0" max="80" step=".1" value="6"><span>mm</span></div></label>
+    </div>
+  </section>
+
+  <section class="pw-section pw-book-only">
+    <div class="pw-section__head"><span class="pw-section__step">10</span><div><h2>Cover & finishing</h2><p>Configure cover production and premium finishing.</p></div></div>
+    <div class="pw-field-grid pw-field-grid--3">
+      <label class="pw-field"><span>Cover type</span><select name="coverType"><option value="same-document" selected>Same Document</option><option value="separate-cover">Separate Cover</option><option value="softcover">Softcover</option><option value="hardcover">Hardcover</option></select></label>
+      <label class="pw-field"><span>Cover stock</span><select name="coverStock"><option value="250-art-card">250 GSM Art Card</option><option value="300-art-card">300 GSM Art Card</option><option value="350-art-card" selected>350 GSM Art Card</option><option value="board">Hardcover Board</option></select></label>
+      <label class="pw-field"><span>Inside paper</span><select name="insidePaper"><option value="80-offset" selected>80 GSM Offset</option><option value="100-offset">100 GSM Offset</option><option value="128-art">128 GSM Art Paper</option><option value="157-matte">157 GSM Matte Art Paper</option></select></label>
+      <label class="pw-field"><span>Lamination</span><select name="lamination"><option value="none" selected>None</option><option value="matte">Matte</option><option value="gloss">Gloss</option><option value="velvet">Velvet</option><option value="soft-touch">Soft Touch</option></select></label>
+      <label class="pw-field"><span>Finishing</span><select name="finishing"><option value="none" selected>None</option><option value="emboss">Emboss</option><option value="deboss">Deboss</option><option value="spot-uv">Spot UV</option><option value="gold-foil">Gold Foil</option><option value="silver-foil">Silver Foil</option></select></label>
+      <label class="pw-field"><span>Imposition</span><select name="imposition"><option value="auto">Auto</option><option value="booklet" selected>Booklet</option><option value="sequential">Sequential</option><option value="printer-driver">Printer Driver</option></select></label>
+    </div>
+    <div class="pw-toggle-grid">
+      <label class="pw-toggle"><input type="checkbox" name="spotUv"><span><b>Spot UV layer</b><small>Add a separate Spot UV instruction.</small></span></label>
+      <label class="pw-toggle"><input type="checkbox" name="foilLayer"><span><b>Foil layer</b><small>Add a separate metallic foil instruction.</small></span></label>
+      <label class="pw-toggle"><input type="checkbox" name="insideCover"><span><b>Print inside cover</b><small>Include inside-front and inside-back printing.</small></span></label>
+    </div>
+  </section>
+
+  <footer class="pw-actions">
+    <button class="pw-button" type="reset" id="resetButton">Reset</button>
+    <button class="pw-button" type="button" id="applyButton">Apply</button>
+    <button class="pw-button pw-button--primary" type="button" id="previewButton">Preview</button>
+  </footer>
+</form>
+
+<aside class="pw-panel pw-preview">
+  <span class="pw-kicker">LIVE SUMMARY</span>
+  <h2>Output preview</h2>
+  <div class="pw-preview-sheet is-portrait" id="previewSheet">
+    <div class="pw-preview-page"><span>1</span></div>
+    <div class="pw-preview-page"><span>2</span></div>
+  </div>
+  <dl class="pw-summary">
+    <div><dt>Mode</dt><dd id="summaryMode">Book</dd></div>
+    <div><dt>Paper</dt><dd id="summaryPaper">A5</dd></div>
+    <div><dt>Orientation</dt><dd id="summaryOrientation">Portrait</dd></div>
+    <div><dt>Book type</dt><dd id="summaryBookType">—</dd></div>
+    <div><dt>Binding</dt><dd id="summaryBinding">—</dd></div>
+    <div><dt>Duplex</dt><dd id="summaryDuplex">Yes</dd></div>
+    <div><dt>Output sheet</dt><dd id="summaryOutputSheet">A4 Landscape</dd></div>
+    <div><dt>Safe margin</dt><dd id="summarySafeMargin">8 mm</dd></div>
+  </dl>
+  <div class="pw-note" id="printAdvice">Normal sequential printing is selected.</div>
+</aside>
+</section>
+</main>
+<script src="print.js"></script>
+
+<section class="pw-modal" id="printPreviewModal" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="printPreviewTitle">
+  <div class="pw-modal__backdrop" data-close-preview></div>
+  <article class="pw-modal__dialog">
+    <header class="pw-modal__header">
+      <div>
+        <span class="pw-kicker">PRINT PREVIEW</span>
+        <h2 id="printPreviewTitle">Selected Print Configuration</h2>
+        <p>Review the selected settings, recommended printer configuration and imposed page preview before printing.</p>
+      </div>
+      <button class="pw-modal__close" type="button" data-close-preview aria-label="Close preview">×</button>
+    </header>
+
+    <div class="pw-modal__body">
+      <section class="pw-preview-config">
+        <div class="pw-preview-block">
+          <div class="pw-preview-block__head">
+            <span class="pw-preview-block__number">01</span>
+            <div><h3>Selected configuration</h3><p>Settings selected in the Print Workspace.</p></div>
+          </div>
+          <dl class="pw-preview-details" id="selectedConfiguration"></dl>
+        </div>
+
+        <div class="pw-preview-block">
+          <div class="pw-preview-block__head">
+            <span class="pw-preview-block__number">02</span>
+            <div><h3>Suggested printer settings</h3><p>Use these options in the browser or printer dialog.</p></div>
+          </div>
+          <dl class="pw-preview-details" id="suggestedPrinterConfiguration"></dl>
+          <div class="pw-device-note" id="printerDeviceNote"></div>
+        </div>
+      </section>
+
+      <section class="pw-preview-block pw-preview-block--visual">
+        <div class="pw-preview-block__head">
+          <span class="pw-preview-block__number">03</span>
+          <div><h3>Print preview</h3><p>Conceptual sheet layout based on the selected configuration.</p></div>
+        </div>
+
+        <div class="pw-imposition-preview" id="impositionPreview">
+          <div class="pw-imposition-sheet" id="impositionSheet">
+      <div class="pw-sheet-safe-area" aria-hidden="true"></div>
+            <div class="pw-imposition-page"><span>1</span></div>
+            <div class="pw-imposition-page"><span>2</span></div>
+          </div>
+        </div>
+
+        <div class="pw-preview-warning" id="previewWarning"></div>
+      </section>
+    </div>
+
+    <footer class="pw-modal__footer">
+      <button class="pw-button" type="button" data-close-preview>Back to Settings</button>
+      <button class="pw-button pw-button--primary" type="button" id="modalPrintButton">Print</button>
+    </footer>
+  </article>
+</section>
+
+</body>
+</html>
