@@ -4787,6 +4787,26 @@ body.ait-elite-is-calculating *{cursor:progress!important}
  .ait-scanner-charts-menu{left:0;right:auto;width:100%;min-width:130px}
 }
 </style>
+
+<style id="ait-elite-details-groups-v10104">
+#aitEliteDecisionDetailModal .ait-elite-detail-group{
+ width:min(100%,1160px);margin:0 auto 14px;padding:14px;
+ border:1px solid var(--v10-line,var(--line,#334155));border-radius:16px;
+ background:color-mix(in srgb,var(--v10-card,var(--card,#0f172a)) 94%,transparent);
+}
+#aitEliteDecisionDetailModal .ait-elite-detail-group-head{margin-bottom:10px}
+#aitEliteDecisionDetailModal .ait-elite-detail-group-head h3{margin:0;font-size:.95rem;line-height:1.3;color:var(--v10-text,var(--text,#e2e8f0))}
+#aitEliteDecisionDetailModal .ait-elite-detail-group-head p{margin:4px 0 0;font-size:.75rem;line-height:1.45;color:var(--v10-muted,var(--muted,#94a3b8))}
+#aitEliteDecisionDetailModal .ait-elite-detail-group .ait-fundamental-strip{margin:0;grid-template-columns:repeat(3,minmax(0,1fr))}
+#aitEliteDecisionDetailModal .ait-fundamental-item em{display:block;margin-top:4px;font-size:.66rem;font-style:normal;line-height:1.4;color:var(--v10-muted,var(--muted,#94a3b8))}
+#aitEliteDecisionDetailModal .ait-elite-detail-group--decision{
+ border-color:color-mix(in srgb,var(--v10-primary,var(--primary,#2563eb)) 42%,var(--v10-line,var(--line,#334155)));
+ background:color-mix(in srgb,var(--v10-primary,var(--primary,#2563eb)) 7%,var(--v10-card,var(--card,#0f172a)));
+}
+#aitEliteDecisionDetailModal .ait-elite-detail-group--decision .ait-fundamental-item:first-child b{font-size:.92rem;color:var(--v10-primary,var(--primary,#2563eb))}
+@media(max-width:820px){#aitEliteDecisionDetailModal .ait-elite-detail-group .ait-fundamental-strip{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){#aitEliteDecisionDetailModal .ait-elite-detail-group{padding:11px}#aitEliteDecisionDetailModal .ait-elite-detail-group .ait-fundamental-strip{grid-template-columns:1fr}}
+</style>
 </head>
 <body>
 <div class="v10-mobile-bar">
@@ -11169,9 +11189,25 @@ document.addEventListener('DOMContentLoaded', () => {
  };
  const calculate=()=>{
   const advanced=window.AitAdvancedSignalPriority?.calculate?.()||{rows:[],available:0,required:9};
-  const sig=`${advanced.rows?.map(r=>`${r.code}:${Number(r.advancedScore||0).toFixed(2)}`).join('|')||''}|${Object.keys(history()).length}`;
+  const primaryRows=bridge()?.priorityDataset?.()||[];
+  const primaryMap=new Map(primaryRows.map(row=>[String(row.code||"").toUpperCase(),row]));
+  const sig=`${advanced.rows?.map(r=>`${r.code}:${Number(r.advancedScore||0).toFixed(2)}`).join('|')||''}|${primaryRows.map(r=>`${r.code}:${Number(r.primaryScore||0).toFixed(1)}:${r.rank||0}:${r.signalRank||0}`).join('|')}|${Object.keys(history()).length}`;
   if(cache.sig===sig&&cache.rows.length)return {rows:cache.rows,available:advanced.available,required:advanced.required};
-  const out=(advanced.rows||[]).map(r=>{const m=metrics(r.code);const eliteScore=clamp((Number(r.advancedScore)||0)*.35+m.liquidity*.15+m.safety*.12+m.breakout*.14+m.support*.12+m.entry*.12);return {...r,liquidityScore:m.liquidity,volatilitySafetyScore:m.safety,breakoutScore:m.breakout,supportScore:m.support,entryQualityScore:m.entry,eliteScore,signal:signal(eliteScore,m.liquidity,m.safety,m.breakout)}});
+  const out=(advanced.rows||[]).map(r=>{
+   const m=metrics(r.code),primary=primaryMap.get(String(r.code||"").toUpperCase())||{};
+   const eliteScore=clamp((Number(r.advancedScore)||0)*.35+m.liquidity*.15+m.safety*.12+m.breakout*.14+m.support*.12+m.entry*.12);
+   return {...r,
+    primaryOverallRank:Number(primary.rank)||0,
+    primarySignalRank:Number(primary.signalRank)||0,
+    primarySignal:String(primary.signal||r.signal||"Avoid"),
+    primaryLtp:Number(primary.ltp??r.ltp)||0,
+    primaryTechnicalScore:Number(primary.indicatorScore??r.indicatorScore)||0,
+    primarySmartMoneyScore:Number(primary.vpaScore??r.vpaScore)||0,
+    primaryScore:Number(primary.primaryScore??r.primaryScore)||0,
+    primaryRelativeScore:Number(primary.comparisonScore??r.comparisonScore)||0,
+    primaryRelativeSignal:String(primary.comparisonSignal??r.comparisonSignal??"Neutral"),
+    liquidityScore:m.liquidity,volatilitySafetyScore:m.safety,breakoutScore:m.breakout,supportScore:m.support,entryQualityScore:m.entry,eliteScore,signal:signal(eliteScore,m.liquidity,m.safety,m.breakout)}
+  });
   const seed=[...out].sort((a,b)=>(b.eliteScore-a.eliteScore)||(b.advancedScore-a.advancedScore)||(b.liquidityScore-a.liquidityScore)||(b.breakoutScore-a.breakoutScore)||String(a.code).localeCompare(String(b.code)));
   const total=seed.length;
   const calibrated=seed.map((r,i)=>{const provisionalRank=i+1,cal=calibratedPriority(r,provisionalRank,total);const merged={...r,rank:provisionalRank,...cal};const signaled={...merged,finalSignal:finalCalibratedSignal(merged)};return decisionLayer(signaled)});
@@ -11217,29 +11253,61 @@ document.addEventListener('DOMContentLoaded', () => {
   set("aitEliteCountHold",rows.filter(r=>["Hold","Hold / Review","Hold / Tight Risk","Reduce"].includes(r.tradeAction)).length);
   set("aitEliteCountAvoid",rows.filter(r=>["Avoid","Exit","Suspend New Buy"].includes(r.tradeAction)).length);
  };
+ const scoreBand=value=>{const n=Number(value)||0;return n>=75?"Strong":n>=60?"Good":n>=45?"Mixed":"Weak"};
  const showDetails=code=>{
   const r=(cache.rows||[]).find(x=>String(x.code)===String(code));if(!r)return;
   const title=document.getElementById("aitEliteDetailTitle"),body=document.getElementById("aitEliteDetailBody");
   if(title)title.textContent=`${r.code} — ${r.tradeAction||"Watch"}`;
-  if(body)body.innerHTML=`<div class="ait-fundamental-strip ait-elite-detail-summary-strip">
-   <div class="ait-fundamental-item"><small>Signal</small><b>${esc(r.finalSignal||"Avoid")} #${r.signalRank}</b></div>
-   <div class="ait-fundamental-item"><small>Elite Score</small><b>${(Number(r.eliteScore)||0).toFixed(1)} • Top ${(Number(r.rankPercentile)||100).toFixed(1)}%</b></div>
-   <div class="ait-fundamental-item"><small>Short Term</small><b>${esc(r.shortTerm||"Watch")} • 3–6D</b></div>
-   <div class="ait-fundamental-item"><small>Mid Term</small><b>${esc(r.midTerm||"Watch")} • 9–20D</b></div>
-   <div class="ait-fundamental-item"><small>Model State</small><b>${esc(r.modelState||"Unverified")}</b></div>
-   <div class="ait-fundamental-item"><small>Trade Action</small><b>${esc(r.tradeAction||"Watch")}</b></div>
-  </div>
-  <div class="ait-fundamental-strip ait-elite-detail-metrics-strip">
-   <div class="ait-fundamental-item"><small>Primary</small><b>${(Number(r.primaryScore)||0).toFixed(1)}</b></div>
-   <div class="ait-fundamental-item"><small>Historical</small><b>${(Number(r.historicalScore)||0).toFixed(1)}</b></div>
-   <div class="ait-fundamental-item"><small>Advanced</small><b>${(Number(r.advancedScore)||0).toFixed(1)}</b></div>
-   <div class="ait-fundamental-item"><small>Liquidity</small><b>${(Number(r.liquidityScore)||0).toFixed(1)}</b></div>
-   <div class="ait-fundamental-item"><small>Volatility Safety</small><b>${(Number(r.volatilitySafetyScore)||0).toFixed(1)}</b></div>
-   <div class="ait-fundamental-item"><small>Breakout</small><b>${(Number(r.breakoutScore)||0).toFixed(1)}</b></div>
-   <div class="ait-fundamental-item"><small>Support</small><b>${(Number(r.supportScore)||0).toFixed(1)}</b></div>
-   <div class="ait-fundamental-item"><small>Entry Quality</small><b>${(Number(r.entryQualityScore)||0).toFixed(1)} • ${esc(r.entryState||"No Entry")}</b></div>
-   <div class="ait-fundamental-item"><small>Decision</small><b title="${esc(plainReason(r))}">${esc(plainReason(r))}</b></div>
-  </div>`
+  const actionWhen=simpleWhen(r),horizon=bestHorizon(r),reason=plainReason(r);
+  const group=(titleText,subtitle,items,cls="")=>`<section class="ait-elite-detail-group ${cls}"><div class="ait-elite-detail-group-head"><div><h3>${esc(titleText)}</h3><p>${esc(subtitle)}</p></div></div><div class="ait-fundamental-strip">${items.join("")}</div></section>`;
+  const item=(label,value,note="")=>`<div class="ait-fundamental-item"><small>${esc(label)}</small><b>${esc(value)}</b>${note?`<em>${esc(note)}</em>`:""}</div>`;
+  if(body)body.innerHTML=`
+   ${group("1. What should I do?","Read this section first. It converts the scanner evidence into your practical next action.",[
+    item("Your Action",r.tradeAction||"Watch",reason),
+    item("When",actionWhen,r.entryState||"No Entry"),
+    item("Best Horizon",horizon,`Short: ${r.shortTerm||"Watch"} • Mid: ${r.midTerm||"Watch"}`),
+    item("Final Signal",`${r.finalSignal||"Avoid"} #${r.signalRank}`,`Elite overall #${r.rank}`),
+    item("Model State",r.modelState||"Unverified",r.modelState==="Healthy"?"Normal confidence":r.modelState==="Caution"?"Use stricter confirmation":r.modelState==="Degraded"?"Avoid aggressive entry":"Check performance state"),
+    item("Why",reason)
+   ],"ait-elite-detail-group--decision")}
+
+   ${group("2. Primary Signal Evidence","These are the fields from the Primary Signal Priority table. They explain the foundation of the Elite decision.",[
+    item("Primary Overall Rank",r.primaryOverallRank?`#${r.primaryOverallRank}`:"—","Rank in the Primary table"),
+    item("Primary Signal Rank",r.primarySignalRank?`${r.primarySignal||"Avoid"} #${r.primarySignalRank}`:(r.primarySignal||"—"),"Rank inside the same Primary signal"),
+    item("LTP",(Number(r.primaryLtp||r.ltp)||0).toFixed(2),"Latest price used by the Primary layer"),
+    item("Technical",(Number(r.primaryTechnicalScore)||0).toFixed(0),scoreBand(r.primaryTechnicalScore)),
+    item("Smart Money",(Number(r.primarySmartMoneyScore)||0).toFixed(0),scoreBand(r.primarySmartMoneyScore)),
+    item("Primary Score",(Number(r.primaryScore)||0).toFixed(1),"50% Technical + 50% Smart Money"),
+    item("Relative Rank",(Number(r.primaryRelativeScore)||0).toFixed(1),r.primaryRelativeSignal||"Neutral"),
+    item("Primary Signal",r.primarySignal||"Avoid","Base signal before Historical / Advanced / Elite calibration")
+   ])}
+
+   ${group("3. Historical & Confirmation","This group tells you whether the Primary setup has persisted and whether recent price/volume behavior confirms it.",[
+    item("Historical",(Number(r.historicalScore)||0).toFixed(1),scoreBand(r.historicalScore)),
+    item("Momentum",(Number(r.momentumScore)||0).toFixed(1),scoreBand(r.momentumScore)),
+    item("Stability",(Number(r.stabilityScore)||0).toFixed(1),scoreBand(r.stabilityScore)),
+    item("Persistence",(Number(r.persistenceScore)||0).toFixed(1),scoreBand(r.persistenceScore)),
+    item("Confirmation",(Number(r.confirmationScore)||0).toFixed(1),scoreBand(r.confirmationScore)),
+    item("Advanced Score",(Number(r.advancedScore)||0).toFixed(1),scoreBand(r.advancedScore))
+   ])}
+
+   ${group("4. Entry & Risk","Use this group to decide whether a good signal is actually tradable now or should wait for confirmation/pullback.",[
+    item("Entry State",r.entryState||"No Entry",actionWhen),
+    item("Entry Quality",(Number(r.entryQualityScore)||0).toFixed(1),scoreBand(r.entryQualityScore)),
+    item("Breakout",(Number(r.breakoutScore)||0).toFixed(1),scoreBand(r.breakoutScore)),
+    item("Support",(Number(r.supportScore)||0).toFixed(1),scoreBand(r.supportScore)),
+    item("Liquidity",(Number(r.liquidityScore)||0).toFixed(1),scoreBand(r.liquidityScore)),
+    item("Volatility Safety",(Number(r.volatilitySafetyScore)||0).toFixed(1),scoreBand(r.volatilitySafetyScore))
+   ])}
+
+   ${group("5. Elite Ranking","Final calibrated ranking and time-horizon evidence used to prioritize this stock against the rest of the active universe.",[
+    item("Elite Score",(Number(r.eliteScore)||0).toFixed(1),scoreBand(r.eliteScore)),
+    item("Rank Percentile",`Top ${(Number(r.rankPercentile)||100).toFixed(1)}%`,r.calibratedPriority||"Watch"),
+    item("Calibrated Priority",r.calibratedPriority||"Watch"),
+    item("Short Term",`${r.shortTerm||"Watch"} • 3–6D`),
+    item("Mid Term",`${r.midTerm||"Watch"} • 9–20D`),
+    item("Long Term",r.longTerm||"Not Validated","Do not infer long-term reliability from the current 20D validation")
+   ])}`;
   document.getElementById("aitElitePriorityModal")?.setAttribute("hidden","");
   document.getElementById("aitEliteDecisionDetailModal")?.removeAttribute("hidden");
  };
