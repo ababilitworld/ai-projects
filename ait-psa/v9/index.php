@@ -4589,6 +4589,204 @@ body.ait-elite-is-calculating *{cursor:progress!important}
   white-space:nowrap;
 }
 </style>
+<style id="ait-terminal-danger-style-v10095">
+.ait-psa-terminal-command--danger{
+  border-color:color-mix(in srgb,#ef4444 52%,var(--v10-line,var(--line,#334155)))!important;
+  background:color-mix(in srgb,#ef4444 9%,var(--v10-card,var(--card,#0f172a)))!important;
+}
+.ait-psa-terminal-command--danger:hover{
+  border-color:#ef4444!important;
+  box-shadow:0 14px 34px rgba(239,68,68,.16)!important;
+}
+.ait-psa-terminal-command--danger span{
+  color:#ef4444!important;
+}
+</style>
+
+<style id="ait-download-timer-v10096">
+#downloadStatusCard .ait-download-timing{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:10px;
+  margin-top:10px;
+}
+#downloadStatusCard .ait-download-time-card{
+  min-width:0;
+  padding:10px 12px;
+  border:1px solid var(--v10-line,var(--line,#334155));
+  border-radius:12px;
+  background:color-mix(in srgb,var(--v10-card,var(--card,#0f172a)) 92%,var(--v10-primary,var(--primary,#2563eb)) 8%);
+}
+#downloadStatusCard .ait-download-time-card span,
+#downloadStatusCard .ait-download-time-card small{
+  display:block;
+  color:var(--v10-muted,var(--muted,#64748b));
+}
+#downloadStatusCard .ait-download-time-card span{
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+}
+#downloadStatusCard .ait-download-time-card strong{
+  display:block;
+  margin-top:3px;
+  font-size:18px;
+  line-height:1.2;
+  color:var(--v10-text,var(--text,#e2e8f0));
+}
+#downloadStatusCard .ait-download-time-card small{
+  margin-top:3px;
+  font-size:11px;
+}
+@media (max-width:640px){
+  #downloadStatusCard .ait-download-timing{grid-template-columns:1fr}
+}
+</style>
+
+<style id="ait-download-status-premium-v10098">
+#downloadStatusCard.ait-download-status-panel{
+  position:relative;
+  overflow:hidden;
+  border:1px solid color-mix(in srgb,var(--v10-primary,var(--primary,#2563eb)) 28%,var(--v10-line,var(--line,#334155)));
+  border-radius:20px;
+  background:
+    radial-gradient(circle at 0 0,color-mix(in srgb,var(--v10-primary,var(--primary,#2563eb)) 13%,transparent),transparent 36%),
+    color-mix(in srgb,var(--v10-card,var(--card,#0f172a)) 96%,transparent);
+  box-shadow:0 20px 54px rgba(15,23,42,.14);
+}
+#downloadStatusCard .ait-download-status-layout{
+  display:grid;
+  grid-template-columns:auto minmax(0,1fr) auto;
+  gap:16px;
+  align-items:center;
+  padding:4px;
+}
+#downloadStatusCard .ait-download-status-orb{
+  width:54px;height:54px;border-radius:16px;display:grid;place-items:center;
+  border:1px solid color-mix(in srgb,var(--v10-primary,var(--primary,#2563eb)) 35%,var(--v10-line,var(--line,#334155)));
+  background:color-mix(in srgb,var(--v10-primary,var(--primary,#2563eb)) 12%,var(--v10-card,var(--card,#0f172a)));
+  color:var(--v10-primary,var(--primary,#2563eb));
+  font-size:24px;font-weight:800;
+}
+#downloadStatusCard .ait-download-status-main{min-width:0}
+#downloadStatusCard .ait-download-status-head{
+  display:flex;justify-content:space-between;gap:14px;align-items:flex-start;
+}
+#downloadStatusCard .ait-download-status-head > div{min-width:0}
+#downloadStatusCard .ait-download-status-kicker{
+  display:block;margin-bottom:3px;font-size:10px;font-weight:800;letter-spacing:.13em;
+  color:var(--v10-primary,var(--primary,#2563eb));
+}
+#downloadStatusCard #downloadStatusTitle{
+  display:block;font-size:16px;line-height:1.3;overflow-wrap:anywhere;
+}
+#downloadStatusCard .ait-download-status-percent{
+  flex:0 0 auto;padding:5px 9px;border-radius:999px;font-weight:800;
+  border:1px solid var(--v10-line,var(--line,#334155));
+  background:color-mix(in srgb,var(--v10-card,var(--card,#0f172a)) 88%,var(--v10-primary,var(--primary,#2563eb)) 12%);
+}
+#downloadStatusCard .ait-download-status-track{
+  height:11px;margin-top:10px;overflow:hidden;border-radius:999px;
+  background:color-mix(in srgb,var(--v10-line,var(--line,#334155)) 48%,transparent);
+  box-shadow:inset 0 1px 3px rgba(15,23,42,.12);
+}
+#downloadStatusCard .ait-download-status-bar{
+  height:100%;border-radius:inherit;
+  transition:width .3s ease,background .25s ease;
+  box-shadow:0 0 18px color-mix(in srgb,var(--v10-primary,var(--primary,#2563eb)) 25%,transparent);
+}
+#downloadStatusCard .ait-download-status-text{
+  margin-top:8px;line-height:1.5;overflow-wrap:anywhere;
+}
+#downloadStatusCard .ait-download-timing{
+  grid-template-columns:repeat(2,minmax(0,1fr));
+}
+#downloadStatusCard .ait-download-time-card{
+  position:relative;overflow:hidden;
+  border-radius:14px;padding:11px 12px;
+}
+#downloadStatusCard #hideDownloadStatus{
+  align-self:start;white-space:nowrap;
+}
+@media (max-width:760px){
+ #downloadStatusCard .ait-download-status-layout{
+   grid-template-columns:1fr;
+   gap:12px;
+ }
+ #downloadStatusCard .ait-download-status-orb{width:46px;height:46px;border-radius:14px}
+ #downloadStatusCard #hideDownloadStatus{justify-self:end;grid-row:1;grid-column:1}
+ #downloadStatusCard .ait-download-status-orb{grid-row:1;grid-column:1}
+ #downloadStatusCard .ait-download-status-main{grid-row:2;grid-column:1}
+}
+@media (max-width:520px){
+ #downloadStatusCard .ait-download-status-head{align-items:flex-start}
+ #downloadStatusCard .ait-download-timing{grid-template-columns:1fr}
+ #downloadStatusCard #downloadStatusTitle{font-size:15px}
+}
+</style>
+
+<style id="ait-watch-header-dropdown-v10099">
+#marketWorkspace .panel .head{gap:14px}
+#marketWorkspace .ait-watch-header-actions{
+ display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap;
+}
+#marketWorkspace .ait-watch-action-menu{flex:0 1 170px;min-width:150px}
+#marketWorkspace .ait-watch-action-menu .v10-menu-trigger{min-height:40px;border-radius:11px}
+#marketWorkspace .ait-watch-action-menu .v10-menu-panel{min-width:220px}
+#marketWorkspace .ait-watch-action-menu .v10-menu-panel button{
+ min-height:42px!important;white-space:nowrap;
+}
+#marketWorkspace .code-row .actions{flex:0 0 auto}
+@media (max-width:760px){
+ #marketWorkspace .panel .head{align-items:flex-start;flex-direction:column}
+ #marketWorkspace .ait-watch-header-actions{width:100%;justify-content:stretch}
+ #marketWorkspace .ait-watch-action-menu{flex:1 1 calc(50% - 4px);min-width:0}
+ #marketWorkspace .ait-watch-action-menu .v10-menu-panel{
+   width:min(280px,calc(100vw - 36px));max-width:calc(100vw - 36px);
+ }
+}
+@media (max-width:480px){
+ #marketWorkspace .ait-watch-header-actions{display:grid;grid-template-columns:1fr 1fr}
+ #marketWorkspace .ait-watch-action-menu{width:100%}
+}
+</style>
+
+
+<style id="ait-scanner-chart-dropdown-v10102">
+.ait-scanner-toolbar{
+ display:flex!important;align-items:center!important;justify-content:flex-end!important;
+ gap:8px!important;flex-wrap:wrap!important;overflow:visible!important;
+}
+.ait-scanner-toolbar .ait-scanner-run{min-width:96px}
+.ait-scanner-charts{position:relative;min-width:132px;overflow:visible}
+.ait-scanner-charts-trigger{
+ width:100%;min-height:40px;display:flex!important;align-items:center;
+ justify-content:space-between;gap:10px;
+}
+.ait-scanner-charts-caret{transition:transform .16s ease}
+.ait-scanner-charts.is-open .ait-scanner-charts-caret{transform:rotate(180deg)}
+.ait-scanner-charts-menu{
+ position:absolute;top:calc(100% + 7px);right:0;z-index:10000;
+ width:150px;padding:7px;border:1px solid var(--v10-line,var(--line,#334155));
+ border-radius:14px;background:var(--v10-panel-solid,var(--card,#0f172a));
+ box-shadow:0 20px 55px rgba(0,0,0,.34);
+}
+.ait-scanner-charts-menu:not([hidden]){display:grid;gap:4px}
+.ait-scanner-charts-menu button{
+ width:100%!important;min-height:40px!important;justify-content:center!important;
+ text-align:center!important;font-weight:800!important;
+}
+.v11-card-head,.v11-potential-actions{overflow:visible!important}
+@media (max-width:640px){
+ .ait-scanner-toolbar{
+  width:100%;display:grid!important;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+ }
+ .ait-scanner-toolbar .ait-scanner-run,.ait-scanner-charts{width:100%;min-width:0}
+ .ait-scanner-charts-menu{left:0;right:auto;width:100%;min-width:130px}
+}
+</style>
 </head>
 <body>
 <div class="v10-mobile-bar">
@@ -4772,7 +4970,19 @@ body.ait-elite-is-calculating *{cursor:progress!important}
 
  <section class="v11-workspace" data-v11-workspace="indicators">
   <article class="v11-card v11-scanner-card">
-   <div class="v11-card-head"><div><h3>Technical Scanner</h3><small>Trend, momentum, SMA, RSI and volume-based technical screening</small></div><div class="v11-potential-actions"><button class="btn primary" id="v11RunScanner" type="button">Run scanner</button><button class="btn soft" id="v11ViewIndicatorCharts" type="button">View 3M Charts</button><button class="btn soft" id="v11ViewIndicatorCharts6" type="button">View 6M Charts</button></div></div>
+   <div class="v11-card-head"><div><h3>Technical Scanner</h3><small>Trend, momentum, SMA, RSI and volume-based technical screening</small></div><div class="v11-potential-actions ait-scanner-toolbar">
+      <button class="btn primary ait-scanner-run" id="v11RunScanner" type="button">Run</button>
+      <div class="ait-scanner-charts" data-ait-scanner-charts>
+       <button class="btn soft ait-scanner-charts-trigger" type="button" aria-haspopup="true" aria-expanded="false">
+        <span>◫ Charts</span><span class="ait-scanner-charts-caret">⌄</span>
+       </button>
+       <div class="ait-scanner-charts-menu" hidden>
+        <button class="btn soft" id="v11ViewIndicatorCharts" type="button">3M</button>
+        <button class="btn soft" id="v11ViewIndicatorCharts6" type="button">6M</button>
+        <button class="btn soft" id="v11ViewIndicatorCharts12" type="button">1Y</button>
+       </div>
+      </div>
+     </div></div>
    <div class="v11-card-body">
     <section class="v11-potential-guideline v11-scanner-guideline"><div class="v11-potential-guideline-grid">
      <div class="v11-potential-guide v11-potential-guide--formula"><strong>Technical Score</strong><span>Combines trend alignment, SMA structure, RSI condition, momentum and volume confirmation.</span></div>
@@ -4799,7 +5009,19 @@ body.ait-elite-is-calculating *{cursor:progress!important}
   <article class="v11-card v11-scanner-card">
    <div class="v11-card-head">
     <div><h3>Relative Strength Scanner</h3><small>Cross-stock ranking by return, momentum, volume participation and volatility</small></div>
-    <div class="v11-potential-actions"><button class="btn primary" type="button" id="v11RunComparison">Rank active list</button><button class="btn soft" id="v11ViewComparisonCharts" type="button">View 3M Charts</button><button class="btn soft" id="v11ViewComparisonCharts6" type="button">View 6M Charts</button></div>
+    <div class="v11-potential-actions ait-scanner-toolbar">
+      <button class="btn primary ait-scanner-run" id="v11RunComparison" type="button">Run</button>
+      <div class="ait-scanner-charts" data-ait-scanner-charts>
+       <button class="btn soft ait-scanner-charts-trigger" type="button" aria-haspopup="true" aria-expanded="false">
+        <span>◫ Charts</span><span class="ait-scanner-charts-caret">⌄</span>
+       </button>
+       <div class="ait-scanner-charts-menu" hidden>
+        <button class="btn soft" id="v11ViewComparisonCharts" type="button">3M</button>
+        <button class="btn soft" id="v11ViewComparisonCharts6" type="button">6M</button>
+        <button class="btn soft" id="v11ViewComparisonCharts12" type="button">1Y</button>
+       </div>
+      </div>
+     </div>
    </div>
    <div class="v11-card-body">
     <div class="v11-summary-grid">
@@ -4845,7 +5067,19 @@ body.ait-elite-is-calculating *{cursor:progress!important}
 
  <section class="v11-workspace" data-v11-workspace="vpa">
   <article class="v11-card v11-scanner-card">
-   <div class="v11-card-head"><div><h3>Smart Money Scanner</h3><small>VPA-based effort-versus-result, spread, volume and trend screening</small></div><div class="v11-potential-actions"><button class="btn primary" id="v11RunVpa" type="button">Analyze active list</button><button class="btn soft" id="v11ViewVpaCharts" type="button">View 3M Charts</button><button class="btn soft" id="v11ViewVpaCharts6" type="button">View 6M Charts</button></div></div>
+   <div class="v11-card-head"><div><h3>Smart Money Scanner</h3><small>VPA-based effort-versus-result, spread, volume and trend screening</small></div><div class="v11-potential-actions ait-scanner-toolbar">
+      <button class="btn primary ait-scanner-run" id="v11RunVpa" type="button">Run</button>
+      <div class="ait-scanner-charts" data-ait-scanner-charts>
+       <button class="btn soft ait-scanner-charts-trigger" type="button" aria-haspopup="true" aria-expanded="false">
+        <span>◫ Charts</span><span class="ait-scanner-charts-caret">⌄</span>
+       </button>
+       <div class="ait-scanner-charts-menu" hidden>
+        <button class="btn soft" id="v11ViewVpaCharts" type="button">3M</button>
+        <button class="btn soft" id="v11ViewVpaCharts6" type="button">6M</button>
+        <button class="btn soft" id="v11ViewVpaCharts12" type="button">1Y</button>
+       </div>
+      </div>
+     </div></div>
    <div class="v11-card-body">
     <section class="v11-potential-guideline v11-scanner-guideline"><div class="v11-potential-guideline-grid">
      <div class="v11-potential-guide v11-potential-guide--formula"><strong>Smart Money Score</strong><span>Summarizes price spread, relative volume, trend and effort-versus-result from local OHLCV history.</span></div>
@@ -4860,7 +5094,19 @@ body.ait-elite-is-calculating *{cursor:progress!important}
 
  <section class="v11-workspace" data-v11-workspace="potential-composite">
   <article class="v11-card v11-scanner-card">
-   <div class="v11-card-head"><div><h3>AIT Composite Screener</h3><small>Weighted multi-factor screening across technical, smart-money and relative-strength evidence</small></div><div class="v11-potential-actions"><button class="btn primary" id="v11RunComposite" type="button">Run composite screen</button><button class="btn soft" id="v11ViewCompositeCharts" type="button">View 3M Charts</button><button class="btn soft" id="v11ViewCompositeCharts6" type="button">View 6M Charts</button></div></div>
+   <div class="v11-card-head"><div><h3>AIT Composite Screener</h3><small>Weighted multi-factor screening across technical, smart-money and relative-strength evidence</small></div><div class="v11-potential-actions ait-scanner-toolbar">
+      <button class="btn primary ait-scanner-run" id="v11RunComposite" type="button">Run</button>
+      <div class="ait-scanner-charts" data-ait-scanner-charts>
+       <button class="btn soft ait-scanner-charts-trigger" type="button" aria-haspopup="true" aria-expanded="false">
+        <span>◫ Charts</span><span class="ait-scanner-charts-caret">⌄</span>
+       </button>
+       <div class="ait-scanner-charts-menu" hidden>
+        <button class="btn soft" id="v11ViewCompositeCharts" type="button">3M</button>
+        <button class="btn soft" id="v11ViewCompositeCharts6" type="button">6M</button>
+        <button class="btn soft" id="v11ViewCompositeCharts12" type="button">1Y</button>
+       </div>
+      </div>
+     </div></div>
    <div class="v11-card-body">
     <section class="v11-potential-guideline"><div class="v11-potential-guideline-grid">
      <div class="v11-potential-guide v11-potential-guide--formula"><strong>Composite Formula</strong><span>Combined Score = 40% Technical + 35% Smart Money + 25% Relative Strength.</span></div>
@@ -4875,7 +5121,19 @@ body.ait-elite-is-calculating *{cursor:progress!important}
 
  <section class="v11-workspace" data-v11-workspace="potential">
   <article class="v11-card v11-scanner-card">
-   <div class="v11-card-head"><div><h3>AIT Elite Screener</h3><small>Balanced 50/50 primary scoring with relative-strength tie-breaking</small></div><div class="v11-potential-actions"><button class="btn primary" id="v11RunPotential" type="button">Run elite screen</button><button class="btn soft" id="v11ViewPotentialCharts" type="button">View 3M Charts</button><button class="btn soft" id="v11ViewPotentialCharts6" type="button">View 6M Charts</button></div></div>
+   <div class="v11-card-head"><div><h3>AIT Elite Screener</h3><small>Balanced 50/50 primary scoring with relative-strength tie-breaking</small></div><div class="v11-potential-actions ait-scanner-toolbar">
+      <button class="btn primary ait-scanner-run" id="v11RunPotential" type="button">Run</button>
+      <div class="ait-scanner-charts" data-ait-scanner-charts>
+       <button class="btn soft ait-scanner-charts-trigger" type="button" aria-haspopup="true" aria-expanded="false">
+        <span>◫ Charts</span><span class="ait-scanner-charts-caret">⌄</span>
+       </button>
+       <div class="ait-scanner-charts-menu" hidden>
+        <button class="btn soft" id="v11ViewPotentialCharts" type="button">3M</button>
+        <button class="btn soft" id="v11ViewPotentialCharts6" type="button">6M</button>
+        <button class="btn soft" id="v11ViewPotentialCharts12" type="button">1Y</button>
+       </div>
+      </div>
+     </div></div>
    <div class="v11-card-body">
     <section class="v11-potential-guideline" aria-labelledby="v11PotentialGuidelineTitle"><div class="v11-potential-guideline-head"><div><h4 id="v11PotentialGuidelineTitle">Elite Screening Guideline</h4><p>Use this as the balanced flagship shortlist, then verify price action, liquidity, support and risk.</p></div></div><div class="v11-potential-guideline-grid">
      <div class="v11-potential-guide v11-potential-guide--strongest"><strong>Strong Buy · 75–100</strong><span>The balanced Primary Score is strong and both Technical and Smart Money scores confirm it.</span></div>
@@ -4890,7 +5148,19 @@ body.ait-elite-is-calculating *{cursor:progress!important}
 
  <section class="v11-workspace" data-v11-workspace="potential-priority">
   <article class="v11-card v11-scanner-card">
-   <div class="v11-card-head"><div><h3>AIT Signal Priority Screener</h3><small>Signal-first screening that keeps every Strong Buy above Buy, Watch and Avoid</small></div><div class="v11-potential-actions"><button class="btn primary" id="v11RunPriority" type="button">Run priority screen</button><button class="btn soft" id="v11ViewPriorityCharts" type="button">View 3M Charts</button><button class="btn soft" id="v11ViewPriorityCharts6" type="button">View 6M Charts</button></div></div>
+   <div class="v11-card-head"><div><h3>AIT Signal Priority Screener</h3><small>Signal-first screening that keeps every Strong Buy above Buy, Watch and Avoid</small></div><div class="v11-potential-actions ait-scanner-toolbar">
+      <button class="btn primary ait-scanner-run" id="v11RunPriority" type="button">Run</button>
+      <div class="ait-scanner-charts" data-ait-scanner-charts>
+       <button class="btn soft ait-scanner-charts-trigger" type="button" aria-haspopup="true" aria-expanded="false">
+        <span>◫ Charts</span><span class="ait-scanner-charts-caret">⌄</span>
+       </button>
+       <div class="ait-scanner-charts-menu" hidden>
+        <button class="btn soft" id="v11ViewPriorityCharts" type="button">3M</button>
+        <button class="btn soft" id="v11ViewPriorityCharts6" type="button">6M</button>
+        <button class="btn soft" id="v11ViewPriorityCharts12" type="button">1Y</button>
+       </div>
+      </div>
+     </div></div>
    <div class="v11-card-body">
     <section class="v11-potential-guideline"><div class="v11-potential-guideline-grid">
      <div class="v11-potential-guide v11-potential-guide--strongest"><strong>First Priority</strong><span>Signal order: Strong Buy → Buy → Watch → Avoid.</span></div>
@@ -5064,17 +5334,22 @@ body.ait-elite-is-calculating *{cursor:progress!important}
    </button>
   </div>
  </div>
- <section class="card" id="downloadStatusCard" data-v10-workspace="downloadWorkspace" style="display:none;margin-bottom:14px">
- <div class="row" style="align-items:center;gap:12px">
-  <div style="flex:1;min-width:220px">
-   <div style="display:flex;justify-content:space-between;gap:12px;align-items:center">
-    <strong id="downloadStatusTitle">Preparing download</strong>
-    <span class="small" id="downloadStatusPercent">0%</span>
+ <section class="card ait-download-status-panel" id="downloadStatusCard" data-v10-workspace="downloadWorkspace" style="display:none;margin-bottom:14px">
+ <div class="row ait-download-status-layout">
+  <div class="ait-download-status-orb" aria-hidden="true"><span>⇩</span></div>
+  <div class="ait-download-status-main">
+   <div class="ait-download-status-head">
+    <div><small class="ait-download-status-kicker">LIVE DOWNLOAD STATUS</small><strong id="downloadStatusTitle">Preparing download</strong></div>
+    <span class="small ait-download-status-percent" id="downloadStatusPercent">0%</span>
    </div>
-   <div style="height:10px;background:#e5e7eb;border-radius:999px;overflow:hidden;margin-top:8px">
-    <div id="downloadStatusBar" style="height:100%;width:0%;background:#2563eb;transition:width .25s ease"></div>
+   <div class="ait-download-status-track">
+    <div id="downloadStatusBar" class="ait-download-status-bar" style="width:0%"></div>
    </div>
-   <div class="small" id="downloadStatusText" style="margin-top:8px">Waiting to start…</div>
+   <div class="small ait-download-status-text" id="downloadStatusText">Waiting to start…</div>
+   <div class="ait-download-timing" id="downloadTiming" aria-live="polite">
+    <div class="ait-download-time-card"><span>Time passed</span><strong id="downloadElapsedTime">00:00</strong><small id="downloadStartedAt">Not started</small></div>
+    <div class="ait-download-time-card"><span>Approx. remaining</span><strong id="downloadEtaTime">Estimating…</strong><small id="downloadEtaFinish">Waiting for progress</small></div>
+   </div>
   </div>
   <button class="btn soft" type="button" id="hideDownloadStatus">Hide</button>
  </div>
@@ -5100,7 +5375,7 @@ body.ait-elite-is-calculating *{cursor:progress!important}
  <button class="btn primary" id="dse3mUpdate">Download DSE 3M</button>
  <button class="btn primary" id="dse6mUpdate">Download DSE 6M</button><button class="btn soft" id="incrementalOhlcDownload" type="button" hidden>Incremental OHLC Download</button><button class="btn soft" id="forceFullOhlc3M" type="button" hidden>Force Full OHLC 3M</button><button class="btn soft" id="forceFullOhlcDownload" type="button" hidden>Force Full OHLC 6M</button><button class="btn soft" id="forceFullOhlc1Y" type="button" hidden>Force Full OHLC 1Y</button>
  <button class="btn primary" id="viewListCharts">View Saved 3M Charts</button>
- <button class="btn primary" id="viewListCharts6">View Saved 6M Charts</button>
+ <button class="btn primary" id="viewListCharts6">View Saved 6M Charts</button><button class="btn primary" id="viewListCharts12">View Saved 1Y Charts</button>
  <button class="btn soft" id="viewDownloadedData">View Downloaded Data</button>
  <button class="btn soft" id="emptyDownloadedData" type="button" hidden>Empty Downloaded Data</button>
  <button class="btn soft" id="exportBtn">Backup Dashboard</button>
@@ -5138,7 +5413,24 @@ body.ait-elite-is-calculating *{cursor:progress!important}
  <section class="card panel">
   <div class="head">
    <div><h2 id="watchTitle">Active Watch List</h2><span class="small" id="watchMeta"></span></div>
-   <div class="actions"><button class="btn blue" id="dse3mUpdate2">Download DSE 3M</button><button class="btn blue" id="dse6mUpdate2">Download DSE 6M</button><button class="btn primary" id="viewListCharts2">View Saved 3M Charts</button><button class="btn primary" id="viewListCharts6_2">View Saved 6M Charts</button></div>
+   <div class="actions ait-watch-header-actions">
+     <div class="v10-menu ait-watch-action-menu">
+      <button class="btn v10-menu-trigger" type="button"><span>⇩ Download</span><span>⌄</span></button>
+      <div class="v10-menu-panel">
+       <button class="btn blue" id="dse3mUpdate2" type="button">3M</button>
+       <button class="btn blue" id="dse6mUpdate2" type="button">6M</button>
+       <button class="btn blue" id="dse1yUpdate2" type="button">1Y</button>
+      </div>
+     </div>
+     <div class="v10-menu ait-watch-action-menu align-right">
+      <button class="btn v10-menu-trigger primary-menu" type="button"><span>◫ Charts</span><span>⌄</span></button>
+      <div class="v10-menu-panel">
+       <button class="btn primary" id="viewListCharts2" type="button">3M</button>
+       <button class="btn primary" id="viewListCharts6_2" type="button">6M</button>
+       <button class="btn primary" id="viewListCharts12_2" type="button">1Y</button>
+      </div>
+     </div>
+    </div>
   </div>
   <div class="scroll" id="watch"></div>
  </section>
@@ -5281,7 +5573,7 @@ body.ait-elite-is-calculating *{cursor:progress!important}
  <div class="modal-head"><div><h2 id="galleryTitle">Watch List — 3M Charts</h2><span class="small">All available local OHLC charts</span></div><button class="btn soft icon" data-close="galleryModal">×</button></div>
  <div class="v11-scanner-searchbar v11-chart-gallery-search" data-gallery-search="gallery">
   <div class="v11-scanner-searchbar__orb" aria-hidden="true">⌕</div>
-  <div class="v11-scanner-searchbar__copy"><span class="v11-scanner-searchbar__kicker">CHART GALLERY</span><label for="gallerySearch">Search Trading Code</label><small>Instantly filter watch-list 3M and 6M charts</small></div>
+  <div class="v11-scanner-searchbar__copy"><span class="v11-scanner-searchbar__kicker">CHART GALLERY</span><label for="gallerySearch">Search Trading Code</label><small>Instantly filter watch-list 3M, 6M and 1Y charts</small></div>
   <div class="v11-scanner-searchbar__field v11-chart-gallery-search__field"><span class="v11-scanner-searchbar__icon" aria-hidden="true">⌕</span><input class="input" id="gallerySearch" type="search" autocomplete="off" spellcheck="false" placeholder="Search ROBI, ALIF, SUMITPOWER…" aria-label="Search watch-list charts"><kbd class="v11-scanner-searchbar__key">/</kbd></div>
   <button class="btn soft v11-scanner-searchbar__clear v11-chart-gallery-search__clear" id="gallerySearchClear" type="button">Clear</button>
   <div class="v11-scanner-searchbar__count v11-chart-gallery-search__count" id="gallerySearchCount" aria-live="polite">0 shown</div>
@@ -5296,7 +5588,7 @@ body.ait-elite-is-calculating *{cursor:progress!important}
  </div>
  <div class="v11-scanner-searchbar v11-chart-gallery-search" data-gallery-search="v11RankedChartGallery">
   <div class="v11-scanner-searchbar__orb" aria-hidden="true">⌕</div>
-  <div class="v11-scanner-searchbar__copy"><span class="v11-scanner-searchbar__kicker">RANKED CHARTS</span><label for="v11RankedChartSearch">Search Trading Code</label><small>Instantly filter ranked scanner 3M and 6M charts</small></div>
+  <div class="v11-scanner-searchbar__copy"><span class="v11-scanner-searchbar__kicker">RANKED CHARTS</span><label for="v11RankedChartSearch">Search Trading Code</label><small>Instantly filter ranked scanner 3M, 6M and 1Y charts</small></div>
   <div class="v11-scanner-searchbar__field v11-chart-gallery-search__field"><span class="v11-scanner-searchbar__icon" aria-hidden="true">⌕</span><input class="input" id="v11RankedChartSearch" type="search" autocomplete="off" spellcheck="false" placeholder="Search ROBI, ALIF, SUMITPOWER…" aria-label="Search ranked charts"><kbd class="v11-scanner-searchbar__key">/</kbd></div>
   <button class="btn soft v11-scanner-searchbar__clear v11-chart-gallery-search__clear" id="v11RankedChartSearchClear" type="button">Clear</button>
   <div class="v11-scanner-searchbar__count v11-chart-gallery-search__count" id="v11RankedChartSearchCount" aria-live="polite">0 shown</div>
@@ -5368,11 +5660,97 @@ body.ait-elite-is-calculating *{cursor:progress!important}
 <script>
 "use strict";
 class ID{static make(){return crypto?.randomUUID?.()||"id-"+Date.now().toString(36)+"-"+Math.random().toString(36).slice(2)}}
+class OHLCStorage{
+ static DB_NAME="ait-psa-market-data-v1";
+ static STORE_NAME="state";
+ static KEY="ohlc-history";
+ static open(){
+  return new Promise((resolve,reject)=>{
+   if(!("indexedDB" in window))return reject(new Error("IndexedDB is not available in this browser."));
+   const request=indexedDB.open(OHLCStorage.DB_NAME,1);
+   request.onupgradeneeded=()=>{const db=request.result;if(!db.objectStoreNames.contains(OHLCStorage.STORE_NAME))db.createObjectStore(OHLCStorage.STORE_NAME)};
+   request.onsuccess=()=>resolve(request.result);
+   request.onerror=()=>reject(request.error||new Error("Unable to open IndexedDB."));
+  });
+ }
+ static async load(){
+  const db=await OHLCStorage.open();
+  try{
+   return await new Promise((resolve,reject)=>{
+    const tx=db.transaction(OHLCStorage.STORE_NAME,"readonly"),req=tx.objectStore(OHLCStorage.STORE_NAME).get(OHLCStorage.KEY);
+    req.onsuccess=()=>resolve(req.result&&typeof req.result==="object"?req.result:{});
+    req.onerror=()=>reject(req.error||new Error("Unable to read OHLC history."));
+   });
+  }finally{db.close()}
+ }
+ static async save(history){
+  const db=await OHLCStorage.open();
+  try{
+   await new Promise((resolve,reject)=>{
+    const tx=db.transaction(OHLCStorage.STORE_NAME,"readwrite");
+    tx.objectStore(OHLCStorage.STORE_NAME).put(history&&typeof history==="object"?history:{},OHLCStorage.KEY);
+    tx.oncomplete=()=>resolve(true);
+    tx.onerror=()=>reject(tx.error||new Error("Unable to save OHLC history."));
+    tx.onabort=()=>reject(tx.error||new Error("OHLC history save was aborted."));
+   });
+   try{if(navigator.storage?.persist)navigator.storage.persist()}catch(_){}
+   return true;
+  }finally{db.close()}
+ }
+ static async clear(){return OHLCStorage.save({})}
+}
 class Store{
  static KEY="dse-watch-dashboard-v3";
- load(){try{const d=JSON.parse(localStorage.getItem(Store.KEY));if(d&&d.watchLists)return this.norm(d)}catch(e){}const id=ID.make();return{motherCodes:[],motherSource:"",lastMotherImport:null,autoMotherSync:true,watchLists:[{id,name:"My DSE Watch List",codes:[]}],activeId:id,history:{},fundamentals:{},lastFundamentalDownload:null,activity:[],lastArchive:null}}
+ constructor(){this._lastHistorySignature="";this._savePromise=Promise.resolve()}
+ load(){
+  try{const d=JSON.parse(localStorage.getItem(Store.KEY));if(d&&d.watchLists)return this.norm(d)}catch(e){}
+  const id=ID.make();
+  return{motherCodes:[],motherSource:"",lastMotherImport:null,autoMotherSync:true,watchLists:[{id,name:"My DSE Watch List",codes:[]}],activeId:id,history:{},fundamentals:{},lastFundamentalDownload:null,activity:[],lastArchive:null}
+ }
  norm(d){d.motherCodes=Array.isArray(d.motherCodes)?[...new Set(d.motherCodes.map(x=>String(x).toUpperCase()))].sort():[];d.history=d.history&&typeof d.history==="object"?d.history:{};d.fundamentals=d.fundamentals&&typeof d.fundamentals==="object"?d.fundamentals:{};const migratedFundamentals={};Object.entries(d.fundamentals).forEach(([key,row])=>{const raw=String(row?.code||key||"").trim().toUpperCase();const canonical=raw.replace(/[^A-Z0-9.-]/g,"");if(canonical)migratedFundamentals[canonical]={...(row||{}),code:canonical};});d.fundamentals=migratedFundamentals;d.lastFundamentalDownload=d.lastFundamentalDownload||null;d.motherSource=String(d.motherSource||"");d.lastMotherImport=d.lastMotherImport||null;d.autoMotherSync=d.autoMotherSync!==false;d.activity=Array.isArray(d.activity)?d.activity:[];if(!d.watchLists?.length){const id=ID.make();d.watchLists=[{id,name:"My DSE Watch List",codes:[]}];d.activeId=id}if(!d.watchLists.some(x=>x.id===d.activeId))d.activeId=d.watchLists[0].id;return d}
- save(d){localStorage.setItem(Store.KEY,JSON.stringify(d))}
+ historySignature(history){
+  const h=history&&typeof history==="object"?history:{},codes=Object.keys(h).sort();
+  let rows=0,tail="";
+  for(const code of codes){const list=Array.isArray(h[code])?h[code]:[];rows+=list.length;const last=list.at(-1);tail+=`|${code}:${list.length}:${last?.date||""}:${last?.close??""}`;}
+  let hash=2166136261;for(let i=0;i<tail.length;i++){hash^=tail.charCodeAt(i);hash=Math.imul(hash,16777619)}
+  return `${codes.length}|${rows}|${(hash>>>0).toString(36)}`;
+ }
+ metadata(d){
+  const copy={...d,history:{}};
+  copy.ohlcStorage="indexeddb-v1";
+  copy.ohlcRecordCount=Object.values(d?.history||{}).reduce((n,rows)=>n+(Array.isArray(rows)?rows.length:0),0);
+  return copy;
+ }
+ saveMetadata(d){localStorage.setItem(Store.KEY,JSON.stringify(this.metadata(d)))}
+ async hydrateHistory(d){
+  const legacy=d.history&&typeof d.history==="object"?d.history:{};
+  let indexed={};
+  try{indexed=await OHLCStorage.load()}catch(e){console.warn("AIT OHLC IndexedDB load:",e)}
+  const indexedCount=Object.values(indexed||{}).reduce((n,rows)=>n+(Array.isArray(rows)?rows.length:0),0);
+  const legacyCount=Object.values(legacy||{}).reduce((n,rows)=>n+(Array.isArray(rows)?rows.length:0),0);
+  if(indexedCount>0)d.history=indexed;
+  else if(legacyCount>0){
+   d.history=legacy;
+   try{await OHLCStorage.save(legacy)}catch(e){console.error("AIT OHLC migration failed:",e);throw e}
+  }else d.history={};
+  this._lastHistorySignature=this.historySignature(d.history);
+  this.saveMetadata(d);
+  return d.history;
+ }
+ save(d){
+  this.saveMetadata(d);
+  const sig=this.historySignature(d.history);
+  if(sig!==this._lastHistorySignature){
+   this._lastHistorySignature=sig;
+   this._savePromise=this._savePromise.then(()=>OHLCStorage.save(d.history)).catch(e=>{
+    this._lastHistorySignature="";
+    console.error("AIT OHLC IndexedDB save:",e);
+    window.dispatchEvent(new CustomEvent("ait:ohlc-storage-error",{detail:{message:e?.message||String(e)}}));
+   });
+  }
+  return this._savePromise;
+ }
+ flush(){return this._savePromise}
 }
 class MotherParser{
  static reserved=new Set(["SL","NO","TRADING","CODE","STOCK","COMPANY","SECURITY","LTP","OPEN","HIGH","LOW","CLOSE","CLOSEP","YCP","CHANGE","TRADE","VALUE","VOLUME","MARKET","PRICE","TOTAL","CATEGORY","SECTOR","DATE"]);
@@ -5429,13 +5807,21 @@ class CandleChart{
  }
 }
 class App{
- constructor(){this.store=new Store();this.s=this.store.load();this.editId=null;this.pending={};this.pendingMother=[];this.pendingMotherSource="";this.currentCode=null;this.searchTerm=""}
- init(){["lastArchive","sMother","sLists","sHistory","sRecords","lists","activity","newList","clearActivity","search","motherImport","quickMotherSync","saveStatus","motherModal","motherSourceSelect","motherUrl","autoMotherSync","openMotherSource","fetchMother","motherFiles","parseMotherFiles","motherPaste","parseMotherPaste","motherResult","motherCommitArea","mergeMother","replaceMother","archiveImport","downloadFundamentals","amarstockFundamentals","instantDseUpdate","dse3mUpdate","dse3mUpdate2","dse6mUpdate","dse6mUpdate2","incrementalOhlcDownload","forceFullOhlc3M","forceFullOhlcDownload","forceFullOhlc1Y","viewListCharts","viewListCharts2","viewListCharts6","viewListCharts6_2","downloadStatusCard","downloadStatusTitle","downloadStatusPercent","downloadStatusBar","downloadStatusText","hideDownloadStatus","viewDownloadedData","emptyDownloadedData","exportBtn","importBtn","dashboardFile","mother","motherMeta","watch","watchTitle","watchMeta","watchCodeSearch","clearWatchCodeSearch","watchCodeSearchStatus","listModal","listModalTitle","listForm","listName","archiveModal","dseStartDate","dseEndDate","fetchDseRange","downloadDseCsv","ohlcFiles","parseFiles","pasteOhlc","parsePaste","archiveUrl","urlCode","fetchUrl","parseResult","commitArea","mergeHistory","replaceHistory","chartModal","chartTitle","chartSubtitle","chartRange","downloadChart","chartCanvas","chartInfo","galleryModal","galleryTitle","gallery","dataModal","dataSummary","dataTable","downloadConfirmModal","downloadConfirmTitle","downloadConfirmMessage","downloadConfirmDetails","instantTradingWindowFields","instantTradingStartTime","instantTradingEndTime","instantTradingWindowHint","downloadConfirmClose","downloadConfirmCancel","downloadConfirmProceed","operationResultModal","operationResultTitle","operationResultSubtitle","operationResultIcon","operationResultMessage","operationResultDetails","operationResultClose","operationResultSecondary","operationResultPrimary","toasts"].forEach(id=>this[id]=document.getElementById(id));this.bind();
+ constructor(){this.store=new Store();this.s=this.store.load();this.editId=null;this.pending={};this.pendingMother=[];this.pendingMotherSource="";this.currentCode=null;this.searchTerm="";this._downloadTimingState=null;this._downloadTimingInterval=null}
+ async init(){["lastArchive","sMother","sLists","sHistory","sRecords","lists","activity","newList","clearActivity","search","motherImport","quickMotherSync","saveStatus","motherModal","motherSourceSelect","motherUrl","autoMotherSync","openMotherSource","fetchMother","motherFiles","parseMotherFiles","motherPaste","parseMotherPaste","motherResult","motherCommitArea","mergeMother","replaceMother","archiveImport","downloadFundamentals","amarstockFundamentals","instantDseUpdate","dse3mUpdate","dse3mUpdate2","dse6mUpdate","dse6mUpdate2","dse1yUpdate2","incrementalOhlcDownload","forceFullOhlc3M","forceFullOhlcDownload","forceFullOhlc1Y","viewListCharts","viewListCharts2","viewListCharts6","viewListCharts6_2","viewListCharts12","viewListCharts12_2","downloadStatusCard","downloadStatusTitle","downloadStatusPercent","downloadStatusBar","downloadStatusText","downloadTiming","downloadElapsedTime","downloadStartedAt","downloadEtaTime","downloadEtaFinish","hideDownloadStatus","viewDownloadedData","emptyDownloadedData","exportBtn","importBtn","dashboardFile","mother","motherMeta","watch","watchTitle","watchMeta","watchCodeSearch","clearWatchCodeSearch","watchCodeSearchStatus","listModal","listModalTitle","listForm","listName","archiveModal","dseStartDate","dseEndDate","fetchDseRange","downloadDseCsv","ohlcFiles","parseFiles","pasteOhlc","parsePaste","archiveUrl","urlCode","fetchUrl","parseResult","commitArea","mergeHistory","replaceHistory","chartModal","chartTitle","chartSubtitle","chartRange","downloadChart","chartCanvas","chartInfo","galleryModal","galleryTitle","gallery","dataModal","dataSummary","dataTable","downloadConfirmModal","downloadConfirmTitle","downloadConfirmMessage","downloadConfirmDetails","instantTradingWindowFields","instantTradingStartTime","instantTradingEndTime","instantTradingWindowHint","downloadConfirmClose","downloadConfirmCancel","downloadConfirmProceed","operationResultModal","operationResultTitle","operationResultSubtitle","operationResultIcon","operationResultMessage","operationResultDetails","operationResultClose","operationResultSecondary","operationResultPrimary","toasts"].forEach(id=>this[id]=document.getElementById(id));this.bind();
  this.searchTerm="";
  if(this.search)this.search.value="";
  if(this.watchCodeSearch)this.watchCodeSearch.value="";
  this.setDefaultDseDates();
+ try{
+  if(this.saveStatus)this.saveStatus.textContent="Loading OHLC history…";
+  await this.store.hydrateHistory(this.s);
+ }catch(e){
+  console.error(e);
+  this.toast(`OHLC storage initialization failed: ${e?.message||e}`,true);
+ }
  this.render();
+ if(this.saveStatus)this.saveStatus.textContent="Permanent autosave enabled • OHLC in IndexedDB";
  setTimeout(()=>this.maybeAutoSync(),500)}
  bind(){this.newList.onclick=()=>this.openList();this.listForm.onsubmit=e=>this.saveList(e);this.clearActivity.onclick=()=>{this.s.activity=[];this.persist();this.renderActivity()};this.search.oninput=e=>this.setTradingCodeSearch(e.target.value);
 this.watchCodeSearch.oninput=e=>this.setTradingCodeSearch(e.target.value);
@@ -5490,6 +5876,14 @@ this.dse6mUpdate.onclick=this.dse6mUpdate2.onclick=async()=>{
   :`${a?.codes?.length||0} trading codes will be requested from ${plan.start} to ${plan.end}. Progress will appear in Download Status.`;
  if(await this.confirmDownload("Sync DSE 6M",`${mode} for ${a?.name||"the active watch list"}?`,details))this.downloadActiveWatchlistMonths(6,false);
 };
+this.dse1yUpdate2.onclick=async()=>{
+ const a=this.active(),plan=this.planIncrementalOhlcRange(12,false);
+ const mode=plan.incremental?"Incremental sync":"Initial 1Y download";
+ const details=plan.incremental
+  ?`Latest stored date: ${plan.latest}. Only ${plan.start} to ${plan.end} will be requested. Existing historical data is preserved; the overlapping latest date is replaced and duplicates are removed.`
+  :`${a?.codes?.length||0} trading codes will be requested from ${plan.start} to ${plan.end}. Progress will appear in Download Status.`;
+ if(await this.confirmDownload("Sync DSE 1Y",`${mode} for ${a?.name||"the active watch list"}?`,details))this.downloadActiveWatchlistMonths(12,false);
+};
 this.incrementalOhlcDownload.onclick=async()=>{
  const a=this.active(),plan=this.planStrictIncrementalOhlcRange();
  if(!plan.latest)return this.toast("No stored OHLC exists for this watch list. Use OHLC → Force for the initial download.",true);
@@ -5517,7 +5911,7 @@ this.downloadDseCsv.onclick=async()=>{
  const p=new URLSearchParams({startDate:this.dseStartDate.value,endDate:this.dseEndDate.value,format:"csv"});
  window.location.href="dse_archive.php?"+p.toString()
 };
-this.viewListCharts.onclick=this.viewListCharts2.onclick=()=>this.openGallery(3);this.viewListCharts6.onclick=this.viewListCharts6_2.onclick=()=>this.openGallery(6);this.viewDownloadedData.onclick=()=>this.openDataPreview();this.emptyDownloadedData.onclick=()=>this.clearDownloadedData();this.parseFiles.onclick=()=>this.readFiles();this.parsePaste.onclick=()=>this.prepare(Parser.parse(this.pasteOhlc.value),"Pasted archive");this.fetchUrl.onclick=async()=>{if(await this.confirmDownload("Download archive URL","Download and parse the entered archive URL?","The remote source may block browser access; manual import remains available if it fails."))this.fetchArchive()};this.mergeHistory.onclick=()=>this.commit(false);this.replaceHistory.onclick=()=>this.commit(true);this.chartRange.onchange=()=>this.drawCurrent();this.downloadChart.onclick=()=>{const a=document.createElement("a");a.href=this.chartCanvas.toDataURL("image/png");a.download=`${this.currentCode||"DSE"}-candlestick.png`;a.click()};this.exportBtn.onclick=()=>this.export();this.importBtn.onclick=()=>this.dashboardFile.click();this.dashboardFile.onchange=e=>this.import(e);document.querySelectorAll("[data-close]").forEach(b=>b.onclick=()=>this.close(b.dataset.close));document.querySelectorAll(".modal").forEach(m=>m.onclick=e=>{if(e.target===m){if(m.id==="downloadConfirmModal")this.resolveDownloadConfirmation(false);else this.close(m.id)}});
+this.viewListCharts.onclick=this.viewListCharts2.onclick=()=>this.openGallery(3);this.viewListCharts6.onclick=this.viewListCharts6_2.onclick=()=>this.openGallery(6);this.viewListCharts12.onclick=this.viewListCharts12_2.onclick=()=>this.openGallery(12);this.viewDownloadedData.onclick=()=>this.openDataPreview();this.emptyDownloadedData.onclick=()=>this.clearDownloadedData();this.parseFiles.onclick=()=>this.readFiles();this.parsePaste.onclick=()=>this.prepare(Parser.parse(this.pasteOhlc.value),"Pasted archive");this.fetchUrl.onclick=async()=>{if(await this.confirmDownload("Download archive URL","Download and parse the entered archive URL?","The remote source may block browser access; manual import remains available if it fails."))this.fetchArchive()};this.mergeHistory.onclick=()=>this.commit(false);this.replaceHistory.onclick=()=>this.commit(true);this.chartRange.onchange=()=>this.drawCurrent();this.downloadChart.onclick=()=>{const a=document.createElement("a");a.href=this.chartCanvas.toDataURL("image/png");a.download=`${this.currentCode||"DSE"}-candlestick.png`;a.click()};this.exportBtn.onclick=()=>this.export();this.importBtn.onclick=()=>this.dashboardFile.click();this.dashboardFile.onchange=e=>this.import(e);document.querySelectorAll("[data-close]").forEach(b=>b.onclick=()=>this.close(b.dataset.close));document.querySelectorAll(".modal").forEach(m=>m.onclick=e=>{if(e.target===m){if(m.id==="downloadConfirmModal")this.resolveDownloadConfirmation(false);else this.close(m.id)}});
 this.downloadConfirmProceed.onclick=()=>this.resolveDownloadConfirmation(true);
 this.downloadConfirmCancel.onclick=this.downloadConfirmClose.onclick=()=>this.resolveDownloadConfirmation(false);
 this.operationResultClose.onclick=this.operationResultPrimary.onclick=()=>this.close("operationResultModal");
@@ -5527,7 +5921,7 @@ this.operationResultSecondary.onclick=()=>{
  try{window.openDataCenterTool?.("status","report",false)}catch(_){}
 };document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>this.tab(b.dataset.tab));
 document.querySelectorAll("[data-mother-tab]").forEach(b=>b.onclick=()=>this.motherTab(b.dataset.motherTab));window.addEventListener("resize",()=>{if(this.chartModal.classList.contains("open"))this.drawCurrent()})}
- active(){return this.s.watchLists.find(x=>x.id===this.s.activeId)||this.s.watchLists[0]}persist(){this.store.save(this.s);if(this.saveStatus){this.saveStatus.textContent="Saved permanently at "+new Date().toLocaleTimeString();clearTimeout(this._saveTimer);this._saveTimer=setTimeout(()=>this.saveStatus.textContent="Permanent autosave enabled",2200)}}
+ active(){return this.s.watchLists.find(x=>x.id===this.s.activeId)||this.s.watchLists[0]}persist(){this.store.save(this.s);if(this.saveStatus){this.saveStatus.textContent="Saved • OHLC IndexedDB • "+new Date().toLocaleTimeString();clearTimeout(this._saveTimer);this._saveTimer=setTimeout(()=>this.saveStatus.textContent="Permanent autosave enabled • OHLC in IndexedDB",2200)}}
  updatePremiumDashboard(){
   const active=this.active?.();
   const codes=active?.codes||[];
@@ -5573,14 +5967,12 @@ document.querySelectorAll("[data-mother-tab]").forEach(b=>b.onclick=()=>this.mot
    ?arr.map(code=>`<div class="code-row${this.searchTerm?" v1112-search-match":""}">
       <div><span class="code">${code}</span><span class="meta">${this.s.history[code]?.length||0} OHLC records</span></div>
       <div class="actions">
-       ${this.s.history[code]?.length?`<button class="btn blue" data-chart="${code}" data-months="3">3M Chart</button><button class="btn blue" data-chart="${code}" data-months="6">6M Chart</button>`:""}
        <button class="btn ${activeCodes.includes(code)?"soft":"primary"}" data-add="${code}" ${activeCodes.includes(code)?"disabled":""}>${activeCodes.includes(code)?"Added":"+ Add"}</button>
       </div>
      </div>`).join("")
    :`<div class="empty">${this.searchTerm?`No DSE trading code matches “${this.esc(this.searchTerm)}”.`:"No DSE trading codes. Import DSE codes or OHLC archive data."}</div>`;
 
   this.mother.querySelectorAll("[data-add]").forEach(button=>button.onclick=()=>this.add(button.dataset.add));
-  this.mother.querySelectorAll("[data-chart]").forEach(button=>button.onclick=()=>this.openChart(button.dataset.chart,Number(button.dataset.months||3)));
 
   const watchMatches=activeCodes.filter(code=>String(code).toUpperCase().includes(this.searchTerm)).length;
   this.updateTradingCodeSearchStatus(arr.length,watchMatches,all.length,activeCodes.length);
@@ -5596,13 +5988,11 @@ document.querySelectorAll("[data-mother-tab]").forEach(b=>b.onclick=()=>this.mot
    ?arr.map(code=>`<div class="code-row${this.searchTerm?" v1112-search-match":""}">
       <div><span class="code">${code}</span><span class="meta">${this.s.history[code]?.length||0} OHLC records</span></div>
       <div class="actions">
-       <button class="btn blue" data-chart="${code}" data-months="3" ${this.s.history[code]?.length?"":"disabled"}>3M Chart</button><button class="btn blue" data-chart="${code}" data-months="6" ${this.s.history[code]?.length?"":"disabled"}>6M Chart</button>
        <button class="btn red" data-remove="${code}">Remove</button>
       </div>
      </div>`).join("")
    :`<div class="empty">${this.searchTerm?`No active watch-list code matches “${this.esc(this.searchTerm)}”.`:"Add trading codes from the DSE Trading Code List."}</div>`;
 
-  this.watch.querySelectorAll("[data-chart]").forEach(button=>button.onclick=()=>this.openChart(button.dataset.chart,Number(button.dataset.months||3)));
   this.watch.querySelectorAll("[data-remove]").forEach(button=>button.onclick=()=>this.remove(button.dataset.remove));
 
   const dseMatches=this.s.motherCodes.filter(code=>code.includes(this.searchTerm)).length;
@@ -5685,14 +6075,84 @@ document.querySelectorAll("[data-mother-tab]").forEach(b=>b.onclick=()=>this.mot
   this.persist();if(!silent)this.close("motherModal");this.render();
   if(!silent)this.toast(`DSE Trading Code List saved with ${this.s.motherCodes.length} codes.`)
  }
+ formatDownloadDuration(seconds){
+  const total=Math.max(0,Math.round(Number(seconds)||0)),h=Math.floor(total/3600),m=Math.floor((total%3600)/60),sec=total%60;
+  return h>0?`${String(h).padStart(2,"0")}:${String(m).padStart(2,"0")}:${String(sec).padStart(2,"0")}`:`${String(m).padStart(2,"0")}:${String(sec).padStart(2,"0")}`;
+ }
+ formatDownloadClock(timestamp){
+  try{return new Intl.DateTimeFormat("en-BD",{timeZone:"Asia/Dhaka",hour:"2-digit",minute:"2-digit",second:"2-digit",hour12:true}).format(new Date(timestamp))}catch(_){return new Date(timestamp).toLocaleTimeString()}
+ }
+ startDownloadTiming(percent=0){
+  if(this._downloadTimingInterval){clearInterval(this._downloadTimingInterval);this._downloadTimingInterval=null}
+  const now=Date.now();
+  this._downloadTimingState={startedAt:now,lastAt:now,lastPercent:Math.max(0,Math.min(100,Number(percent)||0)),rate:null,state:"working",etaSeconds:null};
+  if(this.downloadStartedAt)this.downloadStartedAt.textContent=`Started ${this.formatDownloadClock(now)}`;
+  if(this.downloadElapsedTime)this.downloadElapsedTime.textContent="00:00";
+  if(this.downloadEtaTime)this.downloadEtaTime.textContent="Estimating…";
+  if(this.downloadEtaFinish)this.downloadEtaFinish.textContent="Waiting for enough progress";
+  this._downloadTimingInterval=setInterval(()=>this.refreshDownloadTiming(),1000);
+ }
+ refreshDownloadTiming(){
+  const t=this._downloadTimingState;if(!t)return;
+  const now=Date.now(),elapsed=(now-t.startedAt)/1000;
+  if(this.downloadElapsedTime)this.downloadElapsedTime.textContent=this.formatDownloadDuration(elapsed);
+  if(t.state==="success"){
+   if(this.downloadEtaTime)this.downloadEtaTime.textContent="Complete";
+   if(this.downloadEtaFinish)this.downloadEtaFinish.textContent=`Finished in ${this.formatDownloadDuration(elapsed)}`;
+   return;
+  }
+  if(t.state==="error"){
+   if(this.downloadEtaTime)this.downloadEtaTime.textContent="Stopped";
+   if(this.downloadEtaFinish)this.downloadEtaFinish.textContent=`Stopped after ${this.formatDownloadDuration(elapsed)}`;
+   return;
+  }
+  if(t.etaSeconds!=null&&Number.isFinite(t.etaSeconds)&&t.etaSeconds>=0){
+   if(this.downloadEtaTime)this.downloadEtaTime.textContent=this.formatDownloadDuration(t.etaSeconds);
+   if(this.downloadEtaFinish){
+    const finish=now+(t.etaSeconds*1000);
+    this.downloadEtaFinish.textContent=`Approx. finish ${this.formatDownloadClock(finish)}`;
+   }
+  }else{
+   if(this.downloadEtaTime)this.downloadEtaTime.textContent="Estimating…";
+   if(this.downloadEtaFinish)this.downloadEtaFinish.textContent="Waiting for enough progress";
+  }
+ }
+ updateDownloadTiming(percent,state="working"){
+  const p=Math.max(0,Math.min(100,Number(percent)||0)),now=Date.now();
+  let t=this._downloadTimingState;
+  if(!t||t.state!=="working"||(state==="working"&&p<t.lastPercent-3)){
+   this.startDownloadTiming(p);t=this._downloadTimingState;
+  }
+  if(state==="working"){
+   const dt=Math.max(.25,(now-t.lastAt)/1000),dp=p-t.lastPercent;
+   if(dp>0){
+    const instantRate=dp/dt;
+    t.rate=t.rate==null?instantRate:(t.rate*.72+instantRate*.28);
+   }
+   const elapsed=Math.max(1,(now-t.startedAt)/1000);
+   const overallRate=p>=4?p/elapsed:null;
+   const effectiveRate=t.rate&&overallRate?Math.min(t.rate*1.35,Math.max(overallRate*.45,(t.rate*.55+overallRate*.45))):(t.rate||overallRate);
+   t.etaSeconds=effectiveRate&&p<100?(100-p)/effectiveRate:null;
+   t.lastAt=now;t.lastPercent=p;
+  }else{
+   t.state=state;
+   t.lastAt=now;t.lastPercent=p;
+   t.etaSeconds=0;
+   if(this._downloadTimingInterval){clearInterval(this._downloadTimingInterval);this._downloadTimingInterval=null}
+  }
+  this.refreshDownloadTiming();
+ }
  showDownloadStatus(title,text,percent=0,state="working"){
+  const pct=Math.max(0,Math.min(100,Number(percent)||0));
+  if(state==="working"&&(!this._downloadTimingState||this._downloadTimingState.state!=="working"||pct<=5&&this._downloadTimingState.lastPercent>pct))this.startDownloadTiming(pct);
+  this.updateDownloadTiming(pct,state);
   this.downloadStatusCard.style.display="block";
   this.downloadStatusTitle.textContent=(state==="success"?"✓ ":state==="error"?"⚠ ":"◉ ")+title;
   this.downloadStatusText.textContent=text;
-  this.downloadStatusPercent.textContent=`${Math.max(0,Math.min(100,Math.round(percent)))}%`;
-  this.downloadStatusBar.style.width=`${Math.max(0,Math.min(100,percent))}%`;
+  this.downloadStatusPercent.textContent=`${Math.round(pct)}%`;
+  this.downloadStatusBar.style.width=`${pct}%`;
   this.downloadStatusBar.style.background=state==="success"?"#16a34a":state==="error"?"#dc2626":"#2563eb";
-  window.dispatchEvent(new CustomEvent("dse:download-status",{detail:{title,text,percent,state}}));
+  window.dispatchEvent(new CustomEvent("dse:download-status",{detail:{title,text,percent:pct,state,elapsedSeconds:this._downloadTimingState?Math.round((Date.now()-this._downloadTimingState.startedAt)/1000):0,etaSeconds:this._downloadTimingState?.etaSeconds??null}}));
  }
  completeDownloadStatus(text){
   this.showDownloadStatus("Download completed",text,100,"success");
@@ -6049,7 +6509,7 @@ document.querySelectorAll("[data-mother-tab]").forEach(b=>b.onclick=()=>this.mot
  async fetchArchive(){const url=this.archiveUrl.value.trim();if(!url)return this.toast("Enter an archive URL.",true);try{const r=await fetch(url);if(!r.ok)throw Error();this.prepare(Parser.parse(await r.text(),Parser.cleanCode(this.urlCode.value)),url)}catch(e){this.toast("Archive download was blocked. Download the file manually and import it.",true)}}
  prepare(data,source){Object.keys(data).forEach(c=>{const m=new Map(data[c].map(x=>[x.date,x]));data[c]=[...m.values()].sort((a,b)=>a.date.localeCompare(b.date))});this.pending=data;const sy=Object.keys(data).length,rc=Object.values(data).reduce((n,a)=>n+a.length,0);this.parseResult.style.display="block";this.parseResult.textContent=sy?`Parsed ${rc.toLocaleString()} OHLC records for ${sy} trading codes from ${source}.`:"No valid OHLC rows detected.";this.commitArea.style.display=sy?"flex":"none"}
  commit(replace,silent=false){if(replace)this.s.history={};for(const [c,r] of Object.entries(this.pending)){const old=replace?[]:(this.s.history[c]||[]);const normalized=[...old,...r].filter(Boolean).map(x=>({...x,date:String(x.date||"").slice(0,10)})).filter(x=>x.date);const m=new Map(normalized.map(x=>[x.date,x]));this.s.history[c]=[...m.values()].sort((a,b)=>a.date.localeCompare(b.date));if(!this.s.motherCodes.includes(c))this.s.motherCodes.push(c)}this.s.motherCodes=[...new Set(this.s.motherCodes)].sort();this.s.lastArchive=new Date().toISOString();this.s.lastArchiveSource=this.pendingSource||"Imported archive";this.log(`${replace?"Replaced":"Merged"} OHLC archive data`);this.persist();if(!silent)this.close("archiveModal");this.render();if(!silent)this.toast("Historical archive saved locally.")}
- openChart(code,months=3){this.currentCode=code;this.chartTitle.textContent=`${code} Candlestick Chart`;if(this.chartRange)this.chartRange.value=String(Number(months)===6?6:3);this.open("chartModal");setTimeout(()=>this.drawCurrent(),50)}
+ openChart(code,months=3){this.currentCode=code;this.chartTitle.textContent=`${code} Candlestick Chart`;if(this.chartRange)this.chartRange.value=String([3,6,12].includes(Number(months))?Number(months):3);this.open("chartModal");setTimeout(()=>this.drawCurrent(),50)}
  rangeData(code,months){const a=this.s.history[code]||[];if(!a.length)return[];const last=new Date(a[a.length-1].date+"T00:00:00"),cut=new Date(last);cut.setMonth(cut.getMonth()-months);return a.filter(x=>new Date(x.date+"T00:00:00")>=cut)}
  drawCurrent(){const data=this.rangeData(this.currentCode,Number(this.chartRange.value));CandleChart.draw(this.chartCanvas,data);if(data.length){const f=data[0],l=data[data.length-1],chg=(l.close/f.close-1)*100;this.chartSubtitle.textContent=`${data.length} sessions • ${f.date} to ${l.date}`;this.chartInfo.innerHTML=`<span>Open: <b>${f.open.toFixed(2)}</b></span><span>Last close: <b>${l.close.toFixed(2)}</b></span><span>Change: <b>${chg.toFixed(2)}%</b></span><span>Total volume: <b>${data.reduce((n,x)=>n+x.volume,0).toLocaleString()}</b></span>`}else{this.chartSubtitle.textContent="No local OHLC data";this.chartInfo.innerHTML=""}}
  fundamentalStore(){const merged={};const absorb=(source)=>{if(!source||typeof source!=="object")return;Object.entries(source).forEach(([key,row])=>{if(!row||typeof row!=="object")return;const raw=String(row.code||key||"").trim().toUpperCase();const canonical=raw.replace(/[^A-Z0-9.-]/g,"");const compact=canonical.replace(/[^A-Z0-9]/g,"");if(canonical){merged[canonical]={...row,code:canonical};merged[compact]=merged[canonical];}})};absorb(this.s?.fundamentals);try{absorb(JSON.parse(localStorage.getItem("ait-psa-fundamentals-v1")||"{}"))}catch(_){ }try{const root=JSON.parse(localStorage.getItem(Store.KEY)||"{}");absorb(root?.fundamentals)}catch(_){ }return merged}
@@ -6060,9 +6520,9 @@ document.querySelectorAll("[data-mother-tab]").forEach(b=>b.onclick=()=>this.mot
  async startFundamentalDownload(){return this.downloadFundamentalSource("dse")}
  async startAmarstockFundamentalDownload(){return this.downloadFundamentalSource("amarstock")}
  openGallery(months=3){
-  const period=Number(months)===6?6:3;
+  const period=[3,6,12].includes(Number(months))?Number(months):3;
   const a=this.active();
-  this.galleryTitle.textContent=`${a.name} — ${period}M Charts`;this.galleryModal.dataset.months=String(period);
+  this.galleryTitle.textContent=`${a.name} — ${period===12?"1Y":period+"M"} Charts`;this.galleryModal.dataset.months=String(period);
   this.gallery.innerHTML="";
   if(window.AITChartGallerySearch)window.AITChartGallerySearch.reset("gallery");
   this.open("galleryModal");
@@ -7460,7 +7920,8 @@ document.addEventListener("DOMContentLoaded",()=>{
  }
 
  function openRankedCharts(mode="potential",months=3){
-  const period=Number(months)===6?6:3;
+  const period=[3,6,12].includes(Number(months))?Number(months):3;
+  const periodLabel=period===12?"1Y":`${period}M`;
   const modal=document.getElementById("v11RankedChartModal");
   const gallery=document.getElementById("v11RankedChartGallery");
   const summary=document.getElementById("v11RankedChartSummary");
@@ -7506,16 +7967,16 @@ document.addEventListener("DOMContentLoaded",()=>{
   if(modal.parentElement!==document.body)document.body.appendChild(modal);
 
   const config={
-   indicator:{title:`Technical Scanner — Ranked ${period}M Charts`,description:"Technical Score"},
-   vpa:{title:`Smart Money Scanner — Ranked ${period}M Charts`,description:"Smart Money Score"},
-   comparison:{title:`Relative Strength Scanner — Ranked ${period}M Charts`,description:"Relative Score"},
-   composite:{title:`AIT Composite Screener — Ranked ${period}M Charts`,description:"40/35/25 Combined Score"},
-   potential:{title:`AIT Elite Screener — Ranked ${period}M Charts`,description:"50/50 Technical–Smart Money Primary Score; Relative Strength breaks close ties"},
-   priority:{title:`AIT Signal Priority Screener — Ranked ${period}M Charts`,description:"signal-priority order, then Primary Score"},
-   historical:{title:`AIT Signal Priority Historical Performance — Ranked ${period}M Charts`,description:"Final Historical Score within Strong Buy → Buy → Watch → Avoid"},
-   advanced:{title:`AIT Signal Priority Advanced Performance — Ranked ${period}M Charts`,description:"Advanced Score with momentum, stability, persistence and confirmation"},
-   "elite-priority":{title:`AIT Signal Priority Elite Scanner — Ranked ${period}M Charts`,description:"calibrated Signal Rank (Strong Buy → Buy → Watch → Avoid), then Elite Score"}
-  }[mode]||{title:`Ranked ${period}M Charts`,description:"score"};
+   indicator:{title:`Technical Scanner — Ranked ${periodLabel} Charts`,description:"Technical Score"},
+   vpa:{title:`Smart Money Scanner — Ranked ${periodLabel} Charts`,description:"Smart Money Score"},
+   comparison:{title:`Relative Strength Scanner — Ranked ${periodLabel} Charts`,description:"Relative Score"},
+   composite:{title:`AIT Composite Screener — Ranked ${periodLabel} Charts`,description:"40/35/25 Combined Score"},
+   potential:{title:`AIT Elite Screener — Ranked ${periodLabel} Charts`,description:"50/50 Technical–Smart Money Primary Score; Relative Strength breaks close ties"},
+   priority:{title:`AIT Signal Priority Screener — Ranked ${periodLabel} Charts`,description:"signal-priority order, then Primary Score"},
+   historical:{title:`AIT Signal Priority Historical Performance — Ranked ${period===12?"1Y":period+"M"} Charts`,description:"Final Historical Score within Strong Buy → Buy → Watch → Avoid"},
+   advanced:{title:`AIT Signal Priority Advanced Performance — Ranked ${period===12?"1Y":period+"M"} Charts`,description:"Advanced Score with momentum, stability, persistence and confirmation"},
+   "elite-priority":{title:`AIT Signal Priority Elite Scanner — Ranked ${period===12?"1Y":period+"M"} Charts`,description:"calibrated Signal Rank (Strong Buy → Buy → Watch → Avoid), then Elite Score"}
+  }[mode]||{title:`Ranked ${periodLabel} Charts`,description:"score"};
   const data=rankedChartData(mode);
 
   title.textContent=config.title;
@@ -7525,7 +7986,7 @@ document.addEventListener("DOMContentLoaded",()=>{
 
   if(window.AITChartGallerySearch)window.AITChartGallerySearch.reset("v11RankedChartGallery");
   gallery.innerHTML=data.length?data.map((x,index)=>{
-   const rows=(window.app&&typeof window.app.rangeData==="function")?window.app.rangeData(x.code,period):rowsFor(x.code).slice(-(period===6?180:90));
+   const rows=(window.app&&typeof window.app.rangeData==="function")?window.app.rangeData(x.code,period):rowsFor(x.code).slice(-(period===12?365:period===12?365:period===12?365:period===6?180:90));
    const coverage=rows.length?`${rows.length} sessions • ${rows[0].date} to ${rows[rows.length-1].date}`:"No archive data for this code";
    return `<div class="mini-card v11-ranked-mini-card" data-ranked-chart="${esc(x.code)}">
     <div class="row">
@@ -7555,7 +8016,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     const safeCode=window.CSS&&CSS.escape?CSS.escape(x.code):x.code.replace(/[^A-Za-z0-9_-]/g,"\\$&");
     const canvas=gallery.querySelector(`[data-ranked-chart="${safeCode}"] canvas`);
     if(!canvas)return;
-    const rows=(window.app&&typeof window.app.rangeData==="function")?window.app.rangeData(x.code,period):rowsFor(x.code).slice(-(period===6?180:90));
+    const rows=(window.app&&typeof window.app.rangeData==="function")?window.app.rangeData(x.code,period):rowsFor(x.code).slice(-(period===12?365:period===12?365:period===12?365:period===6?180:90));
     if(window.CandleChart&&typeof window.CandleChart.draw==="function")window.CandleChart.draw(canvas,rows);
     else if(typeof CandleChart!=="undefined"&&typeof CandleChart.draw==="function")CandleChart.draw(canvas,rows);
    });
@@ -7582,16 +8043,22 @@ document.addEventListener("DOMContentLoaded",()=>{
 
  document.getElementById("v11ViewPotentialCharts")?.addEventListener("click",()=>openRankedCharts("potential",3));
  document.getElementById("v11ViewPotentialCharts6")?.addEventListener("click",()=>openRankedCharts("potential",6));
+ document.getElementById("v11ViewPotentialCharts12")?.addEventListener("click",()=>openRankedCharts("potential",12));
  document.getElementById("v11ViewIndicatorCharts")?.addEventListener("click",()=>openRankedCharts("indicator",3));
  document.getElementById("v11ViewIndicatorCharts6")?.addEventListener("click",()=>openRankedCharts("indicator",6));
+ document.getElementById("v11ViewIndicatorCharts12")?.addEventListener("click",()=>openRankedCharts("indicator",12));
  document.getElementById("v11ViewVpaCharts")?.addEventListener("click",()=>openRankedCharts("vpa",3));
  document.getElementById("v11ViewVpaCharts6")?.addEventListener("click",()=>openRankedCharts("vpa",6));
+ document.getElementById("v11ViewVpaCharts12")?.addEventListener("click",()=>openRankedCharts("vpa",12));
  document.getElementById("v11ViewComparisonCharts")?.addEventListener("click",()=>openRankedCharts("comparison",3));
  document.getElementById("v11ViewComparisonCharts6")?.addEventListener("click",()=>openRankedCharts("comparison",6));
+ document.getElementById("v11ViewComparisonCharts12")?.addEventListener("click",()=>openRankedCharts("comparison",12));
  document.getElementById("v11ViewCompositeCharts")?.addEventListener("click",()=>openRankedCharts("composite",3));
  document.getElementById("v11ViewCompositeCharts6")?.addEventListener("click",()=>openRankedCharts("composite",6));
+ document.getElementById("v11ViewCompositeCharts12")?.addEventListener("click",()=>openRankedCharts("composite",12));
  document.getElementById("v11ViewPriorityCharts")?.addEventListener("click",()=>openRankedCharts("priority",3));
  document.getElementById("v11ViewPriorityCharts6")?.addEventListener("click",()=>openRankedCharts("priority",6));
+ document.getElementById("v11ViewPriorityCharts12")?.addEventListener("click",()=>openRankedCharts("priority",12));
 
  function syncScannerScrollbars(){
   document.querySelectorAll(".v11-scanner-table-region").forEach(region=>{
@@ -7618,18 +8085,12 @@ document.addEventListener("DOMContentLoaded",()=>{
    guideline.classList.add("v11-scanner-guideline");
    body.insertBefore(guideline,body.firstElementChild);
    let row=body.querySelector(":scope > .v11-scanner-control-row");
-   if(!row){row=document.createElement("div");row.className="v11-scanner-control-row";guideline.insertAdjacentElement("afterend",row);}
-   if(actions){
-    const buttons=[...actions.querySelectorAll("button")];
-    const six=buttons.find(button=>/6M/i.test(button.textContent));
-    const three=buttons.find(button=>/3M/i.test(button.textContent));
-    const run=buttons.find(button=>button!==six&&button!==three);
-    if(six)six.textContent="6M Chart";
-    if(three)three.textContent="3M Chart";
-    if(run)run.textContent="Run Scanner";
-    [six,three,run].filter(Boolean).forEach(button=>actions.appendChild(button));
-    row.appendChild(actions);
+   if(!row){
+    row=document.createElement("div");
+    row.className="v11-scanner-control-row";
+    guideline.insertAdjacentElement("afterend",row);
    }
+   if(actions)row.appendChild(actions);
   });
  }
  arrangeScannerLayouts();
@@ -9704,9 +10165,6 @@ document.addEventListener("keydown",event=>{
  </div>
 </aside>
 
-.ait-psa-terminal-command--danger{border-color:color-mix(in srgb,#ef4444 52%,var(--v10-line,var(--line,#334155)))!important;background:color-mix(in srgb,#ef4444 9%,var(--v10-card,var(--card,#0f172a)))!important}
-.ait-psa-terminal-command--danger:hover{border-color:#ef4444!important;box-shadow:0 14px 34px rgba(239,68,68,.16)!important}
-.ait-psa-terminal-command--danger span{color:#ef4444!important}
 <div class="ait-psa-terminal-modal-shell" id="aitPsaTerminalModalShell" aria-hidden="true"><button class="ait-psa-terminal-modal-backdrop" id="aitPsaTerminalModalBackdrop" type="button" aria-label="Close modal"></button>
  <section class="ait-psa-terminal-modal" id="aitPsaAppearanceModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">TERMINAL GROUP</span><h2>◉ Appearance</h2><p>Choose an appearance setting to configure.</p></div><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" id="aitPsaOpenThemeMenu" type="button"><span>◐</span><b>Theme</b><small>Open the terminal theme selection menu.</small></button></div></div></section>
  <section class="ait-psa-terminal-modal" id="aitPsaThemeModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">APPEARANCE ITEM</span><h2>◐ Theme</h2><p>Select a theme to apply it immediately.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" id="aitPsaBackToAppearance" type="button">← Appearance</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body ait-psa-theme-host" id="aitPsaThemeHost"></div></section>
@@ -9726,7 +10184,7 @@ document.addEventListener("keydown",event=>{
  <section class="ait-psa-terminal-modal" id="aitPsaBackupMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">DATA CENTER CATEGORY</span><h2>◆ Backup</h2><p>Select a backup operation.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaDataCenterLauncherModal" type="button">← Data Center</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" data-ait-data-action="exportBtn" data-ait-data-group="backup" type="button"><span>⇩</span><b>Backup Dashboard</b><small>Export watch lists, codes, history and settings.</small></button></div></div></section>
  <section class="ait-psa-terminal-modal" id="aitPsaDataReportMenuModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">DATA CENTER CATEGORY</span><h2>▥ Report</h2><p>Select a report category.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaDataCenterLauncherModal" type="button">← Data Center</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaDataReportDownloadedModal" type="button"><span>⇩</span><b>Downloaded</b><small>Review downloaded Fundamentals and OHLC data.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitPsaDataReportChartsModal" type="button"><span>▥</span><b>Charts</b><small>Open saved 3M and 6M chart galleries.</small></button></div></div></section>
 <section class="ait-psa-terminal-modal" id="aitPsaDataReportDownloadedModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">DATA CENTER → REPORT</span><h2>⇩ Downloaded</h2><p>Select the downloaded dataset to review.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaDataReportMenuModal" type="button">← Report</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" id="aitPsaOpenFundamentalsReport" type="button"><span>FN</span><b>Fundamentals</b><small>Review merged DSE and AmarStock fundamental data for the active watch list.</small></button><button class="ait-psa-terminal-command" data-ait-data-action="viewDownloadedData" data-ait-data-group="report" type="button"><span>OHLC</span><b>OHLC</b><small>Inspect stored downloaded OHLC records in a data table.</small></button></div></div></section>
-<section class="ait-psa-terminal-modal" id="aitPsaDataReportChartsModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">DATA CENTER → REPORT</span><h2>▥ Charts</h2><p>Select the saved chart-gallery range.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaDataReportMenuModal" type="button">← Report</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" data-ait-data-action="viewListCharts" data-ait-data-group="report" type="button"><span>3M</span><b>3M</b><small>Open saved three-month charts for the active list.</small></button><button class="ait-psa-terminal-command" data-ait-data-action="viewListCharts6" data-ait-data-group="report" type="button"><span>6M</span><b>6M</b><small>Open saved six-month charts for the active list.</small></button></div></div></section>
+<section class="ait-psa-terminal-modal" id="aitPsaDataReportChartsModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">DATA CENTER → REPORT</span><h2>▥ Charts</h2><p>Select the saved chart-gallery range.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaDataReportMenuModal" type="button">← Report</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid"><button class="ait-psa-terminal-command" data-ait-data-action="viewListCharts" data-ait-data-group="report" type="button"><span>3M</span><b>3M</b><small>Open saved three-month charts for the active list.</small></button><button class="ait-psa-terminal-command" data-ait-data-action="viewListCharts6" data-ait-data-group="report" type="button"><span>6M</span><b>6M</b><small>Open saved six-month charts for the active list.</small></button><button class="ait-psa-terminal-command" data-ait-data-action="viewListCharts12" data-ait-data-group="charts" type="button"><span>1Y</span><b>1Y Charts</b><small>Review saved one-year charts for the active watch list.</small></button></div></div></section>
 <section class="ait-psa-terminal-modal ait-psa-workspace-modal" id="aitPsaDownloadModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow" id="aitPsaDataCenterEyebrow">DATA CENTER TOOL</span><h2 id="aitPsaDataCenterTitle">⇩ Data Center</h2><p id="aitPsaDataCenterDescription">Selected data operation workspace.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" id="aitPsaDataCenterBack" type="button">← Data Center</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body ait-psa-workspace-host" id="aitPsaDownloadHost"></div></section>
  <section class="ait-psa-terminal-modal ait-psa-workspace-modal" id="aitPsaWatchlistModal" hidden role="dialog" aria-modal="true"><header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">WORKSPACE TERMINAL</span><h2>★ Watch List</h2><p>Manage stock groups, trading codes and chart access.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaWorkspaceModal" type="button">← Workspace</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header><div class="ait-psa-terminal-modal__body ait-psa-workspace-host" id="aitPsaWatchlistHost"></div></section>
  
@@ -9758,7 +10216,19 @@ document.addEventListener("keydown",event=>{
 <section class="ait-psa-terminal-modal ait-psa-workspace-modal" id="aitHistoricalPriorityModal" hidden role="dialog" aria-modal="true">
  <header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">SCANNER TOOL</span><h2>AIT Signal Priority — Historical Performance</h2><p>Signal-first screening strengthened by internally calculated historical performance.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaSignalPriorityEngineModal" type="button">← Engine</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header>
  <div class="ait-psa-terminal-modal__body ait-psa-workspace-host"><section class="v11-workspace active"><article class="v11-card v11-scanner-card">
-  <div class="v11-card-head"><div><h3>AIT Signal Priority Historical Screener</h3><small>Signal-first ranking using current Primary Score and internally calculated Historical Score</small></div><div class="v11-potential-actions"><button class="btn soft" id="aitHistoricalPriorityCharts6" type="button">View 6M Charts</button><button class="btn soft" id="aitHistoricalPriorityCharts3" type="button">View 3M Charts</button><button class="btn primary" id="aitHistoricalPriorityRun" type="button">Run historical screen</button></div></div>
+  <div class="v11-card-head"><div><h3>AIT Signal Priority Historical Screener</h3><small>Signal-first ranking using current Primary Score and internally calculated Historical Score</small></div><div class="v11-potential-actions ait-scanner-toolbar">
+      <button class="btn primary ait-scanner-run" id="aitHistoricalPriorityRun" type="button">Run</button>
+      <div class="ait-scanner-charts" data-ait-scanner-charts>
+       <button class="btn soft ait-scanner-charts-trigger" type="button" aria-haspopup="true" aria-expanded="false">
+        <span>◫ Charts</span><span class="ait-scanner-charts-caret">⌄</span>
+       </button>
+       <div class="ait-scanner-charts-menu" hidden>
+        <button class="btn soft" id="aitHistoricalPriorityCharts3" type="button">3M</button>
+        <button class="btn soft" id="aitHistoricalPriorityCharts6" type="button">6M</button>
+        <button class="btn soft" id="aitHistoricalPriorityCharts12" type="button">1Y</button>
+       </div>
+      </div>
+     </div></div>
   <div class="v11-card-body"><section class="v11-potential-guideline"><div class="v11-potential-guideline-grid">
    <div class="v11-potential-guide v11-potential-guide--strongest"><strong>First Priority</strong><span>Final signal order always remains Strong Buy → Buy → Watch → Avoid.</span></div>
    <div class="v11-potential-guide v11-potential-guide--formula"><strong>Historical Engine</strong><span>Historical Score uses weighted 3-day, 6-day and 9-day Primary Score averages plus recent improvement consistency.</span></div>
@@ -9772,7 +10242,19 @@ document.addEventListener("keydown",event=>{
 <section class="ait-psa-terminal-modal ait-psa-workspace-modal" id="aitAdvancedPriorityModal" hidden role="dialog" aria-modal="true">
  <header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">SCANNER TOOL</span><h2>AIT Signal Priority — Advanced Performance</h2><p>Multi-factor confirmation scanner combining current strength with historical quality and price-volume validation.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaSignalPriorityEngineModal" type="button">← Engine</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header>
  <div class="ait-psa-terminal-modal__body ait-psa-workspace-host"><section class="v11-workspace active"><article class="v11-card v11-scanner-card">
-  <div class="v11-card-head"><div><h3>AIT Advanced Signal Priority Screener</h3><small>Signal-first ranking with historical momentum, stability, persistence and market confirmation</small></div><div class="v11-potential-actions"><button class="btn soft" id="aitAdvancedPriorityCharts6" type="button">View 6M Charts</button><button class="btn soft" id="aitAdvancedPriorityCharts3" type="button">View 3M Charts</button><button class="btn primary" id="aitAdvancedPriorityRun" type="button">Run advanced screen</button></div></div>
+  <div class="v11-card-head"><div><h3>AIT Advanced Signal Priority Screener</h3><small>Signal-first ranking with historical momentum, stability, persistence and market confirmation</small></div><div class="v11-potential-actions ait-scanner-toolbar">
+      <button class="btn primary ait-scanner-run" id="aitAdvancedPriorityRun" type="button">Run</button>
+      <div class="ait-scanner-charts" data-ait-scanner-charts>
+       <button class="btn soft ait-scanner-charts-trigger" type="button" aria-haspopup="true" aria-expanded="false">
+        <span>◫ Charts</span><span class="ait-scanner-charts-caret">⌄</span>
+       </button>
+       <div class="ait-scanner-charts-menu" hidden>
+        <button class="btn soft" id="aitAdvancedPriorityCharts3" type="button">3M</button>
+        <button class="btn soft" id="aitAdvancedPriorityCharts6" type="button">6M</button>
+        <button class="btn soft" id="aitAdvancedPriorityCharts12" type="button">1Y</button>
+       </div>
+      </div>
+     </div></div>
   <div class="v11-card-body"><section class="v11-potential-guideline"><div class="v11-potential-guideline-grid">
    <div class="v11-potential-guide v11-potential-guide--strongest"><strong>Signal Priority</strong><span>Final order remains Strong Buy → Buy → Watch → Avoid.</span></div>
    <div class="v11-potential-guide v11-potential-guide--formula"><strong>Advanced Score</strong><span>25% Primary + 20% Historical + 15% Momentum + 12% Stability + 13% Persistence + 15% Confirmation.</span></div>
@@ -9785,7 +10267,19 @@ document.addEventListener("keydown",event=>{
 <section class="ait-psa-terminal-modal ait-psa-workspace-modal" id="aitElitePriorityModal" hidden role="dialog" aria-modal="true">
  <header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">DECISION ENGINE V1.4</span><h2>AIT Elite</h2><p>Self-checking multi-factor decision scanner: refreshes Elite performance state only when downloaded OHLC has changed, then combines current, historical and execution-quality evidence.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaSignalPriorityEngineModal" type="button">← Engine</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header>
  <div class="ait-psa-terminal-modal__body ait-psa-workspace-host"><section class="v11-workspace active"><article class="v11-card v11-scanner-card">
-  <div class="v11-card-head"><div><h3>AIT Elite</h3><small>Simple decision-first scanner: what to do, when to act, preferred horizon, model state and plain-language reason</small></div><div class="v11-potential-actions"><button class="btn soft" id="aitElitePriorityCharts6" type="button">View 6M Charts</button><button class="btn soft" id="aitElitePriorityCharts3" type="button">View 3M Charts</button><button class="btn primary" id="aitElitePriorityRun" type="button">Run elite screen</button></div></div>
+  <div class="v11-card-head"><div><h3>AIT Elite</h3><small>Simple decision-first scanner: what to do, when to act, preferred horizon, model state and plain-language reason</small></div><div class="v11-potential-actions ait-scanner-toolbar">
+      <button class="btn primary ait-scanner-run" id="aitElitePriorityRun" type="button">Run</button>
+      <div class="ait-scanner-charts" data-ait-scanner-charts>
+       <button class="btn soft ait-scanner-charts-trigger" type="button" aria-haspopup="true" aria-expanded="false">
+        <span>◫ Charts</span><span class="ait-scanner-charts-caret">⌄</span>
+       </button>
+       <div class="ait-scanner-charts-menu" hidden>
+        <button class="btn soft" id="aitElitePriorityCharts3" type="button">3M</button>
+        <button class="btn soft" id="aitElitePriorityCharts6" type="button">6M</button>
+        <button class="btn soft" id="aitElitePriorityCharts12" type="button">1Y</button>
+       </div>
+      </div>
+     </div></div>
   <div class="v11-card-body"><section class="v11-potential-guideline"><div class="v11-potential-guideline-grid">
    <div class="v11-potential-guide v11-potential-guide--strongest"><strong>1. What should I do?</strong><span>Read the <b>Your Action</b> column first. It converts the Elite signal into a practical next step.</span></div>
    <div class="v11-potential-guide v11-potential-guide--formula"><strong>2. When?</strong><span><b>Now</b> means entry conditions are ready. <b>Wait Confirmation</b> means do not enter yet. <b>Wait Pullback</b> means price is better bought nearer support.</span></div>
@@ -10077,7 +10571,7 @@ document.addEventListener('DOMContentLoaded', () => {
     importBtn: ['⇧', 'Restore Dashboard', 'Restore terminal data from a dashboard backup.'],
     exportBtn: ['⇩', 'Backup Dashboard', 'Export terminal data and settings as a portable backup.'],
     viewListCharts: ['3M', 'Saved 3M Charts', 'Review saved three-month charts for the active watch list.'],
-    viewListCharts6: ['6M', 'Saved 6M Charts', 'Review saved six-month charts for the active watch list.'],
+    viewListCharts6: ['6M', 'Saved 6M Charts', 'Review saved six-month charts for the active watch list.'],     viewListCharts12: ['1Y', 'Saved 1Y Charts', 'Review saved one-year charts for the active watch list.'],
     viewDownloadedData: ['⌗', 'Downloaded Data', 'Inspect stored OHLC records in a data table.'],
     status: ['◉', 'Download Status', 'Review Data Center operations and current download status.'],
     emptyDownloadedData: ['⌫', 'Empty Downloaded Data', 'Permanently remove all locally stored OHLC records while preserving watch lists, portfolio and settings.']
@@ -10512,6 +11006,7 @@ document.addEventListener('DOMContentLoaded', () => {
  document.getElementById("aitHistoricalPriorityRun")?.addEventListener("click",run);
  document.getElementById("aitHistoricalPriorityCharts3")?.addEventListener("click",()=>window.AITOpenRankedCharts?.("historical",3));
  document.getElementById("aitHistoricalPriorityCharts6")?.addEventListener("click",()=>window.AITOpenRankedCharts?.("historical",6));
+ document.getElementById("aitHistoricalPriorityCharts12")?.addEventListener("click",()=>window.AITOpenRankedCharts?.("historical",12));
  window.AitSignalPriorityHistory={calculate,render,run,clearCache:()=>{cache={signature:"",rows:[],dates:[]}}};
 })();
 </script>
@@ -10537,6 +11032,7 @@ document.addEventListener('DOMContentLoaded', () => {
  document.getElementById("aitAdvancedPriorityRun")?.addEventListener("click",run);
  document.getElementById("aitAdvancedPriorityCharts3")?.addEventListener("click",()=>window.AITOpenRankedCharts?.("advanced",3));
  document.getElementById("aitAdvancedPriorityCharts6")?.addEventListener("click",()=>window.AITOpenRankedCharts?.("advanced",6));
+ document.getElementById("aitAdvancedPriorityCharts12")?.addEventListener("click",()=>window.AITOpenRankedCharts?.("advanced",12));
  window.AitAdvancedSignalPriority={calculate,render,run,clearCache:()=>{cache={sig:"",rows:[],daily:[]}}};
 })();
 </script>
@@ -10754,6 +11250,7 @@ document.addEventListener('DOMContentLoaded', () => {
  document.getElementById("aitElitePriorityRun")?.addEventListener("click",()=>window.AITEliteBusy?.execute?.({kicker:"AIT ELITE SCANNER",title:"Recalculating Elite signals",text:"Refreshing calibrated ranks, horizons, entry state and trade actions…"},async()=>{await ensurePerformanceState();return run()}));
  document.getElementById("aitElitePriorityCharts3")?.addEventListener("click",()=>window.AITOpenRankedCharts?.("elite-priority",3));
  document.getElementById("aitElitePriorityCharts6")?.addEventListener("click",()=>window.AITOpenRankedCharts?.("elite-priority",6));
+ document.getElementById("aitElitePriorityCharts12")?.addEventListener("click",()=>window.AITOpenRankedCharts?.("elite-priority",12));
  window.AitEliteSignalPriority={calculate,render,run,clearCache:()=>{cache={sig:"",rows:[]}}};
 })();
 </script>
@@ -10957,5 +11454,42 @@ document.addEventListener('DOMContentLoaded', () => {
   <div class="ait-elite-calc-track"><div class="ait-elite-calc-bar"></div></div>
  </div>
 </div>
+
+<script id="ait-scanner-chart-dropdown-script-v10102">
+document.addEventListener("DOMContentLoaded",()=>{
+ const groups=[...document.querySelectorAll("[data-ait-scanner-charts]")];
+ const closeAll=(except=null)=>{
+  groups.forEach(group=>{
+   if(group===except)return;
+   group.classList.remove("is-open");
+   const trigger=group.querySelector(".ait-scanner-charts-trigger");
+   const menu=group.querySelector(".ait-scanner-charts-menu");
+   trigger?.setAttribute("aria-expanded","false");
+   if(menu)menu.hidden=true;
+  });
+ };
+ groups.forEach(group=>{
+  const trigger=group.querySelector(".ait-scanner-charts-trigger");
+  const menu=group.querySelector(".ait-scanner-charts-menu");
+  trigger?.addEventListener("click",event=>{
+   event.preventDefault();event.stopPropagation();
+   const willOpen=!group.classList.contains("is-open");
+   closeAll(group);
+   group.classList.toggle("is-open",willOpen);
+   trigger.setAttribute("aria-expanded",willOpen?"true":"false");
+   if(menu)menu.hidden=!willOpen;
+  });
+  menu?.addEventListener("click",event=>{
+   if(event.target.closest("button")){
+    group.classList.remove("is-open");
+    trigger?.setAttribute("aria-expanded","false");
+    menu.hidden=true;
+   }
+  });
+ });
+ document.addEventListener("click",()=>closeAll());
+ document.addEventListener("keydown",event=>{if(event.key==="Escape")closeAll()});
+});
+</script>
 </body>
 </html>
