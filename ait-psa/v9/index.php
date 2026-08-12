@@ -4807,6 +4807,155 @@ body.ait-elite-is-calculating *{cursor:progress!important}
 @media(max-width:820px){#aitEliteDecisionDetailModal .ait-elite-detail-group .ait-fundamental-strip{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:520px){#aitEliteDecisionDetailModal .ait-elite-detail-group{padding:11px}#aitEliteDecisionDetailModal .ait-elite-detail-group .ait-fundamental-strip{grid-template-columns:1fr}}
 </style>
+
+<style id="ait-scanner-download-dropdown-v10108">
+.ait-scanner-download{position:relative;min-width:148px;overflow:visible}
+.ait-scanner-download-trigger{width:100%;min-height:40px;display:flex!important;align-items:center;justify-content:space-between;gap:10px}
+.ait-scanner-download-caret{transition:transform .16s ease}
+.ait-scanner-download.is-open .ait-scanner-download-caret{transform:rotate(180deg)}
+.ait-scanner-download-menu{position:absolute;top:calc(100% + 7px);right:0;z-index:10000;width:160px;padding:7px;border:1px solid var(--v10-line,var(--line,#334155));border-radius:14px;background:var(--v10-panel-solid,var(--card,#0f172a));box-shadow:0 20px 55px rgba(0,0,0,.34)}
+.ait-scanner-download-menu:not([hidden]){display:grid;gap:4px}
+.ait-scanner-download-menu button{width:100%!important;min-height:40px!important;justify-content:center!important;text-align:center!important;font-weight:800!important}
+@media (max-width:640px){.ait-scanner-toolbar{grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr)!important}.ait-scanner-download{width:100%;min-width:0}.ait-scanner-download-menu{left:0;right:auto;width:100%;min-width:140px}}
+@media (max-width:480px){.ait-scanner-toolbar{grid-template-columns:1fr 1fr!important}.ait-scanner-run{grid-column:1/-1}}
+</style>
+
+<style id="ait-elite-final-decision-v10110">
+#aitElitePriorityModal .ait-elite-decision-cell{
+  min-width:230px;
+  border-left:4px solid transparent;
+}
+#aitElitePriorityModal .ait-elite-decision-cell strong{
+  display:block;
+  font-size:13px;
+  line-height:1.25;
+  letter-spacing:.01em;
+}
+#aitElitePriorityModal .ait-elite-decision-cell small{
+  display:block;
+  margin-top:4px;
+  max-width:260px;
+  line-height:1.35;
+  opacity:.78;
+}
+#aitElitePriorityModal .ait-elite-decision--buy{
+  border-left-color:#16a34a;
+  background:color-mix(in srgb,#16a34a 10%,transparent);
+}
+#aitElitePriorityModal .ait-elite-decision--wait{
+  border-left-color:#d97706;
+  background:color-mix(in srgb,#d97706 9%,transparent);
+}
+#aitElitePriorityModal .ait-elite-decision--blocked{
+  border-left-color:#ea580c;
+  background:color-mix(in srgb,#ea580c 12%,transparent);
+}
+#aitElitePriorityModal .ait-elite-decision--hold{
+  border-left-color:#2563eb;
+  background:color-mix(in srgb,#2563eb 9%,transparent);
+}
+#aitElitePriorityModal .ait-elite-decision--caution{
+  border-left-color:#dc2626;
+  background:color-mix(in srgb,#dc2626 9%,transparent);
+}
+#aitElitePriorityModal .ait-elite-decision--avoid{
+  border-left-color:#991b1b;
+  background:color-mix(in srgb,#991b1b 12%,transparent);
+}
+#aitEliteDecisionDetailModal .ait-elite-detail-group--decision{
+  border-width:2px;
+}
+#aitEliteDecisionDetailModal .ait-elite-detail-group--decision.ait-elite-decision--blocked{
+  border-color:color-mix(in srgb,#ea580c 42%,var(--v10-line,var(--line,#334155)));
+  background:color-mix(in srgb,#ea580c 5%,transparent);
+}
+#aitEliteDecisionDetailModal .ait-elite-detail-group--decision.ait-elite-decision--buy{
+  border-color:color-mix(in srgb,#16a34a 42%,var(--v10-line,var(--line,#334155)));
+}
+#aitEliteDecisionDetailModal .ait-elite-detail-group--decision.ait-elite-decision--caution,
+#aitEliteDecisionDetailModal .ait-elite-detail-group--decision.ait-elite-decision--avoid{
+  border-color:color-mix(in srgb,#dc2626 42%,var(--v10-line,var(--line,#334155)));
+}
+</style>
+
+<style id="ait-elite-table-layout-v10111">
+#aitElitePriorityModal .v11-scanner-table-wrap{
+  overflow-x:auto!important;
+  overflow-y:visible!important;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-gutter:stable both-edges;
+}
+#aitElitePriorityModal .v11-potential-table{
+  width:100%;
+  min-width:1460px;
+  table-layout:fixed;
+  border-collapse:separate;
+  border-spacing:0;
+}
+#aitElitePriorityModal .v11-potential-table th,
+#aitElitePriorityModal .v11-potential-table td{
+  vertical-align:top;
+  white-space:normal!important;
+  overflow-wrap:anywhere;
+  word-break:normal;
+  line-height:1.4;
+  padding:11px 10px;
+}
+#aitElitePriorityModal .v11-potential-table th{
+  white-space:nowrap!important;
+}
+#aitElitePriorityModal .v11-potential-table th:nth-child(1),
+#aitElitePriorityModal .v11-potential-table td:nth-child(1){width:115px}
+#aitElitePriorityModal .v11-potential-table th:nth-child(2),
+#aitElitePriorityModal .v11-potential-table td:nth-child(2){width:125px}
+#aitElitePriorityModal .v11-potential-table th:nth-child(3),
+#aitElitePriorityModal .v11-potential-table td:nth-child(3){width:90px}
+#aitElitePriorityModal .v11-potential-table th:nth-child(4),
+#aitElitePriorityModal .v11-potential-table td:nth-child(4){width:235px}
+#aitElitePriorityModal .v11-potential-table th:nth-child(5),
+#aitElitePriorityModal .v11-potential-table td:nth-child(5){width:145px}
+#aitElitePriorityModal .v11-potential-table th:nth-child(6),
+#aitElitePriorityModal .v11-potential-table td:nth-child(6){width:145px}
+#aitElitePriorityModal .v11-potential-table th:nth-child(7),
+#aitElitePriorityModal .v11-potential-table td:nth-child(7){width:155px}
+#aitElitePriorityModal .v11-potential-table th:nth-child(8),
+#aitElitePriorityModal .v11-potential-table td:nth-child(8){width:175px}
+#aitElitePriorityModal .v11-potential-table th:nth-child(9),
+#aitElitePriorityModal .v11-potential-table td:nth-child(9){width:250px}
+#aitElitePriorityModal .v11-potential-table th:nth-child(10),
+#aitElitePriorityModal .v11-potential-table td:nth-child(10){width:125px}
+#aitElitePriorityModal .v11-signal{
+  display:inline-flex!important;
+  max-width:100%;
+  white-space:normal!important;
+  flex-wrap:wrap;
+  line-height:1.25;
+}
+#aitElitePriorityModal .ait-elite-decision-cell{
+  min-width:0!important;
+}
+#aitElitePriorityModal .ait-elite-decision-cell strong,
+#aitElitePriorityModal .ait-elite-decision-cell small{
+  max-width:100%!important;
+  overflow-wrap:anywhere;
+}
+#aitElitePriorityModal .ait-elite-details{
+  width:100%;
+  max-width:110px;
+  white-space:nowrap;
+}
+#aitElitePriorityModal .v11-table-scrollbar{
+  display:block;
+}
+@media (max-width:900px){
+  #aitElitePriorityModal .v11-potential-table{min-width:1380px}
+}
+@media (max-width:640px){
+  #aitElitePriorityModal .v11-potential-table{min-width:1320px}
+  #aitElitePriorityModal .v11-potential-table th,
+  #aitElitePriorityModal .v11-potential-table td{padding:9px 8px}
+}
+</style>
 </head>
 <body>
 <div class="v10-mobile-bar">
@@ -4991,6 +5140,15 @@ body.ait-elite-is-calculating *{cursor:progress!important}
  <section class="v11-workspace" data-v11-workspace="indicators">
   <article class="v11-card v11-scanner-card">
    <div class="v11-card-head"><div><h3>Technical Scanner</h3><small>Trend, momentum, SMA, RSI and volume-based technical screening</small></div><div class="v11-potential-actions ait-scanner-toolbar">
+      <div class="ait-scanner-download" data-ait-scanner-download>
+       <button class="btn soft ait-scanner-download-trigger" type="button" aria-haspopup="true" aria-expanded="false">
+        <span>⇩ Download</span><span class="ait-scanner-download-caret">⌄</span>
+       </button>
+       <div class="ait-scanner-download-menu" hidden>
+        <button class="btn soft" type="button" data-ait-scanner-download-action="instant">Instant</button>
+        <button class="btn soft" type="button" data-ait-scanner-download-action="incremental">Incremental</button>
+       </div>
+      </div>
       <button class="btn primary ait-scanner-run" id="v11RunScanner" type="button">Run</button>
       <div class="ait-scanner-charts" data-ait-scanner-charts>
        <button class="btn soft ait-scanner-charts-trigger" type="button" aria-haspopup="true" aria-expanded="false">
@@ -5030,6 +5188,15 @@ body.ait-elite-is-calculating *{cursor:progress!important}
    <div class="v11-card-head">
     <div><h3>Relative Strength Scanner</h3><small>Cross-stock ranking by return, momentum, volume participation and volatility</small></div>
     <div class="v11-potential-actions ait-scanner-toolbar">
+      <div class="ait-scanner-download" data-ait-scanner-download>
+       <button class="btn soft ait-scanner-download-trigger" type="button" aria-haspopup="true" aria-expanded="false">
+        <span>⇩ Download</span><span class="ait-scanner-download-caret">⌄</span>
+       </button>
+       <div class="ait-scanner-download-menu" hidden>
+        <button class="btn soft" type="button" data-ait-scanner-download-action="instant">Instant</button>
+        <button class="btn soft" type="button" data-ait-scanner-download-action="incremental">Incremental</button>
+       </div>
+      </div>
       <button class="btn primary ait-scanner-run" id="v11RunComparison" type="button">Run</button>
       <div class="ait-scanner-charts" data-ait-scanner-charts>
        <button class="btn soft ait-scanner-charts-trigger" type="button" aria-haspopup="true" aria-expanded="false">
@@ -5088,6 +5255,15 @@ body.ait-elite-is-calculating *{cursor:progress!important}
  <section class="v11-workspace" data-v11-workspace="vpa">
   <article class="v11-card v11-scanner-card">
    <div class="v11-card-head"><div><h3>Smart Money Scanner</h3><small>VPA-based effort-versus-result, spread, volume and trend screening</small></div><div class="v11-potential-actions ait-scanner-toolbar">
+      <div class="ait-scanner-download" data-ait-scanner-download>
+       <button class="btn soft ait-scanner-download-trigger" type="button" aria-haspopup="true" aria-expanded="false">
+        <span>⇩ Download</span><span class="ait-scanner-download-caret">⌄</span>
+       </button>
+       <div class="ait-scanner-download-menu" hidden>
+        <button class="btn soft" type="button" data-ait-scanner-download-action="instant">Instant</button>
+        <button class="btn soft" type="button" data-ait-scanner-download-action="incremental">Incremental</button>
+       </div>
+      </div>
       <button class="btn primary ait-scanner-run" id="v11RunVpa" type="button">Run</button>
       <div class="ait-scanner-charts" data-ait-scanner-charts>
        <button class="btn soft ait-scanner-charts-trigger" type="button" aria-haspopup="true" aria-expanded="false">
@@ -5115,6 +5291,15 @@ body.ait-elite-is-calculating *{cursor:progress!important}
  <section class="v11-workspace" data-v11-workspace="potential-composite">
   <article class="v11-card v11-scanner-card">
    <div class="v11-card-head"><div><h3>AIT Composite Screener</h3><small>Weighted multi-factor screening across technical, smart-money and relative-strength evidence</small></div><div class="v11-potential-actions ait-scanner-toolbar">
+      <div class="ait-scanner-download" data-ait-scanner-download>
+       <button class="btn soft ait-scanner-download-trigger" type="button" aria-haspopup="true" aria-expanded="false">
+        <span>⇩ Download</span><span class="ait-scanner-download-caret">⌄</span>
+       </button>
+       <div class="ait-scanner-download-menu" hidden>
+        <button class="btn soft" type="button" data-ait-scanner-download-action="instant">Instant</button>
+        <button class="btn soft" type="button" data-ait-scanner-download-action="incremental">Incremental</button>
+       </div>
+      </div>
       <button class="btn primary ait-scanner-run" id="v11RunComposite" type="button">Run</button>
       <div class="ait-scanner-charts" data-ait-scanner-charts>
        <button class="btn soft ait-scanner-charts-trigger" type="button" aria-haspopup="true" aria-expanded="false">
@@ -5142,6 +5327,15 @@ body.ait-elite-is-calculating *{cursor:progress!important}
  <section class="v11-workspace" data-v11-workspace="potential">
   <article class="v11-card v11-scanner-card">
    <div class="v11-card-head"><div><h3>AIT Elite Screener</h3><small>Balanced 50/50 primary scoring with relative-strength tie-breaking</small></div><div class="v11-potential-actions ait-scanner-toolbar">
+      <div class="ait-scanner-download" data-ait-scanner-download>
+       <button class="btn soft ait-scanner-download-trigger" type="button" aria-haspopup="true" aria-expanded="false">
+        <span>⇩ Download</span><span class="ait-scanner-download-caret">⌄</span>
+       </button>
+       <div class="ait-scanner-download-menu" hidden>
+        <button class="btn soft" type="button" data-ait-scanner-download-action="instant">Instant</button>
+        <button class="btn soft" type="button" data-ait-scanner-download-action="incremental">Incremental</button>
+       </div>
+      </div>
       <button class="btn primary ait-scanner-run" id="v11RunPotential" type="button">Run</button>
       <div class="ait-scanner-charts" data-ait-scanner-charts>
        <button class="btn soft ait-scanner-charts-trigger" type="button" aria-haspopup="true" aria-expanded="false">
@@ -5169,6 +5363,15 @@ body.ait-elite-is-calculating *{cursor:progress!important}
  <section class="v11-workspace" data-v11-workspace="potential-priority">
   <article class="v11-card v11-scanner-card">
    <div class="v11-card-head"><div><h3>AIT Signal Priority Screener</h3><small>Signal-first screening that keeps every Strong Buy above Buy, Watch and Avoid</small></div><div class="v11-potential-actions ait-scanner-toolbar">
+      <div class="ait-scanner-download" data-ait-scanner-download>
+       <button class="btn soft ait-scanner-download-trigger" type="button" aria-haspopup="true" aria-expanded="false">
+        <span>⇩ Download</span><span class="ait-scanner-download-caret">⌄</span>
+       </button>
+       <div class="ait-scanner-download-menu" hidden>
+        <button class="btn soft" type="button" data-ait-scanner-download-action="instant">Instant</button>
+        <button class="btn soft" type="button" data-ait-scanner-download-action="incremental">Incremental</button>
+       </div>
+      </div>
       <button class="btn primary ait-scanner-run" id="v11RunPriority" type="button">Run</button>
       <div class="ait-scanner-charts" data-ait-scanner-charts>
        <button class="btn soft ait-scanner-charts-trigger" type="button" aria-haspopup="true" aria-expanded="false">
@@ -10300,6 +10503,15 @@ document.addEventListener("keydown",event=>{
  <header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">SCANNER TOOL</span><h2>AIT Signal Priority — Historical Performance</h2><p>Signal-first screening strengthened by internally calculated historical performance.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaSignalPriorityEngineModal" type="button">← Engine</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header>
  <div class="ait-psa-terminal-modal__body ait-psa-workspace-host"><section class="v11-workspace active"><article class="v11-card v11-scanner-card">
   <div class="v11-card-head"><div><h3>AIT Signal Priority Historical Screener</h3><small>Signal-first ranking using current Primary Score and internally calculated Historical Score</small></div><div class="v11-potential-actions ait-scanner-toolbar">
+      <div class="ait-scanner-download" data-ait-scanner-download>
+       <button class="btn soft ait-scanner-download-trigger" type="button" aria-haspopup="true" aria-expanded="false">
+        <span>⇩ Download</span><span class="ait-scanner-download-caret">⌄</span>
+       </button>
+       <div class="ait-scanner-download-menu" hidden>
+        <button class="btn soft" type="button" data-ait-scanner-download-action="instant">Instant</button>
+        <button class="btn soft" type="button" data-ait-scanner-download-action="incremental">Incremental</button>
+       </div>
+      </div>
       <button class="btn primary ait-scanner-run" id="aitHistoricalPriorityRun" type="button">Run</button>
       <div class="ait-scanner-charts" data-ait-scanner-charts>
        <button class="btn soft ait-scanner-charts-trigger" type="button" aria-haspopup="true" aria-expanded="false">
@@ -10326,6 +10538,15 @@ document.addEventListener("keydown",event=>{
  <header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">SCANNER TOOL</span><h2>AIT Signal Priority — Advanced Performance</h2><p>Multi-factor confirmation scanner combining current strength with historical quality and price-volume validation.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaSignalPriorityEngineModal" type="button">← Engine</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header>
  <div class="ait-psa-terminal-modal__body ait-psa-workspace-host"><section class="v11-workspace active"><article class="v11-card v11-scanner-card">
   <div class="v11-card-head"><div><h3>AIT Advanced Signal Priority Screener</h3><small>Signal-first ranking with historical momentum, stability, persistence and market confirmation</small></div><div class="v11-potential-actions ait-scanner-toolbar">
+      <div class="ait-scanner-download" data-ait-scanner-download>
+       <button class="btn soft ait-scanner-download-trigger" type="button" aria-haspopup="true" aria-expanded="false">
+        <span>⇩ Download</span><span class="ait-scanner-download-caret">⌄</span>
+       </button>
+       <div class="ait-scanner-download-menu" hidden>
+        <button class="btn soft" type="button" data-ait-scanner-download-action="instant">Instant</button>
+        <button class="btn soft" type="button" data-ait-scanner-download-action="incremental">Incremental</button>
+       </div>
+      </div>
       <button class="btn primary ait-scanner-run" id="aitAdvancedPriorityRun" type="button">Run</button>
       <div class="ait-scanner-charts" data-ait-scanner-charts>
        <button class="btn soft ait-scanner-charts-trigger" type="button" aria-haspopup="true" aria-expanded="false">
@@ -10351,6 +10572,15 @@ document.addEventListener("keydown",event=>{
  <header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">DECISION ENGINE V1.4</span><h2>AIT Elite</h2><p>Self-checking multi-factor decision scanner: refreshes Elite performance state only when downloaded OHLC has changed, then combines current, historical and execution-quality evidence.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaSignalPriorityEngineModal" type="button">← Engine</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header>
  <div class="ait-psa-terminal-modal__body ait-psa-workspace-host"><section class="v11-workspace active"><article class="v11-card v11-scanner-card">
   <div class="v11-card-head"><div><h3>AIT Elite</h3><small>Simple decision-first scanner: what to do, when to act, preferred horizon, model state and plain-language reason</small></div><div class="v11-potential-actions ait-scanner-toolbar">
+      <div class="ait-scanner-download" data-ait-scanner-download>
+       <button class="btn soft ait-scanner-download-trigger" type="button" aria-haspopup="true" aria-expanded="false">
+        <span>⇩ Download</span><span class="ait-scanner-download-caret">⌄</span>
+       </button>
+       <div class="ait-scanner-download-menu" hidden>
+        <button class="btn soft" type="button" data-ait-scanner-download-action="instant">Instant</button>
+        <button class="btn soft" type="button" data-ait-scanner-download-action="incremental">Incremental</button>
+       </div>
+      </div>
       <button class="btn primary ait-scanner-run" id="aitElitePriorityRun" type="button">Run</button>
       <div class="ait-scanner-charts" data-ait-scanner-charts>
        <button class="btn soft ait-scanner-charts-trigger" type="button" aria-haspopup="true" aria-expanded="false">
@@ -10364,20 +10594,20 @@ document.addEventListener("keydown",event=>{
       </div>
      </div></div>
   <div class="v11-card-body"><section class="v11-potential-guideline"><div class="v11-potential-guideline-grid">
-   <div class="v11-potential-guide v11-potential-guide--strongest"><strong>1. What should I do?</strong><span>Read the <b>Your Action</b> column first. It converts the Elite signal into a practical next step.</span></div>
-   <div class="v11-potential-guide v11-potential-guide--formula"><strong>2. When?</strong><span><b>Now</b> means entry conditions are ready. <b>Wait Confirmation</b> means do not enter yet. <b>Wait Pullback</b> means price is better bought nearer support.</span></div>
-   <div class="v11-potential-guide v11-potential-guide--watch"><strong>3. How long?</strong><span>Short Term = 3–6 trading days. Mid Term = 9–20 trading days. Long Term remains unvalidated until longer history is available.</span></div>
-   <div class="v11-potential-guide v11-potential-guide--avoid"><strong>4. Model State</strong><span>Healthy = normal confidence. Caution = stricter confirmation. Degraded = avoid aggressive new entries. Recalibration Required = suspend new buys.</span></div>
+   <div class="v11-potential-guide v11-potential-guide--strongest"><strong>1. What should I do?</strong><span><b>What to Do</b> is the authoritative decision after model health, position state, entry readiness and setup strength are combined. Read it first.</span></div>
+   <div class="v11-potential-guide v11-potential-guide--formula"><strong>2. Setup Signal ≠ Action</strong><span><b>Strong Buy / Buy</b> describes setup strength only. It does not mean buy when the final decision says WAIT, HOLD, REDUCE, EXIT or AVOID.</span></div>
+   <div class="v11-potential-guide v11-potential-guide--watch"><strong>3. When & Horizon</strong><span>Now = actionable entry. Wait Confirmation / Pullback = no entry yet. Short = 3–6D; Mid = 9–20D. Long term is not validated.</span></div>
+   <div class="v11-potential-guide v11-potential-guide--avoid"><strong>4. Model Safety Gate</strong><span>Healthy = normal confidence. Caution = stricter confirmation. Degraded = avoid aggressive entries. Recalibration Required = new buys are blocked even when the setup says Strong Buy.</span></div>
   </div></section>
   <section class="ait-elite-summary-block" id="aitEliteDecisionSummary" style="margin-top:14px">
    <div class="ait-fundamental-strip">
     <div class="ait-fundamental-item"><small>Buy Now</small><b><span id="aitEliteCountBuyNow">0</span> ready new entries</b></div>
-    <div class="ait-fundamental-item"><small>Wait / Confirm</small><b><span id="aitEliteCountWait">0</span> good candidates, not ready</b></div>
+    <div class="ait-fundamental-item"><small>Wait / Blocked</small><b><span id="aitEliteCountWait">0</span> no-entry decisions</b></div>
     <div class="ait-fundamental-item"><small>Hold / Review</small><b><span id="aitEliteCountHold">0</span> portfolio actions</b></div>
-    <div class="ait-fundamental-item"><small>Avoid / Exit</small><b><span id="aitEliteCountAvoid">0</span> risk or weak setup</b></div>
+    <div class="ait-fundamental-item"><small>Avoid / Exit</small><b><span id="aitEliteCountAvoid">0</span> reject or leave</b></div>
    </div>
   </section>
-  <div class="v11-scanner-table-region" style="margin-top:14px"><div class="v11-table-scrollbar" aria-label="Horizontal table scrollbar"><div></div></div><div class="v11-table-wrap v11-scanner-table-wrap"><table class="v11-table v11-potential-table"><thead><tr><th>Priority</th><th>Trading Code</th><th>LTP</th><th>Signal</th><th>Your Action</th><th>When</th><th>Best Horizon</th><th>Model State</th><th>Why</th><th>Details</th></tr></thead><tbody id="aitElitePriorityRows"><tr><td colspan="10">Open AIT Elite to calculate your decision list.</td></tr></tbody></table></div></div>
+  <div class="v11-scanner-table-region" style="margin-top:14px"><div class="v11-table-scrollbar" aria-label="Horizontal table scrollbar"><div></div></div><div class="v11-table-wrap v11-scanner-table-wrap"><table class="v11-table v11-potential-table"><thead><tr><th>Priority</th><th>Trading Code</th><th>LTP</th><th>What to Do</th><th>When</th><th>Setup Signal</th><th>Best Horizon</th><th>Model State</th><th>Why</th><th>Details</th></tr></thead><tbody id="aitElitePriorityRows"><tr><td colspan="10">Open AIT Elite to calculate your decision list.</td></tr></tbody></table></div></div>
   </div></article></section></div>
 </section>
 <section class="ait-psa-terminal-modal ait-psa-workspace-modal" id="aitEliteDecisionDetailModal" hidden role="dialog" aria-modal="true">
@@ -11295,6 +11525,23 @@ document.addEventListener('DOMContentLoaded', () => {
   if(good(mt))return "Mid 9–20D";
   return "No Buy Horizon";
  };
+ const finalDecision=r=>{
+  const action=String(r.tradeAction||"Watch"),state=String(r.modelState||"Unverified"),held=isHeld(r.code);
+  if(action==="Buy Now")return {label:"BUY NOW",tone:"buy",short:"Entry conditions and model state permit a new position."};
+  if(action==="Buy on Confirmation")return {label:"WAIT — BUY ON CONFIRMATION",tone:"wait",short:"Do not enter until confirmation improves."};
+  if(action==="Buy on Pullback")return {label:"WAIT — BUY ON PULLBACK",tone:"wait",short:"Do not chase; wait for a better price near support."};
+  if(action==="Suspend New Buy")return {label:"WAIT — DO NOT BUY YET",tone:"blocked",short:"The setup may be strong, but the performance safety gate blocks new entries."};
+  if(action==="Hold")return {label:"HOLD",tone:"hold",short:"Existing position remains acceptable."};
+  if(action==="Hold / Review")return {label:"HOLD — REVIEW",tone:"hold",short:"Keep the existing position under review; do not add."};
+  if(action==="Hold / Tight Risk")return {label:"HOLD — TIGHT RISK",tone:"caution",short:"Keep only with tighter risk control while model health is weak."};
+  if(action==="Reduce")return {label:"REDUCE",tone:"caution",short:"Existing position has weakened; reduce exposure according to your risk plan."};
+  if(action==="Exit")return {label:"EXIT",tone:"avoid",short:"Existing-position risk conditions failed."};
+  if(action==="Avoid")return {label:"AVOID",tone:"avoid",short:"Do not open a new position under the current evidence."};
+  if(state==="Degraded"&&!held)return {label:"WAIT — MODEL DEGRADED",tone:"blocked",short:"New entry is not justified while recent model performance is degraded."};
+  return {label:"WAIT — WATCH",tone:"wait",short:"The setup is not actionable yet."};
+ };
+ const decisionClass=r=>`ait-elite-decision--${finalDecision(r).tone}`;
+ const setupLabel=r=>`${r.finalSignal||"Avoid"} #${r.signalRank||"—"}`;
  const plainReason=r=>{
   const action=String(r.tradeAction||"Watch"),state=String(r.modelState||"Unverified"),signal=String(r.finalSignal||"Avoid");
   if(action==="Buy Now")return `High-priority ${signal} setup; entry, liquidity and risk checks are ready.`;
@@ -11305,34 +11552,35 @@ document.addEventListener('DOMContentLoaded', () => {
   if(action==="Hold / Tight Risk")return `Model is ${state}; keep position only with tighter risk control.`;
   if(action==="Reduce")return `Existing position has weakened while model state is ${state}.`;
   if(action==="Exit")return "Risk/signal conditions failed for an existing position.";
-  if(action==="Suspend New Buy")return "Performance monitor requires recalibration; new entries are suspended.";
+  if(action==="Suspend New Buy")return `Setup signal is ${signal}, but the ${state} performance safety gate overrides it. Wait; do not open a new position yet.`;
   if(action==="Avoid")return "Signal, liquidity, volatility or short-term risk gate failed.";
   return "Setup is not ready for a new entry; keep it on watch.";
  };
  const updateDecisionSummary=rows=>{
   const set=(id,n)=>document.getElementById(id)?.replaceChildren(document.createTextNode(String(n)));
   set("aitEliteCountBuyNow",rows.filter(r=>r.tradeAction==="Buy Now").length);
-  set("aitEliteCountWait",rows.filter(r=>["Buy on Confirmation","Buy on Pullback","Watch"].includes(r.tradeAction)).length);
+  set("aitEliteCountWait",rows.filter(r=>["Buy on Confirmation","Buy on Pullback","Watch","Suspend New Buy"].includes(r.tradeAction)).length);
   set("aitEliteCountHold",rows.filter(r=>["Hold","Hold / Review","Hold / Tight Risk","Reduce"].includes(r.tradeAction)).length);
-  set("aitEliteCountAvoid",rows.filter(r=>["Avoid","Exit","Suspend New Buy"].includes(r.tradeAction)).length);
+  set("aitEliteCountAvoid",rows.filter(r=>["Avoid","Exit"].includes(r.tradeAction)).length);
  };
  const scoreBand=value=>{const n=Number(value)||0;return n>=75?"Strong":n>=60?"Good":n>=45?"Mixed":"Weak"};
  const showDetails=code=>{
   const r=(cache.rows||[]).find(x=>String(x.code)===String(code));if(!r)return;
   const title=document.getElementById("aitEliteDetailTitle"),body=document.getElementById("aitEliteDetailBody");
-  if(title)title.textContent=`${r.code} — ${r.tradeAction||"Watch"}`;
+  const decision=finalDecision(r);
+  if(title)title.textContent=`${r.code} — ${decision.label}`;
   const actionWhen=simpleWhen(r),horizon=bestHorizon(r),reason=plainReason(r);
   const group=(titleText,subtitle,items,cls="")=>`<section class="ait-elite-detail-group ${cls}"><div class="ait-elite-detail-group-head"><div><h3>${esc(titleText)}</h3><p>${esc(subtitle)}</p></div></div><div class="ait-fundamental-strip">${items.join("")}</div></section>`;
   const item=(label,value,note="")=>`<div class="ait-fundamental-item"><small>${esc(label)}</small><b>${esc(value)}</b>${note?`<em>${esc(note)}</em>`:""}</div>`;
   if(body)body.innerHTML=`
-   ${group("1. What should I do?","Read this section first. It converts the scanner evidence into your practical next action.",[
-    item("Your Action",r.tradeAction||"Watch",reason),
+   ${group("1. What should I do?","This is the final decision. It has higher priority than the Strong Buy / Buy setup badge.",[
+    item("FINAL DECISION",decision.label,decision.short),
     item("When",actionWhen,r.entryState||"No Entry"),
+    item("Model Safety Gate",r.modelState||"Unverified",r.modelState==="Healthy"?"New entries may be considered when stock-specific gates pass":r.modelState==="Caution"?"Require stronger confirmation":r.modelState==="Degraded"?"Avoid aggressive new entries":"Recalibration blocks new buys"),
+    item("Setup Signal",`${r.finalSignal||"Avoid"} #${r.signalRank}`,`Setup strength only • Elite overall #${r.rank}`),
     item("Best Horizon",horizon,`Short: ${r.shortTerm||"Watch"} • Mid: ${r.midTerm||"Watch"}`),
-    item("Final Signal",`${r.finalSignal||"Avoid"} #${r.signalRank}`,`Elite overall #${r.rank}`),
-    item("Model State",r.modelState||"Unverified",r.modelState==="Healthy"?"Normal confidence":r.modelState==="Caution"?"Use stricter confirmation":r.modelState==="Degraded"?"Avoid aggressive entry":"Check performance state"),
     item("Why",reason)
-   ],"ait-elite-detail-group--decision")}
+   ],`ait-elite-detail-group--decision ${decisionClass(r)}`)}
 
    ${group("2. Primary Signal Evidence","These are the fields from the Primary Signal Priority table. They explain the foundation of the Elite decision.",[
     item("Primary Overall Rank",r.primaryOverallRank?`#${r.primaryOverallRank}`:"—","Rank in the Primary table"),
@@ -11374,7 +11622,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById("aitElitePriorityModal")?.setAttribute("hidden","");
   document.getElementById("aitEliteDecisionDetailModal")?.removeAttribute("hidden");
  };
- const render=()=>{const tbody=document.getElementById("aitElitePriorityRows");if(!tbody)return[];const result=calculate(),rows=result.rows||[];if(!rows.length){tbody.innerHTML=`<tr><td colspan="10">${result.available<9?`Elite scanning requires at least 9 trading dates. ${result.available||0} are currently available.`:"No eligible securities could be calculated."}</td></tr>`;updateDecisionSummary([]);return[]}updateDecisionSummary(rows);tbody.innerHTML=rows.map(r=>`<tr><td><strong>${esc(r.finalSignal||"Avoid")} #${r.signalRank}</strong><small style="display:block">Overall #${r.rank}</small></td><td><strong>${esc(r.code)}</strong></td><td>${(Number(r.ltp)||0).toFixed(2)}</td><td><span class="v11-signal ${String(r.finalSignal||"watch").toLowerCase().replace(/\s+/g,"-")}">${esc(r.finalSignal||"Watch")}</span></td><td><span class="v11-signal ${String(r.tradeAction||"watch").toLowerCase().replace(/\s+/g,"-")}"><strong>${esc(r.tradeAction||"Watch")}</strong></span></td><td><strong>${esc(simpleWhen(r))}</strong></td><td><strong>${esc(bestHorizon(r))}</strong><small style="display:block">${esc(r.shortTerm||"Watch")} / ${esc(r.midTerm||"Watch")}</small></td><td><strong>${esc(r.modelState||"Unverified")}</strong></td><td style="min-width:260px">${esc(plainReason(r))}</td><td><button class="btn soft ait-elite-details" data-code="${esc(r.code)}" type="button">View Details</button></td></tr>`).join("");tbody.querySelectorAll(".ait-elite-details").forEach(btn=>btn.addEventListener("click",()=>showDetails(btn.dataset.code)));return rows};
+ const render=()=>{const tbody=document.getElementById("aitElitePriorityRows");if(!tbody)return[];const result=calculate(),rows=result.rows||[];if(!rows.length){tbody.innerHTML=`<tr><td colspan="10">${result.available<9?`Elite scanning requires at least 9 trading dates. ${result.available||0} are currently available.`:"No eligible securities could be calculated."}</td></tr>`;updateDecisionSummary([]);return[]}updateDecisionSummary(rows);tbody.innerHTML=rows.map(r=>{const decision=finalDecision(r);return `<tr><td><strong>${esc(r.finalSignal||"Avoid")} #${r.signalRank}</strong><small style="display:block">Overall #${r.rank}</small></td><td><strong>${esc(r.code)}</strong></td><td>${(Number(r.ltp)||0).toFixed(2)}</td><td class="ait-elite-decision-cell ${decisionClass(r)}"><strong>${esc(decision.label)}</strong><small>${esc(decision.short)}</small></td><td><strong>${esc(simpleWhen(r))}</strong><small style="display:block">${esc(r.entryState||"No Entry")}</small></td><td><span class="v11-signal ${String(r.finalSignal||"watch").toLowerCase().replace(/\s+/g,"-")}">${esc(setupLabel(r))}</span><small style="display:block">Setup strength only</small></td><td><strong>${esc(bestHorizon(r))}</strong><small style="display:block">${esc(r.shortTerm||"Watch")} / ${esc(r.midTerm||"Watch")}</small></td><td><strong>${esc(r.modelState||"Unverified")}</strong></td><td class="ait-elite-why-cell">${esc(plainReason(r))}</td><td><button class="btn soft ait-elite-details" data-code="${esc(r.code)}" type="button">View Details</button></td></tr>`}).join("");tbody.querySelectorAll(".ait-elite-details").forEach(btn=>btn.addEventListener("click",()=>showDetails(btn.dataset.code)));return rows};
  const run=()=>{cache={sig:"",rows:[]};window.AitAdvancedSignalPriority?.clearCache?.();window.AitSignalPriorityHistory?.clearCache?.();return render()};
  const ensurePerformanceState=async()=>{try{return await window.AitElitePerformance?.ensureCurrent?.()}catch(_){return false}};
  document.getElementById("aitOpenElitePriority")?.addEventListener("click",()=>{document.getElementById("aitPsaSignalPriorityEngineModal")?.setAttribute("hidden","");document.getElementById("aitElitePriorityModal")?.removeAttribute("hidden");window.AITEliteBusy?.execute?.({kicker:"AIT ELITE SCANNER",title:"Building your decision list",text:"Checking performance state, ranking stocks, validating risk and preparing actions…"},async()=>{await ensurePerformanceState();cache={sig:"",rows:[]};return render()})});
@@ -11620,6 +11868,16 @@ document.addEventListener("DOMContentLoaded",()=>{
  });
  document.addEventListener("click",()=>closeAll());
  document.addEventListener("keydown",event=>{if(event.key==="Escape")closeAll()});
+});
+</script>
+
+<script id="ait-scanner-download-dropdown-script-v10108">
+document.addEventListener("DOMContentLoaded",()=>{
+ const groups=[...document.querySelectorAll("[data-ait-scanner-download]")];
+ const closeAll=(except=null)=>{groups.forEach(group=>{if(group===except)return;group.classList.remove("is-open");const trigger=group.querySelector(".ait-scanner-download-trigger");const menu=group.querySelector(".ait-scanner-download-menu");trigger?.setAttribute("aria-expanded","false");if(menu)menu.hidden=true;});};
+ const triggerExistingDownload=(action)=>{const id=action==="instant"?"instantDseUpdate":"incrementalOhlcDownload";const target=document.getElementById(id);if(!target)return false;target.click();return true;};
+ groups.forEach(group=>{const trigger=group.querySelector(".ait-scanner-download-trigger");const menu=group.querySelector(".ait-scanner-download-menu");trigger?.addEventListener("click",event=>{event.preventDefault();event.stopPropagation();const willOpen=!group.classList.contains("is-open");closeAll(group);group.classList.toggle("is-open",willOpen);trigger.setAttribute("aria-expanded",willOpen?"true":"false");if(menu)menu.hidden=!willOpen;});menu?.addEventListener("click",event=>{const button=event.target.closest("[data-ait-scanner-download-action]");if(!button)return;event.preventDefault();event.stopPropagation();const action=button.dataset.aitScannerDownloadAction;group.classList.remove("is-open");trigger?.setAttribute("aria-expanded","false");menu.hidden=true;triggerExistingDownload(action);});});
+ document.addEventListener("click",()=>closeAll());document.addEventListener("keydown",event=>{if(event.key==="Escape")closeAll()});
 });
 </script>
 </body>

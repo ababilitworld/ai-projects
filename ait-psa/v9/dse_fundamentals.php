@@ -220,7 +220,8 @@ final class DseFundamentalProvider
         $category = $this->findCategory($fields);
         $business = $this->findBusinessSegment($fields);
         $yearEnd = $this->findText($fields, ['Year End', 'Financial Year End', 'Financial Year Ended', 'Accounting Year End']);
-        $lastAgm = $this->findDate($fields, ['Last AGM Held on', 'Last AGM Held On', 'Last AGM Date', 'Last AGM']);
+        $lastAgm = $this->extractLastAgmDate($xpath)
+            ?? $this->findDate($fields, ['Last AGM Held on', 'Last AGM Held On', 'Last AGM Date', 'Last AGM']);
 
         return [
             'code' => $code,
@@ -240,6 +241,113 @@ final class DseFundamentalProvider
             'sourcePolicy' => 'DSE-only: Category, Business Segment, Year End, Last AGM',
             'downloadedAt' => gmdate(DATE_ATOM),
         ];
+    }
+
+    private function extractLastAgmDate(DOMXPath $xpath): ?string
+    {
+        /*
+         * DSE does not consistently render Last AGM inside a table row.
+         * Current company pages expose it in #section-to-print, commonly:
+         * //*[@id="section-to-print"]/h2[4]/div[1]/i
+         *
+         * The <i> node can be only an icon/tooltip trigger, so we inspect its
+         * attributes, its containing h2, semantic "Last AGM" headings and
+         * nearby sibling content. We accept only an actual date.
+         */
+        $queries = [
+            '//*[@id="section-to-print"]/h2[4]/div[1]/i',
+            '//*[@id="section-to-print"]/h2[4]',
+            '//*[@id="section-to-print"]//h2[contains(translate(normalize-space(.), "abcdefghijklmnopqrstuvwxyz", "ABCDEFGHIJKLMNOPQRSTUVWXYZ"), "LAST AGM")]',
+            '//*[@id="section-to-print"]//*[contains(translate(normalize-space(.), "abcdefghijklmnopqrstuvwxyz", "ABCDEFGHIJKLMNOPQRSTUVWXYZ"), "LAST AGM")]',
+        ];
+
+        foreach ($queries as $query) {
+            $nodes = $xpath->query($query);
+            if ($nodes === false) {
+                continue;
+            }
+
+            foreach ($nodes as $node) {
+                $candidates = [];
+
+                $text = $this->cleanText($node->textContent ?? '');
+                if ($text !== '') {
+                    $candidates[] = $text;
+                }
+
+                if ($node instanceof DOMElement) {
+                    foreach (['title', 'data-original-title', 'data-bs-original-title', 'aria-label', 'data-content', 'data-title'] as $attribute) {
+                        if ($node->hasAttribute($attribute)) {
+                            $value = $this->cleanText($node->getAttribute($attribute));
+                            if ($value !== '') {
+                                $candidates[] = $value;
+                            }
+                        }
+                    }
+                }
+
+                // The supplied XPath points to an <i>; its parent h2 usually
+                // contains the human-readable AGM text/date.
+                $parent = $node->parentNode;
+                $depth = 0;
+                while ($parent !== null && $depth < 4) {
+                    $parentText = $this->cleanText($parent->textContent ?? '');
+                    if ($parentText !== '') {
+                        $candidates[] = $parentText;
+                    }
+                    if ($parent instanceof DOMElement && strtolower($parent->tagName) === 'h2') {
+                        break;
+                    }
+                    $parent = $parent->parentNode;
+                    $depth++;
+                }
+
+                // Also inspect the first nearby siblings because DSE has used
+                // card-style heading/value layouts in different revisions.
+                $sibling = $node->nextSibling;
+                $checked = 0;
+                while ($sibling !== null && $checked < 4) {
+                    $siblingText = $this->cleanText($sibling->textContent ?? '');
+                    if ($siblingText !== '') {
+                        $candidates[] = $siblingText;
+                    }
+                    $sibling = $sibling->nextSibling;
+                    $checked++;
+                }
+
+                foreach (array_unique($candidates) as $candidate) {
+                    $date = $this->extractDateFromText($candidate);
+                    if ($date !== null) {
+                        return $date;
+                    }
+                }
+            }
+        }
+
+        return null;
+    }
+
+    private function extractDateFromText(string $value): ?string
+    {
+        $value = $this->cleanText($value);
+        if ($value === '') {
+            return null;
+        }
+
+        $patterns = [
+            '/\b(\d{1,2}[-\/.]\d{1,2}[-\/.]\d{4})\b/',
+            '/\b(\d{4}-\d{1,2}-\d{1,2})\b/',
+            '/\b(\d{1,2}\s+(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s+\d{4})\b/i',
+            '/\b((?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s+\d{1,2},?\s+\d{4})\b/i',
+        ];
+
+        foreach ($patterns as $pattern) {
+            if (preg_match($pattern, $value, $matches) === 1) {
+                return $matches[1];
+            }
+        }
+
+        return null;
     }
 
     /** @return array<string,string> */
@@ -351,13 +459,7 @@ final class DseFundamentalProvider
     private function findDate(array $fields, array $labels): ?string
     {
         $value = $this->findText($fields, $labels);
-        if ($value === null) {
-            return null;
-        }
-        if (preg_match('/\b(?:\d{1,2}[-\/.]\d{1,2}[-\/.]\d{2,4}|\d{4}-\d{2}-\d{2})\b/', $value, $matches) === 1) {
-            return $matches[0];
-        }
-        return null;
+        return $value === null ? null : $this->extractDateFromText($value);
     }
 
     /** @param array<string,mixed> $record */

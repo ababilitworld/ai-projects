@@ -2775,3 +2775,26 @@ body{
   :root[data-aod2-theme="ait-pha"] .aod2-section-head h2{grid-row:3!important;margin-top:1.4mm!important}
   :root[data-aod2-theme="ait-pha"] .aod2-section-head>div small{grid-row:4!important;margin-top:.5mm!important;max-width:170mm!important}
 }
+
+/* Keep the space between the outer and inner page frames clean. */
+@media screen{
+  :root[data-aod2-theme="ait-pha"] .aod2-sheet,
+  :root[data-aod2-theme="ait-pha"] .aod2-sheet--wide{
+    background:radial-gradient(circle at 84% 12%,color-mix(in srgb,var(--aod2-gold) 7%,transparent),transparent 25%),var(--aod2-paper)!important;
+  }
+}
+
+/* Page 05 uses only the outer numbered lesson markers. */
+#aod2-khizir .aod2-lesson{align-items:start!important}
+#aod2-khizir .aod2-lesson>div:last-child{
+  min-height:50px!important;padding:6px 18px!important;display:block!important;grid-template-columns:minmax(0,1fr)!important;
+}
+#aod2-khizir .aod2-lesson>div:last-child p{margin:0!important}
+
+@media screen and (max-width:760px){
+  #aod2-khizir .aod2-lesson>div:last-child{min-height:43px!important;padding:5px 13px!important}
+}
+
+@media print{
+  #aod2-khizir .aod2-lesson>div:last-child{min-height:13mm!important;padding:1.5mm 4mm!important;display:block!important}
+}

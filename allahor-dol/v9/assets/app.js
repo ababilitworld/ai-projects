@@ -1,6 +1,8 @@
 (() => {
   "use strict";
 
+  const toBanglaDigits = (value) => String(value).replace(/[0-9]/g, (digit) => "০১২৩৪৫৬৭৮৯"[Number(digit)]);
+
   const HIGHLIGHTS = Object.freeze({
     trust: Object.freeze({
       title: "আল্লহর দল",
@@ -74,8 +76,8 @@
         if (!numberNode) return;
 
         const current = this.formatter.format(index + 1);
-        const visibleCurrent = String(index + 1).padStart(2, "0");
-        const visibleTotal = String(pages.length).padStart(2, "0");
+        const visibleCurrent = current.padStart(2, "০");
+        const visibleTotal = total.padStart(2, "০");
         const visibleNumber = `${visibleCurrent} / ${visibleTotal}`;
         const accessibleLabel = `পৃষ্ঠা ${current}, মোট ${total} পৃষ্ঠা`;
         numberNode.textContent = visibleNumber;
@@ -95,6 +97,7 @@
       this.progressBar = document.getElementById("aod2-progress-bar");
       this.titleNode = document.getElementById("aod2-current-title");
       this.countNode = document.getElementById("aod2-current-count");
+      this.numberFormatter = new Intl.NumberFormat("bn-BD", { useGrouping: false });
       this.handleScroll = this.handleScroll.bind(this);
     }
 
@@ -125,7 +128,9 @@
       const title = section?.dataset.aod2Title || "আল্লহর দল";
       if (this.titleNode) this.titleNode.textContent = title;
       if (this.countNode) {
-        this.countNode.textContent = `${String(this.currentIndex + 1).padStart(2, "0")} / ${String(this.sections.length).padStart(2, "0")}`;
+        const current = this.numberFormatter.format(this.currentIndex + 1).padStart(2, "০");
+        const total = this.numberFormatter.format(this.sections.length).padStart(2, "০");
+        this.countNode.textContent = `${current} / ${total}`;
       }
       this.railButtons.forEach((button) => {
         button.classList.toggle("is-active", button.dataset.aod2Go === section?.id);
@@ -473,7 +478,7 @@
       const all = this.state.printScope === "all";
       document.getElementById("aod2-print-preview-title").textContent = all ? "আল্লহর দল" : heading;
       document.getElementById("aod2-print-preview-text").textContent = all ? "মহাবিশ্বে দল মূলত দুটি।" : paragraph;
-      document.getElementById("aod2-print-meta-paper").textContent = this.state.paper.toUpperCase();
+      document.getElementById("aod2-print-meta-paper").textContent = toBanglaDigits(this.state.paper.toUpperCase());
       document.getElementById("aod2-print-meta-orientation").textContent = this.state.orientation.toUpperCase();
       document.getElementById("aod2-print-meta-tone").textContent = this.state.tone.toUpperCase();
       const sheet = document.querySelector(".aod2-mini-sheet");
@@ -627,7 +632,7 @@
       if (!canvas) return;
       const [width, height] = this.posterDimensions(true);
       this.renderer.renderPoster(canvas, HIGHLIGHTS[this.state.posterContent], this.state.posterPalette, width, height);
-      document.getElementById("aod2-poster-meta").textContent = { portrait: "4:5", landscape: "16:9", a3: "A3" }[this.state.posterFormat];
+      document.getElementById("aod2-poster-meta").textContent = { portrait: "৪:৫", landscape: "১৬:৯", a3: "A৩" }[this.state.posterFormat];
     }
 
     downloadPoster() {
@@ -650,9 +655,9 @@
     }
 
     updateDslrMeta() {
-      document.getElementById("aod2-dslr-meta-res").textContent = this.state.resolution.toUpperCase();
-      document.getElementById("aod2-dslr-meta-ratio").textContent = this.state.ratio;
-      document.getElementById("aod2-dslr-download").innerHTML = `<span>↓</span> Download ${this.state.resolution.toUpperCase()} JPG`;
+      document.getElementById("aod2-dslr-meta-res").textContent = toBanglaDigits(this.state.resolution.toUpperCase());
+      document.getElementById("aod2-dslr-meta-ratio").textContent = toBanglaDigits(this.state.ratio);
+      document.getElementById("aod2-dslr-download").innerHTML = `<span>↓</span> Download ${toBanglaDigits(this.state.resolution.toUpperCase())} JPG`;
     }
 
     downloadDslr() {
@@ -721,8 +726,8 @@
       if (leading) leading.value = String(this.preferences.lineHeight);
       const sizeOutput = document.getElementById("aod2-font-size-output");
       const lineOutput = document.getElementById("aod2-line-height-output");
-      if (sizeOutput) sizeOutput.textContent = `${this.preferences.fontSize}px`;
-      if (lineOutput) lineOutput.textContent = `${this.preferences.lineHeight.toFixed(1)}×`;
+      if (sizeOutput) sizeOutput.textContent = `${this.preferences.fontSize.toLocaleString("bn-BD", { useGrouping: false })}px`;
+      if (lineOutput) lineOutput.textContent = `${this.preferences.lineHeight.toLocaleString("bn-BD", { minimumFractionDigits: 1, maximumFractionDigits: 2, useGrouping: false })}×`;
       const focus = document.getElementById("aod2-focus");
       const motion = document.getElementById("aod2-motion");
       const progressToggle = document.getElementById("aod2-progress-toggle");
