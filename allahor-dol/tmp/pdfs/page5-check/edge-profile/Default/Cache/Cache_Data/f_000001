@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="bn" data-aod2-theme="ait-pha" data-aod2-font="ait-pha">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="description" content="আল্লহর দল — একটি ইন্টার‌্যাক্টিভ বাংলা ইবুক।">
+  <title>আল্লহর দল — ইবুক</title>
+<link rel="stylesheet" href="assets/styles.css?v=4.15">
+</head>
+<body>
+  <a class="aod2-skip" href="#aod2-disclaimer">পাঠ শুরু করুন</a>
+  <div class="aod2-progress" aria-hidden="true"><span id="aod2-progress-bar"></span></div>
+
+  <header class="aod2-topbar">
+    <button class="aod2-brand" type="button" data-aod2-go="aod2-cover" aria-label="প্রচ্ছদে যান">
+      <span class="aod2-brand__seal" aria-hidden="true">◈</span>
+      <span><strong>আল্লহর দল</strong><small>AIT-PHA · EBOOK</small></span>
+    </button>
+    <div class="aod2-read-state" aria-live="polite">
+      <span class="aod2-read-state__dot"></span>
+      <span id="aod2-current-title">প্রচ্ছদ</span>
+      <b id="aod2-current-count">০১ / ১২</b>
+    </div>
+    <div class="aod2-topbar__actions">
+      <a class="aod2-download" id="aod2-download-zip" href="../downloads/allahor-dol-ebook.zip" download>
+        <span aria-hidden="true">↓</span><span>ZIP</span>
+      </a>
+      <button class="aod2-terminal-trigger" id="aod2-terminal-trigger" type="button" aria-controls="aod2-terminal" aria-expanded="false">
+        <span class="aod2-terminal-trigger__icon" aria-hidden="true">⌘</span>
+        <span>Terminal</span><kbd>T</kbd>
+      </button>
+    </div>
+  </header>
+
+  <nav class="aod2-rail" aria-label="দ্রুত নেভিগেশন">
+    <span class="aod2-rail__track" aria-hidden="true"></span>
+    <button type="button" data-aod2-go="aod2-cover" class="is-active" aria-label="প্রচ্ছদ"><span>০১</span></button>
+    <button type="button" data-aod2-go="aod2-disclaimer" aria-label="Disclaimer"><span>০২</span></button>
+    <button type="button" data-aod2-go="aod2-index" aria-label="সূচিপত্র"><span>০৩</span></button>
+    <button type="button" data-aod2-go="aod2-intro" aria-label="ভূমিকা"><span>০৪</span></button>
+    <button type="button" data-aod2-go="aod2-khizir" aria-label="মুসা ও খিযির"><span>০৫</span></button>
+    <button type="button" data-aod2-go="aod2-entry" aria-label="আল্লহর দলে অন্তর্ভুক্ত হওয়ার উপায়"><span>০৬</span></button>
+    <button type="button" data-aod2-go="aod2-roadmap" aria-label="১ থেকে ১১ ধাপ"><span>০৭</span></button>
+    <button type="button" data-aod2-go="aod2-benefit" aria-label="বিশেষ টিপস"><span>০৮</span></button>
+    <button type="button" data-aod2-go="aod2-unity" aria-label="ঐক্য ও সহযোগিতা"><span>০৯</span></button>
+    <button type="button" data-aod2-go="aod2-purpose" aria-label="জীবনের সার্থকতা"><span>১০</span></button>
+    <button type="button" data-aod2-go="aod2-conclusion" aria-label="উপসংহার"><span>১১</span></button>
+    <button type="button" data-aod2-go="aod2-dua" aria-label="দোয়া"><span>১২</span></button>
+  </nav>
+
+  <main class="aod2-reader" id="aod2-reader">
+    <section class="aod2-sheet aod2-cover" id="aod2-cover" data-aod2-section data-aod2-title="প্রচ্ছদ">
+      <div class="aod2-sheet__frame" aria-hidden="true"></div>
+      <div class="aod2-cover__content">
+        <div class="aod2-cover__edition" aria-hidden="true"><span>AIT-PHA READER</span><i></i><span>বাংলা ইবুক</span></div>
+        <div class="aod2-cover__mark" aria-hidden="true"><i></i><i></i><span>◈</span></div>
+        <p class="aod2-kicker">আল্লহর দল</p>
+        <h1>আল্লহর দল</h1>
+        <div class="aod2-flourish" aria-hidden="true"><i></i><span>◆</span><i></i></div>
+        <p class="aod2-cover__statement">আল্লহর সন্তুষ্টি প্রাপ্তির উদ্দেশ্যে - আপনার জীবনের অর্জিত সকল অভিজ্ঞতা ও ট্যালেন্ট দিয়ে  মুসলিমদের টেকসই উন্নয়নের জন্য আল্লহর নির্দেশিত পথে কি করতে পারলেন, মুসলিম হিসেবে এটাই আপনার জীবনের সার্থকতা।</p>
+        <div class="badge-row aod2-cover-badges" aria-label="বইটির বৈশিষ্ট্য"><span>কুরআন ও সুন্নাহ</span><span>বাস্তবমুখী</span><span>ঐক্য ও সহযোগিতা</span></div>
+        <button class="aod2-start" type="button" data-aod2-go="aod2-disclaimer"><span>পাঠ শুরু করুন</span><b aria-hidden="true">↓</b></button>
+      </div>
+      <footer class="aod2-sheet__folio"><span>আল্লহর দল</span><b class="aod2-folio-number" aria-label="পৃষ্ঠা নম্বর"></b></footer>
+    </section>
+
+    <section class="aod2-sheet aod2-frontmatter aod2-disclaimer" id="aod2-disclaimer" data-aod2-section data-aod2-title="Disclaimer">
+      <header class="aod2-section-head aod2-frontmatter__head">
+        <div><span>অধ্যায় ০০</span><b class="aod2-chapter-name">প্রারম্ভিক অংশ</b><small>গুরুত্বপূর্ণ ঘোষণা ও ব্যবহারবিধি</small></div>
+        <h2>Disclaimer</h2>
+      </header>
+      <div class="aod2-disclaimer__panel">
+        <div class="aod2-disclaimer__seal" aria-hidden="true"><span>!</span></div>
+        <h3>গুরুত্বপূর্ণ নোট</h3>
+        <p>এই ইবুকটি ধর্মীয় শিক্ষা, ব্যক্তিগত চিন্তা ও আত্মউন্নয়নমূলক আলোচনার উদ্দেশ্যে প্রস্তুত। এটি কোনো ফতোয়া, আইনগত পরামর্শ, রাজনৈতিক দল বা সংগঠনের আনুষ্ঠানিক বক্তব্য নয়।</p>
+        <p>আল-কুরআন, হাদিস, ধর্মীয় ব্যাখ্যা ও সিদ্ধান্তের ক্ষেত্রে নির্ভরযোগ্য তাফসির, সহীহ হাদিস এবং যোগ্য আলেমের পরামর্শের মাধ্যমে তথ্য যাচাই করা উচিত।</p>
+        <p>এখানে ব্যবহৃত ধর্মীয় ও রাজনৈতিক শব্দসমূহ লেখকের মূল বক্তব্যের অংশ হিসেবে সংরক্ষিত হয়েছে। এগুলো কোনো ব্যক্তি বা গোষ্ঠীর বিরুদ্ধে ঘৃণা, সহিংসতা, অবৈধ কার্যক্রম বা নিজ হাতে শাস্তি প্রয়োগের আহ্বান হিসেবে বিবেচ্য নয়।</p>
+        <p>পাঠককে দেশের আইন, মানুষের অধিকার, শান্তি, ন্যায়, নিরাপত্তা ও পারস্পরিক সম্মান বজায় রেখে ধর্মীয় জ্ঞানচর্চা ও কল্যাণমূলক কাজে অংশ নেওয়ার অনুরোধ করা হচ্ছে।</p>
+      </div>
+      <div class="aod2-frontmatter__ornament" aria-hidden="true"><i></i><span>◆</span><i></i></div>
+      <footer class="aod2-sheet__folio"><span>আল্লহর দল</span><b class="aod2-folio-number" aria-label="পৃষ্ঠা নম্বর"></b></footer>
+    </section>
+
+    <section class="aod2-sheet aod2-frontmatter aod2-index" id="aod2-index" data-aod2-section data-aod2-title="সূচিপত্র">
+      <header class="aod2-section-head aod2-frontmatter__head">
+        <div><span>অধ্যায় ০০</span><b class="aod2-chapter-name">প্রারম্ভিক অংশ</b><small>বইয়ের অধ্যায় ও বিষয়সমূহের মানচিত্র</small></div>
+        <h2>সূচিপত্র</h2>
+      </header>
+      <nav class="aod2-index-list" aria-label="অধ্যায়ের সূচিপত্র">
+        <button type="button" data-aod2-go="aod2-intro"><span>০১</span><div><small>প্রথম অধ্যায়</small><b>ভূমিকা</b></div><em>০৪—০৫</em><i>→</i></button>
+        <button type="button" data-aod2-go="aod2-entry"><span>০২</span><div><small>দ্বিতীয় অধ্যায়</small><b>আল্লহর দলে অন্তর্ভুক্ত হওয়ার উপায়</b></div><em>০৬—০৭</em><i>→</i></button>
+        <button type="button" data-aod2-go="aod2-benefit"><span>০৩</span><div><small>তৃতীয় অধ্যায়</small><b>বিশেষ টিপস</b></div><em>০৮—১০</em><i>→</i></button>
+        <button type="button" data-aod2-go="aod2-conclusion"><span>০৪</span><div><small>চতুর্থ অধ্যায়</small><b>উপসংহার</b></div><em>১১</em><i>→</i></button>
+        <button type="button" data-aod2-go="aod2-dua"><span>০৫</span><div><small>পঞ্চম অধ্যায়</small><b>দোয়া</b></div><em>১২</em><i>→</i></button>
+      </nav>
+      <div class="aod2-frontmatter__ornament" aria-hidden="true"><i></i><span>◆</span><i></i></div>
+      <footer class="aod2-sheet__folio"><span>আল্লহর দল</span><b class="aod2-folio-number" aria-label="পৃষ্ঠা নম্বর"></b></footer>
+    </section>
+
+    <section class="aod2-sheet" id="aod2-intro" data-aod2-section data-aod2-title="Introduction">
+      <div class="aod2-chapter-marker"><span>CHAPTER ০১</span><i></i><b>INTRODUCTION</b></div>
+      <header class="aod2-section-head">
+        <div><span>অধ্যায় ০১</span><b class="aod2-chapter-name">ভূমিকা</b><small>আল্লহর দল ও শয়তানের দলের পার্থক্য</small></div>
+        <h2>মহাবিশ্বে দল মূলত দুটি।</h2>
+      </header>
+
+      <div class="aod2-page4-fit-grid" aria-label="দুটি দলের তুলনা">
+        <article class="aod2-page4-fit-card aod2-page4-fit-card--primary">
+          <header class="aod2-page4-panel-head"><h3><span class="aod2-page4-guide-number">০১</span><span>আল্লহর দল</span></h3></header>
+          <ul class="aod2-bangla-number-list">
+            <li><span>১</span><p>যেই দল আল্লহর এজেন্ডা বাস্তবায়ন করার চেষ্টা করে, সেই দল আল্লহর দল।</p></li>
+            <li><span>২</span><p>তাদের হারানোর কিছু নেই।</p></li>
+            <li><span>৩</span><p>দুনিয়াতে তারা বেঁচে থাকলে গাজী, আর মারা গেলে শহীদ।</p></li>
+          </ul>
+        </article>
+        <article class="aod2-page4-fit-card aod2-page4-fit-card--contrast">
+          <header class="aod2-page4-panel-head"><h3><span class="aod2-page4-guide-number">০২</span><span>শয়তানের দল</span></h3></header>
+          <ul class="aod2-bangla-number-list">
+            <li><span>১</span><p>যেই দল শয়তানের এজেন্ডা বাস্তবায়ন করার চেষ্টা করে, সেই দল শয়তানের দল।</p></li>
+            <li><span>২</span><p>তাদের আফসোসের শেষ থাকে না এবং তাদের জীবনে পরম শান্তি থাকে না।</p></li>
+            <li><span>৩</span><p>তারা মারা গেলে তাদের জন্য আছে জাহান্নামের কঠিনতম শাস্তি।</p></li>
+          </ul>
+        </article>
+      </div>
+
+      <footer class="aod2-sheet__folio"><span>আল্লহর দল</span><b class="aod2-folio-number" aria-label="পৃষ্ঠা নম্বর"></b></footer>
+    </section>
+
+    <section class="aod2-sheet" id="aod2-khizir" data-aod2-section data-aod2-title="আল্লহর দলের লোক হলে কি লাভ?">
+      <header class="aod2-section-head">
+        <div><span>অধ্যায় ০১</span><b class="aod2-chapter-name">ভূমিকা</b><small>মুসা (আ:) ও খিযির (আ:)–এর ঘটনা থেকে শিক্ষা</small></div>
+        <h2>আল্লহর দলের লোক হলে কি লাভ? আপনি কেন আল্লহর দলের লোক হবেন বা হতে চাইবেন?</h2>
+      </header>
+      <p class="aod2-opening">আল কুরআন এ বর্ণিত সবচেয়ে রহস্যময় ঘটনা হলো মুসা (আ:) ও খিযির (আ:) এর ঘটনা।  এবং সবচেয়ে রহস্যময় চরিত্র হলো খিযির ( আ: )। তার ঘটনাবলী বিশ্লেষণ করে পাওয়া যায় -</p>
+
+      <div class="aod2-lessons">
+        <article class="aod2-lesson">
+          <div class="aod2-lesson__index"><span>০১</span><i></i></div>
+          <div><p>আল্লহ তাঁর নিজের দলের লোকদের অদৃশ্য উপায়ে সাহায্য করেন ও তাদের দায়িত্ব আল্লহর নিকটে থাকে। কাজেই তাদের হারানোর কিছু নেই। তারা জীবনের প্রতিটি ক্ষেত্রে আল্লহর উপর ভরসা রাখে এবং জীবনের প্রতিটি ক্ষেত্রে তাঁর নির্দেশনা মেনে চলার সর্বোচ্চ চেষ্টা করে।</p></div>
+        </article>
+        <article class="aod2-lesson">
+          <div class="aod2-lesson__index"><span>০২</span><i></i></div>
+          <div><p>আল্লহ তাঁর নিজের দলের লোকদের কখনও কখনও ছোট বিপদ দিয়ে বড় বিপদ থেকে রক্ষা করেন।</p></div>
+        </article>
+        <article class="aod2-lesson">
+          <div class="aod2-lesson__index"><span>০৩</span><i></i></div>
+          <div><p>আল্লহ তাঁর নিজের দলের লোকদের ঈমান বিভিন্নভাবে পরীক্ষা করেন। ঈমান এর কোনো পরীক্ষায় পাস করতে পারলে, এর বিনিময়ে আল্লহ তাকে দুনিয়া ও আখিরাতে বড় পুরস্কার দেন। তাদের নেক আমল ও দোয়ার বরকতে আল্লহ তাদের এবং তাদের ভবিষ্যৎ প্রজন্মের ওপরও রহমত ও বরকত নাজিল করেন।</p></div>
+        </article>
+      </div>
+      <footer class="aod2-sheet__folio"><span>আল্লহর দল</span><b class="aod2-folio-number" aria-label="পৃষ্ঠা নম্বর"></b></footer>
+    </section>
+
+    <section class="aod2-sheet" id="aod2-entry" data-aod2-section data-aod2-title="How to be part of Allahor Dol">
+      <div class="aod2-chapter-marker"><span>CHAPTER ০২</span><i></i><b>HOW TO BE PART OF ALLAHOR DOL</b></div>
+      <header class="aod2-section-head">
+        <div><span>অধ্যায় ০২</span><b class="aod2-chapter-name">আল্লহর দলের অন্তর্ভুক্তি</b><small>সদস্য হওয়ার মৌলিক করণীয়</small></div>
+        <h2>আল্লহর দলে অন্তর্ভুক্ত হওয়ার উপায়</h2>
+      </header>
+
+      <div class="aod2-check-grid practical-guide-grid">
+        <article><span>১</span><p>দুনিয়ার জীবনকে পরীক্ষা ক্ষেত্র হিসেবে মেনে নিয়ে, জীবনের সব ক্ষেত্রে আল্লহর বিধান প্রতিষ্ঠা করার চেষ্টা করা।</p></article>
+        <article><span>২</span><p>হালাল উপার্জনের মাধ্যমে জীবিকা নির্বাহ করা, বিনা স্বার্থে মানুষের উপকার করা ও প্রতিদান আল্লহর কাছে চাওয়া ।</p></article>
+        <article><span>৩</span><p>জীবনের সকল অবস্থায় আল্লহর উপর ভরসা রেখে ধৈর্য্য ধারণ করা। মনে রাখতে হবে, আল্লহ যা করেন - অবশ্যই তার অন্তর্নিহিত কোন না কোন কারণ আছে।</p></article>
+        <article><span>৪</span><p>জীবনে চলার পথে ভুল হলে তওবা করা, আর সেই ভুলের চেয়ে বেশি মানের নেকির কাজ করা।</p></article>
+        <article><span>৫</span><p>কোনো ভুলের মাধ্যমে যদি বান্দার হক নষ্ট হয়, তবে তা আদায় করা।</p></article>
+      </div>
+      <div class="aod2-next-note"><span class="aod2-next-note__num">৬</span><p>এছাড়া নিম্নোক্ত কাজসমূহ সঠিক উপায়ে সম্পন্ন করতে হবে:</p><b aria-hidden="true">↓</b></div>
+      <footer class="aod2-sheet__folio"><span>আল্লহর দল</span><b class="aod2-folio-number" aria-label="পৃষ্ঠা নম্বর"></b></footer>
+    </section>
+
+    <section class="aod2-sheet aod2-sheet--wide" id="aod2-roadmap" data-aod2-section data-aod2-title="১ থেকে ১১ ধাপ">
+      <header class="aod2-section-head aod2-section-head--roadmap">
+        <div><span>অধ্যায় ০২</span><b class="aod2-chapter-name">আল্লহর দলের অন্তর্ভুক্তি</b><small>এক থেকে এগারো ধাপ</small></div>
+        <h2>আল্লহর দলে অন্তর্ভুক্ত হওয়ার উপায়</h2>
+      </header>
+
+      <ol class="aod2-roadmap timeline">
+        <li><span class="aod2-roadmap__num">১</span><div><p>জ্ঞান ও ভালো গুণাবলী অর্জন করা।</p></div></li>
+        <li><span class="aod2-roadmap__num">২</span><div><p>জ্ঞানের প্রচার করা।</p></div></li>
+        <li><span class="aod2-roadmap__num">৩</span><div><p>পারস্পরিক উপকার করা। তারাই সৃষ্টির সেরা, যারা মানবজাতির জন্য সবচেয়ে উপকারী।</p></div></li>
+        <li><span class="aod2-roadmap__num">৪</span><div><p>একতাবদ্ধ থাকা । গীবত, চোগলখোরী, অপবাদ মুসলিমদের মধ্যে একতা  বিনষ্ট করে।<br>অপরদিকে পারস্পরিক উপকারের মাধ্যমে মুসলিমদের মধ্যে একতা বৃদ্ধি পায়।</p></div></li>
+        <li><span class="aod2-roadmap__num">৫</span><div><p>সচেতন হওয়া - এমন উপায় আবিষ্কার করা যাতে কেউ আমাদের ক্ষতি করতে না পারে।</p></div></li>
+        <li><span class="aod2-roadmap__num">৬</span><div><p>উদ্ভাবন।</p></div></li>
+        <li><span class="aod2-roadmap__num">৭</span><div><p>সকল ক্ষেত্রে স্বয়ংসম্পূর্ণতা অর্জনের চেষ্টা করা।</p></div></li>
+        <li><span class="aod2-roadmap__num">৮</span><div><p>হালাল আয়, হালাল খাদ্য, হালাল পোষাক অর্জনের জন্য উদ্ভাবন এবং বাস্তবায়ন করা।</p></div></li>
+        <li><span class="aod2-roadmap__num">৯</span><div><p>এমন একটি উপায় বের করা যাতে প্রায় সব ধরনের সমস্যার সমাধান করা যায়।</p></div></li>
+        <li><span class="aod2-roadmap__num">১০</span><div><p>এইভাবে ১-৯ ধাপ সম্পন্ন করার মাধ্যমে আমরা যে সিস্টেম পাই তার ব্যাকআপ রাখা এবং সময়ের সাথে আল - কুরআন ও সহীহ হাদিস এর মাপকাঠি অনুযায়ী উক্ত সিস্টেম কে আপডেট করা।</p></div></li>
+        <li><span class="aod2-roadmap__num">১১</span><div><p>সকল ক্ষেত্রে আল্লহর উপর পূর্ণ ভরসা করা এবং ধৈর্য ধারণ করা। আল্লহ তাদের ভালোবাসেন -  যারা তাদের কাজ সঠিকভাবে সম্পন্ন করে।</p></div></li>
+      </ol>
+      <footer class="aod2-sheet__folio"><span>আল্লহর দল</span><b class="aod2-folio-number" aria-label="পৃষ্ঠা নম্বর"></b></footer>
+    </section>
+
+    <section class="aod2-sheet" id="aod2-benefit" data-aod2-section data-aod2-title="Special Tips">
+      <div class="aod2-chapter-marker"><span>CHAPTER ০৩</span><i></i><b>SPECIAL TIPS</b></div>
+      <header class="aod2-section-head">
+        <div><span>অধ্যায় ০৩</span><b class="aod2-chapter-name">বিশেষ পরামর্শ</b><small>পারস্পরিক উপকার ও জ্ঞান প্রচার</small></div>
+        <h2>স্পেশাল টিপস</h2>
+      </header>
+
+      <section class="aod2-benefit-card aod2-benefit-card--primary-tip panel" aria-labelledby="aod2-benefit-card-title">
+        <header class="aod2-benefit-card__head panel-head">
+          <h3 id="aod2-benefit-card-title">পারস্পরিক উপকারে মুসলিমদের কি লাভ?</h3>
+        </header>
+        <div class="aod2-benefit-copy">
+          <p class="aod2-opening">একটু ভেবে দেখুন, আপনি একা একদিনে নিজের উপকার সর্বোচ্চ ২৪ ঘন্টা করতে পারবেন।  কিন্তু যদি ৩০০ জন মুসলিম দিনে ৫ মিনিট আপনার উপকার করে,তাহলে আপনি একদিনে উপকার প্রাপ্ত হন ৩০০ * ৫ = ১৫০০ মিনিট যা ২৪ ঘন্টার থেকে বেশি। আলহামদুলিল্লাহ এই পৃথিবীতে এখন মুসলিম রয়েছে ১৬০ কোটির ও উপরে। প্রতিটি মুসলিম যদি তার ওপর মুসলিম ভাই এর উপকার এর জন্য দিনে ৫ মিনিট তার অবস্থান থেকে চেষ্টা করে - তাহলে একজন মুসলিম এর জীবন কতটা সহজ হয়ে যাবে চিন্তা করেন। এখানেই মুসলিমদের পারস্পরিক উপকারের সার্থকতা।</p>
+          <div class="aod2-formula-stack" aria-label="পারস্পরিক উপকারের তিন ধাপের হিসাব">
+            <article class="aod2-formula-step-card">
+              <span class="aod2-formula-step-card__index" aria-hidden="true">১</span>
+              <p><strong>৩০০</strong> জন × <strong>৫</strong> মিনিট = <strong>১৫০০</strong> মিনিট</p>
+            </article>
+            <article class="aod2-formula-step-card">
+              <span class="aod2-formula-step-card__index" aria-hidden="true">২</span>
+              <p><strong>১৫০০</strong> মিনিট / <strong>৬০</strong> মিনিট = <strong>২৫</strong> ঘন্টা</p>
+            </article>
+            <article class="aod2-formula-step-card aod2-formula-step-card--result">
+              <span class="aod2-formula-step-card__index" aria-hidden="true">৩</span>
+              <p><strong>২৫</strong> ঘন্টা <strong>≥</strong> <strong>২৪</strong> ঘন্টা</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="aod2-benefit-card aod2-benefit-card--secondary-tip panel" aria-labelledby="aod2-knowledge-tip-title">
+        <header class="aod2-benefit-card__head panel-head">
+          <h3 id="aod2-knowledge-tip-title">মুসলিমদের পারস্পরিক জ্ঞান প্রচারের সহজ উপায়</h3>
+        </header>
+        <div class="aod2-benefit-copy aod2-benefit-copy--knowledge">
+          <p class="aod2-opening">সহজ একটি পদ্ধতি হলো — ধরি আল্লাহর দল বই টি আমরা পৃথিবীর ১৬০ কোটি মুসলিম এর কাছে পৌঁছাতে চাই। এক্ষেত্রে একজন মুসলিম প্রথম দিনে ওপর ২ জন মুসলিম কে জানাবে। এরপর ওই ২ জন মুসলিম পরবর্তী দিনে ওপর ২ জন মুসলিম কে জানাবে। এই পদ্ধতিটি ৩১ দিন চালু রাখলে, ৩১ তম দিনে দেখা যাবে উক্ত বই টি ১৬০ কোটি মুসলিমের কাছে পৌছে গেছে ইনশাল্লাহ</p>
+          <div class="aod2-formula-stack aod2-formula-stack--binary" aria-label="বাইনারি পদ্ধতির তিন ধাপের হিসাব">
+            <article class="aod2-formula-step-card">
+              <span class="aod2-formula-step-card__index" aria-hidden="true">১</span>
+              <p><strong>২ⁿ ≥ ১৬০ কোটি</strong></p>
+            </article>
+            <article class="aod2-formula-step-card">
+              <span class="aod2-formula-step-card__index" aria-hidden="true">২</span>
+              <p>n = log<sub>২</sub>(১৬০ কোটি) ≈ <strong>৩১</strong></p>
+            </article>
+            <article class="aod2-formula-step-card aod2-formula-step-card--result">
+              <span class="aod2-formula-step-card__index" aria-hidden="true">৩</span>
+              <p><strong>২<sup>৩১</sup></strong> = <strong>২১৪.৭৫</strong> কোটি ≥ <strong>১৬০</strong> কোটি</p>
+            </article>
+          </div>
+        </div>
+      </section>
+      <footer class="aod2-sheet__folio"><span>আল্লহর দল</span><b class="aod2-folio-number" aria-label="পৃষ্ঠা নম্বর"></b></footer>
+    </section>
+
+    <section class="aod2-sheet" id="aod2-unity" data-aod2-section data-aod2-title="ঐক্য ও সহযোগিতা">
+      <header class="aod2-section-head">
+        <div><span>অধ্যায় ০৩</span><b class="aod2-chapter-name">বিশেষ পরামর্শ</b><small>ঐক্য, সহযোগিতা ও সম্মিলিত প্রচেষ্টা</small></div>
+        <h2>একতাবদ্ধ হয়ে আল্লহর এজেন্ডা বাস্তবায়নের চেষ্টা কর।</h2>
+      </header>
+
+      <blockquote class="aod2-quote"><span aria-hidden="true">›</span><p>আল্লহ তাআলা বলেছেন তোমরা তার রশিকে দৃঢ়ভাবে আঁকড়ে ধরো, পরস্পর থেকে পৃথক হয়না। অর্থাৎ একতাবদ্ধ হয়ে আল্লহর এজেন্ডা বাস্তবায়নের চেষ্টা কর। (সূরা আল-ইমরান, আয়াত ১০৩)</p></blockquote>
+      <div class="aod2-prose-grid practical-guide-grid">
+        <article><span>০১</span><p>আবার যে ব্যক্তি তার দুই ভাই অথবা দুই গ্রুপের মধ্যে বিরোধ মিটানোর চেষ্টা করবে সে ইনশাল্লাহ জান্নাতে যাবে। (সূরা আল-হুজুরাত, আয়াত ১০)</p></article>
+        <article><span>০২</span><p>সঠিক জ্ঞান অর্জনের মাধ্যমে, কারো অন্ধ অনুসরণ না করে, নিজ অবস্থানে থেকে আল্লহর এজেন্ডা বাস্তবায়নের উদ্দেশ্যে আপনার সাধ্যমত চেষ্টা করবেন।</p></article>
+        <article><span>০৩</span><p>এজন্য কোন নির্দিষ্ট দল বা গ্রুপের অন্তর্ভুক্ত হওয়া জরুরী নয়। তবে একক প্রচেষ্টা থেকে দলগত প্রচেষ্টা অনেক বেশি কার্যকরী।</p></article>
+        <article><span>০৪</span><p>যে সকল দল আল্লহর এজেন্ডা বাস্তবায়নের চেষ্টা করছে, তাদের সকল ভাল কাজে আপনার সাধ্যমত সহযোগিতা করার চেষ্টা করবেন। এটা হতে হবে আল্লহর সন্তুষ্টি প্রাপ্তির উদ্দেশ্যে।</p></article>
+      </div>
+
+      <div class="aod2-behaviour">
+        <div class="aod2-behaviour__line"><span aria-hidden="true">›</span><p>মনে রাখতে হবে সব দল সকল ক্ষেত্রে পারফেক্ট হবে না। কোন দলের কোন কাজ খারাপ লাগলে, এক্ষেত্রে আমাদের ধৈর্য্য ধরে কাজ করতে হবে। তাদের সাথে পার্সোনালি যোগাযোগ করে তা ঠিক করার চেষ্টা করতে হবে। কিন্তু কোনভাবেই সোশ্যাল মিডিয়া প্লাটফর্ম এ তাদেরকে অপমান করে নয়।</p></div>
+        <div class="aod2-behaviour__line aod2-behaviour__line--strong"><span aria-hidden="true">›</span><p>আপনি চেষ্টা করবেন যেন সকল মুসলিমদের মধ্যে ঐক্য, একতা বজায় থাকে।</p></div>
+        <div class="aod2-behaviour__line"><span aria-hidden="true">›</span><p>মনে রাখতে হবে আল্লহ তায়ালা মুসলিমদেরকে একতাবদ্ধ থাকতে নির্দেশ দিয়েছেন। এখন একসাথে কাজ করার সময়। আমাদের কাদা ছোড়াছুড়ি থেকে এখন বিরত থাকা উচিত। আগে সবাই মিলে ইসলামি বিধানকে ক্ষমতায় নিয়ে আসার চেষ্টা করুন। তারপর ক্ষমতায় এসে কিভাবে দেশ চালাতে হবে তার বাহাস করার অনেক সময় পাবেন। আর এটা না করলে ইসলামের শত্রুরা মুসলিমদের ক্ষতি করার সুযোগ পেয়ে যাবে।</p></div>
+      </div>
+      <footer class="aod2-sheet__folio"><span>আল্লহর দল</span><b class="aod2-folio-number" aria-label="পৃষ্ঠা নম্বর"></b></footer>
+    </section>
+
+    <section class="aod2-sheet" id="aod2-purpose" data-aod2-section data-aod2-title="জীবনের সার্থকতা">
+      <header class="aod2-section-head">
+        <div><span>অধ্যায় ০৩</span><b class="aod2-chapter-name">বিশেষ পরামর্শ</b><small>মুসলিম জীবনের উদ্দেশ্য</small></div>
+        <h2>মুসলিম হিসেবে এটাই আপনার জীবনের সার্থকতা।</h2>
+      </header>
+      <div class="aod2-purpose">
+        <div class="aod2-purpose__seal" aria-hidden="true">◈</div>
+        <p>আল্লহর সন্তুষ্টি প্রাপ্তির উদ্দেশ্যে - আপনার জীবনের অর্জিত সকল অভিজ্ঞতা ও ট্যালেন্ট দিয়ে  মুসলিমদের টেকসই উন্নয়নের জন্য আল্লহর নির্দেশিত পথে কি করতে পারলেন, মুসলিম হিসেবে এটাই আপনার জীবনের সার্থকতা।</p>
+      </div>
+      <div class="aod2-purpose__support final-note"><span aria-hidden="true">◆</span><p>সৎ, যোগ্য, তাকওয়াবান লোকেরা ক্ষমতায় আসলে দেশ ও জাতির টেকসই উন্নয়ন সম্ভব। এক্ষেত্রে দেশের স্বাধীনতা ও সার্বভৌমত্ব সঠিক ভিত্তি পাবে।</p></div>
+      <footer class="aod2-sheet__folio"><span>আল্লহর দল</span><b class="aod2-folio-number" aria-label="পৃষ্ঠা নম্বর"></b></footer>
+    </section>
+
+    <section class="aod2-sheet" id="aod2-conclusion" data-aod2-section data-aod2-title="Conclusion">
+      <div class="aod2-chapter-marker"><span>CHAPTER ০৪</span><i></i><b>CONCLUSION</b></div>
+      <header class="aod2-section-head">
+        <div><span>অধ্যায় ০৪</span><b class="aod2-chapter-name">উপসংহার</b><small>অন্তর্ভুক্তির সিদ্ধান্ত ও অঙ্গীকার</small></div>
+        <h2>তাহলে আপনি আল্লহর দলের অন্তর্ভুক্ত হবেন ইনশাল্লাহ।</h2>
+      </header>
+
+      <div class="aod2-conclusion-stack panel">
+        <p class="aod2-conclusion-stack__lead"><span aria-hidden="true">›</span>তাহলে আপনি আল্লহর দলের অন্তর্ভুক্ত হবেন ইনশাল্লাহ।</p>
+        <p>ইসলাম অনুযায়ী নিজের জীবনকে সাজাতে পারলে, জীবনের সব হিসেব মিলে যাবে ইনশাল্লাহ। এর বাহিরে গেলে জীবনের হিসাব মিলাতে পারবেন না।</p>
+        <p>আপনি আল্লহর সন্তুষ্টি প্রাপ্তির উদ্দেশ্যে আল্লহর নির্দেশিত পথে ধৈর্য ধরে কাজ করবেন, আল্লহ তায়ালাও আপনাকে সন্তুষ্ট করবেন।</p>
+        <p>আসুন আমরা নিজেদের সাধ্যমত, ব্যক্তিগত বা দলগত প্রচেষ্টার মাধ্যমে একতাবদ্ধ হয়ে থাকার চেষ্টা করি, এবং সম্মিলিতভাবে আল্লাহর এজেন্ডা বাস্তবায়নের চেষ্টা করি।</p>
+      </div>
+      <footer class="aod2-sheet__folio"><span>আল্লহর দল</span><b class="aod2-folio-number" aria-label="পৃষ্ঠা নম্বর"></b></footer>
+    </section>
+
+    <section class="aod2-sheet aod2-dua" id="aod2-dua" data-aod2-section data-aod2-title="সমাপনী দোয়া">
+      <div class="aod2-chapter-marker"><span>CHAPTER ০৫</span><i></i><b>DOA</b></div>
+      <header class="aod2-section-head">
+        <div><span>অধ্যায় ০৫</span><b class="aod2-chapter-name">দোয়া</b><small>আল্লহর কাছে চাওয়া</small></div>
+        <h2>সমাপনী দোয়া</h2>
+      </header>
+      <div class="aod2-dua__arch">
+        <div class="aod2-dua__mark" aria-hidden="true">◈</div>
+        <p>হে আল্লহ, আপনি সকল মুসলিমকে ঐক্যবদ্ধ করুন এবং সম্মিলিতভাবে আপনার এজেন্ডা বাস্তবায়নের চেষ্টার তৌফিক দান করুন। সকল মুসলিমকে আপনার সন্তুষ্টির পথে চলার তৌফিক প্রদান করুন এবং তাদের উপর আপনার সন্তুষ্টি প্রদান করুন।</p>
+        <i aria-hidden="true"></i>
+        <p>আল্লহুম্মা সল্লি আলা মুহাম্মাদ ওয়া আলা আলি মুহাম্মাদ, কামা সাল্লাইতা আলা ইব্রহীম ওয়া আলা আলি ইব্রহীম ইন্নাকা হামীদুম মাজিদ। আল্লহুম্মা বারিক আলা মুহাম্মাদ ওয়া আলা আলি মুহাম্মাদ, কামা বারাকটা আলা ইব্রহীম ওয়া আলা আলি ইব্রহীম ইন্নাকা হামীদুম মাজিদ।</p>
+        <strong>আমিন।</strong>
+      </div>
+      <footer class="aod2-sheet__folio"><span>আল্লহর দল</span><b class="aod2-folio-number" aria-label="পৃষ্ঠা নম্বর"></b></footer>
+    </section>
+
+    <nav class="aod2-bottom-nav" aria-label="পৃষ্ঠা নেভিগেশন">
+      <button type="button" id="aod2-prev"><span aria-hidden="true">←</span><b>পূর্ববর্তী</b></button>
+      <button type="button" id="aod2-contents"><span aria-hidden="true">☷</span><b>সূচিপত্র</b></button>
+      <button type="button" id="aod2-next"><b>পরবর্তী</b><span aria-hidden="true">→</span></button>
+    </nav>
+  </main>
+
+  <div class="aod2-terminal-backdrop" id="aod2-terminal-backdrop" hidden></div>
+  <aside class="aod2-terminal" id="aod2-terminal" aria-labelledby="aod2-terminal-title" aria-hidden="true">
+    <header class="aod2-terminal__head">
+      <div><span class="aod2-terminal__lights"><i></i><i></i><i></i></span><small>AIT-PHA · LOCAL TERMINAL READY</small><h2 id="aod2-terminal-title">Reader Terminal</h2></div>
+      <button type="button" class="aod2-icon-button" id="aod2-terminal-close" aria-label="Terminal বন্ধ করুন">×</button>
+    </header>
+    <div class="aod2-terminal__body">
+      <section class="aod2-term-group">
+        <button class="aod2-term-group__trigger" type="button" aria-expanded="false"><span>▣</span><b>Workspace</b><small>০৩</small><i>›</i></button>
+        <div class="aod2-term-group__panel" inert>
+          <div><small class="aod2-term-label">REPORT</small>
+            <button type="button" class="aod2-term-item" data-aod2-report="print"><span>▤</span><div><b>Professional Print</b><small>A৪ · A৫ · Color</small></div><i>›</i></button>
+            <button type="button" class="aod2-term-item" data-aod2-report="poster"><span>▧</span><div><b>Professional Poster</b><small>PNG · Social · A৩</small></div><i>›</i></button>
+            <button type="button" class="aod2-term-item" data-aod2-report="dslr"><span>◉</span><div><b>DSLR Image</b><small>৪K · ৬K · ৮K</small></div><i>›</i></button>
+          </div>
+        </div>
+      </section>
+      <section class="aod2-term-group">
+        <button class="aod2-term-group__trigger" type="button" aria-expanded="false"><span>◌</span><b>Appearance</b><small>০৩</small><i>›</i></button>
+        <div class="aod2-term-group__panel" inert><div>
+          <button type="button" class="aod2-term-item" data-aod2-appearance="theme"><span>◉</span><div><b>Theme</b><small>১০ curated palettes</small></div><i>›</i></button>
+          <button type="button" class="aod2-term-item" data-aod2-appearance="type"><span>Aa</span><div><b>Typography</b><small>Font · Size · Leading</small></div><i>›</i></button>
+          <button type="button" class="aod2-term-item" data-aod2-appearance="preset"><span>✦</span><div><b>Predefined Sets</b><small>Theme + typography</small></div><i>›</i></button>
+        </div></div>
+      </section>
+      <section class="aod2-term-group">
+        <button class="aod2-term-group__trigger" type="button" aria-expanded="false"><span>✦</span><b>Interaction</b><small>০৩</small><i>›</i></button>
+        <div class="aod2-term-group__panel" inert><div>
+          <label class="aod2-term-toggle"><div><b>Reading Focus</b><small>Distraction-free canvas</small></div><input type="checkbox" id="aod2-focus"><span><i></i></span></label>
+          <label class="aod2-term-toggle"><div><b>Page Motion</b><small>Smooth transitions</small></div><input type="checkbox" id="aod2-motion" checked><span><i></i></span></label>
+          <label class="aod2-term-toggle"><div><b>Reading Progress</b><small>Top progress indicator</small></div><input type="checkbox" id="aod2-progress-toggle" checked><span><i></i></span></label>
+        </div></div>
+      </section>
+      <section class="aod2-term-group">
+        <button class="aod2-term-group__trigger" type="button" aria-expanded="false"><span>◎</span><b>Navigation</b><small>০৪</small><i>›</i></button>
+        <div class="aod2-term-group__panel" inert><div>
+          <button type="button" class="aod2-term-item" data-aod2-nav="contents"><span>☷</span><div><b>Contents</b><small>১০ reading sections</small></div><i>›</i></button>
+          <button type="button" class="aod2-term-item" data-aod2-nav="prev"><span>←</span><div><b>Previous Section</b><small>Move backward</small></div><i>›</i></button>
+          <button type="button" class="aod2-term-item" data-aod2-nav="next"><span>→</span><div><b>Next Section</b><small>Move forward</small></div><i>›</i></button>
+          <button type="button" class="aod2-term-item" data-aod2-nav="top"><span>↑</span><div><b>Back to Top</b><small>Return to cover</small></div><i>›</i></button>
+        </div></div>
+      </section>
+    </div>
+    <footer class="aod2-terminal__foot"><span>SYSTEM</span><b>ONLINE</b><small>v২.০</small></footer>
+  </aside>
+
+  <dialog class="aod2-dialog aod2-report-dialog" id="aod2-report-dialog">
+    <header class="aod2-dialog__head"><span id="aod2-report-icon">▤</span><div><small>WORKSPACE / REPORT</small><h2 id="aod2-report-title">Professional Print</h2></div><button type="button" data-aod2-dialog-close aria-label="বন্ধ করুন">×</button></header>
+    <div class="aod2-report-view" data-aod2-report-view="print">
+      <iframe class="aod2-print-workspace" id="aod2-print-workspace" title="Allahor Dol Professional Print Workspace" data-src="print/index.html"></iframe>
+    </div>
+
+    <div class="aod2-report-view" data-aod2-report-view="poster" hidden>
+      <div class="aod2-report-controls">
+        <fieldset><legend>POSTER CONTENT</legend><label class="aod2-select"><span>বিষয়</span><select id="aod2-poster-content"><option value="trust">আল্লহর উপর ভরসা</option><option value="unity">একতাবদ্ধ থাকা</option><option value="benefit">পারস্পরিক উপকার</option><option value="patience">ভরসা ও ধৈর্য</option></select></label></fieldset>
+        <fieldset><legend>CANVAS</legend><div class="aod2-segment"><button type="button" class="is-active" data-aod2-poster-format="portrait">৪:৫</button><button type="button" data-aod2-poster-format="landscape">১৬:৯</button><button type="button" data-aod2-poster-format="a3">A৩</button></div></fieldset>
+        <fieldset><legend>ART DIRECTION</legend><div class="aod2-palette-list"><button type="button" class="is-active" data-aod2-poster-palette="emerald"><i style="--aod2-chip:#0b4237"></i>Emerald</button><button type="button" data-aod2-poster-palette="ink"><i style="--aod2-chip:#17263d"></i>Ink</button><button type="button" data-aod2-poster-palette="ivory"><i style="--aod2-chip:#eadcc2"></i>Ivory</button></div></fieldset>
+        <button class="aod2-primary-action" type="button" id="aod2-poster-download"><span>↓</span> Download PNG</button>
+      </div>
+      <div class="aod2-canvas-stage"><canvas id="aod2-poster-canvas" aria-label="Poster preview"></canvas><footer><span>HIGH RESOLUTION</span><span>PNG</span><span id="aod2-poster-meta">৪:৫</span></footer></div>
+    </div>
+
+    <div class="aod2-report-view" data-aod2-report-view="dslr" hidden>
+      <div class="aod2-report-controls">
+        <fieldset><legend>IMAGE CONTENT</legend><label class="aod2-select"><span>বিষয়</span><select id="aod2-dslr-content"><option value="trust">আল্লহর উপর ভরসা</option><option value="unity">একতাবদ্ধ থাকা</option><option value="benefit">পারস্পরিক উপকার</option><option value="patience">ভরসা ও ধৈর্য</option></select></label></fieldset>
+        <fieldset><legend>RESOLUTION</legend><div class="aod2-segment"><button type="button" class="is-active" data-aod2-resolution="4k">৪K</button><button type="button" data-aod2-resolution="6k">৬K</button><button type="button" data-aod2-resolution="8k">৮K</button></div><div class="aod2-segment"><button type="button" class="is-active" data-aod2-ratio="3:2">৩:২</button><button type="button" data-aod2-ratio="4:3">৪:৩</button><button type="button" data-aod2-ratio="16:9">১৬:৯</button></div></fieldset>
+        <fieldset><legend>LENS MOOD</legend><div class="aod2-palette-list"><button type="button" class="is-active" data-aod2-dslr-palette="golden"><i style="--aod2-chip:#8d673b"></i>Golden</button><button type="button" data-aod2-dslr-palette="forest"><i style="--aod2-chip:#195a4e"></i>Forest</button><button type="button" data-aod2-dslr-palette="midnight"><i style="--aod2-chip:#1d3560"></i>Midnight</button></div></fieldset>
+        <button class="aod2-primary-action" type="button" id="aod2-dslr-download"><span>↓</span> Download ৪K JPG</button>
+      </div>
+      <div class="aod2-canvas-stage aod2-canvas-stage--wide"><canvas id="aod2-dslr-canvas" aria-label="DSLR image preview"></canvas><footer><span id="aod2-dslr-meta-res">৪K</span><span>JPG ৯৬%</span><span id="aod2-dslr-meta-ratio">৩:২</span></footer></div>
+    </div>
+  </dialog>
+
+  <dialog class="aod2-dialog aod2-appearance-dialog" id="aod2-appearance-dialog">
+    <header class="aod2-dialog__head"><span>◉</span><div><small>APPEARANCE</small><h2 id="aod2-appearance-title">Theme</h2></div><button type="button" data-aod2-dialog-close aria-label="বন্ধ করুন">×</button></header>
+    <div class="aod2-appearance-view" data-aod2-appearance-view="theme">
+      <div class="aod2-theme-grid">
+        <button type="button" data-aod2-theme="noor"><i style="--c1:#f8f1df;--c2:#0d5b46;--c3:#c7983e"></i><span><b>নূর</b><small>NOOR</small></span><em></em></button>
+        <button type="button" data-aod2-theme="emerald"><i style="--c1:#e5f2e7;--c2:#075c45;--c3:#d5ad55"></i><span><b>জমরুদ</b><small>EMERALD</small></span><em></em></button>
+        <button type="button" data-aod2-theme="kaaba"><i style="--c1:#171817;--c2:#d2b15f;--c3:#f1e3bf"></i><span><b>কাবা</b><small>KAABA</small></span><em></em></button>
+        <button type="button" data-aod2-theme="sahri"><i style="--c1:#f0ebf7;--c2:#5d347a;--c3:#c08b38"></i><span><b>সাহ্‌রি</b><small>SAHRI</small></span><em></em></button>
+        <button type="button" data-aod2-theme="sky"><i style="--c1:#e7f2f6;--c2:#0b5b76;--c3:#d09b47"></i><span><b>আকাশ</b><small>SKY</small></span><em></em></button>
+        <button type="button" data-aod2-theme="amber"><i style="--c1:#fbefd7;--c2:#8a3c1e;--c3:#d08a28"></i><span><b>অ্যাম্বার</b><small>AMBER</small></span><em></em></button>
+        <button type="button" data-aod2-theme="night"><i style="--c1:#111f2d;--c2:#77c9b6;--c3:#cda656"></i><span><b>রজনী</b><small>NIGHT</small></span><em></em></button>
+        <button type="button" data-aod2-theme="earth"><i style="--c1:#eee8dc;--c2:#535f35;--c3:#a8713f"></i><span><b>মাটি</b><small>EARTH</small></span><em></em></button>
+        <button type="button" data-aod2-theme="mono"><i style="--c1:#eeeeeb;--c2:#30302f;--c3:#858585"></i><span><b>মনোক্রোম</b><small>MONO</small></span><em></em></button>
+        <button type="button" class="is-active" data-aod2-theme="ait-pha"><i style="--c1:#fffdf7;--c2:#12552f;--c3:#d68a00"></i><span><b>এআইটি-পিএইচএ</b><small>AIT-PHA COMPONENTS</small></span><em>✓</em></button>
+      </div>
+    </div>
+    <div class="aod2-appearance-view aod2-type-view" data-aod2-appearance-view="type" hidden>
+      <div class="aod2-font-grid"><button type="button" data-aod2-font="classic"><b>আল্লহর দল</b><small>ক্লাসিক</small></button><button type="button" data-aod2-font="modern"><b>আল্লহর দল</b><small>আধুনিক</small></button><button type="button" data-aod2-font="book"><b>আল্লহর দল</b><small>বই</small></button><button type="button" class="is-active" data-aod2-font="ait-pha"><b>আল্লহর দল</b><small>AIT-PHA · SANS</small></button></div>
+      <label class="aod2-range"><span><b>অক্ষরের আকার</b><output id="aod2-font-size-output">২০px</output></span><input id="aod2-font-size" type="range" min="14" max="26" step="1" value="20"></label>
+      <label class="aod2-range"><span><b>লাইন ব্যবধান</b><output id="aod2-line-height-output">২.০×</output></span><input id="aod2-line-height" type="range" min="1.4" max="2.4" step="0.05" value="2"></label>
+      <div class="aod2-type-sample"><small>PREVIEW</small><p>আল্লহর দলের লোক হলে কি লাভ? আপনি কেন আল্লহর দলের লোক হবেন বা হতে চাইবেন?</p></div>
+    </div>
+    <div class="aod2-appearance-view" data-aod2-appearance-view="preset" hidden>
+      <div class="aod2-preset-grid">
+        <button type="button" class="is-active" data-aod2-preset="ait-pha"><i>✦</i><span><b>AIT-PHA Professional</b><small>AIT-PHA components · Sans Bengali · ১৫px · ১.৬৫×</small></span><em>✓</em></button>
+        <button type="button" data-aod2-preset="noor-classic"><i>◆</i><span><b>Noor Classic</b><small>Noor palette · Serif Bengali · ২০px · ২.০×</small></span><em></em></button>
+        <button type="button" data-aod2-preset="emerald-book"><i>◈</i><span><b>Emerald Book</b><small>Emerald palette · Book Bengali · ১৯px · ১.৯×</small></span><em></em></button>
+      </div>
+    </div>
+  </dialog>
+
+  <dialog class="aod2-dialog aod2-contents-dialog" id="aod2-contents-dialog">
+    <header class="aod2-dialog__head"><span>☷</span><div><small>NAVIGATION</small><h2>সূচিপত্র</h2></div><button type="button" data-aod2-dialog-close aria-label="বন্ধ করুন">×</button></header>
+    <nav class="aod2-contents-grid">
+      <button type="button" data-aod2-go="aod2-cover"><span>০১</span><div><small>প্রচ্ছদ</small><b>আল্লহর দল</b></div><i>→</i></button>
+      <button type="button" data-aod2-go="aod2-disclaimer"><span>০২</span><div><small>FRONT MATTER</small><b>Disclaimer</b></div><i>→</i></button>
+      <button type="button" data-aod2-go="aod2-index"><span>০৩</span><div><small>সূচি</small><b>সূচিপত্র</b></div><i>→</i></button>
+      <button type="button" data-aod2-go="aod2-intro"><span>০১</span><div><small>অধ্যায়</small><b>ভূমিকা</b></div><i>→</i></button>
+      <button type="button" data-aod2-go="aod2-entry"><span>০২</span><div><small>অধ্যায়</small><b>আল্লহর দলে অন্তর্ভুক্ত হওয়ার উপায়</b></div><i>→</i></button>
+      <button type="button" data-aod2-go="aod2-benefit"><span>০৩</span><div><small>অধ্যায়</small><b>বিশেষ টিপস</b></div><i>→</i></button>
+      <button type="button" data-aod2-go="aod2-conclusion"><span>০৪</span><div><small>অধ্যায়</small><b>উপসংহার</b></div><i>→</i></button>
+      <button type="button" data-aod2-go="aod2-dua"><span>০৫</span><div><small>অধ্যায়</small><b>দোয়া</b></div><i>→</i></button>
+    </nav>
+  </dialog>
+
+<script src="assets/app.js?v=4.13" defer></script>
+</body>
+</html>

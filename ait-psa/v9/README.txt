@@ -455,3 +455,17 @@ V11.26 Watch Lists card tooltip correction
 - Removed broad tooltip detection from individual trading-code rows/items.
 - Tooltip supports mouse hover, native title fallback, and keyboard focus.
 - Dynamically created/updated watch lists are refreshed automatically.
+
+
+V11.27 AIT Elite v4.4 reliability validation
+---------------------------------------------
+- Added walk-forward-validated Advanced Rank ordering and frozen percentile
+  signals: Strong Buy top 8%, Buy 8-20%, Watch 20-80%, Avoid bottom 20%.
+- Added chronological development, validation and final-holdout monitoring.
+- Corrected forward returns to exact common market dates and rejected missing
+  or zero entry/target prices instead of carrying prices across dates.
+- Added complete-history fingerprinting and safe incremental cache reuse.
+- Added date-clustered Strong Buy uncertainty, explicit evaluable samples,
+  automatic reliability classification and stricter new-entry gating.
+- Reduced replay time with snapshot, history and market-series caching.
+- See AIT_ELITE_V4_4_RELIABILITY.md in the package root for the verified result.

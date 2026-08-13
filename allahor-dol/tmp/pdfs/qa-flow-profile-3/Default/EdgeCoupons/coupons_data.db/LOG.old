@@ -1,0 +1,5 @@
+2026/08/13-00:26:49.218 1554 Creating DB C:\laragon\www\development\ai-projects\allahor-dol\tmp\pdfs\qa-flow-profile-3\Default\EdgeCoupons/coupons_data.db since it was missing.
+2026/08/13-00:26:49.230 1554 Reusing MANIFEST C:\laragon\www\development\ai-projects\allahor-dol\tmp\pdfs\qa-flow-profile-3\Default\EdgeCoupons/coupons_data.db/MANIFEST-000001
+2026/08/13-00:26:49.601 359c Level-0 table #5: started
+2026/08/13-00:26:49.610 359c Level-0 table #5: 683273 bytes OK
+2026/08/13-00:26:49.612 359c Delete type=0 #3

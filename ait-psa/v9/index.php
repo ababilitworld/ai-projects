@@ -6791,6 +6791,7 @@ document.querySelectorAll("[data-mother-tab]").forEach(b=>b.onclick=()=>this.mot
   this.s.lastArchiveSource=this.pendingSource||"Imported archive";
   this.log(`${replace?"Replaced":"Merged"} OHLC archive data${!replace&&replacedRows?` • ${replacedRows} overlapping Trading Code + Date rows replaced by downloaded data`:""}`);
   this.persist();
+  window.dispatchEvent(new CustomEvent("ait:ohlc-history-changed",{detail:{replace,codes:Object.keys(this.pending).length,replacedRows}}));
   if(!silent)this.close("archiveModal");
   this.render();
   if(!silent)this.toast("Historical archive saved locally.");
@@ -8110,7 +8111,25 @@ document.addEventListener("DOMContentLoaded",()=>{
    return {...item,combinedScore,signal};
   }).filter(Boolean).sort((a,b)=>(b.combinedScore-a.combinedScore)||(b.vpaScore-a.vpaScore)||(b.indicatorScore-a.indicatorScore)||a.code.localeCompare(b.code)).map((x,index)=>({...x,rank:index+1}));
  }
+ const prioritySnapshotCache={historySignature:"",rowsByDate:new Map()};
+ function scannerHistorySignature(){
+  const {app,history}=appState();
+  try{return app?.store?.historySignature?.(history)||`${Object.keys(history||{}).length}|${Object.values(history||{}).reduce((sum,rows)=>sum+(Array.isArray(rows)?rows.length:0),0)}`}
+  catch{return "unavailable"}
+ }
+ function clearPrioritySnapshotCache(){
+  prioritySnapshotCache.historySignature="";
+  prioritySnapshotCache.rowsByDate.clear();
+ }
  function priorityDataset(){
+  const historySignature=scannerHistorySignature();
+  if(prioritySnapshotCache.historySignature!==historySignature){
+   prioritySnapshotCache.historySignature=historySignature;
+   prioritySnapshotCache.rowsByDate.clear();
+  }
+  const snapshotKey=String(window.__AIT_HISTORICAL_CUTOFF_DATE__||"latest");
+  const cached=prioritySnapshotCache.rowsByDate.get(snapshotKey);
+  if(cached)return cached.map(row=>({...row}));
   const priority={"Strong Buy":4,"Buy":3,"Watch":2,"Avoid":1};
   const source=potentialDataset();
   const groups=new Map();
@@ -8129,7 +8148,13 @@ document.addEventListener("DOMContentLoaded",()=>{
    }
    ranked.forEach((x,index)=>output.push({...x,signalRank:index+1,signalPriority:priority[signal]}));
   });
-  return output.map((x,index)=>({...x,rank:index+1}));
+  const result=output.map((x,index)=>({...x,rank:index+1}));
+  prioritySnapshotCache.rowsByDate.set(snapshotKey,result.map(row=>({...row})));
+  if(prioritySnapshotCache.rowsByDate.size>400){
+   const oldest=prioritySnapshotCache.rowsByDate.keys().next().value;
+   prioritySnapshotCache.rowsByDate.delete(oldest);
+  }
+  return result;
  }
  // Shared scanner-data bridge for modules declared outside this initialization scope.
  window.AITScannerDataBridge={
@@ -8140,8 +8165,10 @@ document.addEventListener("DOMContentLoaded",()=>{
   vpaData,
   comparisonDataset,
   potentialDataset,
-  priorityDataset
+  priorityDataset,
+  clearPrioritySnapshotCache
  };
+ ["ait:ohlc-history-changed","ait:instant-dse-merged","ait:ohlc-data-cleared"].forEach(eventName=>window.addEventListener(eventName,clearPrioritySnapshotCache));
 
  function renderPotentialRows(tbodyId,data,mode){
   const tbody=document.getElementById(tbodyId);if(!tbody)return data;
@@ -10597,7 +10624,7 @@ document.addEventListener("keydown",event=>{
    <div class="v11-potential-guide v11-potential-guide--strongest"><strong>1. What should I do?</strong><span><b>What to Do</b> is the authoritative decision after model health, position state, entry readiness and setup strength are combined. Read it first.</span></div>
    <div class="v11-potential-guide v11-potential-guide--formula"><strong>2. Setup Signal ≠ Action</strong><span><b>Strong Buy / Buy</b> describes setup strength only. It does not mean buy when the final decision says WAIT, HOLD, REDUCE, EXIT or AVOID.</span></div>
    <div class="v11-potential-guide v11-potential-guide--watch"><strong>3. When & Horizon</strong><span>Now = actionable entry. Wait Confirmation / Pullback = no entry yet. Short = 3–6D; Mid = 9–20D. Long term is not validated.</span></div>
-   <div class="v11-potential-guide v11-potential-guide--avoid"><strong>4. Model Safety Gate</strong><span>Healthy = normal confidence. Caution = stricter confirmation. Degraded = avoid aggressive entries. Recalibration Required = new buys are blocked even when the setup says Strong Buy.</span></div>
+   <div class="v11-potential-guide v11-potential-guide--avoid"><strong>4. Model Safety Gate</strong><span>Healthy = normal confidence. Caution = stricter confirmation. Degraded = avoid aggressive entries. Recalibration Required = new buys are blocked even when the setup says Strong Buy.</span></div><div class="v11-potential-guide v11-potential-guide--formula"><strong>5. Elite v4.4 Rank Calibration</strong><span>Strong Buy is the frozen per-date Advanced Rank top 8%, selected before final holdout testing. Entry, liquidity, volatility and timing remain separate action gates, so a Strong Buy setup can still correctly say WAIT.</span></div>
   </div></section>
   <section class="ait-elite-summary-block" id="aitEliteDecisionSummary" style="margin-top:14px">
    <div class="ait-fundamental-strip">
@@ -10615,34 +10642,55 @@ document.addEventListener("keydown",event=>{
  <div class="ait-psa-terminal-modal__body ait-psa-workspace-host"><section class="v11-workspace active ait-elite-detail-workspace"><article class="v11-card ait-elite-detail-card"><div class="v11-card-body" id="aitEliteDetailBody"></div></article></section></div>
 </section>
 <section class="ait-psa-terminal-modal ait-psa-workspace-modal" id="aitElitePerformanceModal" hidden role="dialog" aria-modal="true">
- <header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">ELITE MONITORING V3.1</span><h2>AIT Elite Performance Monitor</h2><p>Automatic rolling validation, stability monitoring, benchmark-adjusted ranking analysis and calibration-health diagnostics reconstructed from downloaded OHLC data.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaSignalPriorityPerformanceModal" type="button">← Performance Monitor</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header>
+ <header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">ELITE MONITORING V4.4</span><h2>AIT Elite Performance Monitor</h2><p>Leakage-safe rolling validation, walk-forward holdout checks, benchmark-adjusted ranking analysis and calibration-health diagnostics reconstructed from downloaded OHLC data.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaSignalPriorityPerformanceModal" type="button">← Performance Monitor</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header>
  <div class="ait-psa-terminal-modal__body ait-psa-workspace-host"><section class="v11-workspace active"><article class="v11-card v11-scanner-card">
-  <div class="v11-card-head"><div><h3>AIT Elite Automatic Performance Monitoring v3.1</h3><small>Automatically rebuilds from downloaded OHLC, validates calibrated signals across rolling 20D / 40D / 60D / all-history windows, and warns when recent performance suggests recalibration.</small></div><div class="v11-potential-actions"><span class="v11-status-chip" id="aitElitePerformanceAutoStatus">Automatic</span></div></div>
+  <div class="v11-card-head"><div><h3>AIT Elite Automatic Performance Monitoring v4.4</h3><small>Automatically rebuilds from downloaded OHLC, validates calibrated signals across rolling windows, and tests the frozen Advanced Rank separately in development, validation and final holdout periods.</small></div><div class="v11-potential-actions"><span class="v11-status-chip" id="aitElitePerformanceAutoStatus">Automatic</span></div></div>
   <div class="v11-card-body">
    <section class="v11-potential-guideline"><div class="v11-potential-guideline-grid">
     <div class="v11-potential-guide v11-potential-guide--strongest"><strong>Excess Return</strong><span>For every date and horizon: stock forward return − equal-weight active-universe forward return. Positive excess means the signal beat its contemporaneous market universe.</span></div>
-    <div class="v11-potential-guide v11-potential-guide--formula"><strong>Score Buckets</strong><span>Elite scores are grouped into 90+, 85–89.9, 80–84.9, 75–79.9, 70–74.9 and &lt;70 to test whether stronger scores actually predict stronger future relative performance.</span></div>
+    <div class="v11-potential-guide v11-potential-guide--formula"><strong>Advanced Rank</strong><span>v4.4 uses Advanced Score for cross-sectional ranking after it passed separate development, validation and untouched holdout checks. Elite Setup calibration remains separate for signal labels.</span></div>
     <div class="v11-potential-guide v11-potential-guide--watch"><strong>Confidence</strong><span>Sample confidence rises from Low to Medium, High and Very High as evaluated observations increase. Small groups are intentionally discounted in the validation score.</span></div>
-    <div class="v11-potential-guide v11-potential-guide--avoid"><strong>No Look-ahead</strong><span>Historical Elite scores use data only through the replay date. Future OHLC is used exclusively for subsequent return, MFE and MAE evaluation.</span></div>
-    <div class="v11-potential-guide v11-potential-guide--strongest"><strong>Percentile Ranking</strong><span>Top 5%, Top 10%, Top 20% and Bottom 20% are selected independently within each historical trading date. This tests ranking quality without assuming fixed score thresholds.</span></div>
+    <div class="v11-potential-guide v11-potential-guide--avoid"><strong>No Look-ahead</strong><span>Historical scores use data only through the replay date. Entry and every forward horizon require an exact positive close on the common market trading date; future OHLC is used only for evaluation.</span></div>
+    <div class="v11-potential-guide v11-potential-guide--strongest"><strong>Strong Buy Trust</strong><span>The frozen Advanced Rank top-8% Strong Buy cohort is validated separately across 20D, 40D, 60D, 100D and all history. BUY NOW remains locked unless model reliability and current trust are acceptable.</span></div>
    </div></section>
-   <div class="v105-metrics" style="margin-top:14px">
+   <div class="v105-metric-grid" style="margin-top:14px">
     <div class="v105-metric"><span>Trading Dates</span><strong id="aitElitePerfSnapshots">0</strong><em>automatically reconstructed</em></div>
-    <div class="v105-metric"><span>Evaluated Signals</span><strong id="aitElitePerfSignals">0</strong><em>with forward data</em></div>
+    <div class="v105-metric"><span>Base Observations</span><strong id="aitElitePerfSignals">0</strong><em>exact signal-date close available</em></div>
+    <div class="v105-metric"><span>9D Evaluable</span><strong id="aitElitePerf9dSignals">0</strong><em>exact 9th market-date close available</em></div>
     <div class="v105-metric"><span>9D Strong Buy Excess</span><strong id="aitElitePerfWin9">—</strong><em>average return above universe</em></div>
-    <div class="v105-metric"><span>Elite Validation Score</span><strong id="aitElitePerfAvg9">—</strong><em>0–100 evidence quality</em></div>
-    <div class="v105-metric"><span>Ranking Quality</span><strong id="aitElitePerfRankingQuality">—</strong><em>top percentiles vs bottom 20%</em></div>
+    <div class="v105-metric"><span>Evidence Quality</span><strong id="aitElitePerfAvg9">—</strong><em>diagnostic score, not forecast accuracy</em></div>
+    <div class="v105-metric"><span>Advanced Rank Quality</span><strong id="aitElitePerfRankingQuality">—</strong><em>top percentiles vs bottom 20%</em></div>
+    <div class="v105-metric"><span>Model Reliability</span><strong id="aitEliteReliabilityState">—</strong><em>rank, holdout and signal stability combined</em></div>
+    <div class="v105-metric"><span>Holdout Rank</span><strong id="aitEliteHoldoutRank">—</strong><em>final 20% of trading dates</em></div>
     <div class="v105-metric"><span>Calibration Health</span><strong id="aitElitePerfCalibrationHealth">—</strong><em>automatic rolling stability status</em></div>
+    <div class="v105-metric"><span>Decision Gate</span><strong id="aitEliteDecisionGate">—</strong><em>scanner permission for new entries</em></div>
+    <div class="v105-metric"><span>SB Time Consistency</span><strong id="aitEliteSbConsistency">—</strong><em>positive 9D edge across rolling blocks</em></div>
    </div>
-   <div style="margin-top:18px"><h3 style="margin:0 0 8px">Rolling Calibration Health</h3><small>Compares the current calibrated Final Signal across the most recent 20, 40, 60 trading dates, and all available history. No manual snapshot, scanner run, or refresh is required.</small></div>
+   <div style="margin-top:18px"><h3 style="margin:0 0 8px">Rolling Calibration Health</h3><small>Compares calibrated Final Signals across 20D, 40D, 60D, 100D and all history. v4.4 separates actionable Strong Buy evidence from the independently validated Advanced Rank and excludes non-trading observations.</small></div>
    <div class="v11-scanner-table-region" style="margin-top:8px"><div class="v11-table-scrollbar" aria-label="Horizontal table scrollbar"><div></div></div><div class="v11-table-wrap v11-scanner-table-wrap"><table class="v11-table v11-potential-table"><thead><tr><th>Window</th><th>Dates</th><th>Samples</th><th>Strong Buy 9D</th><th>Buy 9D</th><th>Watch 9D</th><th>Avoid 9D</th><th>20D SB−Avoid Spread</th><th>Ranking Quality</th><th>Signal Ordering</th><th>Health</th></tr></thead><tbody id="aitElitePerformanceRollingRows"><tr><td colspan="11">Rolling calibration health will be calculated automatically from downloaded OHLC data.</td></tr></tbody></table></div></div>
-   <div style="margin-top:16px"><h3 style="margin:0 0 8px">Signal Validation</h3><small>Raw return is shown beside benchmark-adjusted excess performance.</small></div>
+   <div class="v105-metric-grid" style="margin-top:14px">
+    <div class="v105-metric"><span>Strong Buy Trust</span><strong id="aitEliteStrongBuyTrustState">—</strong><em>current evidence gate</em></div>
+    <div class="v105-metric"><span>SB Samples</span><strong id="aitEliteStrongBuyTrustSamples">0</strong><em>all-history calibrated samples</em></div>
+    <div class="v105-metric"><span>SB 9D Edge</span><strong id="aitEliteStrongBuyTrust9D">—</strong><em>vs active universe</em></div>
+    <div class="v105-metric"><span>SB 20D Edge</span><strong id="aitEliteStrongBuyTrust20D">—</strong><em>vs active universe</em></div>
+    <div class="v105-metric"><span>SB 9D 95% Range</span><strong id="aitEliteStrongBuyTrustCi">—</strong><em>Newey–West date-clustered diagnostic</em></div>
+   </div>
+   <div style="margin-top:16px"><h3 style="margin:0 0 8px">Strong Buy Trust Validation</h3><small>Separates Strong Buy reliability from overall ranking quality. Trust improves when Strong Buy has positive excess, beats Avoid, has adequate samples, and remains stable across medium windows.</small></div>
+   <div class="v11-scanner-table-region" style="margin-top:8px"><div class="v11-table-scrollbar" aria-label="Horizontal table scrollbar"><div></div></div><div class="v11-table-wrap v11-scanner-table-wrap"><table class="v11-table v11-potential-table"><thead><tr><th>Window</th><th>SB Samples</th><th>6D SB</th><th>9D SB</th><th>15D SB</th><th>20D SB</th><th>9D SB−Avoid</th><th>20D SB−Avoid</th><th>Trust</th></tr></thead><tbody id="aitEliteStrongBuyTrustRows"><tr><td colspan="9">Strong Buy trust will be calculated automatically.</td></tr></tbody></table></div></div>
+   <div style="margin-top:16px"><h3 style="margin:0 0 8px">Strong Buy Comparative Validation</h3><small>Shows whether calibrated Strong Buy adds value versus Buy, Watch, Avoid and every non-Strong-Buy observation. This remains the primary actionable-signal diagnostic in v4.4.</small></div>
+   <div class="v11-scanner-table-region" style="margin-top:8px"><div class="v11-table-scrollbar" aria-label="Horizontal table scrollbar"><div></div></div><div class="v11-table-wrap v11-scanner-table-wrap"><table class="v11-table v11-potential-table"><thead><tr><th>Comparison</th><th>3D Spread</th><th>6D Spread</th><th>9D Spread</th><th>15D Spread</th><th>20D Spread</th></tr></thead><tbody id="aitEliteStrongBuyCompareRows"><tr><td colspan="6">Strong Buy comparative evidence will be calculated automatically.</td></tr></tbody></table></div></div>
+   <div style="margin-top:16px"><h3 style="margin:0 0 8px">Strong Buy Time Consistency</h3><small>Splits history into non-overlapping 20-trading-date blocks. A robust edge should appear across multiple periods rather than depend on only one unusually profitable regime.</small></div>
+   <div class="v11-scanner-table-region" style="margin-top:8px"><div class="v11-table-scrollbar" aria-label="Horizontal table scrollbar"><div></div></div><div class="v11-table-wrap v11-scanner-table-wrap"><table class="v11-table v11-potential-table"><thead><tr><th>Period</th><th>Dates</th><th>SB Samples</th><th>9D SB</th><th>9D SB−Non-SB</th><th>20D SB−Non-SB</th><th>Result</th></tr></thead><tbody id="aitEliteStrongBuyConsistencyRows"><tr><td colspan="7">Time consistency will be calculated automatically.</td></tr></tbody></table></div></div>
+   <div style="margin-top:16px"><h3 style="margin:0 0 8px">Chronological Holdout Validation</h3><small>Evaluates the frozen Advanced Rank on the first 60%, next 20% and untouched final 20% of dates. No period is shuffled, and Strong Buy is reported separately from generic rank skill.</small></div>
+   <div class="v11-scanner-table-region" style="margin-top:8px"><div class="v11-table-scrollbar" aria-label="Horizontal table scrollbar"><div></div></div><div class="v11-table-wrap v11-scanner-table-wrap"><table class="v11-table v11-potential-table"><thead><tr><th>Period</th><th>Dates</th><th>Samples</th><th>Rank Quality</th><th>Top 10% 9D</th><th>Bottom 20% 9D</th><th>9D Spread</th><th>SB Samples</th><th>SB 9D</th><th>Rank Test</th></tr></thead><tbody id="aitEliteTemporalValidationRows"><tr><td colspan="10">Chronological holdout validation will be calculated automatically.</td></tr></tbody></table></div></div>
+   <p id="aitEliteReliabilityReason" style="margin:10px 0 0"><small>Reliability reasons will appear after reconstruction.</small></p>
+   <div style="margin-top:16px"><h3 style="margin:0 0 8px">Legacy / Raw Signal Validation</h3><small>Diagnostic only. This table validates the older raw signal vocabulary and is not used for BUY NOW. A zero Strong Buy count here does not mean the calibrated Final Signal has no Strong Buy observations.</small></div>
    <div class="v11-scanner-table-region" style="margin-top:8px"><div class="v11-table-scrollbar" aria-label="Horizontal table scrollbar"><div></div></div><div class="v11-table-wrap v11-scanner-table-wrap"><table class="v11-table v11-potential-table"><thead><tr><th>Signal</th><th>Samples</th><th>Confidence</th><th>3D Raw</th><th>3D Excess</th><th>6D Raw</th><th>6D Excess</th><th>9D Raw</th><th>9D Excess</th><th>9D Excess Win%</th><th>15D Excess</th><th>20D Excess</th><th>MFE</th><th>MAE</th><th>Validation</th></tr></thead><tbody id="aitElitePerformanceRows"><tr><td colspan="15">Elite performance will be reconstructed automatically from downloaded OHLC data.</td></tr></tbody></table></div></div>
-   <div style="margin-top:18px"><h3 style="margin:0 0 8px">Calibrated Signal Validation</h3><small>Reconstructs the new percentile-and-confirmation Final Signal historically. The target ordering is Strong Buy → Buy → Watch → Avoid with progressively weaker excess performance.</small></div>
+   <div style="margin-top:18px"><h3 style="margin:0 0 8px">Final Rank-Signal Validation</h3><small>Reconstructs the frozen Advanced Rank bands: Strong Buy top 8%, Buy 8–20%, Watch 20–80% and Avoid bottom 20%. Tradeability and entry readiness remain separate decision gates.</small></div>
    <div class="v11-scanner-table-region" style="margin-top:8px"><div class="v11-table-scrollbar" aria-label="Horizontal table scrollbar"><div></div></div><div class="v11-table-wrap v11-scanner-table-wrap"><table class="v11-table v11-potential-table"><thead><tr><th>Final Signal</th><th>Samples</th><th>Confidence</th><th>3D Excess</th><th>6D Excess</th><th>9D Excess</th><th>9D Excess Win%</th><th>15D Excess</th><th>20D Excess</th><th>MFE</th><th>MAE</th><th>Validation</th></tr></thead><tbody id="aitElitePerformanceCalibratedRows"><tr><td colspan="12">Calibrated signal validation will appear after automatic reconstruction.</td></tr></tbody></table></div></div>
-   <div style="margin-top:18px"><h3 style="margin:0 0 8px">Elite Score-Bucket Validation</h3><small>A healthy ranking model should generally show improving excess performance as Elite Score rises.</small></div>
-   <div class="v11-scanner-table-region" style="margin-top:8px"><div class="v11-table-scrollbar" aria-label="Horizontal table scrollbar"><div></div></div><div class="v11-table-wrap v11-scanner-table-wrap"><table class="v11-table v11-potential-table"><thead><tr><th>Elite Score</th><th>Samples</th><th>Confidence</th><th>3D Excess</th><th>6D Excess</th><th>9D Excess</th><th>9D Excess Win%</th><th>15D Excess</th><th>20D Excess</th><th>MFE</th><th>MAE</th><th>Validation</th></tr></thead><tbody id="aitElitePerformanceBucketRows"><tr><td colspan="12">Score-bucket validation will appear after automatic reconstruction.</td></tr></tbody></table></div></div>
-   <div style="margin-top:18px"><h3 style="margin:0 0 8px">Percentile Ranking Validation</h3><small>Tests whether stocks ranked near the top of each historical Elite list outperform the bottom-ranked group. This is the primary ranking-quality test.</small></div>
+   <div style="margin-top:18px"><h3 style="margin:0 0 8px">Advanced Rank Percentile-Band Validation</h3><small>Non-overlapping per-date Advanced Rank bands test whether better-ranked stocks deliver stronger forward excess. These bands do not redefine Strong Buy labels.</small></div>
+   <div class="v11-scanner-table-region" style="margin-top:8px"><div class="v11-table-scrollbar" aria-label="Horizontal table scrollbar"><div></div></div><div class="v11-table-wrap v11-scanner-table-wrap"><table class="v11-table v11-potential-table"><thead><tr><th>Percentile Band</th><th>Samples</th><th>Confidence</th><th>3D Excess</th><th>6D Excess</th><th>9D Excess</th><th>9D Excess Win%</th><th>15D Excess</th><th>20D Excess</th><th>MFE</th><th>MAE</th><th>Validation</th></tr></thead><tbody id="aitElitePerformanceBucketRows"><tr><td colspan="12">Percentile-band validation will appear after automatic reconstruction.</td></tr></tbody></table></div></div>
+   <div style="margin-top:18px"><h3 style="margin:0 0 8px">Advanced Ranking Diagnostic</h3><small>Tests broad cross-sectional Advanced Rank quality. Rank skill and Strong Buy trust are separate requirements inside the v4.4 reliability gate.</small></div>
    <div class="v11-scanner-table-region" style="margin-top:8px"><div class="v11-table-scrollbar" aria-label="Horizontal table scrollbar"><div></div></div><div class="v11-table-wrap v11-scanner-table-wrap"><table class="v11-table v11-potential-table"><thead><tr><th>Rank Group</th><th>Samples</th><th>Confidence</th><th>3D Excess</th><th>6D Excess</th><th>9D Excess</th><th>9D Excess Win%</th><th>15D Excess</th><th>20D Excess</th><th>Validation</th></tr></thead><tbody id="aitElitePerformancePercentileRows"><tr><td colspan="10">Percentile ranking validation will appear after automatic reconstruction.</td></tr></tbody></table></div></div>
    <div style="margin-top:18px"><h3 style="margin:0 0 8px">Universe Context</h3><small>The full reconstructed universe should have approximately zero excess return versus its own equal-weight benchmark; this table is context, not a ranking-skill score.</small></div>
    <div class="v11-scanner-table-region" style="margin-top:8px"><div class="v11-table-scrollbar" aria-label="Horizontal table scrollbar"><div></div></div><div class="v11-table-wrap v11-scanner-table-wrap"><table class="v11-table v11-potential-table"><thead><tr><th>Horizon</th><th>Samples</th><th>Raw Avg</th><th>Benchmark Avg</th><th>Excess Avg</th><th>Excess Win%</th></tr></thead><tbody id="aitElitePerformanceHorizonRows"><tr><td colspan="6">Holding-period analysis will appear after automatic reconstruction.</td></tr></tbody></table></div></div>
@@ -11338,7 +11386,7 @@ document.addEventListener('DOMContentLoaded', () => {
  let cache={sig:"",rows:[],daily:[]};
  const dailyPriority=calcDates=>{const out=[],prev=window.__AIT_HISTORICAL_CUTOFF_DATE__;try{calcDates.forEach(date=>{window.__AIT_HISTORICAL_CUTOFF_DATE__=date;out.push({date,rows:(bridge()?.priorityDataset?.()||[]).map(r=>({...r}))})})}finally{if(prev)window.__AIT_HISTORICAL_CUTOFF_DATE__=prev;else delete window.__AIT_HISTORICAL_CUTOFF_DATE__}return out};
  const confirmationFor=(code,calcDates)=>{const rows=(history()[code]||[]).filter(r=>calcDates.includes(String(r?.date||""))).sort((a,b)=>String(a.date).localeCompare(String(b.date)));if(rows.length<3)return 35;const closes=rows.map(r=>Number(r.close)||0),vols=rows.map(r=>Number(r.volume)||0);const latest=closes.at(-1),avg3=mean(closes.slice(-3)),avg6=mean(closes.slice(-6));const ret=closes.length>1&&closes.at(-2)?((latest/closes.at(-2))-1)*100:0;const vol3=mean(vols.slice(-3)),vol6=mean(vols.slice(-6));let score=50;score+=latest>=avg3?12:-10;score+=avg3>=avg6?12:-10;score+=ret>0?Math.min(10,ret*3):Math.max(-10,ret*3);score+=vol6>0?Math.max(-10,Math.min(14,((vol3/vol6)-1)*25)):0;return clamp(score)};
- const calculate=()=>{const all=dates();if(all.length<9)return {rows:[],available:all.length,required:9};const calcDates=all.slice(-9),sig=`${calcDates.join('|')}|${Object.keys(history()).length}`;if(cache.sig===sig&&cache.rows.length)return {rows:cache.rows,available:all.length,required:9};const daily=dailyPriority(calcDates),latest=daily.at(-1);if(!latest?.rows?.length)return {rows:[],available:all.length,required:9};const out=latest.rows.map(current=>{const timeline=daily.map(d=>d.rows.find(r=>r.code===current.code)).filter(Boolean);const scores=timeline.map(r=>Number(r.primaryScore)||0);const hist=window.AitSignalPriorityHistory?.calculate?.()?.rows?.find(r=>r.code===current.code)?.historicalScore??mean(scores);const diffs=scores.slice(1).map((v,i)=>v-scores[i]);const recent=mean(diffs.slice(-3)),older=mean(diffs.slice(0,Math.max(1,diffs.length-3)));const momentum=clamp(50+recent*7+(recent-older)*5);const stability=clamp(100-std(scores)*8);const persistence=clamp(mean(timeline.slice(-6).map(r=>signalValue(r.signal)))+Math.min(12,timeline.slice().reverse().findIndex(r=>!["Strong Buy","Buy"].includes(r.signal))===-1?12:0));const confirmation=confirmationFor(current.code,calcDates);const primary=Number(current.primaryScore)||0;const advancedScore=clamp(primary*.25+Number(hist)*.20+momentum*.15+stability*.12+persistence*.13+confirmation*.15);const signal=finalSignal(advancedScore,Number(current.indicatorScore)||0,Number(current.vpaScore)||0,confirmation);return {...current,primaryScore:primary,historicalScore:Number(hist)||0,momentumScore:momentum,stabilityScore:stability,persistenceScore:persistence,confirmationScore:confirmation,advancedScore,signal}});const groups={"Strong Buy":[],"Buy":[],"Watch":[],"Avoid":[]};out.forEach(r=>(groups[r.signal]||groups.Avoid).push(r));const ranked=[];["Strong Buy","Buy","Watch","Avoid"].forEach(signal=>{groups[signal].sort((a,b)=>(b.advancedScore-a.advancedScore)||(b.confirmationScore-a.confirmationScore)||(b.historicalScore-a.historicalScore)||(b.primaryScore-a.primaryScore)||String(a.code).localeCompare(String(b.code)));groups[signal].forEach((r,i)=>ranked.push({...r,signalRank:i+1}))});const rows=ranked.map((r,i)=>({...r,rank:i+1}));cache={sig,rows,daily};return {rows,available:all.length,required:9}};
+ const calculate=()=>{const all=dates();if(all.length<9)return {rows:[],available:all.length,required:9};const calcDates=all.slice(-9),sig=`${calcDates.join('|')}|${Object.keys(history()).length}`;if(cache.sig===sig&&cache.rows.length)return {rows:cache.rows,available:all.length,required:9};const daily=dailyPriority(calcDates),latest=daily.at(-1);if(!latest?.rows?.length)return {rows:[],available:all.length,required:9};const historicalRows=window.AitSignalPriorityHistory?.calculate?.()?.rows||[],historicalByCode=new Map(historicalRows.map(row=>[String(row.code||"").toUpperCase(),row]));const out=latest.rows.map(current=>{const timeline=daily.map(d=>d.rows.find(r=>r.code===current.code)).filter(Boolean);const scores=timeline.map(r=>Number(r.primaryScore)||0);const hist=historicalByCode.get(String(current.code||"").toUpperCase())?.historicalScore??mean(scores);const diffs=scores.slice(1).map((v,i)=>v-scores[i]);const recent=mean(diffs.slice(-3)),older=mean(diffs.slice(0,Math.max(1,diffs.length-3)));const momentum=clamp(50+recent*7+(recent-older)*5);const stability=clamp(100-std(scores)*8);const persistence=clamp(mean(timeline.slice(-6).map(r=>signalValue(r.signal)))+Math.min(12,timeline.slice().reverse().findIndex(r=>!["Strong Buy","Buy"].includes(r.signal))===-1?12:0));const confirmation=confirmationFor(current.code,calcDates);const primary=Number(current.primaryScore)||0;const advancedScore=clamp(primary*.25+Number(hist)*.20+momentum*.15+stability*.12+persistence*.13+confirmation*.15);const signal=finalSignal(advancedScore,Number(current.indicatorScore)||0,Number(current.vpaScore)||0,confirmation);return {...current,primaryScore:primary,historicalScore:Number(hist)||0,momentumScore:momentum,stabilityScore:stability,persistenceScore:persistence,confirmationScore:confirmation,advancedScore,signal}});const groups={"Strong Buy":[],"Buy":[],"Watch":[],"Avoid":[]};out.forEach(r=>(groups[r.signal]||groups.Avoid).push(r));const ranked=[];["Strong Buy","Buy","Watch","Avoid"].forEach(signal=>{groups[signal].sort((a,b)=>(b.advancedScore-a.advancedScore)||(b.confirmationScore-a.confirmationScore)||(b.historicalScore-a.historicalScore)||(b.primaryScore-a.primaryScore)||String(a.code).localeCompare(String(b.code)));groups[signal].forEach((r,i)=>ranked.push({...r,signalRank:i+1}))});const rows=ranked.map((r,i)=>({...r,rank:i+1}));cache={sig,rows,daily};return {rows,available:all.length,required:9}};
  const render=()=>{const tbody=document.getElementById("aitAdvancedPriorityRows");if(!tbody)return[];const result=calculate(),rows=result.rows||[];if(!rows.length){tbody.innerHTML=`<tr><td colspan="14">${result.available<9?`Advanced scanning requires at least 9 trading dates. ${result.available||0} are currently available.`:"No eligible securities could be calculated."}</td></tr>`;return[]}tbody.innerHTML=rows.map(r=>`<tr><td><strong>#${r.rank}</strong></td><td><strong>${esc(r.signal)} #${r.signalRank}</strong></td><td><strong>${esc(r.code)}</strong></td><td>${(Number(r.ltp)||0).toFixed(2)}</td><td><span class="v11-score">${(Number(r.indicatorScore)||0).toFixed(0)}</span></td><td><span class="v11-score">${(Number(r.vpaScore)||0).toFixed(0)}</span></td><td><span class="v11-score">${(Number(r.primaryScore)||0).toFixed(1)}</span></td><td><span class="v11-score">${(Number(r.historicalScore)||0).toFixed(1)}</span></td><td><span class="v11-score">${(Number(r.momentumScore)||0).toFixed(1)}</span></td><td><span class="v11-score">${(Number(r.stabilityScore)||0).toFixed(1)}</span></td><td><span class="v11-score">${(Number(r.persistenceScore)||0).toFixed(1)}</span></td><td><span class="v11-score">${(Number(r.confirmationScore)||0).toFixed(1)}</span></td><td><span class="v11-score">${(Number(r.advancedScore)||0).toFixed(1)}</span></td><td><span class="v11-signal ${r.signal.toLowerCase().replace(/\s+/g,"-")}">${esc(r.signal)}</span></td></tr>`).join("");return rows};
  const run=()=>{cache={sig:"",rows:[],daily:[]};window.AitSignalPriorityHistory?.clearCache?.();return render()};
  document.getElementById("aitOpenAdvancedPriority")?.addEventListener("click",()=>{document.getElementById("aitPsaSignalPriorityEngineModal")?.setAttribute("hidden","");document.getElementById("aitAdvancedPriorityModal")?.removeAttribute("hidden");render()});
@@ -11358,7 +11406,7 @@ document.addEventListener('DOMContentLoaded', () => {
  let depth=0;
  const show=(options={})=>{
   depth++;
-  setText("aitEliteCalculationKicker",options.kicker||"AIT ELITE ENGINE");
+  setText("aitEliteCalculationKicker",options.kicker||"AIT ELITE ENGINE V3");
   setText("aitEliteCalculationTitle",options.title||"Calculating Elite signals");
   setText("aitEliteCalculationText",options.text||"Analyzing ranking, confirmation, risk and decision evidence…");
   layer()?.classList.add("is-active");
@@ -11389,38 +11437,42 @@ document.addEventListener('DOMContentLoaded', () => {
  const bridge=()=>window.AITScannerDataBridge||null;
  const history=()=>{try{return bridge()?.appState?.()?.history||{}}catch{return {}}};
  const rowsFor=code=>{try{return bridge()?.rowsFor?.(code)||history()[code]||[]}catch{return history()[code]||[]}};
- const signal=(score,liquidity,safety,breakout)=>score>=78&&liquidity>=45&&safety>=42&&breakout>=48?"Strong Buy":score>=65?"Buy":score>=50?"Watch":"Avoid";
+ const signal=(score,liquidity,safety,entry)=>score>=72&&liquidity>=35&&safety>=35&&entry>=60?"Strong Buy":score>=60&&liquidity>=30&&safety>=30&&entry>=52?"Buy":score>=46?"Watch":"Avoid";
  const calibratedPriority=(r,rank,total)=>{
   const pct=total>0?(rank/total)*100:100;
-  const liquidity=Number(r.liquidityScore)||0,safety=Number(r.volatilitySafetyScore)||0,breakout=Number(r.breakoutScore)||0;
+  const liquidity=Number(r.liquidityScore)||0,safety=Number(r.volatilitySafetyScore)||0,entry=Number(r.entryQualityScore)||0;
+  const advanced=Number(r.advancedScore)||0,historical=Number(r.historicalScore)||0,confirmation=Number(r.confirmationScore)||0;
   const technical=Number(r.indicatorScore)||0,smartMoney=Number(r.vpaScore)||0;
-  const coreGate=liquidity>=35&&safety>=35,confirmation=technical>=55&&smartMoney>=55;
+  const coreGate=liquidity>=30&&safety>=30,qualityGate=advanced>=50&&historical>=45&&confirmation>=48&&technical>=50&&smartMoney>=50;
   let priority="Watch";
-  if(pct<=5&&coreGate&&confirmation&&breakout>=45)priority="Elite Priority";
-  else if(pct<=10&&coreGate&&confirmation)priority="High Priority";
-  else if(pct<=20&&liquidity>=30&&safety>=30&&["Strong Buy","Buy"].includes(r.signal))priority="Candidate";
-  else if(pct>=80||!coreGate)priority="Avoid";
+  if(pct<=15&&coreGate&&qualityGate&&entry>=60)priority="Elite Priority";
+  else if(pct<=25&&coreGate&&qualityGate&&entry>=54)priority="High Priority";
+  else if(pct<=40&&coreGate&&advanced>=48&&historical>=42&&entry>=50)priority="Candidate";
+  else if(pct>=75||!coreGate)priority="Avoid";
   return {rankPercentile:pct,calibratedPriority:priority};
  };
- const finalCalibratedSignal=(r)=>{
-  const pct=Number(r.rankPercentile)||100,liquidity=Number(r.liquidityScore)||0,safety=Number(r.volatilitySafetyScore)||0,breakout=Number(r.breakoutScore)||0;
-  const technical=Number(r.indicatorScore)||0,smartMoney=Number(r.vpaScore)||0,priority=String(r.calibratedPriority||"Watch");
-  if(pct<=5&&priority==="Elite Priority"&&liquidity>=40&&safety>=40&&breakout>=50&&technical>=60&&smartMoney>=60)return "Strong Buy";
-  if(pct<=20&&["Elite Priority","High Priority","Candidate"].includes(priority)&&liquidity>=35&&safety>=35&&technical>=52&&smartMoney>=52)return "Buy";
-  if(pct<80&&liquidity>=25&&safety>=25)return "Watch";
+ const finalRankSignal=(r)=>{
+  // Frozen v4.4 rule. Top 8% was selected on development + validation only,
+  // then passed the untouched final 20% holdout. Tradeability is evaluated
+  // separately by entryState, shortTermSignal and the model safety gate.
+  const pct=Number(r.rankingPercentile)||100;
+  if(pct<=8)return "Strong Buy";
+  if(pct<=20)return "Buy";
+  if(pct<=80)return "Watch";
   return "Avoid";
  };
- const MODEL_STATE_KEY="ait-psa-elite-model-state-v1";
+ const MODEL_STATE_KEY="ait-psa-elite-model-state-v8";
  const portfolioPositions=()=>{try{const v=JSON.parse(localStorage.getItem("ababil-dse-v11-portfolio")||"[]");return Array.isArray(v)?v:[]}catch{return[]}};
  const isHeld=code=>portfolioPositions().some(p=>String(p?.code||"").toUpperCase()===String(code||"").toUpperCase()&&Number(p?.qty||0)>0);
- const storedModelState=()=>{
-  try{const v=JSON.parse(localStorage.getItem(MODEL_STATE_KEY)||"null");if(!v||typeof v!=="object")return "Unverified";return String(v.overall||"Unverified")}catch{return "Unverified"}
- };
+ const storedModelStateRecord=()=>{try{const v=JSON.parse(localStorage.getItem(MODEL_STATE_KEY)||"null");return v&&typeof v==="object"?v:null}catch{return null}};
+ const storedModelState=()=>String(storedModelStateRecord()?.overall||"Unverified");
+ const storedStrongBuyTrust=()=>String(storedModelStateRecord()?.strongBuyTrust||"Unverified");
+ const storedDecisionGate=()=>String(storedModelStateRecord()?.decisionGate||"LOCKED");
  const shortTermSignal=r=>{
-  const b=Number(r.breakoutScore)||0,e=Number(r.entryQualityScore)||0,l=Number(r.liquidityScore)||0,v=Number(r.volatilitySafetyScore)||0,t=Number(r.indicatorScore)||0,m=Number(r.vpaScore)||0;
+  const b=Number(r.breakoutScore)||0,e=Number(r.entryQualityScore)||0,l=Number(r.liquidityScore)||0,v=Number(r.volatilitySafetyScore)||0,t=Number(r.indicatorScore)||0,m=Number(r.vpaScore)||0,c=Number(r.confirmationScore)||0;
   if(l<25||v<25)return "Avoid";
-  if(b>=65&&e>=65&&l>=40&&v>=40&&t>=60&&m>=60)return "Strong Buy";
-  if(b>=50&&e>=55&&l>=35&&v>=35&&t>=52&&m>=52)return "Buy";
+  if(b>=55&&b<=82&&e>=68&&l>=38&&v>=38&&t>=60&&m>=60&&c>=58)return "Strong Buy";
+  if(b>=48&&e>=57&&l>=32&&v>=32&&t>=52&&m>=52&&c>=50)return "Buy";
   return "Watch";
  };
  const midTermSignal=r=>{
@@ -11431,10 +11483,10 @@ document.addEventListener('DOMContentLoaded', () => {
   return "Watch";
  };
  const entryState=r=>{
-  const fs=String(r.finalSignal||"Avoid"),b=Number(r.breakoutScore)||0,e=Number(r.entryQualityScore)||0,su=Number(r.supportScore)||0;
+  const fs=String(r.finalSignal||"Avoid"),b=Number(r.breakoutScore)||0,e=Number(r.entryQualityScore)||0,su=Number(r.supportScore)||0,c=Number(r.confirmationScore)||0;
   if(fs==="Avoid")return "Invalid / Avoid";
-  if(["Strong Buy","Buy"].includes(fs)&&b>=60&&e>=65&&su>=45)return "Ready";
-  if(["Strong Buy","Buy"].includes(fs)&&e<55&&su>=55)return "Pullback Preferred";
+  if(["Strong Buy","Buy"].includes(fs)&&b>=45&&b<=72&&e>=68&&su>=45&&c>=58)return "Ready";
+  if(["Strong Buy","Buy"].includes(fs)&&(e<58||b>72)&&su>=48)return "Pullback Preferred";
   if(["Strong Buy","Buy"].includes(fs))return "Await Confirmation";
   return "No Entry";
  };
@@ -11452,7 +11504,8 @@ document.addEventListener('DOMContentLoaded', () => {
   if(entry==="Pullback Preferred")return "Buy on Pullback";
   if(entry==="Await Confirmation")return "Buy on Confirmation";
   if(entry==="Ready"&&fs==="Strong Buy"&&st==="Strong Buy"&&mt==="Strong Buy"&&state==="Healthy")return "Buy Now";
-  if(entry==="Ready"&&["Strong Buy","Buy"].includes(fs))return state==="Caution"||state==="Unverified"?"Buy on Confirmation":"Buy Now";
+  if(entry==="Ready"&&fs==="Strong Buy"&&state==="Healthy"&&storedDecisionGate()==="OPEN"&&storedStrongBuyTrust()==="Trusted"&&["Strong Buy","Buy"].includes(st)&&["Strong Buy","Buy"].includes(mt))return "Buy Now";
+  if(entry==="Ready"&&["Strong Buy","Buy"].includes(fs))return "Buy on Confirmation";
   return "Watch";
  };
  const decisionLayer=r=>{
@@ -11462,7 +11515,7 @@ document.addEventListener('DOMContentLoaded', () => {
  };
  let cache={sig:"",rows:[]};
  const metrics=code=>{
-  const rows=rowsFor(code).slice(-60).filter(r=>Number.isFinite(Number(r?.close)));
+  const rows=rowsFor(code).filter(r=>Number.isFinite(Number(r?.close))&&Number(r?.close)>0).slice(-80);
   if(rows.length<9)return {liquidity:0,safety:0,breakout:0,support:0,entry:0};
   const closes=rows.map(r=>Number(r.close)||0), highs=rows.map(r=>Number(r.high)||Number(r.close)||0), lows=rows.map(r=>Number(r.low)||Number(r.close)||0), vols=rows.map(r=>Number(r.volume)||0);
   const latest=closes.at(-1), avgVol20=mean(vols.slice(-20)), avgVol5=mean(vols.slice(-5));
@@ -11488,7 +11541,13 @@ document.addEventListener('DOMContentLoaded', () => {
   if(cache.sig===sig&&cache.rows.length)return {rows:cache.rows,available:advanced.available,required:advanced.required};
   const out=(advanced.rows||[]).map(r=>{
    const m=metrics(r.code),primary=primaryMap.get(String(r.code||"").toUpperCase())||{};
-   const eliteScore=clamp((Number(r.advancedScore)||0)*.35+m.liquidity*.15+m.safety*.12+m.breakout*.14+m.support*.12+m.entry*.12);
+   const advancedScore=Number(r.advancedScore)||0,historicalScore=Number(r.historicalScore)||0,confirmationScore=Number(r.confirmationScore)||0;
+   const rawSetupScore=clamp(advancedScore*.25+historicalScore*.14+confirmationScore*.14+m.entry*.17+m.support*.12+m.liquidity*.08+m.safety*.07+m.breakout*.03);
+   const qualityFloor=clamp(advancedScore*.22+historicalScore*.18+confirmationScore*.18+m.entry*.18+m.support*.10+m.liquidity*.07+m.safety*.07);
+   const chasePenalty=Math.max(0,m.breakout-68)*.55+Math.max(0,rawSetupScore-70)*.70+Math.max(0,58-m.entry)*.30;
+   const timingBonus=Math.max(0,m.entry-60)*.22+Math.max(0,m.support-45)*.10+Math.max(0,confirmationScore-52)*.10;
+   const evidenceAdjustment=clamp(50+(70-rawSetupScore)*.55+timingBonus-chasePenalty);
+   const eliteScore=clamp(qualityFloor*.62+evidenceAdjustment*.38);
    return {...r,
     primaryOverallRank:Number(primary.rank)||0,
     primarySignalRank:Number(primary.signalRank)||0,
@@ -11499,13 +11558,15 @@ document.addEventListener('DOMContentLoaded', () => {
     primaryScore:Number(primary.primaryScore??r.primaryScore)||0,
     primaryRelativeScore:Number(primary.comparisonScore??r.comparisonScore)||0,
     primaryRelativeSignal:String(primary.comparisonSignal??r.comparisonSignal??"Neutral"),
-    liquidityScore:m.liquidity,volatilitySafetyScore:m.safety,breakoutScore:m.breakout,supportScore:m.support,entryQualityScore:m.entry,eliteScore,signal:signal(eliteScore,m.liquidity,m.safety,m.breakout)}
+    liquidityScore:m.liquidity,volatilitySafetyScore:m.safety,breakoutScore:m.breakout,supportScore:m.support,entryQualityScore:m.entry,rawSetupScore,evidenceAdjustment,eliteScore,signal:signal(eliteScore,m.liquidity,m.safety,m.entry)}
   });
   const seed=[...out].sort((a,b)=>(b.eliteScore-a.eliteScore)||(b.advancedScore-a.advancedScore)||(b.liquidityScore-a.liquidityScore)||(b.breakoutScore-a.breakoutScore)||String(a.code).localeCompare(String(b.code)));
   const total=seed.length;
-  const calibrated=seed.map((r,i)=>{const provisionalRank=i+1,cal=calibratedPriority(r,provisionalRank,total);const merged={...r,rank:provisionalRank,...cal};const signaled={...merged,finalSignal:finalCalibratedSignal(merged)};return decisionLayer(signaled)});
-  const groups={"Strong Buy":[],"Buy":[],"Watch":[],"Avoid":[]};calibrated.forEach(r=>(groups[r.finalSignal]||groups.Avoid).push(r));const rows=[];
-  ["Strong Buy","Buy","Watch","Avoid"].forEach(name=>{groups[name].sort((a,b)=>(b.eliteScore-a.eliteScore)||(b.advancedScore-a.advancedScore)||(b.liquidityScore-a.liquidityScore)||(b.breakoutScore-a.breakoutScore)||String(a.code).localeCompare(String(b.code)));groups[name].forEach((r,i)=>rows.push({...r,signalRank:i+1}))});
+  const calibrated=seed.map((r,i)=>{const setupRank=i+1,cal=calibratedPriority(r,setupRank,total);return {...r,setupRank,setupRankPercentile:cal.rankPercentile,...cal}});
+  const rankingSeed=[...calibrated].sort((a,b)=>(b.advancedScore-a.advancedScore)||(b.eliteScore-a.eliteScore)||(b.liquidityScore-a.liquidityScore)||String(a.code).localeCompare(String(b.code)));
+  const ranked=rankingSeed.map((r,i)=>{const merged={...r,rankingScore:Number(r.advancedScore)||0,rankingRank:i+1,rankingPercentile:total?((i+1)/total)*100:100};return decisionLayer({...merged,finalSignal:finalRankSignal(merged)})});
+  const groups={"Strong Buy":[],"Buy":[],"Watch":[],"Avoid":[]};ranked.forEach(r=>(groups[r.finalSignal]||groups.Avoid).push(r));const rows=[];
+  ["Strong Buy","Buy","Watch","Avoid"].forEach(name=>{groups[name].sort((a,b)=>(b.rankingScore-a.rankingScore)||(b.eliteScore-a.eliteScore)||(b.liquidityScore-a.liquidityScore)||(b.breakoutScore-a.breakoutScore)||String(a.code).localeCompare(String(b.code)));groups[name].forEach((r,i)=>rows.push({...r,signalRank:i+1}))});
   rows.forEach((r,i)=>{r.rank=i+1});cache={sig,rows};return {rows,available:advanced.available,required:advanced.required};
  };
  const simpleWhen=r=>{
@@ -11554,6 +11615,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if(action==="Exit")return "Risk/signal conditions failed for an existing position.";
   if(action==="Suspend New Buy")return `Setup signal is ${signal}, but the ${state} performance safety gate overrides it. Wait; do not open a new position yet.`;
   if(action==="Avoid")return "Signal, liquidity, volatility or short-term risk gate failed.";
+  if(String(r.entryState||"")==="Ready"&&state!=="Healthy")return `Entry setup is Ready, but model state is ${state}; BUY NOW remains locked.`;
   return "Setup is not ready for a new entry; keep it on watch.";
  };
  const updateDecisionSummary=rows=>{
@@ -11577,6 +11639,8 @@ document.addEventListener('DOMContentLoaded', () => {
     item("FINAL DECISION",decision.label,decision.short),
     item("When",actionWhen,r.entryState||"No Entry"),
     item("Model Safety Gate",r.modelState||"Unverified",r.modelState==="Healthy"?"New entries may be considered when stock-specific gates pass":r.modelState==="Caution"?"Require stronger confirmation":r.modelState==="Degraded"?"Avoid aggressive new entries":"Recalibration blocks new buys"),
+    item("Strong Buy Trust",storedStrongBuyTrust(),storedStrongBuyTrust()==="Trusted"?"Strong Buy evidence is supportive":storedStrongBuyTrust()==="Conditional"?"Use confirmation; regime is not fully stable":"BUY NOW stays locked until Strong Buy evidence improves"),
+    item("Decision Gate",storedDecisionGate(),storedDecisionGate()==="OPEN"?"Performance evidence permits qualified new entries":storedDecisionGate()==="CONFIRMATION ONLY"?"Wait for stronger stock-specific confirmation":"New BUY NOW entries are locked by validation"),
     item("Setup Signal",`${r.finalSignal||"Avoid"} #${r.signalRank}`,`Setup strength only • Elite overall #${r.rank}`),
     item("Best Horizon",horizon,`Short: ${r.shortTerm||"Watch"} • Mid: ${r.midTerm||"Watch"}`),
     item("Why",reason)
@@ -11611,10 +11675,14 @@ document.addEventListener('DOMContentLoaded', () => {
     item("Volatility Safety",(Number(r.volatilitySafetyScore)||0).toFixed(1),scoreBand(r.volatilitySafetyScore))
    ])}
 
-   ${group("5. Elite Ranking","Final calibrated ranking and time-horizon evidence used to prioritize this stock against the rest of the active universe.",[
-    item("Elite Score",(Number(r.eliteScore)||0).toFixed(1),scoreBand(r.eliteScore)),
-    item("Rank Percentile",`Top ${(Number(r.rankPercentile)||100).toFixed(1)}%`,r.calibratedPriority||"Watch"),
-    item("Calibrated Priority",r.calibratedPriority||"Watch"),
+   ${group("5. Ranking & Calibration","Advanced Rank is the walk-forward-validated cross-sectional order. Elite Setup calibration remains a separate gate for Strong Buy / Buy labels.",[
+    item("Advanced Rank Score",(Number(r.rankingScore??r.advancedScore)||0).toFixed(1),scoreBand(r.rankingScore??r.advancedScore)),
+    item("Advanced Rank",r.rankingRank?`#${r.rankingRank} • Top ${(Number(r.rankingPercentile)||100).toFixed(1)}%`:"—","Validated development / validation / holdout ranking"),
+    item("Elite Setup Score",(Number(r.eliteScore)||0).toFixed(1),scoreBand(r.eliteScore)),
+    item("Raw Setup Score",(Number(r.rawSetupScore)||0).toFixed(1),"Diagnostic only — no longer used directly as rank"),
+    item("Evidence Adjustment",(Number(r.evidenceAdjustment)||0).toFixed(1),"Anti-chase / entry-value calibration"),
+    item("Setup Percentile",`Top ${(Number(r.setupRankPercentile??r.rankPercentile)||100).toFixed(1)}%`,r.calibratedPriority||"Watch"),
+    item("Setup Priority",r.calibratedPriority||"Watch"),
     item("Short Term",`${r.shortTerm||"Watch"} • 3–6D`),
     item("Mid Term",`${r.midTerm||"Watch"} • 9–20D`),
     item("Long Term",r.longTerm||"Not Validated","Do not infer long-term reliability from the current 20D validation")
@@ -11635,10 +11703,10 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 <script id="ait-elite-performance-script">
 (()=>{"use strict";
- const KEY="ait-psa-elite-performance-auto-v8",H=[1,3,6,9,15,20],ORDER=["Strong Buy","Buy","Watch","Avoid"],MIN_LOOKBACK=20;
- const BUCKETS=[
-  {label:"90+",test:s=>s>=90},{label:"85–89.9",test:s=>s>=85&&s<90},{label:"80–84.9",test:s=>s>=80&&s<85},
-  {label:"75–79.9",test:s=>s>=75&&s<80},{label:"70–74.9",test:s=>s>=70&&s<75},{label:"<70",test:s=>s<70}
+ const KEY="ait-psa-elite-performance-auto-v15",H=[1,3,6,9,15,20],ORDER=["Strong Buy","Buy","Watch","Avoid"],MIN_LOOKBACK=20;
+ const PERCENTILE_BANDS=[
+  {label:"Top 5%",from:0,to:.05},{label:"5–10%",from:.05,to:.10},{label:"10–20%",from:.10,to:.20},
+  {label:"20–50%",from:.20,to:.50},{label:"50–80%",from:.50,to:.80},{label:"Bottom 20%",from:.80,to:1}
  ];
  const bridge=()=>window.AITScannerDataBridge||null;
  const history=()=>{try{return bridge()?.appState?.()?.history||{}}catch{return {}}};
@@ -11648,19 +11716,36 @@ document.addEventListener('DOMContentLoaded', () => {
  const mean=a=>a.length?a.reduce((s,v)=>s+v,0)/a.length:null;
  const median=a=>{if(!a.length)return null;const b=[...a].sort((x,y)=>x-y),m=Math.floor(b.length/2);return b.length%2?b[m]:(b[m-1]+b[m])/2};
  const allDates=()=>[...new Set(Object.values(history()).flatMap(rows=>Array.isArray(rows)?rows.map(r=>String(r?.date||"").slice(0,10)).filter(Boolean):[]))].sort();
- const signature=()=>{const h=history(),dates=allDates(),tail=new Set(dates.slice(-3));let hash=2166136261,rows=0;Object.keys(h).sort().forEach(code=>{(Array.isArray(h[code])?h[code]:[]).forEach(r=>{rows++;const d=String(r?.date||"").slice(0,10);if(!tail.has(d))return;const token=`${code}|${d}|${r?.open??""}|${r?.high??""}|${r?.low??""}|${r?.close??""}|${r?.volume??""}`;for(let i=0;i<token.length;i++){hash^=token.charCodeAt(i);hash=Math.imul(hash,16777619)}})});return `${dates.at(-1)||"none"}|${dates.length}|${Object.keys(h).length}|${rows}|${(hash>>>0).toString(36)}`};
- const load=()=>{try{const x=JSON.parse(localStorage.getItem(KEY)||"null");return x&&typeof x==="object"?x:null}catch{return null}};
- const save=x=>{try{localStorage.setItem(KEY,JSON.stringify(x))}catch(_){}};
+ const historyFingerprint=(maximumDate=null)=>{const h=history();let hash=2166136261,rows=0,lastDate="none";Object.keys(h).sort().forEach(code=>{const codeToken=`#${code}|`;for(let i=0;i<codeToken.length;i++){hash^=codeToken.charCodeAt(i);hash=Math.imul(hash,16777619)}(Array.isArray(h[code])?h[code]:[]).forEach(r=>{const d=String(r?.date||"").slice(0,10);if(!d||(maximumDate&&d>maximumDate))return;rows++;if(lastDate==="none"||d>lastDate)lastDate=d;const token=`${d}|${r?.open??""}|${r?.high??""}|${r?.low??""}|${r?.close??""}|${r?.volume??""};`;for(let i=0;i<token.length;i++){hash^=token.charCodeAt(i);hash=Math.imul(hash,16777619)}})});return `${lastDate}|${Object.keys(h).length}|${rows}|${(hash>>>0).toString(36)}`};
+ const signature=()=>historyFingerprint();
+ const load=()=>{try{const x=JSON.parse(localStorage.getItem(KEY)||"null");if(!x||typeof x!=="object")return null;if(!Array.isArray(x.records)&&Array.isArray(x.packedRecords)&&Array.isArray(x.dates)&&Array.isArray(x.codes)){x.records=x.packedRecords.map(p=>({date:x.dates[p[0]],code:x.codes[p[1]],signal:ORDER[p[2]]||"Avoid",finalSignal:ORDER[p[3]]||"Avoid",rankingScore:Number(p[4])||0,entryClose:Number(p[5])||0})).filter(r=>r.date&&r.code&&r.entryClose>0)}return x}catch{return null}};
+ const save=x=>{try{const codes=[...new Set((x.records||[]).map(r=>r.code))].sort(),dateIndex=new Map((x.dates||[]).map((date,index)=>[date,index])),codeIndex=new Map(codes.map((code,index)=>[code,index])),signalIndex=value=>{const index=ORDER.indexOf(value);return index<0?ORDER.length-1:index},packedRecords=(x.records||[]).map(r=>[dateIndex.get(r.date),codeIndex.get(r.code),signalIndex(r.signal),signalIndex(r.finalSignal),Number(r.rankingScore)||0,Number(r.entryClose)||0]);const payload={...x,records:undefined,codes,packedRecords};localStorage.setItem(KEY,JSON.stringify(payload));return true}catch(_){return false}};
  const confidence=n=>n<=0?{label:"Insufficient",score:0}:n>=300?{label:"Very High",score:100}:n>=100?{label:"High",score:82}:n>=30?{label:"Medium",score:62}:n>=10?{label:"Low",score:38}:{label:"Very Low",score:20};
+ const marketSeriesCache={signature:"",rowsByCode:new Map(),indexByCode:new Map(),calendarDates:[],calendarIndex:new Map()};
+ function prepareMarketSeries(currentSignature=signature()){
+  if(marketSeriesCache.signature===currentSignature)return;
+  marketSeriesCache.signature=currentSignature;
+  marketSeriesCache.rowsByCode.clear();
+  marketSeriesCache.indexByCode.clear();
+  marketSeriesCache.calendarDates=allDates();
+  marketSeriesCache.calendarIndex=new Map(marketSeriesCache.calendarDates.map((date,index)=>[date,index]));
+  Object.entries(history()).forEach(([code,rows])=>{
+   const positive=(Array.isArray(rows)?rows:[]).filter(row=>row?.date&&num(row.close)!=null&&Number(row.close)>0).sort((a,b)=>String(a.date).localeCompare(String(b.date)));
+   const canonical=String(code||"").toUpperCase();
+   marketSeriesCache.rowsByCode.set(canonical,positive);
+   marketSeriesCache.indexByCode.set(canonical,new Map(positive.map((row,index)=>[String(row.date).slice(0,10),index])));
+  });
+ }
+ const positiveSeries=code=>marketSeriesCache.rowsByCode.get(String(code||"").toUpperCase())||[];
  function clearScannerCaches(){window.AitEliteSignalPriority?.clearCache?.();window.AitAdvancedSignalPriority?.clearCache?.();window.AitSignalPriorityHistory?.clearCache?.()}
- function closeAt(code,date){const rows=(history()[code]||[]).filter(r=>String(r?.date||"").slice(0,10)<=date&&num(r?.close)!=null).sort((a,b)=>String(a.date).localeCompare(String(b.date)));return rows.length?num(rows.at(-1).close):null}
+ function closeAt(code,date){const canonical=String(code||"").toUpperCase(),rows=positiveSeries(canonical),index=marketSeriesCache.indexByCode.get(canonical)?.get(date);return index==null?null:num(rows[index]?.close)}
  function setBusyProgress(title,text){try{window.AITEliteBusy?.update?.({title,text})}catch(_){}}
  const yieldBrowser=()=>new Promise(resolve=>setTimeout(resolve,0));
  async function reconstructAsync(force=false){
-  const dates=allDates(),sig=signature(),cached=load(),eligible=dates.slice(Math.min(MIN_LOOKBACK-1,dates.length));
+  const dates=allDates(),sig=signature(),cached=load(),eligible=dates.slice(Math.min(MIN_LOOKBACK-1,dates.length));prepareMarketSeries(sig);
   if(!force&&cached?.signature===sig&&Array.isArray(cached.records)&&Array.isArray(cached.dates))return cached;
   let records=[],startIndex=0,mode="Full reconstruction";
-  if(!force&&cached&&Array.isArray(cached.records)&&Array.isArray(cached.dates)&&cached.dates.length){
+  if(!force&&cached&&Array.isArray(cached.records)&&Array.isArray(cached.dates)&&cached.dates.length&&cached.historyEndDate&&cached.sourceFingerprint===historyFingerprint(cached.historyEndDate)){
    const common=Math.min(cached.dates.length,eligible.length);
    let prefix=0;while(prefix<common&&cached.dates[prefix]===eligible[prefix])prefix++;
    if(prefix===cached.dates.length&&eligible.length>=cached.dates.length){
@@ -11675,22 +11760,27 @@ document.addEventListener('DOMContentLoaded', () => {
    for(let i=0;i<pending.length;i++){
     const date=pending[i];window.__AIT_HISTORICAL_CUTOFF_DATE__=date;clearScannerCaches();
     const result=window.AitEliteSignalPriority?.calculate?.();
-    (result?.rows||[]).forEach(r=>{const entryClose=closeAt(r.code,date);if(entryClose==null)return;records.push({date,code:String(r.code||"").toUpperCase(),rank:Number(r.rank)||0,signalRank:Number(r.signalRank)||0,signal:r.signal||"Avoid",finalSignal:r.finalSignal||"Avoid",calibratedPriority:r.calibratedPriority||"Watch",rankPercentile:Number(r.rankPercentile)||100,eliteScore:Number(r.eliteScore)||0,advancedScore:Number(r.advancedScore)||0,entryClose})});
+    (result?.rows||[]).forEach(r=>{const entryClose=closeAt(r.code,date);if(entryClose==null)return;records.push({date,code:String(r.code||"").toUpperCase(),signal:r.signal||"Avoid",finalSignal:r.finalSignal||"Avoid",rankingScore:Number(r.rankingScore??r.advancedScore)||0,entryClose})});
     setBusyProgress(`${mode} • ${i+1}/${pending.length||1} dates`,`Reconstructing ${date}. Cached history is being reused wherever possible.`);
     await yieldBrowser();
    }
   }finally{if(previous)window.__AIT_HISTORICAL_CUTOFF_DATE__=previous;else delete window.__AIT_HISTORICAL_CUTOFF_DATE__;clearScannerCaches()}
-  const data={version:9,signature:sig,builtAt:new Date().toISOString(),dates:eligible,records};save(data);return data;
+  const historyEndDate=dates.at(-1)||null,data={version:15,signature:sig,sourceFingerprint:historyEndDate?historyFingerprint(historyEndDate):sig,historyEndDate,builtAt:new Date().toISOString(),dates:eligible,records};save(data);return data;
  }
- function evaluateRaw(r){const data=(history()[r.code]||[]).filter(x=>x?.date&&num(x.close)!=null).sort((a,b)=>String(a.date).localeCompare(String(b.date)));const idx=data.findIndex(x=>String(x.date).slice(0,10)===r.date);if(idx<0||!r.entryClose)return {...r,returns:{},mfe:null,mae:null};const base=Number(r.entryClose),returns={};H.forEach(h=>{const x=data[idx+h];returns[h]=x?((Number(x.close)/base)-1)*100:null});const future=data.slice(idx+1,Math.min(data.length,idx+21));return {...r,returns,mfe:future.length?Math.max(...future.map(x=>((Number(x.high??x.close)/base)-1)*100)):null,mae:future.length?Math.min(...future.map(x=>((Number(x.low??x.close)/base)-1)*100)):null}}
- function attachBenchmark(rows){const byDate=new Map();rows.forEach(r=>{if(!byDate.has(r.date))byDate.set(r.date,[]);byDate.get(r.date).push(r)});return rows.map(r=>{const peers=byDate.get(r.date)||[],benchmark={},excess={};H.forEach(h=>{const vals=peers.map(x=>x.returns?.[h]).filter(v=>v!=null&&Number.isFinite(v));benchmark[h]=mean(vals);excess[h]=r.returns?.[h]!=null&&benchmark[h]!=null?r.returns[h]-benchmark[h]:null});return {...r,benchmark,excess}})}
+ function evaluateRaw(r){const code=String(r.code||"").toUpperCase(),data=positiveSeries(code),rowIndex=marketSeriesCache.indexByCode.get(code),calendarIndex=marketSeriesCache.calendarIndex.get(r.date);if(calendarIndex==null||!r.entryClose)return {...r,returns:{},mfe:null,mae:null};const base=Number(r.entryClose),returns={};H.forEach(h=>{const targetDate=marketSeriesCache.calendarDates[calendarIndex+h],targetIndex=targetDate?rowIndex?.get(targetDate):null,x=targetIndex==null?null:data[targetIndex];returns[h]=x?((Number(x.close)/base)-1)*100:null});const futureDates=marketSeriesCache.calendarDates.slice(calendarIndex+1,calendarIndex+21),future=futureDates.map(date=>{const index=rowIndex?.get(date);return index==null?null:data[index]}).filter(Boolean);return {...r,returns,mfe:future.length?Math.max(...future.map(x=>((Number(x.high??x.close)/base)-1)*100)):null,mae:future.length?Math.min(...future.map(x=>((Number(x.low??x.close)/base)-1)*100)):null}}
+ function attachBenchmark(rows){const byDate=new Map();rows.forEach(r=>{if(!byDate.has(r.date))byDate.set(r.date,[]);byDate.get(r.date).push(r)});const benchmarkByDate=new Map();byDate.forEach((peers,date)=>{const benchmark={};H.forEach(h=>{const values=[];for(const peer of peers){const value=peer.returns?.[h];if(value!=null&&Number.isFinite(value))values.push(value)}benchmark[h]=mean(values)});benchmarkByDate.set(date,benchmark)});return rows.map(r=>{const benchmark=benchmarkByDate.get(r.date)||{},excess={};H.forEach(h=>{excess[h]=r.returns?.[h]!=null&&benchmark[h]!=null?r.returns[h]-benchmark[h]:null});return {...r,benchmark,excess}})}
  function stats(rows,h){const raw=rows.map(r=>r.returns?.[h]).filter(v=>v!=null&&Number.isFinite(v)),bench=rows.map(r=>r.benchmark?.[h]).filter(v=>v!=null&&Number.isFinite(v)),ex=rows.map(r=>r.excess?.[h]).filter(v=>v!=null&&Number.isFinite(v));return {n:ex.length,rawAvg:mean(raw),benchAvg:mean(bench),excessAvg:mean(ex),excessMedian:median(ex),excessWin:ex.length?ex.filter(v=>v>0).length/ex.length*100:null}}
  function validation(rows){const s3=stats(rows,3),s6=stats(rows,6),s9=stats(rows,9),n=Math.max(s3.n,s6.n,s9.n),conf=confidence(n);if(n<=0)return {score:null,confidence:conf,n:0,edge:null,win:null,risk:null};const weightedParts=[[s3.excessAvg,.2],[s6.excessAvg,.3],[s9.excessAvg,.5]].filter(([v])=>v!=null);const weightTotal=weightedParts.reduce((a,[,w])=>a+w,0)||1,weightedExcess=weightedParts.reduce((a,[v,w])=>a+v*w,0)/weightTotal,edge=clamp(50+weightedExcess*10),win=clamp(s9.excessWin??50),mfe=mean(rows.map(r=>r.mfe).filter(v=>v!=null)),mae=mean(rows.map(r=>r.mae).filter(v=>v!=null)),risk=mfe==null||mae==null?50:clamp((mfe/(Math.max(.01,mfe+Math.abs(mae))))*100);return {score:clamp(edge*.35+win*.30+conf.score*.20+risk*.15),confidence:conf,n,edge,win,risk}}
- function monotonicity(all){const vals=BUCKETS.map(b=>({b,v:stats(all.filter(r=>b.test(Number(r.eliteScore)||0)),9).excessAvg})).filter(x=>x.v!=null);if(vals.length<2)return 50;let good=0,total=0;for(let i=0;i<vals.length-1;i++){total++;if(vals[i].v>=vals[i+1].v)good++}return total?good/total*100:50}
- function globalValidation(all){const top=all.filter(r=>(Number(r.eliteScore)||0)>=80),v=validation(top.length?top:all),mono=monotonicity(all);return v.score==null?null:clamp(v.score*.75+mono*.25)}
+ function monotonicity(all){const vals=PERCENTILE_BANDS.map(b=>({b,v:stats(percentileBandRows(all,b.from,b.to),9).excessAvg})).filter(x=>x.v!=null);if(vals.length<2)return 50;let good=0,total=0;for(let i=0;i<vals.length-1;i++){total++;if(vals[i].v>=vals[i+1].v)good++}return total?good/total*100:50}
+ function globalValidation(all){const top=percentileRows(all,.10,"top"),v=validation(top.length?top:all),mono=monotonicity(all);return v.score==null?null:clamp(v.score*.75+mono*.25)}
  function percentileRows(all,fraction,side="top"){
   const byDate=new Map();all.forEach(r=>{if(!byDate.has(r.date))byDate.set(r.date,[]);byDate.get(r.date).push(r)});const selected=[];
-  byDate.forEach(rows=>{const sorted=[...rows].sort((a,b)=>(Number(b.eliteScore)||0)-(Number(a.eliteScore)||0)||(Number(a.rank)||0)-(Number(b.rank)||0));if(!sorted.length)return;const count=Math.max(1,Math.ceil(sorted.length*fraction));selected.push(...(side==="bottom"?sorted.slice(-count):sorted.slice(0,count)))});return selected;
+  byDate.forEach(rows=>{const sorted=[...rows].sort((a,b)=>(Number(b.rankingScore??b.advancedScore)||0)-(Number(a.rankingScore??a.advancedScore)||0)||(Number(a.rankingRank)||0)-(Number(b.rankingRank)||0));if(!sorted.length)return;const count=Math.max(1,Math.ceil(sorted.length*fraction));selected.push(...(side==="bottom"?sorted.slice(-count):sorted.slice(0,count)))});return selected;
+ }
+ function percentileBandRows(all,from,to){
+  const byDate=new Map();all.forEach(r=>{if(!byDate.has(r.date))byDate.set(r.date,[]);byDate.get(r.date).push(r)});const selected=[];
+  byDate.forEach(rows=>{const sorted=[...rows].sort((a,b)=>(Number(b.rankingScore??b.advancedScore)||0)-(Number(a.rankingScore??a.advancedScore)||0)||(Number(a.rankingRank)||0)-(Number(b.rankingRank)||0));if(!sorted.length)return;const start=Math.floor(sorted.length*from),end=Math.max(start+1,Math.ceil(sorted.length*to));selected.push(...sorted.slice(start,Math.min(sorted.length,end)))});
+  return selected;
  }
  const PERCENTILES=[
   {label:"Top 5%",rows:all=>percentileRows(all,.05,"top")},
@@ -11740,24 +11830,80 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   return {label,dates:w.dates.length,rows:w.rows,samples:w.rows.length,sb,buy,watch,avoid,spread20,rq,ordering,health};
  }
+ function strongBuyTrustWindow(all,dateCount,label){
+  const w=windowByDates(all,dateCount),sbRows=w.rows.filter(r=>(r.finalSignal||"Avoid")==="Strong Buy"),avoidRows=w.rows.filter(r=>(r.finalSignal||"Avoid")==="Avoid");
+  const s6=stats(sbRows,6),s9=stats(sbRows,9),s15=stats(sbRows,15),s20=stats(sbRows,20),a9=stats(avoidRows,9),a20=stats(avoidRows,20);
+  const spread9=s9.excessAvg==null||a9.excessAvg==null?null:s9.excessAvg-a9.excessAvg,spread20=s20.excessAvg==null||a20.excessAvg==null?null:s20.excessAvg-a20.excessAvg;
+  let trust="Insufficient";if(s9.n>=30){const strong=(s9.excessAvg??-99)>0&&(s15.excessAvg??-99)>0&&(spread9??-99)>.15&&(spread20??-99)>0;const acceptable=(s9.excessAvg??-99)>-.10&&(spread9??-99)>0&&(s20.excessAvg??-99)>-.20;trust=strong?"Trusted":acceptable?"Conditional":"Weak"}
+  return {label,dates:w.dates.length,samples:s9.n,s6,s9,s15,s20,spread9,spread20,trust};
+ }
+ function strongBuyTrust(all){
+  const windows=[strongBuyTrustWindow(all,20,"Recent 20D"),strongBuyTrustWindow(all,40,"Recent 40D"),strongBuyTrustWindow(all,60,"Recent 60D"),strongBuyTrustWindow(all,100,"Recent 100D"),strongBuyTrustWindow(all,null,"All History")];
+  const [recent,medium,confirm,regime,history]=windows;let overall="Insufficient";
+  if(history.samples>=30){if(confirm.trust==="Weak"&&regime.trust==="Weak")overall="Weak";else if(regime.trust==="Trusted"&&["Trusted","Conditional"].includes(confirm.trust))overall=(recent.trust==="Weak"||medium.trust==="Weak")?"Conditional":"Trusted";else if(["Trusted","Conditional"].includes(regime.trust)||["Trusted","Conditional"].includes(confirm.trust))overall="Conditional";else overall=history.trust}
+  return {overall,windows};
+ }
+ function strongBuyComparison(all){
+  const sb=all.filter(r=>(r.finalSignal||"Avoid")==="Strong Buy"),others=all.filter(r=>(r.finalSignal||"Avoid")!=="Strong Buy");
+  const groups=[{label:"SB vs Buy",rows:all.filter(r=>(r.finalSignal||"Avoid")==="Buy")},{label:"SB vs Watch",rows:all.filter(r=>(r.finalSignal||"Avoid")==="Watch")},{label:"SB vs Avoid",rows:all.filter(r=>(r.finalSignal||"Avoid")==="Avoid")},{label:"SB vs All Non-SB",rows:others}];
+  return groups.map(g=>{const spreads={};H.filter(h=>h!==1).forEach(h=>{const a=stats(sb,h).excessAvg,b=stats(g.rows,h).excessAvg;spreads[h]=a==null||b==null?null:a-b});return {label:g.label,spreads}});
+ }
+function strongBuyTimeConsistency(all,blockSize=20){
+  const dates=[...new Set(all.map(r=>r.date))].sort(),blocks=[];for(let i=0;i<dates.length;i+=blockSize){const ds=dates.slice(i,i+blockSize);if(ds.length<Math.min(10,blockSize))continue;const set=new Set(ds),rows=all.filter(r=>set.has(r.date)),sb=rows.filter(r=>(r.finalSignal||"Avoid")==="Strong Buy"),non=rows.filter(r=>(r.finalSignal||"Avoid")!=="Strong Buy"),s9=stats(sb,9),n9=stats(non,9),s20=stats(sb,20),n20=stats(non,20),spread9=s9.excessAvg==null||n9.excessAvg==null?null:s9.excessAvg-n9.excessAvg,spread20=s20.excessAvg==null||n20.excessAvg==null?null:s20.excessAvg-n20.excessAvg;blocks.push({label:`${ds[0]} → ${ds.at(-1)}`,dates:ds.length,samples:s9.n,s9,spread9,spread20,result:s9.n<10?"Insufficient":(s9.excessAvg>0&&spread9>0)?"Positive":"Weak"})}const eligible=blocks.filter(b=>b.result!=="Insufficient"),positive=eligible.filter(b=>b.result==="Positive").length,ratio=eligible.length?positive/eligible.length:null;return {blocks,eligible:eligible.length,positive,ratio,label:ratio==null?"Insufficient":ratio>=.65?"Consistent":ratio>=.5?"Mixed":"Unstable"};
+ }
+ function hacInterval(rows,horizon=9){
+  const byDate=new Map();rows.forEach(r=>{const value=r.excess?.[horizon];if(value==null||!Number.isFinite(value))return;if(!byDate.has(r.date))byDate.set(r.date,[]);byDate.get(r.date).push(value)});
+  const values=[...byDate.entries()].sort(([a],[b])=>a.localeCompare(b)).map(([,items])=>mean(items)).filter(v=>v!=null),n=values.length;
+  if(n<12)return {n,mean:mean(values),lower:null,upper:null,se:null};
+  const average=mean(values),centered=values.map(v=>v-average),bandwidth=Math.min(Math.max(1,horizon),n-1);
+  let longRunVariance=centered.reduce((sum,v)=>sum+v*v,0)/n;
+  for(let lag=1;lag<=bandwidth;lag++){let covariance=0;for(let i=lag;i<n;i++)covariance+=centered[i]*centered[i-lag];covariance/=n;longRunVariance+=2*(1-lag/(bandwidth+1))*covariance}
+  const se=Math.sqrt(Math.max(0,longRunVariance)/n),margin=1.96*se;return {n,mean:average,lower:average-margin,upper:average+margin,se};
+ }
+ function temporalHoldoutValidation(all){
+  const dates=[...new Set(all.map(r=>r.date).filter(Boolean))].sort(),developmentEnd=Math.floor(dates.length*.60),validationEnd=Math.floor(dates.length*.80);
+  const definitions=[{label:"Development 60%",dates:dates.slice(0,developmentEnd)},{label:"Validation 20%",dates:dates.slice(developmentEnd,validationEnd)},{label:"Final Holdout 20%",dates:dates.slice(validationEnd)}];
+  const periods=definitions.map(period=>{const selected=new Set(period.dates),rows=all.filter(r=>selected.has(r.date)),rq=rankingQuality(rows),top10=stats(percentileRows(rows,.10,"top"),9),bottom20=stats(percentileRows(rows,.20,"bottom"),9),sb9=stats(rows.filter(r=>(r.finalSignal||"Avoid")==="Strong Buy"),9),spread=top10.excessAvg==null||bottom20.excessAvg==null?null:top10.excessAvg-bottom20.excessAvg;let result="Insufficient";if(period.dates.length>=20&&top10.n>=30&&bottom20.n>=30){if((rq.score??0)>=60&&(spread??-99)>0&&(top10.excessAvg??-99)>0)result="Pass";else if((rq.score??0)>=60&&(spread??-99)>0)result="Caution";else result="Fail"}return {...period,rows:rows.length,rq,top10,bottom20,spread,sb9,result}});
+  return {periods,holdout:periods.at(-1)||null};
+ }
+ function reliabilityAssessment(health,trust,consistency,temporal,interval){
+  const holdout=temporal.holdout,history=trust.windows.at(-1),rankPeriods=temporal.periods.filter(p=>p.result!=="Insufficient"),rankPass=rankPeriods.length===3&&rankPeriods.every(p=>p.result==="Pass"),structuralSignal=history?.trust==="Trusted"&&(history?.s9?.excessAvg??-99)>0,holdoutSignal=(holdout?.sb9?.n??0)>=30&&(holdout?.sb9?.excessAvg??-99)>0,statisticallySupported=interval?.lower!=null&&interval.lower>0;
+  let status="NOT RELIABLE";if(rankPass&&structuralSignal&&holdoutSignal&&statisticallySupported&&consistency.label==="Consistent")status="RELIABLE";else if(rankPass&&structuralSignal&&holdoutSignal&&!(["Recalibration Required","Degraded"].includes(health)))status="CONDITIONAL";
+  const reasons=[];reasons.push(rankPass?"Advanced Rank passed all three chronological periods":"Advanced Rank did not pass every chronological period");reasons.push(structuralSignal?"all-history Strong Buy edge is positive and trusted":"all-history Strong Buy evidence is not trusted");reasons.push(holdoutSignal?"Strong Buy is positive in the final holdout":"Strong Buy is not positive with 30+ samples in the final holdout");reasons.push(consistency.label==="Consistent"?`time consistency is ${consistency.positive}/${consistency.eligible}`:`time consistency is only ${consistency.positive}/${consistency.eligible} eligible blocks`);reasons.push(statisticallySupported?"the date-clustered 95% lower bound is above zero":"the date-clustered 95% range still includes zero");if(health!=="Healthy")reasons.push(`current rolling health is ${health}`);return {status,reasons,rankPass,structuralSignal,holdoutSignal,statisticallySupported};
+ }
+ function decisionGate(health,trust,consistency,reliability){
+  if(["Recalibration Required","Degraded"].includes(health))return "LOCKED";
+  if(reliability?.status==="NOT RELIABLE")return "LOCKED";
+  if(trust==="Weak"||trust==="Insufficient")return "LOCKED";
+  if(consistency.label==="Unstable")return "LOCKED";
+  if(reliability?.status==="RELIABLE"&&health==="Healthy"&&trust==="Trusted"&&consistency.label==="Consistent")return "OPEN";
+  return "CONFIRMATION ONLY";
+ }
  function calibrationHealth(all){
+  // v4.1: separate immediate regime stress from structural model failure.
+  // 20D/40D can lock BUY NOW through Caution, but recalibration requires
+  // deterioration that persists through the 60D and 100D confirmation windows.
   const windows=[
     rollingHealth(all,20,"Recent 20D"),
     rollingHealth(all,40,"Recent 40D"),
     rollingHealth(all,60,"Recent 60D"),
+    rollingHealth(all,100,"Recent 100D"),
     rollingHealth(all,null,"All History")
   ];
-  const recent=windows[0],medium=windows[1],confirm=windows[2],history=windows[3];
+  const recent=windows[0],medium=windows[1],confirm=windows[2],regime=windows[3],history=windows[4];
   const known=windows.filter(w=>w.health!=="Insufficient Data");
   let overall="Insufficient Data";
   if(known.length){
-    const recentBad=recent.health==="Degraded";
-    const mediumBad=medium.health==="Degraded";
-    const confirmBad=confirm.health==="Degraded";
-    if(recentBad&&mediumBad&&confirmBad)overall="Recalibration Required";
-    else if(recentBad&&mediumBad)overall="Degraded";
-    else if(recentBad||recent.health==="Caution"||mediumBad||medium.health==="Caution")overall="Caution";
-    else if(history.health==="Healthy"||confirm.health==="Healthy")overall="Healthy";
+    const bad=w=>w.health==="Degraded";
+    const warn=w=>w.health==="Caution"||w.health==="Degraded";
+    // Structural failure: weakness persists beyond the latest short window.
+    if(bad(medium)&&bad(confirm)&&bad(regime))overall="Recalibration Required";
+    else if(bad(confirm)&&bad(regime))overall="Degraded";
+    // Short-lived regime weakness remains a safety lock, but does not label
+    // the model itself broken when 60D/100D evidence is still acceptable.
+    else if(bad(recent)||bad(medium)||warn(confirm)||warn(regime))overall="Caution";
+    else if(confirm.health==="Healthy"&&regime.health==="Healthy")overall="Healthy";
+    else if(regime.health==="Healthy")overall="Healthy";
     else overall=known[0].health;
   }
   return {overall,windows};
@@ -11771,32 +11917,53 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   return out;
  }
+ const evaluatedMemoryCache={signature:"",built:null,all:null};
  async function evaluatedAsync(force=false){
+  const currentSignature=signature();
+  if(!force&&evaluatedMemoryCache.signature===currentSignature&&evaluatedMemoryCache.built&&Array.isArray(evaluatedMemoryCache.all))return {built:evaluatedMemoryCache.built,all:evaluatedMemoryCache.all};
   const built=await reconstructAsync(force);
   const raw=await evaluateRecordsAsync(built.records||[]);
   setBusyProgress("Building benchmark & validation","Calculating excess returns, percentile ranking and rolling calibration health.");
   await yieldBrowser();
-  return {built,all:attachBenchmark(raw)};
+  const all=attachBenchmark(raw);evaluatedMemoryCache.signature=currentSignature;evaluatedMemoryCache.built=built;evaluatedMemoryCache.all=all;return {built,all};
  }
+ let lastRenderedSignature="";
  async function render(force=false){
+  const currentSignature=signature();if(!force&&lastRenderedSignature===currentSignature&&Array.isArray(evaluatedMemoryCache.all))return evaluatedMemoryCache.all;
   const status=document.getElementById("aitElitePerformanceAutoStatus");if(status)status.textContent="Analyzing OHLC…";const {built,all}=await evaluatedAsync(force);
   document.getElementById("aitElitePerfSnapshots")?.replaceChildren(document.createTextNode(String((built.dates||[]).length)));
-  document.getElementById("aitElitePerfSignals")?.replaceChildren(document.createTextNode(String(all.filter(r=>Object.values(r.excess||{}).some(v=>v!=null)).length)));
-  const sb9=stats(all.filter(r=>(r.finalSignal||"Avoid")==="Strong Buy"),9),global=globalValidation(all),rankQuality=rankingQuality(all),health=calibrationHealth(all);
+  document.getElementById("aitElitePerfSignals")?.replaceChildren(document.createTextNode(String(all.length)));
+  document.getElementById("aitElitePerf9dSignals")?.replaceChildren(document.createTextNode(String(stats(all,9).n)));
+  const sbRows=all.filter(r=>(r.finalSignal||"Avoid")==="Strong Buy"),sb9=stats(sbRows,9),global=globalValidation(all),rankQuality=rankingQuality(all),health=calibrationHealth(all);
   document.getElementById("aitElitePerfWin9")?.replaceChildren(document.createTextNode(pct(sb9.excessAvg)));
   document.getElementById("aitElitePerfAvg9")?.replaceChildren(document.createTextNode(global==null?"N/A":global.toFixed(1)));
   document.getElementById("aitElitePerfRankingQuality")?.replaceChildren(document.createTextNode(rankQuality.score==null?"N/A":`${rankQuality.score.toFixed(1)} • ${rankQuality.label}`));
+  const sbTrust=strongBuyTrust(all),sbCompare=strongBuyComparison(all),sbConsistency=strongBuyTimeConsistency(all),temporal=temporalHoldoutValidation(all),sbCi=hacInterval(sbRows,9),reliability=reliabilityAssessment(health.overall,sbTrust,sbConsistency,temporal,sbCi),gate=decisionGate(health.overall,sbTrust.overall,sbConsistency,reliability);
+  document.getElementById("aitEliteReliabilityState")?.replaceChildren(document.createTextNode(reliability.status));
+  document.getElementById("aitEliteHoldoutRank")?.replaceChildren(document.createTextNode(temporal.holdout?.rq?.score==null?"N/A":`${temporal.holdout.rq.score.toFixed(1)} • ${temporal.holdout.result}`));
   document.getElementById("aitElitePerfCalibrationHealth")?.replaceChildren(document.createTextNode(health.overall));
-  try{localStorage.setItem("ait-psa-elite-model-state-v1",JSON.stringify({overall:health.overall,updatedAt:new Date().toISOString(),dates:(built.dates||[]).length,signature:signature()}))}catch{}
-  if(status)status.textContent=`On-demand v3.2 async • ${(built.dates||[]).length} dates • ${health.overall}`;
+  document.getElementById("aitEliteDecisionGate")?.replaceChildren(document.createTextNode(gate));
+  document.getElementById("aitEliteSbConsistency")?.replaceChildren(document.createTextNode(sbConsistency.ratio==null?"N/A":`${(sbConsistency.ratio*100).toFixed(0)}% (${sbConsistency.positive}/${sbConsistency.eligible}) • ${sbConsistency.label}`));
+  document.getElementById("aitEliteStrongBuyTrustState")?.replaceChildren(document.createTextNode(sbTrust.overall));const sbAll=sbTrust.windows.at(-1);
+  document.getElementById("aitEliteStrongBuyTrustSamples")?.replaceChildren(document.createTextNode(String(sbAll?.samples||0)));
+  document.getElementById("aitEliteStrongBuyTrust9D")?.replaceChildren(document.createTextNode(pct(sbAll?.s9?.excessAvg??null)));
+  document.getElementById("aitEliteStrongBuyTrust20D")?.replaceChildren(document.createTextNode(pct(sbAll?.s20?.excessAvg??null)));
+  document.getElementById("aitEliteStrongBuyTrustCi")?.replaceChildren(document.createTextNode(sbCi.lower==null||sbCi.upper==null?"N/A":`${pct(sbCi.lower)} to ${pct(sbCi.upper)}`));
+  document.getElementById("aitEliteReliabilityReason")?.replaceChildren(document.createTextNode(`Reliability: ${reliability.reasons.join("; ")}.`));
+  try{localStorage.setItem("ait-psa-elite-model-state-v8",JSON.stringify({overall:health.overall,reliability:reliability.status,strongBuyTrust:sbTrust.overall,decisionGate:gate,strongBuyConsistency:sbConsistency.label,strongBuyConsistencyRatio:sbConsistency.ratio,holdoutRankQuality:temporal.holdout?.rq?.score??null,holdoutStrongBuy9D:temporal.holdout?.sb9?.excessAvg??null,updatedAt:new Date().toISOString(),dates:(built.dates||[]).length,signature:signature()}))}catch{}
+  if(status)status.textContent=`On-demand v4.4 reliability-validation • ${(built.dates||[]).length} dates • ${reliability.status} • ${health.overall} • SB ${sbTrust.overall} • ${gate}`;
   const rollingBody=document.getElementById("aitElitePerformanceRollingRows");if(rollingBody){rollingBody.innerHTML=health.windows.map(w=>`<tr><td><strong>${w.label}</strong></td><td>${w.dates}</td><td>${w.samples}</td><td>${pct(w.sb.excessAvg)}</td><td>${pct(w.buy.excessAvg)}</td><td>${pct(w.watch.excessAvg)}</td><td>${pct(w.avoid.excessAvg)}</td><td>${pct(w.spread20)}</td><td>${w.rq.score==null?"N/A":w.rq.score.toFixed(1)+" • "+w.rq.label}</td><td>${w.ordering.label}</td><td><strong>${w.health}</strong></td></tr>`).join("")}
+  const trustBody=document.getElementById("aitEliteStrongBuyTrustRows");if(trustBody){trustBody.innerHTML=sbTrust.windows.map(w=>`<tr><td><strong>${w.label}</strong></td><td>${w.samples}</td><td>${pct(w.s6.excessAvg)}</td><td>${pct(w.s9.excessAvg)}</td><td>${pct(w.s15.excessAvg)}</td><td>${pct(w.s20.excessAvg)}</td><td>${pct(w.spread9)}</td><td>${pct(w.spread20)}</td><td><strong>${w.trust}</strong></td></tr>`).join("")}
+  const compareBody=document.getElementById("aitEliteStrongBuyCompareRows");if(compareBody){compareBody.innerHTML=sbCompare.map(g=>`<tr><td><strong>${g.label}</strong></td><td>${pct(g.spreads[3])}</td><td>${pct(g.spreads[6])}</td><td>${pct(g.spreads[9])}</td><td>${pct(g.spreads[15])}</td><td>${pct(g.spreads[20])}</td></tr>`).join("")}
+  const consistencyBody=document.getElementById("aitEliteStrongBuyConsistencyRows");if(consistencyBody){consistencyBody.innerHTML=sbConsistency.blocks.map(b=>`<tr><td><strong>${b.label}</strong></td><td>${b.dates}</td><td>${b.samples}</td><td>${pct(b.s9.excessAvg)}</td><td>${pct(b.spread9)}</td><td>${pct(b.spread20)}</td><td><strong>${b.result}</strong></td></tr>`).join("")}
+  const temporalBody=document.getElementById("aitEliteTemporalValidationRows");if(temporalBody){temporalBody.innerHTML=temporal.periods.map(p=>`<tr><td><strong>${p.label}</strong><small style="display:block">${p.dates[0]||"—"} → ${p.dates.at(-1)||"—"}</small></td><td>${p.dates.length}</td><td>${p.rows}</td><td>${p.rq.score==null?"N/A":p.rq.score.toFixed(1)+" • "+p.rq.label}</td><td>${pct(p.top10.excessAvg)}</td><td>${pct(p.bottom20.excessAvg)}</td><td>${pct(p.spread)}</td><td>${p.sb9.n}</td><td>${pct(p.sb9.excessAvg)}</td><td><strong>${p.result}</strong></td></tr>`).join("")}
   const tbody=document.getElementById("aitElitePerformanceRows");
   if(tbody){if(!all.length)tbody.innerHTML=`<tr><td colspan="15">No eligible Elite history could be reconstructed. At least ${MIN_LOOKBACK} downloaded trading dates are required.</td></tr>`;else tbody.innerHTML=ORDER.map(sig=>{const rows=all.filter(r=>r.signal===sig),v=validation(rows),s3=stats(rows,3),s6=stats(rows,6),s9=stats(rows,9),s15=stats(rows,15),s20=stats(rows,20),mfe=mean(rows.map(r=>r.mfe).filter(x=>x!=null)),mae=mean(rows.map(r=>r.mae).filter(x=>x!=null));return `<tr><td><strong>${sig}</strong></td><td>${v.n}</td><td>${v.confidence.label}</td><td>${pct(s3.rawAvg)}</td><td>${pct(s3.excessAvg)}</td><td>${pct(s6.rawAvg)}</td><td>${pct(s6.excessAvg)}</td><td>${pct(s9.rawAvg)}</td><td>${pct(s9.excessAvg)}</td><td>${s9.excessWin==null?"—":s9.excessWin.toFixed(1)+"%"}</td><td>${pct(s15.excessAvg)}</td><td>${pct(s20.excessAvg)}</td><td>${pct(mfe)}</td><td>${pct(mae)}</td><td><strong>${v.score==null?"N/A":v.score.toFixed(1)}</strong></td></tr>`}).join("")}
   const calibratedBody=document.getElementById("aitElitePerformanceCalibratedRows");if(calibratedBody){calibratedBody.innerHTML=ORDER.map(sig=>{const rows=all.filter(r=>(r.finalSignal||"Avoid")===sig),v=validation(rows),s3=stats(rows,3),s6=stats(rows,6),s9=stats(rows,9),s15=stats(rows,15),s20=stats(rows,20),mfe=mean(rows.map(r=>r.mfe).filter(x=>x!=null)),mae=mean(rows.map(r=>r.mae).filter(x=>x!=null));return `<tr><td><strong>${sig}</strong></td><td>${v.n}</td><td>${v.confidence.label}</td><td>${pct(s3.excessAvg)}</td><td>${pct(s6.excessAvg)}</td><td>${pct(s9.excessAvg)}</td><td>${s9.excessWin==null?"—":s9.excessWin.toFixed(1)+"%"}</td><td>${pct(s15.excessAvg)}</td><td>${pct(s20.excessAvg)}</td><td>${pct(mfe)}</td><td>${pct(mae)}</td><td><strong>${v.score==null?"N/A":v.score.toFixed(1)}</strong></td></tr>`}).join("")}
-    const bucketBody=document.getElementById("aitElitePerformanceBucketRows");if(bucketBody){bucketBody.innerHTML=BUCKETS.map(b=>{const rows=all.filter(r=>b.test(Number(r.eliteScore)||0)),v=validation(rows),s3=stats(rows,3),s6=stats(rows,6),s9=stats(rows,9),s15=stats(rows,15),s20=stats(rows,20),mfe=mean(rows.map(r=>r.mfe).filter(x=>x!=null)),mae=mean(rows.map(r=>r.mae).filter(x=>x!=null));return `<tr><td><strong>${b.label}</strong></td><td>${v.n}</td><td>${v.confidence.label}</td><td>${pct(s3.excessAvg)}</td><td>${pct(s6.excessAvg)}</td><td>${pct(s9.excessAvg)}</td><td>${s9.excessWin==null?"—":s9.excessWin.toFixed(1)+"%"}</td><td>${pct(s15.excessAvg)}</td><td>${pct(s20.excessAvg)}</td><td>${pct(mfe)}</td><td>${pct(mae)}</td><td><strong>${v.score==null?"N/A":v.score.toFixed(1)}</strong></td></tr>`}).join("")}
+    const bucketBody=document.getElementById("aitElitePerformanceBucketRows");if(bucketBody){bucketBody.innerHTML=PERCENTILE_BANDS.map(b=>{const rows=percentileBandRows(all,b.from,b.to),v=validation(rows),s3=stats(rows,3),s6=stats(rows,6),s9=stats(rows,9),s15=stats(rows,15),s20=stats(rows,20),mfe=mean(rows.map(r=>r.mfe).filter(x=>x!=null)),mae=mean(rows.map(r=>r.mae).filter(x=>x!=null));return `<tr><td><strong>${b.label}</strong></td><td>${v.n}</td><td>${v.confidence.label}</td><td>${pct(s3.excessAvg)}</td><td>${pct(s6.excessAvg)}</td><td>${pct(s9.excessAvg)}</td><td>${s9.excessWin==null?"—":s9.excessWin.toFixed(1)+"%"}</td><td>${pct(s15.excessAvg)}</td><td>${pct(s20.excessAvg)}</td><td>${pct(mfe)}</td><td>${pct(mae)}</td><td><strong>${v.score==null?"N/A":v.score.toFixed(1)}</strong></td></tr>`}).join("")}
   const percentileBody=document.getElementById("aitElitePerformancePercentileRows");if(percentileBody){percentileBody.innerHTML=PERCENTILES.map(g=>{const rows=g.rows(all),v=validation(rows),s3=stats(rows,3),s6=stats(rows,6),s9=stats(rows,9),s15=stats(rows,15),s20=stats(rows,20);return `<tr><td><strong>${g.label}</strong></td><td>${v.n}</td><td>${v.confidence.label}</td><td>${pct(s3.excessAvg)}</td><td>${pct(s6.excessAvg)}</td><td>${pct(s9.excessAvg)}</td><td>${s9.excessWin==null?"—":s9.excessWin.toFixed(1)+"%"}</td><td>${pct(s15.excessAvg)}</td><td>${pct(s20.excessAvg)}</td><td><strong>${v.score==null?"N/A":v.score.toFixed(1)}</strong></td></tr>`}).join("")}
   const horizonBody=document.getElementById("aitElitePerformanceHorizonRows");if(horizonBody){horizonBody.innerHTML=H.map(h=>{const st=stats(all,h);return `<tr><td><strong>${h}D</strong></td><td>${st.n}</td><td>${pct(st.rawAvg)}</td><td>${pct(st.benchAvg)}</td><td>${pct(st.excessAvg)}</td><td>${st.excessWin==null?"—":st.excessWin.toFixed(1)+"%"}</td></tr>`}).join("")}
-  return all;
+  lastRenderedSignature=currentSignature;return all;
  }
  let lastObservedSignature="",activeRun=null;
  async function runOnDemand(force=false){
@@ -11807,9 +11974,9 @@ document.addEventListener('DOMContentLoaded', () => {
  document.querySelectorAll('[data-ait-psa-open="aitElitePerformanceModal"]').forEach(button=>{
   button.addEventListener("click",()=>window.AITEliteBusy?.execute?.({kicker:"AIT ELITE PERFORMANCE",title:"Reconstructing performance history",text:"Replaying downloaded OHLC, evaluating rolling windows and measuring calibration health…"},()=>runOnDemand()));
  });
- const storedModelSignature=()=>{try{const v=JSON.parse(localStorage.getItem("ait-psa-elite-model-state-v1")||"null");return v&&typeof v==="object"?String(v.signature||""):""}catch{return ""}};
+ const storedModelSignature=()=>{try{const v=JSON.parse(localStorage.getItem("ait-psa-elite-model-state-v8")||"null");return v&&typeof v==="object"?String(v.signature||""):""}catch{return ""}};
  async function ensureCurrent(){const current=signature();if(!current||current.startsWith("none|"))return false;if(storedModelSignature()!==current){await runOnDemand(false);return true}return false}
- window.AitElitePerformance={rebuild:()=>{try{localStorage.removeItem(KEY)}catch(_){}lastObservedSignature="";return runOnDemand(true)},evaluate:async()=>{const x=await evaluatedAsync(false);return x.all},render:runOnDemand,ensureCurrent,currentSignature:signature,storageKey:KEY};
+ window.AitElitePerformance={rebuild:()=>{try{localStorage.removeItem(KEY)}catch(_){}evaluatedMemoryCache.signature="";evaluatedMemoryCache.built=null;evaluatedMemoryCache.all=null;lastRenderedSignature="";lastObservedSignature="";return runOnDemand(true)},evaluate:async()=>{const x=await evaluatedAsync(false);return x.all},render:runOnDemand,ensureCurrent,currentSignature:signature,storageKey:KEY};
 })();
 </script>
 <script>
