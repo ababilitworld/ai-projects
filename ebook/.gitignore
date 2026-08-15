@@ -1,0 +1,7 @@
+/vendor/
+/storage/cache/*
+/storage/logs/*
+/storage/exports/*
+/storage/imports/*
+/storage/backups/*
+!.gitkeep

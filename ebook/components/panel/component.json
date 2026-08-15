@@ -1,0 +1,10 @@
+{
+  "type": "panel",
+  "name": "Panel",
+  "category": "content",
+  "version": "1.0.0",
+  "pagination": {
+    "can_split": true,
+    "repeat_header": true
+  }
+}

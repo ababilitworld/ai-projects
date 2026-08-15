@@ -1020,6 +1020,9 @@ header h1{font-size:1.55rem!important}
  gap:10px;
  min-width:0;
 }
+
+.v11-ranked-ranking-badge{display:inline-flex;align-items:center;gap:4px;margin-left:5px;padding:3px 7px;border-radius:999px;font-size:.63rem;font-weight:900;line-height:1;letter-spacing:.01em;border:1px solid var(--v10-line);white-space:nowrap;vertical-align:middle}.v11-ranked-ranking-badge--signal{background:color-mix(in srgb,var(--v10-primary) 12%,var(--v10-card));border-color:color-mix(in srgb,var(--v10-primary) 34%,var(--v10-line));color:var(--v10-primary)}.v11-ranked-ranking-badge--overall{background:color-mix(in srgb,#7c3aed 10%,var(--v10-card));border-color:color-mix(in srgb,#7c3aed 30%,var(--v10-line));color:#6d28d9}
+.v11-ranked-priority-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 8px;border-radius:999px;font-size:.66rem;font-weight:800;line-height:1;letter-spacing:.02em;border:1px solid var(--v10-line);background:var(--v10-bg);color:var(--v10-text);white-space:nowrap;margin-left:6px;vertical-align:middle}.v11-ranked-priority-badge--elite-priority,.v11-ranked-priority-badge--high-priority,.v11-ranked-priority-badge--high{background:color-mix(in srgb,#16a34a 14%,var(--v10-bg));border-color:color-mix(in srgb,#16a34a 35%,var(--v10-line));color:#166534}.v11-ranked-priority-badge--candidate,.v11-ranked-priority-badge--medium,.v11-ranked-priority-badge--confirmation{background:color-mix(in srgb,#d97706 14%,var(--v10-bg));border-color:color-mix(in srgb,#d97706 35%,var(--v10-line));color:#92400e}.v11-ranked-priority-badge--watch,.v11-ranked-priority-badge--low{background:color-mix(in srgb,#64748b 12%,var(--v10-bg));border-color:color-mix(in srgb,#64748b 30%,var(--v10-line));color:#475569}.v11-ranked-priority-badge--avoid{background:color-mix(in srgb,#dc2626 12%,var(--v10-bg));border-color:color-mix(in srgb,#dc2626 30%,var(--v10-line));color:#991b1b}
 .v11-ranked-chart-title h3{
  margin:0;
  color:var(--v10-text);
@@ -4789,6 +4792,16 @@ body.ait-elite-is-calculating *{cursor:progress!important}
 </style>
 
 <style id="ait-elite-details-groups-v10104">
+#aitEliteRegimeDetailModal .ait-elite-detail-card{width:min(100%,1160px);margin-inline:auto;background:transparent;border:0;box-shadow:none}
+#aitEliteRegimeDetailModal .ait-elite-detail-group{padding:14px;border:1px solid var(--v10-line,var(--line,#334155));border-radius:14px;margin-bottom:12px;background:color-mix(in srgb,var(--v10-card,#0f172a) 96%,transparent)}
+#aitEliteRegimeDetailModal .ait-elite-detail-group-head{margin-bottom:10px}
+#aitEliteRegimeDetailModal .ait-elite-detail-group-head h3{margin:0;font-size:.95rem;line-height:1.3;color:var(--v10-text,var(--text,#e2e8f0))}
+#aitEliteRegimeDetailModal .ait-elite-detail-group-head p{margin:4px 0 0;font-size:.75rem;line-height:1.45;color:var(--v10-muted,var(--muted,#94a3b8))}
+#aitEliteRegimeDetailModal .ait-elite-detail-group .ait-fundamental-strip{margin:0;grid-template-columns:repeat(3,minmax(0,1fr))}
+#aitEliteRegimeDetailModal .ait-fundamental-item b{white-space:normal;overflow:visible;text-overflow:clip;line-height:1.35}
+@media(max-width:820px){#aitEliteRegimeDetailModal .ait-elite-detail-group .ait-fundamental-strip{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){#aitEliteRegimeDetailModal .ait-elite-detail-group .ait-fundamental-strip{grid-template-columns:1fr}}
+
 #aitEliteDecisionDetailModal .ait-elite-detail-group{
  width:min(100%,1160px);margin:0 auto 14px;padding:14px;
  border:1px solid var(--v10-line,var(--line,#334155));border-radius:16px;
@@ -4956,6 +4969,110 @@ body.ait-elite-is-calculating *{cursor:progress!important}
   #aitElitePriorityModal .v11-potential-table td{padding:9px 8px}
 }
 </style>
+<style id="ait-elite-regime-table-layout-v10117">
+/* AIT Elite Regime — mirror AIT Elite table comfort/layout without changing logic */
+#aitEliteRegimeModal .v11-scanner-table-wrap,
+#aitEliteRegimeWorkspace .v11-scanner-table-wrap{
+  overflow-x:auto!important;
+  overflow-y:visible!important;
+  -webkit-overflow-scrolling:touch;
+  scrollbar-gutter:stable both-edges;
+}
+#aitEliteRegimeModal .v11-potential-table,
+#aitEliteRegimeWorkspace .v11-potential-table{
+  width:100%;
+  min-width:1460px;
+  table-layout:fixed;
+  border-collapse:separate;
+  border-spacing:0;
+}
+#aitEliteRegimeModal .v11-potential-table th,
+#aitEliteRegimeModal .v11-potential-table td,
+#aitEliteRegimeWorkspace .v11-potential-table th,
+#aitEliteRegimeWorkspace .v11-potential-table td{
+  vertical-align:top;
+  white-space:normal!important;
+  overflow-wrap:anywhere;
+  word-break:normal;
+  line-height:1.4;
+  padding:11px 10px;
+}
+#aitEliteRegimeModal .v11-potential-table th,
+#aitEliteRegimeWorkspace .v11-potential-table th{white-space:nowrap!important}
+#aitEliteRegimeModal .v11-potential-table th:nth-child(1),
+#aitEliteRegimeModal .v11-potential-table td:nth-child(1),
+#aitEliteRegimeWorkspace .v11-potential-table th:nth-child(1),
+#aitEliteRegimeWorkspace .v11-potential-table td:nth-child(1){width:125px}
+#aitEliteRegimeModal .v11-potential-table th:nth-child(2),
+#aitEliteRegimeModal .v11-potential-table td:nth-child(2),
+#aitEliteRegimeWorkspace .v11-potential-table th:nth-child(2),
+#aitEliteRegimeWorkspace .v11-potential-table td:nth-child(2){width:125px}
+#aitEliteRegimeModal .v11-potential-table th:nth-child(3),
+#aitEliteRegimeModal .v11-potential-table td:nth-child(3),
+#aitEliteRegimeWorkspace .v11-potential-table th:nth-child(3),
+#aitEliteRegimeWorkspace .v11-potential-table td:nth-child(3){width:90px}
+#aitEliteRegimeModal .v11-potential-table th:nth-child(4),
+#aitEliteRegimeModal .v11-potential-table td:nth-child(4),
+#aitEliteRegimeWorkspace .v11-potential-table th:nth-child(4),
+#aitEliteRegimeWorkspace .v11-potential-table td:nth-child(4){width:235px}
+#aitEliteRegimeModal .v11-potential-table th:nth-child(5),
+#aitEliteRegimeModal .v11-potential-table td:nth-child(5),
+#aitEliteRegimeWorkspace .v11-potential-table th:nth-child(5),
+#aitEliteRegimeWorkspace .v11-potential-table td:nth-child(5){width:145px}
+#aitEliteRegimeModal .v11-potential-table th:nth-child(6),
+#aitEliteRegimeModal .v11-potential-table td:nth-child(6),
+#aitEliteRegimeWorkspace .v11-potential-table th:nth-child(6),
+#aitEliteRegimeWorkspace .v11-potential-table td:nth-child(6){width:145px}
+#aitEliteRegimeModal .v11-potential-table th:nth-child(7),
+#aitEliteRegimeModal .v11-potential-table td:nth-child(7),
+#aitEliteRegimeWorkspace .v11-potential-table th:nth-child(7),
+#aitEliteRegimeWorkspace .v11-potential-table td:nth-child(7){width:155px}
+#aitEliteRegimeModal .v11-potential-table th:nth-child(8),
+#aitEliteRegimeModal .v11-potential-table td:nth-child(8),
+#aitEliteRegimeWorkspace .v11-potential-table th:nth-child(8),
+#aitEliteRegimeWorkspace .v11-potential-table td:nth-child(8){width:175px}
+#aitEliteRegimeModal .v11-potential-table th:nth-child(9),
+#aitEliteRegimeModal .v11-potential-table td:nth-child(9),
+#aitEliteRegimeWorkspace .v11-potential-table th:nth-child(9),
+#aitEliteRegimeWorkspace .v11-potential-table td:nth-child(9){width:250px}
+#aitEliteRegimeModal .v11-potential-table th:nth-child(10),
+#aitEliteRegimeModal .v11-potential-table td:nth-child(10),
+#aitEliteRegimeWorkspace .v11-potential-table th:nth-child(10),
+#aitEliteRegimeWorkspace .v11-potential-table td:nth-child(10){width:125px}
+#aitEliteRegimeModal .v11-signal,
+#aitEliteRegimeWorkspace .v11-signal{
+  display:inline-flex!important;
+  max-width:100%;
+  white-space:normal!important;
+  flex-wrap:wrap;
+  line-height:1.25;
+}
+#aitEliteRegimeModal .ait-elite-decision-cell,
+#aitEliteRegimeWorkspace .ait-elite-decision-cell{min-width:0!important}
+#aitEliteRegimeModal .ait-elite-decision-cell strong,
+#aitEliteRegimeModal .ait-elite-decision-cell small,
+#aitEliteRegimeWorkspace .ait-elite-decision-cell strong,
+#aitEliteRegimeWorkspace .ait-elite-decision-cell small{max-width:100%!important;overflow-wrap:anywhere}
+#aitEliteRegimeModal .ait-elite-regime-details,
+#aitEliteRegimeWorkspace .ait-elite-regime-details{width:100%;max-width:110px;white-space:nowrap}
+#aitEliteRegimeModal .v11-table-scrollbar,
+#aitEliteRegimeWorkspace .v11-table-scrollbar{display:block}
+#aitEliteRegimeModal .v11-scanner-table-wrap .v11-table tbody tr:nth-child(even),
+#aitEliteRegimeWorkspace .v11-scanner-table-wrap .v11-table tbody tr:nth-child(even){background:color-mix(in srgb,var(--v10-card) 48%,transparent)}
+@media (max-width:900px){
+  #aitEliteRegimeModal .v11-potential-table,
+  #aitEliteRegimeWorkspace .v11-potential-table{min-width:1380px}
+}
+@media (max-width:640px){
+  #aitEliteRegimeModal .v11-potential-table,
+  #aitEliteRegimeWorkspace .v11-potential-table{min-width:1320px}
+  #aitEliteRegimeModal .v11-potential-table th,
+  #aitEliteRegimeModal .v11-potential-table td,
+  #aitEliteRegimeWorkspace .v11-potential-table th,
+  #aitEliteRegimeWorkspace .v11-potential-table td{padding:9px 8px}
+}
+</style>
+
 </head>
 <body>
 <div class="v10-mobile-bar">
@@ -5356,6 +5473,28 @@ body.ait-elite-is-calculating *{cursor:progress!important}
      <div class="v11-potential-guide v11-potential-guide--formula"><strong>Elite Formula</strong><span>Primary Score = 50% Technical + 50% Smart Money. Relative Strength breaks ties within a 5-point Primary Score range.</span></div>
     </div></section>
     <div class="v11-scanner-table-region"><div class="v11-table-scrollbar" aria-label="Horizontal table scrollbar"><div></div></div><div class="v11-table-wrap v11-scanner-table-wrap"><table class="v11-table v11-potential-table"><thead><tr><th>Rank</th><th>Trading Code</th><th>LTP</th><th>Technical</th><th>Smart Money</th><th>Primary Score</th><th>Relative Rank</th><th>Strength</th><th>Signal</th></tr></thead><tbody id="v11PotentialRows"></tbody></table></div></div>
+   </div>
+  </article>
+ </section>
+
+ <section class="v11-workspace" data-v11-workspace="elite-regime">
+  <article class="v11-card v11-scanner-card">
+   <div class="v11-card-head"><div><h3>AIT Elite Regime</h3><small>Regime-aware Elite scanner — adapts the calibrated Elite setup to Bull, Sideways and Bear market conditions.</small></div><div class="v11-potential-actions ait-scanner-toolbar"><div class="ait-scanner-download" data-ait-scanner-download><button class="btn soft ait-scanner-download-trigger" type="button" aria-haspopup="true" aria-expanded="false"><span>⇩ Download</span><span class="ait-scanner-download-caret">⌄</span></button><div class="ait-scanner-download-menu" hidden><button class="btn soft" type="button" data-ait-scanner-download-action="instant">Instant</button><button class="btn soft" type="button" data-ait-scanner-download-action="incremental">Incremental</button></div></div><button class="btn primary ait-scanner-run" id="v11RunEliteRegime" type="button">Run</button><button class="btn soft" id="aitEliteRegimePerformance" data-ait-psa-open="aitEliteRegimePerformanceModal" type="button">Performance</button><div class="ait-scanner-charts" data-ait-scanner-charts><button class="btn soft ait-scanner-charts-trigger" type="button" aria-haspopup="true" aria-expanded="false"><span>◫ Charts</span><span class="ait-scanner-charts-caret">⌄</span></button><div class="ait-scanner-charts-menu" hidden><button class="btn soft" id="aitEliteRegimeCharts3" type="button">3M</button><button class="btn soft" id="aitEliteRegimeCharts6" type="button">6M</button><button class="btn soft" id="aitEliteRegimeCharts12" type="button">1Y</button></div></div></div></div>
+   <div class="v11-card-body">
+    <section class="v11-potential-guideline"><div class="v11-potential-guideline-grid">
+     <div class="v11-potential-guide v11-potential-guide--strongest"><strong>Regime Detection</strong><span>Classifies the current market as Bull, Sideways or Bear using equal-weight universe trend, breadth and recent market return.</span></div>
+     <div class="v11-potential-guide v11-potential-guide--formula"><strong>Regime Adjustment</strong><span>The original AIT Elite score remains the foundation. Regime compatibility adjusts conviction; it never turns weak evidence into a Strong Buy.</span></div>
+     <div class="v11-potential-guide v11-potential-guide--watch"><strong>Risk Awareness</strong><span>Bear regimes require stronger setup evidence and reduce aggressive entry confidence.</span></div>
+     <div class="v11-potential-guide v11-potential-guide--formula"><strong>Action Guide</strong><span>BUY NOW = actionable now. CONFIRMATION = wait for price/volume/regime confirmation before entry. WATCH = monitor. AVOID = do not enter.</span></div>
+     <div class="v11-potential-guide v11-potential-guide--avoid"><strong>Purpose</strong><span>This is a separate experimental/diagnostic scanner beside AIT Elite, not a replacement for the original v4.4 scanner.</span></div>
+    </div></section>
+    <div class="v105-metric-grid" style="margin-top:14px">
+     <div class="v105-metric"><span>Market Regime</span><strong id="aitEliteRegimeLabel">—</strong><em>current classification</em></div>
+     <div class="v105-metric"><span>Regime Confidence</span><strong id="aitEliteRegimeConfidence">—</strong><em>breadth + trend evidence</em></div>
+     <div class="v105-metric"><span>Market Return</span><strong id="aitEliteRegimeReturn">—</strong><em>recent equal-weight universe</em></div>
+     <div class="v105-metric"><span>Market Breadth</span><strong id="aitEliteRegimeBreadth">—</strong><em>stocks above short trend</em></div>
+    </div>
+    <div class="v11-scanner-table-region" style="margin-top:14px"><div class="v11-table-scrollbar" aria-label="Horizontal table scrollbar"><div></div></div><div class="v11-table-wrap v11-scanner-table-wrap"><table class="v11-table v11-potential-table"><thead><tr><th>Priority</th><th>Trading Code</th><th>LTP</th><th>What to Do</th><th>When</th><th>Setup Signal</th><th>Regime</th><th>Regime Score</th><th>Why</th><th>Details</th></tr></thead><tbody id="aitEliteRegimeRows"><tr><td colspan="10">Run AIT Elite Regime to calculate the regime-aware shortlist.</td></tr></tbody></table></div></div>
    </div>
   </article>
  </section>
@@ -7708,7 +7847,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   workspaces.forEach(w=>w.classList.toggle("active",w.dataset.v11Workspace===name));
 
   const reportTabs=["charts","reports","explorer"];
-  const scannerTabs=["indicators","vpa","potential","comparison"];
+  const scannerTabs=["indicators","vpa","potential","elite-regime","comparison"];
   document.querySelectorAll("[data-v11-group]").forEach(group=>{
    const groupName=group.dataset.v11Group;
    const isActive=(groupName==="report"&&reportTabs.includes(name))||(groupName==="scanner"&&scannerTabs.includes(name));
@@ -8214,17 +8353,42 @@ document.addEventListener("DOMContentLoaded",()=>{
    const result=window.AitAdvancedSignalPriority?.calculate?.();
    return (result?.rows||[]).map(x=>({code:x.code,ltp:last(rowsFor(x.code))?.close??null,score:Number(x.advancedScore||0),signal:x.signal||"Avoid",scoreLabel:"Advanced Score",rank:x.rank}));
   }
+  const addGroupedSignalRanks = rows => {
+   const groups = new Map();
+   rows.forEach(row => {
+    const key = String(row.signal || "Watch");
+    if(!groups.has(key)) groups.set(key, 0);
+    groups.set(key, groups.get(key) + 1);
+    row.signalRank = groups.get(key);
+   });
+   return rows;
+  };
+  if(mode==="elite-regime"){
+   const result=window.AITEliteRegime?.run?.()||[];
+   const rows=(result||[]).map(x=>({
+    code:x.code,
+    ltp:Number.isFinite(Number(x.ltp))?Number(x.ltp):last(rowsFor(x.code))?.close??null,
+    score:Number(x.regimeScore||0),
+    signal:x.signal||x.setupSignal||"Watch",
+    scoreLabel:"Regime Score",
+    rank:Number(x.rank)||0,
+    priority:String(x?.priority?.label||x?.priority||((x.action==="BUY NOW")?"HIGH":x.action==="CONFIRMATION"?"MEDIUM":x.action==="WATCH"?"LOW":"AVOID")),
+    action:x.action||"WATCH"
+   })).sort((a,b)=>(a.rank||999999)-(b.rank||999999)||(b.score-a.score)||a.code.localeCompare(b.code));
+   return addGroupedSignalRanks(rows);
+  }
   if(mode==="elite-priority"){
    const result=window.AitEliteSignalPriority?.calculate?.();
-   return (result?.rows||[]).map(x=>({
+   const rows=(result?.rows||[]).map(x=>({
     code:x.code,
     ltp:last(rowsFor(x.code))?.close??null,
     score:Number(x.eliteScore||0),
-    signal:x.finalSignal||"Avoid",
-    signalRank:Number(x.signalRank)||0,
+    signal:x.finalSignal||x.signal||"Avoid",
     scoreLabel:"Elite Score",
-    rank:Number(x.rank)||0
-   }));
+    rank:Number(x.rank)||0,
+    priority:String(x.calibratedPriority||"Watch")
+   })).sort((a,b)=>(a.rank||999999)-(b.rank||999999)||(b.score-a.score)||a.code.localeCompare(b.code));
+   return addGroupedSignalRanks(rows);
   }
   return potentialDataset().map(x=>({
    code:x.code,ltp:x.ltp,score:Number(x.primaryScore||0),signal:x.signal||"Avoid",
@@ -8288,7 +8452,8 @@ document.addEventListener("DOMContentLoaded",()=>{
    priority:{title:`AIT Signal Priority Screener — Ranked ${periodLabel} Charts`,description:"signal-priority order, then Primary Score"},
    historical:{title:`AIT Signal Priority Historical Performance — Ranked ${period===12?"1Y":period+"M"} Charts`,description:"Final Historical Score within Strong Buy → Buy → Watch → Avoid"},
    advanced:{title:`AIT Signal Priority Advanced Performance — Ranked ${period===12?"1Y":period+"M"} Charts`,description:"Advanced Score with momentum, stability, persistence and confirmation"},
-   "elite-priority":{title:`AIT Signal Priority Elite Scanner — Ranked ${period===12?"1Y":period+"M"} Charts`,description:"calibrated Signal Rank (Strong Buy → Buy → Watch → Avoid), then Elite Score"}
+   "elite-priority":{title:`AIT Signal Priority Elite Scanner — Ranked ${period===12?"1Y":period+"M"} Charts`,description:"calibrated Signal Rank (Strong Buy → Buy → Watch → Avoid), then Elite Score"},
+   "elite-regime":{title:`AIT Elite Regime — Ranked ${period===12?"1Y":period+"M"} Charts`,description:"regime-aware rank (Regime Score), preserving AIT Elite Regime scanner order"}
   }[mode]||{title:`Ranked ${periodLabel} Charts`,description:"score"};
   const data=rankedChartData(mode);
 
@@ -8303,7 +8468,7 @@ document.addEventListener("DOMContentLoaded",()=>{
    const coverage=rows.length?`${rows.length} sessions • ${rows[0].date} to ${rows[rows.length-1].date}`:"No archive data for this code";
    return `<div class="mini-card v11-ranked-mini-card" data-ranked-chart="${esc(x.code)}">
     <div class="row">
-     <h3><span class="v11-ranked-number">#${index+1}</span> ${esc(x.code)}</h3>
+     <h3><span class="v11-ranked-number">#${index+1}</span> ${esc(x.code)}${(mode==="elite-priority"||mode==="elite-regime")&&x.signalRank?`<span class="v11-ranked-ranking-badge v11-ranked-ranking-badge--signal">${esc(String(x.signal||"Signal"))} #${x.signalRank}</span>`:""}${(mode==="elite-priority"||mode==="elite-regime")&&x.rank?`<span class="v11-ranked-ranking-badge v11-ranked-ranking-badge--overall">Overall #${x.rank}</span>`:""}${(mode==="elite-priority"||mode==="elite-regime")&&x.priority?`<span class="v11-ranked-priority-badge v11-ranked-priority-badge--${String(x.priority).toLowerCase().replace(/[^a-z0-9]+/g,"-").replace(/^-|-$/g,"")}">${esc(x.priority)}</span>`:""}</h3>
      <div class="actions">
       <button class="btn blue" type="button" data-open-ranked-code="${esc(x.code)}" ${rows.length?"":"disabled"}>Open</button>
       <a class="btn soft" href="https://www.amarstock.com/stock/${encodeURIComponent(x.code)}" target="_blank" rel="noopener noreferrer" title="View ${esc(x.code)} on AmarStock">Details</a>
@@ -8312,7 +8477,7 @@ document.addEventListener("DOMContentLoaded",()=>{
     <div class="v11-ranked-summary-line">
      <span>LTP <b>${fmt(x.ltp,2)}</b></span>
      <span>${esc(x.scoreLabel)} <b>${fmt(x.score,1)}</b></span>
-     <span class="v11-signal ${String(x.signal).toLowerCase().replace(/\s+/g,"-")}">${esc(x.signal)}${mode==="elite-priority"&&x.signalRank?` #${x.signalRank}`:""}</span>
+     <span class="v11-signal ${String(x.signal).toLowerCase().replace(/\s+/g,"-")}">${esc(x.signal)}</span>
     </div>
     ${(window.app&&typeof window.app.fundamentalHtml==="function")?window.app.fundamentalHtml(x.code):""}
     <div class="chart-box mini-chart"><canvas></canvas></div>
@@ -10371,6 +10536,8 @@ document.addEventListener("keydown",event=>{
     <button class="v105-workspace-btn active" type="button" data-workspace="trading" data-target="marketWorkspace"><strong>Trading</strong><small>Watch lists and symbols</small></button>
     <button class="v105-workspace-btn" type="button" data-workspace="download" data-target="downloadWorkspace"><strong>Download</strong><small>Archive status and queue</small></button>
     <button class="v105-workspace-btn" type="button" data-workspace="charts" data-proxy="viewListCharts"><strong>Charts</strong><small>Candlestick gallery</small></button>
+    <button class="v105-workspace-btn" type="button" data-workspace="elite" data-proxy="aitOpenElitePriority"><strong>AIT Elite</strong><small>Calibrated decision scanner</small></button>
+    <button class="v105-workspace-btn" type="button" data-workspace="elite-regime" data-proxy="aitOpenEliteRegime"><strong>AIT Elite Regime</strong><small>Regime-aware decision scanner</small></button>
     <button class="v105-workspace-btn" type="button" data-workspace="overview" data-target="overviewWorkspace"><strong>Overview</strong><small>Terminal statistics</small></button>
    </div>
    <div style="margin-top:14px">
@@ -10512,7 +10679,7 @@ document.addEventListener("keydown",event=>{
 <section class="ait-psa-terminal-modal" id="aitPsaSignalPriorityPerformanceModal" hidden role="dialog" aria-modal="true">
  <header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">AIT POTENTIAL SIGNAL SCANNER</span><h2>↗ Performance Monitor</h2><p>Select an automatic scanner performance monitor.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaSignalPriorityMenuModal" type="button">← AIT Potential Signal Scanner</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header>
  <div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid ait-signal-priority-menu-grid">
-  <button class="ait-psa-terminal-command" data-ait-psa-open="aitElitePerformanceModal" type="button"><span>✹</span><b>AIT Elite</b><small>Automatic rolling Elite validation, stability, benchmark-relative performance and calibration-health monitoring.</small></button>
+  <button class="ait-psa-terminal-command" data-ait-psa-open="aitElitePerformanceModal" type="button"><span>✹</span><b>AIT Elite</b><small>Automatic rolling Elite validation, stability, benchmark-relative performance and calibration-health monitoring.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitEliteRegimePerformanceModal" type="button"><span>◈</span><b>AIT Elite Regime</b><small>Compare regime-specific signal performance, hit rate, excess return and stability.</small></button>
  </div></div>
 </section>
 
@@ -10523,6 +10690,7 @@ document.addEventListener("keydown",event=>{
   <button class="ait-psa-terminal-command" id="aitOpenHistoricalPriority" type="button"><span>↗</span><b>Historical Performance</b><small>Rank stocks by day-to-day signal, score and rank improvement.</small></button>
   <button class="ait-psa-terminal-command" id="aitOpenAdvancedPriority" type="button"><span>✦</span><b>Advanced Performance</b><small>Historical strength, momentum, stability, persistence, and price-volume confirmation.</small></button>
   <button class="ait-psa-terminal-command" id="aitOpenElitePriority" type="button"><span>✹</span><b>AIT Elite</b><small>Final calibrated decision scanner with liquidity, volatility, breakout, support, entry quality and risk controls.</small></button>
+  <button class="ait-psa-terminal-command" id="aitOpenEliteRegime" data-ait-psa-open="aitEliteRegimeModal" type="button"><span>◈</span><b>AIT Elite Regime</b><small>Regime-aware AIT Elite scanner for Bull, Sideways and Bear market conditions.</small></button>
  </div></div>
 </section>
 
@@ -10641,6 +10809,42 @@ document.addEventListener("keydown",event=>{
  <header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">AIT ELITE DETAILS</span><h2 id="aitEliteDetailTitle">Decision Details</h2><p>Technical evidence behind the simple action shown in the main Elite table.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitElitePriorityModal" type="button">← AIT Elite</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header>
  <div class="ait-psa-terminal-modal__body ait-psa-workspace-host"><section class="v11-workspace active ait-elite-detail-workspace"><article class="v11-card ait-elite-detail-card"><div class="v11-card-body" id="aitEliteDetailBody"></div></article></section></div>
 </section>
+<section class="ait-psa-terminal-modal ait-psa-workspace-modal" id="aitEliteRegimeModal" hidden role="dialog" aria-modal="true">
+ <header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">REGIME-AWARE DECISION ENGINE</span><h2>AIT Elite Regime</h2><p>Regime-aware version of AIT Elite. The original AIT Elite remains unchanged.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaSignalPriorityEngineModal" type="button">← Engine</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header>
+ <div class="ait-psa-terminal-modal__body ait-psa-workspace-host"><section class="v11-workspace active"><article class="v11-card v11-scanner-card">
+  <div class="v11-card-head"><div><h3>AIT Elite Regime Scanner</h3><small>Detects Bull, Sideways or Bear conditions and adjusts the calibrated Elite conviction without upgrading weak evidence.</small></div><div class="v11-potential-actions ait-scanner-toolbar"><div class="ait-scanner-download" data-ait-scanner-download><button class="btn soft ait-scanner-download-trigger" type="button" aria-haspopup="true" aria-expanded="false"><span>⇩ Download</span><span class="ait-scanner-download-caret">⌄</span></button><div class="ait-scanner-download-menu" hidden><button class="btn soft" type="button" data-ait-scanner-download-action="instant">Instant</button><button class="btn soft" type="button" data-ait-scanner-download-action="incremental">Incremental</button></div></div><button class="btn primary ait-scanner-run" id="aitEliteRegimeModalRun" type="button">Run</button><button class="btn soft" id="aitEliteRegimeModalPerformance" type="button">Performance</button><div class="ait-scanner-charts" data-ait-scanner-charts><button class="btn soft ait-scanner-charts-trigger" type="button" aria-haspopup="true" aria-expanded="false"><span>◫ Charts</span><span class="ait-scanner-charts-caret">⌄</span></button><div class="ait-scanner-charts-menu" hidden><button class="btn soft" id="aitEliteRegimeModalCharts3" type="button">3M</button><button class="btn soft" id="aitEliteRegimeModalCharts6" type="button">6M</button><button class="btn soft" id="aitEliteRegimeModalCharts12" type="button">1Y</button></div></div></div></div>
+  <div class="v11-card-body">
+   <section class="v11-potential-guideline" aria-labelledby="aitEliteRegimeModalGuidelineTitle"><div class="v11-potential-guideline-head"><div><h4 id="aitEliteRegimeModalGuidelineTitle">Elite Regime Guideline</h4><p>Use the calibrated AIT Elite evidence first, then interpret conviction through the current market regime. Regime context can strengthen or weaken confidence, but it cannot manufacture a Strong Buy from weak evidence.</p></div></div><div class="v11-potential-guideline-grid">
+    <div class="v11-potential-guide v11-potential-guide--strongest"><strong>Bull · Supportive</strong><span>Trend and breadth conditions favor long-side setups. Strong Elite evidence can receive stronger regime compatibility.</span></div>
+    <div class="v11-potential-guide v11-potential-guide--watch"><strong>Sideways · Selective</strong><span>Directional edge is less consistent. Prefer stronger Elite evidence and confirmation before aggressive entries.</span></div>
+    <div class="v11-potential-guide v11-potential-guide--avoid"><strong>Bear · Defensive</strong><span>Long-side risk is higher. The Regime Score becomes more demanding and weak setups should remain Watch or Avoid.</span></div>
+    <div class="v11-potential-guide v11-potential-guide--formula"><strong>Decision Rule</strong><span>Elite Score + Regime Compatibility → Regime Score → BUY NOW / CONFIRMATION / WATCH / AVOID. The Regime layer never overrides the underlying Elite evidence.</span></div>
+   </div></section>
+   <div class="v105-metric-grid"><div class="v105-metric"><span>Market Regime</span><strong id="aitEliteRegimeModalLabel">—</strong></div><div class="v105-metric"><span>Confidence</span><strong id="aitEliteRegimeModalConfidence">—</strong></div><div class="v105-metric"><span>Market Return</span><strong id="aitEliteRegimeModalReturn">—</strong></div><div class="v105-metric"><span>Market Breadth</span><strong id="aitEliteRegimeModalBreadth">—</strong></div></div>
+  <div class="v11-scanner-table-region" style="margin-top:14px"><div class="v11-table-scrollbar" aria-label="Horizontal table scrollbar"><div></div></div><div class="v11-table-wrap v11-scanner-table-wrap"><table class="v11-table v11-potential-table"><thead><tr><th>Priority</th><th>Trading Code</th><th>LTP</th><th>What to Do</th><th>When</th><th>Setup Signal</th><th>Regime</th><th>Regime Score</th><th>Why</th><th>Details</th></tr></thead><tbody id="aitEliteRegimeModalRows"><tr><td colspan="10">Click Run Scan to calculate the regime-aware shortlist.</td></tr></tbody></table></div></div></div>
+ </article></section></div>
+</section>
+
+<section class="ait-psa-terminal-modal ait-psa-workspace-modal" id="aitEliteRegimeDetailModal" hidden role="dialog" aria-modal="true">
+ <header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">AIT ELITE REGIME DETAILS</span><h2 id="aitEliteRegimeDetailTitle">Regime Decision Details</h2><p>Detailed Elite evidence plus market-regime context behind the actionable row.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitEliteRegimeModal" type="button">← AIT Elite Regime</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header>
+ <div class="ait-psa-terminal-modal__body ait-psa-workspace-host"><section class="v11-workspace active ait-elite-detail-workspace"><article class="v11-card ait-elite-detail-card"><div class="v11-card-body" id="aitEliteRegimeDetailBody"></div></article></section></div>
+</section>
+
+<section class="ait-psa-terminal-modal ait-psa-workspace-modal" id="aitEliteRegimePerformanceModal" hidden role="dialog" aria-modal="true">
+ <header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">ELITE REGIME MONITOR</span><h2>AIT Elite Regime Performance Monitor</h2><p>Historical regime classification and regime-specific Elite signal validation reconstructed from downloaded OHLC data.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaSignalPriorityPerformanceModal" type="button">← Performance Monitor</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header>
+ <div class="ait-psa-terminal-modal__body ait-psa-workspace-host"><section class="v11-workspace active"><article class="v11-card v11-scanner-card"><div class="v11-card-head"><div><h3>AIT Elite Regime Historical Monitor</h3><small>Measures how Elite signals behaved in Bull, Sideways and Bear regimes. This is validation evidence, not a guaranteed forecast.</small></div><div class="v11-potential-actions"><span class="v11-status-chip" id="aitEliteRegimeMonitorStatus">Automatic</span></div></div><div class="v11-card-body">
+  <section class="v11-potential-guideline" aria-labelledby="aitEliteRegimePerformanceGuidelineTitle"><div class="v11-potential-guideline-head"><div><h4 id="aitEliteRegimePerformanceGuidelineTitle">Elite Regime Performance Guideline</h4><p>This monitor is historical validation evidence. It measures how the same AIT Elite signals behaved after being classified into Bull, Sideways and Bear market regimes; it is not a guaranteed forecast.</p></div></div><div class="v11-potential-guideline-grid">
+   <div class="v11-potential-guide v11-potential-guide--strongest"><strong>Evaluated Dates</strong><span>Only chronological replay dates with enough forward market data are included. The replay must use information available on the signal date and never future data.</span></div>
+   <div class="v11-potential-guide v11-potential-guide--formula"><strong>9D Excess</strong><span>Stock 9D forward return minus the equal-weight active-universe 9D forward return. Positive excess means the signal beat its contemporaneous benchmark.</span></div>
+   <div class="v11-potential-guide v11-potential-guide--watch"><strong>Regime Stability</strong><span>Positive excess is stronger evidence when there are enough distinct regime dates and enough signal observations. A large observation count concentrated in only a few regime dates is treated as low-date-sample evidence.</span></div>
+   <div class="v11-potential-guide v11-potential-guide--avoid"><strong>How to Read It</strong><span>Use sample size, excess return, win rate and median excess together. Strong historical evidence does not guarantee the next signal will win.</span></div>
+  </div></section>
+  <div class="v105-metric-grid"><div class="v105-metric"><span>Evaluated Dates</span><strong id="aitEliteRegimePerfDates">0</strong><em>historical replay dates</em></div><div class="v105-metric"><span>Best Regime</span><strong id="aitEliteRegimePerfBest">—</strong><em>highest excess evidence</em></div><div class="v105-metric"><span>Strongest Excess</span><strong id="aitEliteRegimePerfExcess">—</strong><em>across evaluated regimes</em></div><div class="v105-metric"><span>Stable Regimes</span><strong id="aitEliteRegimePerfStable">0</strong><em>positive and sufficiently sampled</em></div></div>
+  <div class="v11-scanner-table-region" style="margin-top:14px"><div class="v11-table-scrollbar" aria-label="Horizontal table scrollbar"><div></div></div><div class="v11-table-wrap v11-scanner-table-wrap"><table class="v11-table v11-potential-table"><thead><tr><th>Regime</th><th>Dates</th><th>Samples</th><th>Strong Buy Samples</th><th>9D Raw</th><th>9D Excess</th><th>9D Win%</th><th>Avg Elite Score</th><th>Assessment</th></tr></thead><tbody id="aitEliteRegimePerformanceRows"><tr><td colspan="9">Regime performance will be calculated automatically.</td></tr></tbody></table></div></div>
+  <div class="v11-scanner-table-region" style="margin-top:14px"><div class="v11-table-scrollbar" aria-label="Horizontal table scrollbar"><div></div></div><div class="v11-table-wrap v11-scanner-table-wrap"><table class="v11-table v11-potential-table"><thead><tr><th>Regime</th><th>Signal</th><th>Samples</th><th>Raw Avg</th><th>Excess Avg</th><th>Win%</th><th>Median</th><th>Risk Note</th></tr></thead><tbody id="aitEliteRegimeSignalRows"><tr><td colspan="8">Signal-by-regime diagnostics will appear automatically.</td></tr></tbody></table></div></div>
+ </div></article></section></div>
+</section>
+
 <section class="ait-psa-terminal-modal ait-psa-workspace-modal" id="aitElitePerformanceModal" hidden role="dialog" aria-modal="true">
  <header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">ELITE MONITORING V4.4</span><h2>AIT Elite Performance Monitor</h2><p>Leakage-safe rolling validation, walk-forward holdout checks, benchmark-adjusted ranking analysis and calibration-health diagnostics reconstructed from downloaded OHLC data.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaSignalPriorityPerformanceModal" type="button">← Performance Monitor</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header>
  <div class="ait-psa-terminal-modal__body ait-psa-workspace-host"><section class="v11-workspace active"><article class="v11-card v11-scanner-card">
@@ -10982,6 +11186,7 @@ document.addEventListener('DOMContentLoaded', () => {
     comparison: ['⇄ Relative Strength Scanner', 'Cross-stock relative ranking workspace.'],
     'potential-composite': ['◇ AIT Composite Screener', '40/35/25 weighted multi-factor screening.'],
     potential: ['◆ AIT Elite Screener', 'Balanced 50/50 primary scoring with relative tie-breaking.'],
+    'elite-regime': ['◈ AIT Elite Regime', 'Regime-aware Elite scoring for Bull, Sideways and Bear market conditions.'],
     'potential-priority': ['★ AIT Signal Priority Screener', 'Signal-first ranking with close-score relative tie-breaking.']
   };
   const tradingGroupModal = {
@@ -11399,6 +11604,144 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 
 
+<script id="ait-elite-regime-script">
+(()=>{"use strict";
+ const esc=v=>String(v??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[c]));
+ const clamp=(n,a=0,b=100)=>Math.max(a,Math.min(b,Number(n)||0));
+ const mean=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
+ const median=a=>{if(!a.length)return null;const x=[...a].sort((a,b)=>a-b),m=Math.floor(x.length/2);return x.length%2?x[m]:(x[m-1]+x[m])/2};
+ const pct=(n,d=2)=>Number.isFinite(Number(n))?`${Number(n).toFixed(d)}%`:"—";
+ const bridge=()=>window.AITScannerDataBridge||null;
+ const state=()=>{try{return bridge()?.appState?.()||{history:{}}}catch{return {history:{}}}};
+ const history=()=>state().history||{};
+ const codes=()=>Object.keys(history()).map(String).filter(Boolean);
+ const rowsFor=(code,cutoff=null)=>{const r=Array.isArray(history()[code])?history()[code]:[];return (cutoff?r.filter(x=>String(x?.date||"")<=cutoff):r).sort((a,b)=>String(a.date).localeCompare(String(b.date)))};
+ const dates=()=>[...new Set(codes().flatMap(c=>rowsFor(c).map(r=>String(r?.date||"")).filter(Boolean)))].sort();
+ const closeAt=(code,date)=>{const r=rowsFor(code).find(x=>String(x.date)===date);return Number.isFinite(Number(r?.close))?Number(r.close):null};
+ const prevClose=(code,date)=>{const r=rowsFor(code).filter(x=>String(x.date)<date).at(-1);return Number.isFinite(Number(r?.close))?Number(r.close):null};
+ const marketStats=(date)=>{const vals=codes().map(c=>{const c0=closeAt(c,date),p=prevClose(c,date);return c0!=null&&p>0?(c0/p-1)*100:null}).filter(Number.isFinite);const ret=mean(vals);const breadth=vals.length?vals.filter(x=>x>0).length/vals.length*100:0;return {ret,breadth,n:vals.length}};
+ const classify=(date)=>{const d=dates().filter(x=>x<=date), recent=d.slice(-20), prev=d.at(-2);const now=marketStats(date), prior=prev?marketStats(prev):{ret:0,breadth:50};const series=recent.map(x=>marketStats(x).ret).filter(Number.isFinite);const momentum=mean(series)||0;let label="Sideways";if(now.breadth>=62&&momentum>=0.15&&now.ret>=0)label="Bull";else if(now.breadth<=38&&momentum<=-0.15&&now.ret<=0)label="Bear";const confidence=clamp(50+Math.abs(now.breadth-50)*0.9+Math.abs(momentum)*8,0,100);return {...now,previousReturn:prior.ret,momentum,label,confidence}};
+ const snapshotRows=(date)=>{const prev=window.__AIT_HISTORICAL_CUTOFF_DATE__;try{window.__AIT_HISTORICAL_CUTOFF_DATE__=date;return bridge()?.priorityDataset?.()||[]}finally{if(prev)window.__AIT_HISTORICAL_CUTOFF_DATE__=prev;else delete window.__AIT_HISTORICAL_CUTOFF_DATE__}};
+ const latestRegime=()=>{const d=dates().at(-1);return d?{date:d,...classify(d)}:null};
+ const regimeAdjustment=(regime,score,signal)=>{let adj=0;if(regime.label==="Bull")adj=signal==="Strong Buy"?4:2;if(regime.label==="Sideways")adj=signal==="Strong Buy"?0:-1;if(regime.label==="Bear")adj=signal==="Strong Buy"?-7:signal==="Buy"?-5:-2;const regimeScore=clamp(score+adj);let fit="Neutral";if(regime.label==="Bull"&&score>=70)fit="Supportive";else if(regime.label==="Bear"&&score>=75)fit="Defensive";else if(regime.label==="Bear")fit="Adverse";else if(regime.label==="Sideways"&&score>=70)fit="Selective";return {regimeScore,fit}};
+ const regimeWhen=action=>{if(action==="BUY NOW")return "Now";if(action==="CONFIRMATION")return "Wait for confirmation";if(action==="WATCH")return "Monitor / wait";if(action==="AVOID")return "Do not enter";return "Review"};
+ const regimeDecision=({regimeScore,signal,fit})=>{const score=Number(regimeScore)||0;if(signal==="Avoid")return {action:"AVOID",tone:"avoid",why:"Underlying Elite signal is Avoid."};if(score>=80&&signal==="Strong Buy"&&fit!=="Adverse")return {action:"BUY NOW",tone:"buy",why:"Strong Elite setup with sufficient regime support."};if(score>=70&&["Strong Buy","Buy"].includes(signal))return {action:"CONFIRMATION",tone:"wait",why:`Good ${signal} setup, but current regime requires confirmation before entry.`};if(fit==="Adverse"||score<50)return {action:"AVOID",tone:"avoid",why:"Regime context and score do not provide enough support for a new entry."};return {action:"WATCH",tone:"caution",why:"Keep under observation until score or confirmation improves."}};
+ const regimePriority=(action,rank)=>({label:action==="BUY NOW"?"HIGH":action==="CONFIRMATION"?"MEDIUM":action==="WATCH"?"LOW":"AVOID",rank});
+ const decisionToneClass=t=>t==="buy"?"ait-elite-decision--buy":t==="wait"?"ait-elite-decision--wait":t==="avoid"?"ait-elite-decision--avoid":"ait-elite-decision--caution";
+ const regimeScoreBand=v=>{const n=Number(v)||0;return n>=80?"Strong":n>=70?"Good":n>=55?"Mixed":"Weak"};
+ const showRegimeDetails=code=>{
+  const row=(window.AitEliteRegimeState?.rows||[]).find(x=>String(x.code)===String(code));
+  if(!row)return;
+  const d=row.decision||regimeDecision({regimeScore:row.regimeScore,signal:row.signal,fit:row.fit});
+  const title=document.getElementById("aitEliteRegimeDetailTitle"),body=document.getElementById("aitEliteRegimeDetailBody");
+  const group=(titleText,subtitle,items,cls="")=>`<section class="ait-elite-detail-group ${cls}"><div class="ait-elite-detail-group-head"><div><h3>${esc(titleText)}</h3><p>${esc(subtitle)}</p></div></div><div class="ait-fundamental-strip">${items.join("")}</div></section>`;
+  const item=(label,value,note="")=>`<div class="ait-fundamental-item"><small>${esc(label)}</small><b>${esc(value)}</b>${note?`<em>${esc(note)}</em>`:""}</div>`;
+  if(title)title.textContent=`${row.code} — ${d.action}`;
+  if(body)body.innerHTML=`
+   ${group("1. What should I do?","This is the final regime-aware decision shown in the scanner row.",[
+    item("FINAL DECISION",d.action,d.why),
+    item("Priority",`${row.priority?.label||"—"} #${row.rank}`,`Overall #${row.rank}`),
+    item("When",regimeWhen(d.action),row.fit||"Neutral"),
+    item("Setup Signal",`${row.signal||"Avoid"}`,`Elite Score ${Number(row.eliteScore??row.primaryScore??0).toFixed(1)}`),
+    item("Regime",`${row.regime?.label||row.regime||"—"}`,`Confidence ${row.regime?.confidence!=null?Number(row.regime.confidence).toFixed(0)+"%":"—"}`),
+    item("Regime Score",Number(row.regimeScore??0).toFixed(1),regimeScoreBand(row.regimeScore)),
+    item("Regime Fit",row.fit||"Neutral"),
+    item("Why",d.why)
+   ],`ait-elite-detail-group--decision ${decisionToneClass(d.tone)}`)}
+   ${group("2. Market Regime Evidence","Current regime context used to adjust Elite conviction.",[
+    item("Market Regime",row.regime?.label||row.regime||"—"),
+    item("Confidence",row.regime?.confidence!=null?`${Number(row.regime.confidence).toFixed(0)}%`:"—"),
+    item("Market Return",row.regime?.ret!=null?pct(row.regime.ret):"—","Recent equal-weight universe"),
+    item("Market Breadth",row.regime?.breadth!=null?`${Number(row.regime.breadth).toFixed(0)}%`:"—","Stocks above short trend"),
+    item("Momentum",row.regime?.momentum!=null?Number(row.regime.momentum).toFixed(2):"—"),
+    item("Regime Adjustment",Number(row.regimeScore??0)-Number(row.eliteScore??row.primaryScore??0)>=0?`+${(Number(row.regimeScore??0)-Number(row.eliteScore??row.primaryScore??0)).toFixed(1)}`:(Number(row.regimeScore??0)-Number(row.eliteScore??row.primaryScore??0)).toFixed(1))
+   ])}
+   ${group("3. AIT Elite Foundation","The underlying Elite signal remains the primary evidence; regime context does not replace it.",[
+    item("Elite Score",Number(row.eliteScore??row.primaryScore??0).toFixed(1),regimeScoreBand(row.eliteScore??row.primaryScore)),
+    item("Technical",Number(row.indicatorScore??row.technicalScore??0).toFixed(0)),
+    item("Smart Money",Number(row.vpaScore??row.smartMoneyScore??0).toFixed(0)),
+    item("Primary Score",Number(row.primaryScore??0).toFixed(1)),
+    item("Advanced Score",Number(row.advancedScore??row.rankingScore??0).toFixed(1)),
+    item("LTP",Number(row.ltp??0).toFixed(2))
+   ])}
+   ${group("4. Entry & Risk","Use these values with the action gate before entering.",[
+    item("Entry State",row.entryState||"Review"),
+    item("Entry Quality",Number(row.entryQualityScore??0).toFixed(1),regimeScoreBand(row.entryQualityScore)),
+    item("Breakout",Number(row.breakoutScore??0).toFixed(1),regimeScoreBand(row.breakoutScore)),
+    item("Support",Number(row.supportScore??0).toFixed(1),regimeScoreBand(row.supportScore)),
+    item("Liquidity",Number(row.liquidityScore??0).toFixed(1),regimeScoreBand(row.liquidityScore)),
+    item("Volatility Safety",Number(row.volatilitySafetyScore??0).toFixed(1),regimeScoreBand(row.volatilitySafetyScore))
+   ])}
+   ${group("5. Ranking & Action Logic","Regime ranking preserves the Elite evidence and applies a regime compatibility layer.",[
+    item("Overall Rank",`#${row.rank}`),
+    item("Signal Rank",row.signalRank?`${row.signal} #${row.signalRank}`:row.signal||"—"),
+    item("Regime Priority",row.priority?.label||"—"),
+    item("Final Action",d.action),
+    item("Confirmation Rule",d.action==="CONFIRMATION"?"Wait for price / volume / regime confirmation before entry":"No extra regime confirmation gate is currently required"),
+    item("Risk Note",row.regime?.label==="Bear"?"Higher downside sensitivity":row.regime?.label==="Sideways"?"Selective entries":"Trend supportive")
+   ])}`;
+  document.getElementById("aitEliteRegimeModal")?.setAttribute("hidden","");
+  document.getElementById("aitEliteRegimeDetailModal")?.removeAttribute("hidden");
+ };
+ const run=()=>{const regime=latestRegime(),tbody=document.getElementById("aitEliteRegimeRows");if(!tbody||!regime)return [];const eliteBase=(()=>{try{const rows=window.AitEliteSignalPriority?.calculate?.()||[];if(Array.isArray(rows)&&rows.length)return rows;}catch(e){console.error("AIT Elite Regime:",e)}return (bridge()?.priorityDataset?.()||[]).map(x=>({...x,eliteScore:Number(x.eliteScore??x.primaryScore??0),finalSignal:x.finalSignal||x.signal||"Avoid"}))})();const base=eliteBase;const rows=base.map(x=>{const score=Number(x.eliteScore??x.primaryScore??0),signal=String(x.finalSignal||x.signal||"Avoid"),a=regimeAdjustment(regime,score,signal),decision=regimeDecision({...a,signal});return {...x,...a,signal,action:decision.action,decision,regime}}).sort((a,b)=>{const order={"BUY NOW":1,"CONFIRMATION":2,"WATCH":3,"AVOID":4};return (order[a.action]-order[b.action])||(b.regimeScore-a.regimeScore)||(b.eliteScore-a.eliteScore)||String(a.code).localeCompare(String(b.code))}).map((x,i)=>({...x,rank:i+1,signalRank:x.signalRank||null,priority:regimePriority(x.action,i+1)})); window.AitEliteRegimeState={rows,regime};document.getElementById("aitEliteRegimeLabel")?.replaceChildren(document.createTextNode(regime.label));document.getElementById("aitEliteRegimeConfidence")?.replaceChildren(document.createTextNode(`${regime.confidence.toFixed(0)}%`));document.getElementById("aitEliteRegimeReturn")?.replaceChildren(document.createTextNode(pct(regime.ret)));document.getElementById("aitEliteRegimeBreadth")?.replaceChildren(document.createTextNode(`${regime.breadth.toFixed(0)}%`));document.getElementById("aitEliteRegimeState")?.replaceChildren(document.createTextNode(`${regime.label} • ${regime.confidence.toFixed(0)}%`));tbody.innerHTML=rows.length?rows.map(x=>{const d=x.decision||regimeDecision({regimeScore:x.regimeScore,signal:x.signal,fit:x.fit});return `<tr><td class="ait-elite-decision-cell ${decisionToneClass(d.tone)}"><strong>${esc(x.priority.label)} #${x.rank}</strong><small style="display:block">Overall #${x.rank}</small></td><td><strong>${esc(x.code)}</strong></td><td>${Number.isFinite(Number(x.ltp))?Number(x.ltp).toFixed(2):"—"}</td><td class="ait-elite-decision-cell ${decisionToneClass(d.tone)}"><strong>${esc(d.action)}</strong><small>${esc(d.why)}</small></td><td><strong>${esc(regimeWhen(d.action))}</strong><small style="display:block">${esc(x.fit)}</small></td><td><span class="v11-signal ${String(x.signal||"watch").toLowerCase().replace(/\s+/g,"-")}">${esc(x.signal)}</span><small style="display:block">Elite ${Number(x.eliteScore??x.primaryScore??0).toFixed(1)}</small></td><td><span class="v11-status-chip">${esc(regime.label)}</span><small style="display:block">${esc(x.fit)}</small></td><td><strong>${x.regimeScore.toFixed(1)}</strong><small style="display:block">Elite ${Number(x.eliteScore??x.primaryScore??0).toFixed(1)}</small></td><td class="ait-elite-why-cell">${esc(d.why)}</td><td><button class="btn soft ait-elite-regime-details" data-code="${esc(x.code)}" type="button">View Details</button></td></tr>`}).join(""):"<tr><td colspan=10>No Elite data available.</td></tr>";tbody.querySelectorAll(".ait-elite-regime-details").forEach(btn=>btn.addEventListener("click",()=>showRegimeDetails(btn.dataset.code)));return rows};
+ const evaluate=async()=>{
+  // Always force the original AIT Elite chronological replay first. The Regime
+  // monitor must never depend on a previously rendered scanner or stale cache.
+  // This keeps signal construction, forward returns and benchmark/excess math
+  // identical to AIT Elite v4.4 while adding only regime classification here.
+  try{
+   let all=[];
+   if(typeof window.AitElitePerformance?.rebuild==='function'){
+    all=await window.AitElitePerformance.rebuild();
+   }
+   if(!Array.isArray(all)||!all.length){
+    all=await window.AitElitePerformance?.evaluate?.();
+   }
+   if(Array.isArray(all)){
+    const mapped=all.map(r=>{
+     const date=String(r?.date||"").slice(0,10);
+     const regime=classify(date);
+     const ret=Number(r?.returns?.[9]);
+     const excess=Number(r?.excess?.[9]);
+     return {
+      date,
+      regime:regime.label,
+      signal:String(r?.finalSignal||r?.signal||"Avoid"),
+      eliteScore:Number(r?.eliteScore??r?.rankingScore??r?.advancedScore??r?.primaryScore??r?.rankingScore??0),
+      ret:Number.isFinite(ret)?ret:null,
+      excess:Number.isFinite(excess)?excess:null
+     };
+    }).filter(r=>r.date&&r.regime&&Number.isFinite(r.ret)&&Number.isFinite(r.excess));
+    return mapped;
+   }
+  }catch(error){
+   console.error("AIT Elite Regime performance replay:",error);
+  }
+  return [];
+ };
+ const renderMonitor=async()=>{
+  // Reuse AIT Elite's incremental/cached performance pipeline. Do NOT force a full
+  // historical rebuild when the user opens Performance; that can block the UI on
+  // large OHLC datasets. ensureCurrent() rebuilds only when the downloaded history
+  // signature changed, then evaluate() reuses the in-memory/local cache.
+  try{await window.AitElitePerformance?.ensureCurrent?.()}catch(error){console.error("AIT Elite Regime performance prepare:",error)}
+  const rows=await evaluate(),body=document.getElementById("aitEliteRegimePerformanceRows"),sigBody=document.getElementById("aitEliteRegimeSignalRows");if(!rows.length){if(body)body.innerHTML="<tr><td colspan=9>No evaluated Elite history is available. The monitor could not find 9D forward returns from the AIT Elite historical replay.</td></tr>";if(sigBody)sigBody.innerHTML="<tr><td colspan=8>No regime signal diagnostics are available until historical replay produces evaluable 9D outcomes.</td></tr>";document.getElementById("aitEliteRegimePerfDates")?.replaceChildren(document.createTextNode("0"));document.getElementById("aitEliteRegimePerfBest")?.replaceChildren(document.createTextNode("—"));document.getElementById("aitEliteRegimePerfExcess")?.replaceChildren(document.createTextNode("—"));document.getElementById("aitEliteRegimePerfStable")?.replaceChildren(document.createTextNode("0"));return rows;}const groups=["Bull","Sideways","Bear"].map(reg=>{const r=rows.filter(x=>x.regime===reg),sb=r.filter(x=>x.signal==="Strong Buy");return {reg,n:r.length,dates:new Set(r.map(x=>x.date)).size,sb:sb.length,raw:mean(sb.map(x=>x.ret)),ex:mean(sb.map(x=>x.excess)),win:sb.length?sb.filter(x=>x.excess>0).length/sb.length*100:null,score:mean(r.map(x=>x.eliteScore))}});body.innerHTML=groups.map(g=>{const evidence=g.dates>=30&&g.n>=500&&g.ex!=null;const moderate=g.dates>=15&&g.n>=250&&g.ex!=null;const label=evidence&&g.ex>0?"SUPPORTIVE":moderate&&g.ex>0?"SELECTIVE":g.dates<15?"CAUTION · LOW DATE SAMPLE":"DEFENSIVE";return `<tr><td><strong>${g.reg}</strong></td><td>${g.dates}</td><td>${g.n}</td><td>${g.sb}</td><td>${pct(g.raw)}</td><td>${pct(g.ex)}</td><td>${pct(g.win,1)}</td><td>${g.score==null?"—":g.score.toFixed(1)}</td><td><strong>${label}</strong></td></tr>`;}).join("");const signalRows=[];for(const reg of ["Bull","Sideways","Bear"])for(const sig of ["Strong Buy","Buy","Watch","Avoid"]){const r=rows.filter(x=>x.regime===reg&&x.signal===sig);signalRows.push({reg,sig,n:r.length,raw:mean(r.map(x=>x.ret)),ex:mean(r.map(x=>x.excess)),win:r.length?r.filter(x=>x.excess>0).length/r.length*100:null,med:median(r.map(x=>x.excess)),risk:reg==="Bear"?"Higher downside sensitivity":reg==="Sideways"?"Selective entries":"Trend supportive"})}sigBody.innerHTML=signalRows.map(g=>`<tr><td>${g.reg}</td><td><strong>${g.sig}</strong></td><td>${g.n}</td><td>${pct(g.raw)}</td><td>${pct(g.ex)}</td><td>${pct(g.win,1)}</td><td>${pct(g.med)}</td><td>${g.risk}</td></tr>`).join("");const valid=groups.filter(g=>g.dates>=30&&g.n>=500&&g.ex!=null),best=valid.sort((a,b)=>(b.ex??-Infinity)-(a.ex??-Infinity))[0];document.getElementById("aitEliteRegimePerfDates")?.replaceChildren(document.createTextNode(String(new Set(rows.map(x=>x.date)).size)));document.getElementById("aitEliteRegimePerfBest")?.replaceChildren(document.createTextNode(best?.reg||"—"));document.getElementById("aitEliteRegimePerfExcess")?.replaceChildren(document.createTextNode(pct(best?.ex)));document.getElementById("aitEliteRegimePerfStable")?.replaceChildren(document.createTextNode(String(valid.filter(g=>g.ex>0).length)));return rows};
+ document.getElementById("v11RunEliteRegime")?.addEventListener("click",()=>{const fn=async()=>{try{await window.AitElitePerformance?.ensureCurrent?.()}catch(_){}return run()};return window.AITEliteBusy?.execute?.({kicker:"AIT ELITE REGIME",title:"Calculating regime-aware signals",text:"Detecting market regime and adapting calibrated Elite conviction…"},fn)||fn()});
+ document.getElementById("aitEliteRegimeCharts3")?.addEventListener("click",()=>window.AITOpenRankedCharts?.("elite-regime",3));
+ document.getElementById("aitEliteRegimeCharts6")?.addEventListener("click",()=>window.AITOpenRankedCharts?.("elite-regime",6));
+ document.getElementById("aitEliteRegimeCharts12")?.addEventListener("click",()=>window.AITOpenRankedCharts?.("elite-regime",12));
+ document.querySelectorAll('[data-ait-psa-open="aitEliteRegimePerformanceModal"]').forEach(b=>b.addEventListener("click",()=>{setTimeout(()=>{window.AITEliteBusy?.execute?.({kicker:"AIT ELITE REGIME PERFORMANCE",title:"Reconstructing regime performance",text:"Replaying the original AIT Elite history and classifying each evaluated date by market regime…"},renderMonitor)},80)}));
+ const renderModal=()=>{const regime=latestRegime(),tbody=document.getElementById("aitEliteRegimeModalRows");if(!tbody||!regime){if(tbody)tbody.innerHTML="<tr><td colspan=9>No historical OHLC data is available. Download market data first.</td></tr>";return [];}const base=bridge()?.priorityDataset?.()||[];const rows=base.map(x=>{const score=Number(x.eliteScore??x.primaryScore??x.advancedScore??0),signal=x.signal||x.finalSignal||"Avoid",a=regimeAdjustment(regime,score,signal),decision=regimeDecision({...a,signal});return {...x,eliteScore:score,signal,...a,action:decision.action,decision,regime}}).sort((a,b)=>(b.regimeScore-a.regimeScore)||(b.eliteScore-a.eliteScore)||String(a.code).localeCompare(String(b.code))).map((x,i)=>({...x,rank:i+1,priority:regimePriority(x.action,i+1)})); window.AitEliteRegimeState={rows,regime};document.getElementById("aitEliteRegimeModalLabel")?.replaceChildren(document.createTextNode(regime.label));document.getElementById("aitEliteRegimeModalConfidence")?.replaceChildren(document.createTextNode(`${regime.confidence.toFixed(0)}%`));document.getElementById("aitEliteRegimeModalReturn")?.replaceChildren(document.createTextNode(pct(regime.ret)));document.getElementById("aitEliteRegimeModalBreadth")?.replaceChildren(document.createTextNode(`${regime.breadth.toFixed(0)}%`));document.getElementById("aitEliteRegimeModalState")?.replaceChildren(document.createTextNode(`${regime.label} • ${regime.confidence.toFixed(0)}%`));tbody.innerHTML=rows.length?rows.map(x=>{const d=regimeDecision({regimeScore:x.regimeScore,signal:x.signal,fit:x.fit});const priority=regimePriority(d.action,x.rank||0);return `<tr><td class="ait-elite-decision-cell ${decisionToneClass(d.tone)}"><strong>${esc(priority.label)} #${x.rank}</strong><small style="display:block">Overall #${x.rank}</small></td><td><strong>${esc(x.code)}</strong></td><td>${Number.isFinite(Number(x.ltp))?Number(x.ltp).toFixed(2):"—"}</td><td class="ait-elite-decision-cell ${decisionToneClass(d.tone)}"><strong>${esc(d.action)}</strong><small>${esc(d.why)}</small></td><td><strong>${esc(regimeWhen(d.action))}</strong><small style="display:block">${esc(x.fit)}</small></td><td><span class="v11-signal ${String(x.signal||"watch").toLowerCase().replace(/\s+/g,"-")}">${esc(x.signal)}</span><small style="display:block">Elite ${Number(x.eliteScore).toFixed(1)}</small></td><td><span class="v11-status-chip">${esc(regime.label)}</span><small style="display:block">${esc(x.fit)}</small></td><td><strong>${x.regimeScore.toFixed(1)}</strong><small style="display:block">Elite ${Number(x.eliteScore).toFixed(1)}</small></td><td class="ait-elite-why-cell">${esc(d.why)}</td><td><button class="btn soft ait-elite-regime-details" data-code="${esc(x.code)}" type="button">View Details</button></td></tr>`}).join(""):"<tr><td colspan=10>No eligible securities could be calculated. Ensure DSE OHLC data is downloaded and at least 9 trading dates are available.</td></tr>";tbody.querySelectorAll(".ait-elite-regime-details").forEach(btn=>btn.addEventListener("click",()=>showRegimeDetails(btn.dataset.code)));return rows};
+ document.getElementById("aitEliteRegimeModalRun")?.addEventListener("click",()=>{const fn=async()=>{try{await window.AitElitePerformance?.ensureCurrent?.()}catch(_){}return renderModal()};return window.AITEliteBusy?.execute?.({kicker:"AIT ELITE REGIME",title:"Scanning regime-aware signals",text:"Detecting market regime and ranking the calibrated Elite universe…"},fn)||fn()});
+ document.getElementById("aitEliteRegimeModalCharts3")?.addEventListener("click",()=>window.AITOpenRankedCharts?.("elite-regime",3));
+ document.getElementById("aitEliteRegimeModalCharts6")?.addEventListener("click",()=>window.AITOpenRankedCharts?.("elite-regime",6));
+ document.getElementById("aitEliteRegimeModalCharts12")?.addEventListener("click",()=>window.AITOpenRankedCharts?.("elite-regime",12));
+ document.getElementById("aitEliteRegimeModalPerformance")?.setAttribute("data-ait-psa-open","aitEliteRegimePerformanceModal");
+ document.getElementById("aitEliteRegimeCharts")?.addEventListener("click",()=>document.getElementById("viewListCharts")?.click());
+ document.getElementById("aitEliteRegimeModalCharts")?.addEventListener("click",()=>document.getElementById("viewListCharts")?.click());
+ window.AITEliteRegime={run:()=>{const rows=run();renderModal();return rows},evaluate:renderMonitor,currentRegime:latestRegime,render:renderModal};
+})();
+</script>
 <script id="ait-elite-calculation-cursor-script">
 (()=>{"use strict";
  const layer=()=>document.getElementById("aitEliteCalculationLayer");
@@ -12049,3 +12392,4 @@ document.addEventListener("DOMContentLoaded",()=>{
 </script>
 </body>
 </html>
+

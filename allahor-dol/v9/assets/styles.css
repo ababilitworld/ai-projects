@@ -3241,3 +3241,212 @@ body{
   :root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-roadmap::after{content:""!important;position:absolute!important;z-index:4!important;left:17px!important;right:17px!important;bottom:1mm!important;height:3mm!important;display:block!important;background:linear-gradient(90deg,var(--aod2-gold),var(--aod2-primary))!important;clip-path:polygon(0 38%,calc(100% - 10px) 38%,calc(100% - 10px) 8%,100% 50%,calc(100% - 10px) 92%,calc(100% - 10px) 62%,0 62%)!important}
   :root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-roadmap li:nth-child(1){grid-area:1/1!important}:root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-roadmap li:nth-child(2){grid-area:2/1!important}:root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-roadmap li:nth-child(3){grid-area:3/1!important}:root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-roadmap li:nth-child(4){grid-area:4/1!important}:root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-roadmap li:nth-child(5){grid-area:5/1!important}:root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-roadmap li:nth-child(6){grid-area:6/1!important}:root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-roadmap li:nth-child(7){grid-area:1/2!important}:root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-roadmap li:nth-child(8){grid-area:2/2!important}:root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-roadmap li:nth-child(9){grid-area:3/2!important}:root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-roadmap li:nth-child(10){grid-area:4/2!important}:root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-roadmap li:nth-child(11){grid-area:5/2!important}
 }
+
+/* PAGE 07 â€” explicit continuous snake flow (1 â†’ 11).  Kept last to win over legacy experiments. */
+:root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap{
+  --aod2-flow-node:21px;
+  --aod2-flow-line:4px;
+  position:relative!important;
+  isolation:isolate!important;
+  display:grid!important;
+  grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  grid-template-rows:repeat(6,minmax(88px,auto))!important;
+  grid-auto-flow:row!important;
+  column-gap:34px!important;
+  row-gap:14px!important;
+  padding:2px 0!important;
+  overflow:visible!important;
+}
+:root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap::before{
+  content:""!important;
+  position:absolute!important;
+  z-index:0!important;
+  inset:22px 0 22px!important;
+  display:block!important;
+  background:
+    linear-gradient(var(--aod2-primary),var(--aod2-primary)) left calc(var(--aod2-flow-node) - (var(--aod2-flow-line) / 2)) top/var(--aod2-flow-line) 100% no-repeat,
+    linear-gradient(var(--aod2-primary),var(--aod2-primary)) calc(50% + var(--aod2-flow-node) + 17px - (var(--aod2-flow-line) / 2)) top/var(--aod2-flow-line) 100% no-repeat!important;
+  opacity:1!important;
+}
+:root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap::after{display:none!important}
+:root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap li,
+:root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap li:last-child{
+  position:relative!important;
+  z-index:2!important;
+  display:grid!important;
+  grid-template-columns:42px minmax(0,1fr)!important;
+  gap:10px!important;
+  align-items:center!important;
+}
+:root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap li:nth-child(1){grid-area:1/1!important}
+:root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap li:nth-child(2){grid-area:2/1!important}
+:root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap li:nth-child(3){grid-area:3/1!important}
+:root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap li:nth-child(4){grid-area:4/1!important}
+:root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap li:nth-child(5){grid-area:5/1!important}
+:root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap li:nth-child(6){grid-area:6/1!important}
+:root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap li:nth-child(7){grid-area:6/2!important}
+:root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap li:nth-child(8){grid-area:5/2!important}
+:root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap li:nth-child(9){grid-area:4/2!important}
+:root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap li:nth-child(10){grid-area:3/2!important}
+:root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap li:nth-child(11){grid-area:2/2!important}
+:root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap li>div{
+  min-height:88px!important;
+  padding:33px 14px 12px!important;
+  border:1px solid color-mix(in srgb,var(--aod2-primary) 28%,var(--aod2-line))!important;
+  border-left:4px solid var(--aod2-primary)!important;
+  border-radius:12px!important;
+  background:linear-gradient(135deg,color-mix(in srgb,var(--aod2-primary) 7%,var(--aod2-paper)),var(--aod2-paper))!important;
+  box-shadow:0 7px 17px color-mix(in srgb,var(--aod2-shadow) 13%,transparent)!important;
+}
+:root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap li>div::before{
+  top:10px!important;
+  left:14px!important;
+  color:var(--aod2-primary)!important;
+  font:900 10px/1.2 "Noto Sans Bengali","Nirmala UI",sans-serif!important;
+}
+:root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap__num{
+  position:relative!important;
+  z-index:3!important;
+  width:42px!important;
+  height:42px!important;
+  display:grid!important;
+  place-items:center!important;
+  border:3px solid var(--aod2-paper)!important;
+  border-radius:50%!important;
+  background:var(--aod2-primary)!important;
+  color:var(--aod2-gold-2)!important;
+  box-shadow:0 3px 8px color-mix(in srgb,var(--aod2-shadow) 30%,transparent)!important;
+  font:900 14px/1 "Noto Sans Bengali","Nirmala UI",sans-serif!important;
+}
+/* Downward arrows: 1 â†’ 6.  Upward arrows: 7 â†’ 11. */
+:root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap li:nth-child(-n+5)::after,
+:root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap li:nth-child(n+7):nth-child(-n+10)::after{
+  content:""!important;
+  position:absolute!important;
+  z-index:4!important;
+  left:13px!important;
+  width:16px!important;
+  height:15px!important;
+  display:block!important;
+  background:var(--aod2-gold)!important;
+  filter:drop-shadow(0 2px 1px color-mix(in srgb,var(--aod2-shadow) 28%,transparent))!important;
+}
+:root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap li:nth-child(-n+5)::after{bottom:-15px!important;top:auto!important;clip-path:polygon(0 0,100% 0,50% 100%)!important}
+:root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap li:nth-child(n+7):nth-child(-n+10)::after{top:-15px!important;bottom:auto!important;clip-path:polygon(50% 0,100% 100%,0 100%)!important}
+/* The bridge is attached to the two equal-height final nodes: 6 â†’ 7. */
+:root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap li:nth-child(6)::before{
+  content:""!important;
+  position:absolute!important;
+  z-index:1!important;
+  left:21px!important;
+  top:calc(50% - 3px)!important;
+  width:calc(100% + 34px)!important;
+  height:6px!important;
+  display:block!important;
+  background:linear-gradient(90deg,var(--aod2-primary),var(--aod2-gold))!important;
+  clip-path:polygon(0 18%,calc(100% - 16px) 18%,calc(100% - 16px) 0,100% 50%,calc(100% - 16px) 100%,calc(100% - 16px) 82%,0 82%)!important;
+}
+
+@media screen and (max-width:760px){
+  :root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap{grid-template-columns:1fr!important;grid-template-rows:none!important;grid-auto-flow:row!important;row-gap:14px!important}
+  :root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap::before{inset:22px auto 22px 20px!important;width:4px!important;background:linear-gradient(var(--aod2-primary),var(--aod2-primary))!important}
+  :root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap li:nth-child(n){grid-area:auto!important}
+  :root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap li:nth-child(6)::before{display:none!important}
+  :root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap li:nth-child(n+7):nth-child(-n+10)::after{top:auto!important;bottom:-15px!important;clip-path:polygon(0 0,100% 0,50% 100%)!important}
+}
+
+@media print{
+  :root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-step-six-panel .aod2-roadmap{
+    --aod2-flow-node:4mm;--aod2-flow-line:.75mm;
+    grid-template-rows:repeat(6,minmax(13mm,auto))!important;
+    column-gap:4mm!important;row-gap:2mm!important;padding:0!important;
+  }
+  :root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-step-six-panel .aod2-roadmap::before{inset:4mm 0!important}
+  :root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-step-six-panel .aod2-roadmap li{grid-template-columns:8mm minmax(0,1fr)!important;gap:1.5mm!important}
+  :root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-step-six-panel .aod2-roadmap li>div{min-height:13mm!important;padding:4.5mm 2.3mm 1.6mm!important;border-left-width:.75mm!important;border-radius:1.5mm!important;box-shadow:none!important}
+  :root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-step-six-panel .aod2-roadmap li>div::before{top:1.4mm!important;left:2.3mm!important;font-size:6.6pt!important}
+  :root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-step-six-panel .aod2-roadmap__num{width:8mm!important;height:8mm!important;border-width:.55mm!important;font-size:8pt!important}
+  :root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-step-six-panel .aod2-roadmap li:nth-child(-n+5)::after,
+  :root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-step-six-panel .aod2-roadmap li:nth-child(n+7):nth-child(-n+10)::after{left:2.4mm!important;width:3.1mm!important;height:2.8mm!important;filter:none!important}
+  :root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-step-six-panel .aod2-roadmap li:nth-child(-n+5)::after{bottom:-2.2mm!important}
+  :root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-step-six-panel .aod2-roadmap li:nth-child(n+7):nth-child(-n+10)::after{top:-2.2mm!important}
+  :root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-step-six-panel .aod2-roadmap li:nth-child(6)::before{left:4mm!important;top:calc(50% - .4mm)!important;width:calc(100% + 4mm)!important;height:.8mm!important}
+}
+
+/* PAGE 07 â€” standard two-column list, deliberately without flow arrows. */
+@media screen and (min-width:761px){
+  :root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    grid-template-rows:repeat(6,minmax(88px,auto))!important;
+    grid-auto-flow:row!important;
+    gap:14px 28px!important;
+    padding:0!important;
+  }
+  :root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap::before,
+  :root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap::after,
+  :root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap li::before,
+  :root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap li::after{content:none!important;display:none!important}
+  :root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap li:nth-child(1){grid-area:1/1!important}
+  :root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap li:nth-child(2){grid-area:2/1!important}
+  :root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap li:nth-child(3){grid-area:3/1!important}
+  :root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap li:nth-child(4){grid-area:4/1!important}
+  :root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap li:nth-child(5){grid-area:5/1!important}
+  :root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap li:nth-child(6){grid-area:6/1!important}
+  :root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap li:nth-child(7){grid-area:1/2!important}
+  :root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap li:nth-child(8){grid-area:2/2!important}
+  :root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap li:nth-child(9){grid-area:3/2!important}
+  :root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap li:nth-child(10){grid-area:4/2!important}
+  :root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap li:nth-child(11){grid-area:5/2!important}
+}
+@media print{
+  :root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-step-six-panel .aod2-roadmap{
+    display:grid!important;
+    grid-template-columns:repeat(2,minmax(0,1fr))!important;
+    grid-template-rows:repeat(6,minmax(13mm,auto))!important;
+    grid-auto-flow:row!important;
+    gap:2mm 4mm!important;
+    padding:0!important;
+  }
+  :root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-step-six-panel .aod2-roadmap::before,
+  :root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-step-six-panel .aod2-roadmap::after,
+  :root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-step-six-panel .aod2-roadmap li::before,
+  :root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-step-six-panel .aod2-roadmap li::after{content:none!important;display:none!important}
+  :root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-step-six-panel .aod2-roadmap li:nth-child(1){grid-area:1/1!important}
+  :root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-step-six-panel .aod2-roadmap li:nth-child(2){grid-area:2/1!important}
+  :root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-step-six-panel .aod2-roadmap li:nth-child(3){grid-area:3/1!important}
+  :root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-step-six-panel .aod2-roadmap li:nth-child(4){grid-area:4/1!important}
+  :root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-step-six-panel .aod2-roadmap li:nth-child(5){grid-area:5/1!important}
+  :root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-step-six-panel .aod2-roadmap li:nth-child(6){grid-area:6/1!important}
+  :root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-step-six-panel .aod2-roadmap li:nth-child(7){grid-area:1/2!important}
+  :root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-step-six-panel .aod2-roadmap li:nth-child(8){grid-area:2/2!important}
+  :root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-step-six-panel .aod2-roadmap li:nth-child(9){grid-area:3/2!important}
+  :root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-step-six-panel .aod2-roadmap li:nth-child(10){grid-area:4/2!important}
+  :root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-step-six-panel .aod2-roadmap li:nth-child(11){grid-area:5/2!important}
+}
+
+/* Final removal of all legacy connector pseudo-elements. */
+@media screen and (min-width:761px){
+  :root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap li:nth-child(n)::before,
+  :root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap li:nth-child(n)::after{content:none!important;display:none!important}
+}
+@media print{
+  :root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-step-six-panel .aod2-roadmap li:nth-child(n)::before,
+  :root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-step-six-panel .aod2-roadmap li:nth-child(n)::after{content:none!important;display:none!important}
+}
+
+@media screen and (min-width:761px){
+  :root[data-aod2-theme="ait-pha"] #aod2-roadmap .aod2-step-six-panel .aod2-roadmap li:nth-child(n+7):nth-child(-n+10)::after{content:none!important;display:none!important}
+}
+@media print{
+  :root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-step-six-panel .aod2-roadmap li:nth-child(n+7):nth-child(-n+10)::after{content:none!important;display:none!important}
+}
+
+/* Print preview must use the same arrow-free cards as the reader. */
+@media print{
+  :root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-roadmap-flow{display:none!important}
+  :root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-step-six-panel .aod2-roadmap::before,
+  :root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-step-six-panel .aod2-roadmap::after{content:none!important;display:none!important;background:none!important}
+  :root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-step-six-panel .aod2-roadmap li:not(:nth-child(6)):not(:nth-child(11))::after,
+  :root[data-aod2-theme="ait-pha"] :is(#aod2-roadmap,[data-aod2-source-page="aod2-roadmap"]) .aod2-step-six-panel .aod2-roadmap li:nth-child(6)::before{content:none!important;display:none!important;background:none!important}
+}

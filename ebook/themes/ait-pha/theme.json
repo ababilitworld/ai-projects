@@ -1,0 +1,12 @@
+{
+  "id": "ait-pha",
+  "name": "AIT-PHA",
+  "version": "1.0.0",
+  "description": "Professional terminal-inspired publishing theme.",
+  "tokens": {
+    "surface": "#ffffff",
+    "text": "#17202a",
+    "muted": "#687789",
+    "border": "#dbe2e9"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "id": "professional",
+  "name": "Professional",
+  "version": "1.0.0",
+  "page": {
+    "width": 794,
+    "height": 1123,
+    "margins": {"top": 64, "right": 64, "bottom": 64, "left": 64},
+    "border": true,
+    "header": true,
+    "footer": true,
+    "page_number": true
+  }
+}
