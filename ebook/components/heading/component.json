@@ -1,9 +1,0 @@
-{
-  "type": "heading",
-  "name": "Heading",
-  "category": "content",
-  "version": "1.0.0",
-  "pagination": {
-    "can_split": false
-  }
-}

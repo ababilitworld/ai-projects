@@ -1,9 +1,0 @@
-{
-  "type": "paragraph",
-  "name": "Paragraph",
-  "category": "content",
-  "version": "1.0.0",
-  "pagination": {
-    "can_split": true
-  }
-}

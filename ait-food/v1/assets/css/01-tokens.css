@@ -1,0 +1,11 @@
+:root{
+--aitb-color-primary:#5b3825;--aitb-color-secondary:#8b5e3c;--aitb-color-accent:#c99a45;
+--aitb-color-bg:#f7f1e7;--aitb-color-surface:#fffdf8;--aitb-color-border:#dfd2bf;
+--aitb-color-text:#29231e;--aitb-color-muted:#756b61;--aitb-color-success:#4f7657;
+--aitb-color-warning:#a36c1d;--aitb-color-danger:#9b4b42;
+--aitb-radius-sm:6px;--aitb-radius-md:12px;--aitb-radius-lg:20px;
+--aitb-space-xs:.35rem;--aitb-space-sm:.65rem;--aitb-space-md:1rem;--aitb-space-lg:1.5rem;--aitb-space-xl:2.5rem;
+--aitb-shadow:0 12px 30px rgba(60,40,20,.08);
+--aitb-max:1180px;
+}
+[data-aitb-theme="dark"]{--aitb-color-bg:#211b17;--aitb-color-surface:#2b241f;--aitb-color-border:#4b4037;--aitb-color-text:#f5eee5;--aitb-color-muted:#c7b9aa}
