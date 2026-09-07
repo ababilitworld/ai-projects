@@ -38,10 +38,11 @@ assert.equal(events.length,4,'One close per news day; unmatched dates omitted');
 assert.equal(events[0].tags.length,2,'Multiple news categories share their publication date');
 assert.equal(events[0].markerPrice,8.1,'Marker starts at exactly 90% of OHLC low');
 assert.deepEqual(news.segments(events).map(s=>s.color),[news.lineColors.up,news.lineColors.down,news.lineColors.equal]);
-const b = news.bounds(bars,events,130);
+const metrics = news.symbolMetrics(600,300);
+const b = news.bounds(bars,events,130,metrics);
 for (const e of events) {
   const markerY = (b.max-e.markerPrice)/b.range*130;
-  assert.ok(markerY+(e.tags.length-1)*15+7<=130,'Stacked markers must fit inside the plot');
+  assert.ok(markerY+(e.tags.length-1)*metrics.gap+metrics.radius<=130+1e-9,'Stacked markers must fit inside the plot');
 }
 assert.deepEqual(news.eventsFor(bars,[]),[]);
 assert.deepEqual(news.segments(events.slice(0,1)),[]);

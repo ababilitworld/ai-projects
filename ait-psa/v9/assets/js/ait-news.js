@@ -94,18 +94,31 @@
   function segments(events) {
     return events.slice(1).map((to, i) => ({from: events[i], to, color: lineColors[to.close > events[i].close ? 'up' : to.close < events[i].close ? 'down' : 'equal']}));
   }
-  function bounds(data, events, height) {
+  function symbolMetrics(width, height) {
+    const size=Math.round(Math.max(20,Math.min(34,Math.min(width*.045,height*.08))));
+    return {size,gap:size+5,radius:size*.6};
+  }
+  function watermark(ctx, left, top, width, height) {
+    ctx.save();
+    ctx.beginPath();ctx.rect(left,top,width,height);ctx.clip();
+    ctx.font=`700 ${Math.round(Math.max(26,Math.min(width*.16,height*.3,100)))}px system-ui, sans-serif`;
+    ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillStyle='#7c8fa4';ctx.globalAlpha=.15;
+    ctx.fillText('AIT-PSA',left+width/2,top+height/2,width*.75);
+    ctx.restore();
+  }
+  function bounds(data, events, height, metrics = symbolMetrics(600,300)) {
     const max = Math.max(...data.map(r => Number(r.high)));
     let min = Math.min(...data.map(r => Number(r.low)));
     for (const e of events) {
-      const fraction = Math.min(.8, (12 + (e.tags.length - 1) * 15) / Math.max(1, height));
+      const fraction = Math.min(.95, (metrics.radius + (e.tags.length - 1) * metrics.gap) / Math.max(1, height));
       min = Math.min(min, (e.markerPrice - max * fraction) / (1 - fraction));
     }
     return {min, max, range: Math.max(.01, max - min)};
   }
   const records = new Map(), manifests = new Map();
   function forCode(code) {return records.get(normalizeCode(code)) || [];}
-  function draw(ctx, canvas, events, x, y) {
+  function draw(ctx, canvas, events, x, y, metrics = symbolMetrics(canvas.width/(root.devicePixelRatio||1),canvas.height/(root.devicePixelRatio||1))) {
     ctx.save();
     for (const segment of segments(events)) {
       ctx.beginPath(); ctx.strokeStyle = segment.color; ctx.lineWidth = 2;
@@ -115,10 +128,10 @@
     events.forEach(e => {
       ctx.fillStyle = '#596c78'; ctx.beginPath(); ctx.arc(x(e.index), y(e.close), 2.5, 0, Math.PI * 2); ctx.fill();
       e.tags.forEach((tag, i) => {
-        const s = style(tag), xx = x(e.index), yy = y(e.markerPrice) + i * 15;
-        ctx.fillStyle = s.color; ctx.font = 'bold 14px "Segoe UI Symbol", sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        const s = style(tag), xx = x(e.index), yy = y(e.markerPrice) + i * metrics.gap;
+        ctx.fillStyle = s.color; ctx.font = `bold ${metrics.size}px "Segoe UI Symbol", sans-serif`; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
         ctx.fillText(s.symbol, xx, yy);
-        hits.push({x: xx, y: yy, event: e, tag});
+        hits.push({x: xx, y: yy, radius:metrics.radius, event: e, tag});
       });
     });
     ctx.restore();
@@ -130,12 +143,14 @@
       legend.innerHTML = `<span>News: markers at low −10%</span> <span style="color:${lineColors.up}">↗ Higher close</span> <span style="color:${lineColors.down}">↘ Lower close</span> <span style="color:${lineColors.equal}">→ Equal close</span><button type="button" class="btn soft" data-ait-news-open="report">News</button>`;
       if (legendHost === box) box.appendChild(legend); else box.insertAdjacentElement('afterend', legend);
     }
+    const newsButton = legendHost?.querySelector(':scope > .ait-news-chart-legend [data-ait-news-open]');
+    if (newsButton) newsButton.dataset.aitNewsCode = canvas.dataset.newsCode || '';
     if (!canvas._aitNewsBound) {
       canvas._aitNewsBound = true;
       canvas.addEventListener('mousemove', event => {
         const rect = canvas.getBoundingClientRect(), ratio = (canvas.width / (root.devicePixelRatio || 1)) / rect.width;
         const px = (event.clientX - rect.left) * ratio, py = (event.clientY - rect.top) * ((canvas.height / (root.devicePixelRatio || 1)) / rect.height);
-        const hit = canvas._aitNewsHits?.find(h => Math.abs(h.x - px) < 8 && Math.abs(h.y - py) < 8);
+        const hit = canvas._aitNewsHits?.find(h => Math.abs(h.x - px) < h.radius && Math.abs(h.y - py) < h.radius);
         canvas.title = hit ? `${hit.event.date} · ${style(hit.tag).label} · Close ${hit.event.close.toFixed(2)}\n${hit.event.items.map(r => r.title).join('\n')}\nClick to read news` : '';
         canvas.style.cursor = hit ? 'pointer' : '';
       });
@@ -143,12 +158,12 @@
         const rect = canvas.getBoundingClientRect();
         const px = (event.clientX-rect.left)*(canvas.width/(root.devicePixelRatio||1))/rect.width;
         const py = (event.clientY-rect.top)*(canvas.height/(root.devicePixelRatio||1))/rect.height;
-        const hit = canvas._aitNewsHits?.find(h => Math.abs(h.x-px)<9 && Math.abs(h.y-py)<9);
+        const hit = canvas._aitNewsHits?.find(h => Math.abs(h.x-px)<h.radius && Math.abs(h.y-py)<h.radius);
         if (hit) openWorkspace('report', {code: canvas.dataset.newsCode, date: hit.event.date});
       });
     }
   }
-  const api = {categories, lineColors, classify, style, mergeRows, mergeDownload, chartData, eventsFor, segments, bounds, forCode, draw};
+  const api = {categories, lineColors, classify, style, mergeRows, mergeDownload, chartData, eventsFor, segments, symbolMetrics, watermark, bounds, forCode, draw};
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   root.AITNews = api;
   if (!root.document) return;
@@ -312,7 +327,7 @@
     $('aitNewsLegend').innerHTML = Object.entries(categories).map(([category,c]) => `<div><strong><span style="color:${c.color}">${c.symbol}</span> ${esc(c.label)}</strong><div class="ait-news-tags">${Object.keys(c.types).map(type=>badge({category,type})).join('')}</div></div>`).join('');
     document.addEventListener('click', event => {
       const open = event.target.closest('[data-ait-news-open]');
-      if (open) {event.preventDefault(); openWorkspace(open.dataset.aitNewsOpen);}
+      if (open) {event.preventDefault(); openWorkspace(open.dataset.aitNewsOpen, {code: open.dataset.aitNewsCode});}
       const button = event.target.closest('[data-ait-news-download]');
       if (button) {openWorkspace('download'); $('aitNewsErrors').replaceChildren(); download(button.dataset.aitNewsDownload);}
       if (event.target.closest('[data-ait-psa-close],#aitPsaTerminalModalBackdrop')) $('aitPsaTerminalModalShell').classList.remove('ait-news-front');

@@ -6168,19 +6168,21 @@ class Parser{
 class CandleChart{
  static draw(canvas,data,opts={}){
   data=window.AITNews?.chartData(data,window.app?.s?.history?.[opts.code||canvas.dataset.newsCode]||data)||data;
-  const rect=canvas.getBoundingClientRect(),dpr=devicePixelRatio||1;canvas.width=Math.max(600,rect.width*dpr);canvas.height=Math.max(300,rect.height*dpr);const ctx=canvas.getContext("2d");ctx.scale(dpr,dpr);const W=canvas.width/dpr,H=canvas.height/dpr;ctx.clearRect(0,0,W,H);
+  const rect=canvas.getBoundingClientRect(),dpr=devicePixelRatio||1;canvas.width=Math.max(1,Math.round((rect.width||600)*dpr));canvas.height=Math.max(1,Math.round((rect.height||300)*dpr));const ctx=canvas.getContext("2d");ctx.scale(dpr,dpr);const W=canvas.width/dpr,H=canvas.height/dpr;ctx.clearRect(0,0,W,H);
   canvas.dataset.newsCode=opts.code||canvas.dataset.newsCode||"";canvas._aitNewsHits=[];canvas.title="";canvas.style.cursor="";
   if(!data.length){ctx.fillStyle="#64748b";ctx.font="15px system-ui";ctx.textAlign="center";ctx.fillText("No OHLC records available for this period.",W/2,H/2);return}
   const newsEvents=window.AITNews?.eventsFor(data,window.AITNews.forCode(canvas.dataset.newsCode))||[];
   const margin={l:60,r:18,t:18,b:55},volH=80,priceBottom=H-margin.b-volH,gW=W-margin.l-margin.r,pH=priceBottom-margin.t;
-  const bounds=window.AITNews?.bounds(data,newsEvents,pH),min=bounds?.min??Math.min(...data.map(x=>x.low)),max=bounds?.max??Math.max(...data.map(x=>x.high)),range=Math.max(.01,max-min),maxVol=Math.max(1,...data.map(x=>x.volume||0));
+  const newsMetrics=window.AITNews?.symbolMetrics(W,H);
+  const bounds=window.AITNews?.bounds(data,newsEvents,pH,newsMetrics),min=bounds?.min??Math.min(...data.map(x=>x.low)),max=bounds?.max??Math.max(...data.map(x=>x.high)),range=Math.max(.01,max-min),maxVol=Math.max(1,...data.map(x=>x.volume||0));
   const y=p=>margin.t+(max-p)/range*pH,x=i=>margin.l+(i+.5)*gW/data.length,cw=Math.max(2,Math.min(11,gW/data.length*.62));
+  window.AITNews?.watermark(ctx,margin.l,margin.t,gW,pH);
   ctx.strokeStyle="#e2e8f0";ctx.lineWidth=1;ctx.fillStyle="#64748b";ctx.font="11px system-ui";ctx.textAlign="right";
   for(let i=0;i<=5;i++){const yy=margin.t+i*pH/5,price=max-i*range/5;ctx.beginPath();ctx.moveTo(margin.l,yy);ctx.lineTo(W-margin.r,yy);ctx.stroke();ctx.fillText(price.toFixed(2),margin.l-7,yy+4)}
   const step=Math.max(1,Math.ceil(data.length/6));ctx.textAlign="center";for(let i=0;i<data.length;i+=step){ctx.fillText(data[i].date.slice(5),x(i),H-18)}
   data.forEach((d,i)=>{const up=d.close>=d.open,col=up?"#15803d":"#dc2626",xx=x(i);ctx.strokeStyle=col;ctx.fillStyle=col;ctx.beginPath();ctx.moveTo(xx,y(d.high));ctx.lineTo(xx,y(d.low));ctx.stroke();const top=y(Math.max(d.open,d.close)),bottom=y(Math.min(d.open,d.close));ctx.fillRect(xx-cw/2,top,cw,Math.max(1,bottom-top));const vh=(d.volume||0)/maxVol*(volH-15);ctx.globalAlpha=.35;ctx.fillRect(xx-cw/2,H-margin.b-vh,cw,vh);ctx.globalAlpha=1});
   ctx.strokeStyle="#cbd5e1";ctx.strokeRect(margin.l,margin.t,gW,pH);
-  window.AITNews?.draw(ctx,canvas,newsEvents,x,y);
+  window.AITNews?.draw(ctx,canvas,newsEvents,x,y,newsMetrics);
  }
 }
 class App{
@@ -7997,7 +7999,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   const ctx=canvas.getContext("2d");
   const rect=canvas.getBoundingClientRect();
   const dpr=window.devicePixelRatio||1;
-  canvas.width=Math.max(320,rect.width*dpr);
+  canvas.width=Math.max(1,Math.round((rect.width||320)*dpr));
   canvas.height=270*dpr;
   ctx.setTransform(dpr,0,0,dpr,0,0);
   const w=canvas.width/dpr,h=270;
@@ -8012,8 +8014,10 @@ document.addEventListener("DOMContentLoaded",()=>{
   const highs=data.map(r=>Number(r.high));
   const lows=data.map(r=>Number(r.low));
   const pad=24,plotH=h-48,step=(w-pad*2)/Math.max(1,data.length);
-  const newsBounds=window.AITNews?.bounds(data,newsEvents,plotH),max=newsBounds?.max??Math.max(...highs),min=newsBounds?.min??Math.min(...lows);
+  const newsMetrics=window.AITNews?.symbolMetrics(w,h);
+  const newsBounds=window.AITNews?.bounds(data,newsEvents,plotH,newsMetrics),max=newsBounds?.max??Math.max(...highs),min=newsBounds?.min??Math.min(...lows);
   const y=v=>pad+(max-v)/(max-min||1)*plotH;
+  window.AITNews?.watermark(ctx,pad,pad,w-pad*2,plotH);
   const css=getComputedStyle(document.documentElement);
   const grid=css.getPropertyValue("--v10-line").trim()||"rgba(255,255,255,.15)";
   const up=css.getPropertyValue("--v10-success").trim()||"#22c55e";
@@ -8049,7 +8053,7 @@ document.addEventListener("DOMContentLoaded",()=>{
   }
   if(document.getElementById("v11Sma20")?.checked)line(20,accent);
   if(document.getElementById("v11Sma50")?.checked)line(50,css.getPropertyValue("--v10-primary-2").trim()||"#8b5cf6");
-  window.AITNews?.draw(ctx,canvas,newsEvents,i=>pad+i*step+step/2,y);
+  window.AITNews?.draw(ctx,canvas,newsEvents,i=>pad+i*step+step/2,y,newsMetrics);
   canvas.parentElement.querySelector(".v11-chart-label").textContent=code||"No symbol";
  }
 
