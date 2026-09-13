@@ -1,0 +1,31 @@
+name: Workflow validation
+
+on:
+  pull_request:
+    branches: [development, production, main]
+  push:
+    branches: [development, production, main, 'feature/**', 'fix/**', 'docs/**', 'hotfix/**']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: workflow-validation-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Workflow validation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check handbook syntax and references
+        run: node github-workflow/scripts/check.js
+      - name: Test workflow state and publication boundaries
+        run: node --test github-workflow/tests/*.test.js
+      - name: Build Cloudflare static site
+        run: node github-workflow/scripts/build-site.js

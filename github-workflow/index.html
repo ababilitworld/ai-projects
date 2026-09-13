@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#101815">
+  <meta name="description" content="The AI Projects release handbook. Develop, review, test and promote changes with GitHub and Cloudflare.">
+  <title>Release Atlas · AI Projects</title>
+  <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./assets/styles.css">
+  <script type="module" src="./src/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to handbook</a>
+  <aside class="sidebar">
+    <a class="brand" href="#overview"><span class="brand-mark">a<span>↗</span></span><span>AI PROJECTS<small>ENGINEERING HANDBOOK</small></span></a>
+    <div class="edition"><span class="status-dot"></span> RELEASE ATLAS <span>01</span></div>
+    <nav aria-label="Handbook chapters">
+      <a href="#overview"><span>01</span> Overview <b>↗</b></a>
+      <a href="#workflow"><span>02</span> Branch workflow <b>↗</b></a>
+      <a href="#playbook"><span>03</span> Step-by-step <b>↗</b></a>
+      <a href="#environments"><span>04</span> Environments <b>↗</b></a>
+      <a href="#release"><span>05</span> Release checklist <b>↗</b></a>
+      <a href="#architecture"><span>06</span> Extend the guide <b>↗</b></a>
+    </nav>
+    <div class="sidebar-note"><span class="tiny-label">THE GOLDEN RULE</span><p>Small changes.<br>Clear reviews.<br><em>Confident releases.</em></p><span class="mini-branch">feature → development → production → main</span></div>
+    <a class="repo-link" href="https://github.com/ababilitworld/ai-projects">View repository <span>↗</span></a>
+  </aside>
+  <main id="main">
+    <header class="topbar"><span>ababilitworld <span class="muted">/</span> ai-projects</span><div><span class="desktop-label">YOUR PATH TO PRODUCTION</span><button id="print-guide" class="quiet-button" type="button">Print guide ↗</button></div></header>
+    <section id="overview" class="hero section-anchor">
+      <div class="eyebrow"><span class="status-dot"></span> THE RELEASE PLAYBOOK <span class="line"></span> V1.0</div>
+      <div class="hero-grid"><div><h1>Great ideas.<br>Careful steps.<br><em>Live with confidence.</em></h1><p class="hero-copy">A clear route from your next feature to a tested release. One repository, three branches, and two environments working together.</p><div class="hero-actions"><a class="primary-button" href="#playbook">Start building <span>↗</span></a><a class="text-link" href="#workflow">Explore the workflow ↓</a></div></div>
+        <div class="blueprint" aria-label="Release route: feature to development, then production candidate, then main live"><div class="blueprint-top"><span>RELEASE ROUTE</span><span>↗</span></div><div class="route-row"><i></i><span>feature / your-idea</span><small>BUILD</small></div><div class="route-connector">↓ pull request + checks</div><div class="route-row"><i></i><span>development</span><small>INTEGRATE</small></div><div class="route-connector">↓ release review</div><div class="route-row"><i></i><span>production</span><small>VALIDATE</small></div><div class="route-connector">↓ tested release</div><div class="route-row live"><i></i><span>main</span><small>GO LIVE ↗</small></div><div class="blueprint-foot"><span class="status-dot"></span> Every promotion has a checkpoint.</div></div></div>
+      <div class="metrics"><div><strong>03</strong><span>Long-lived branches</span></div><div><strong>02</strong><span>Permanent sites</span></div><div><strong>01</strong><span>Shared release process</span></div><div><strong>0</strong><span>Direct feature pushes to main</span></div></div>
+    </section>
+    <section id="workflow" class="section-anchor chapter"><div class="section-heading"><div><div class="eyebrow">01 / THE BIG PICTURE</div><h2>Every branch has a purpose.</h2></div><p>Select a stage to see where work belongs<br>and what happens next.</p></div><div id="pipeline"></div><div class="notice"><strong>A name worth remembering.</strong> The <code>production</code> branch is the release candidate. The <code>main</code> branch serves the live production site.</div></section>
+    <section id="playbook" class="section-anchor chapter"><div class="section-heading"><div><div class="eyebrow">02 / PUT IT INTO PRACTICE</div><h2>Your next move, explained.</h2></div><label class="search-label">Find a step<input id="guide-search" type="search" placeholder="Search branches, tests, Cloudflare…"></label></div><div id="playbook-content"></div></section>
+    <section id="environments" class="section-anchor chapter"><div class="section-heading"><div><div class="eyebrow">03 / TWO SITES. ONE SOURCE.</div><h2>A place to test.<br>A place to go live.</h2></div><p>Cloudflare Pages builds the static site.<br>cPanel continues to serve existing PHP apps.</p></div><div id="environment-cards"></div><div class="notice"><strong>Preview before promotion.</strong> Enable the <code>production</code> preview branch in the prod Pages project. Test its commit-specific deployment, record the SHA in the PR, then promote that code to <code>main</code>.</div></section>
+    <section id="release" class="section-anchor chapter release-section"><div><div class="eyebrow">04 / THE LAST MILE</div><h2>Ready is a checklist.<br><em>Not a feeling.</em></h2><p>Record your checks before promoting a release. Progress stays in this browser; it is a personal aid, not a GitHub approval or a live deployment status.</p><label class="release-label">Release reference<input id="release-name" placeholder="e.g. v0.1.0 · candidate SHA" maxlength="120"></label><div id="release-progress"></div></div><div id="release-checklist"></div></section>
+    <section id="architecture" class="section-anchor chapter"><div class="section-heading"><div><div class="eyebrow">05 / BUILT TO EVOLVE</div><h2>Change the content.<br>Keep the structure.</h2></div><a class="text-link" href="./README.md">Read the maintainer guide ↗</a></div><div class="architecture-grid"><article><span>01 / CONTENT</span><h3>Data, not tangled markup.</h3><p>Edit <code>src/data.js</code> to add stages, playbooks, environments and release checks.</p></article><article><span>02 / COMPONENTS</span><h3>Small, replaceable pieces.</h3><p>Each ES6 class owns one interface. Components receive data and services from the application.</p></article><article><span>03 / SERVICES</span><h3>Dependencies at the edge.</h3><p>Storage and clipboard adapters can be replaced without rewriting the workflow or its views.</p></article></div><details class="reference-details"><summary>Setup record, operations & official references <span>+</span></summary><p><a href="./docs/SETUP-STATUS.md">Setup status</a> · <a href="./docs/OPERATIONS.md">Daily operations and recovery</a> · <a href="./docs/CLOUDFLARE.md">Cloudflare setup</a></p><p><a href="https://docs.github.com/en/repositories/configuring-branches-and-merges-in-your-repository/managing-protected-branches">GitHub branch protections</a> · <a href="https://developers.cloudflare.com/pages/configuration/branch-build-controls/">Cloudflare branch controls</a> · <a href="https://developers.cloudflare.com/pages/configuration/preview-deployments/">Preview deployments</a></p></details></section>
+    <footer><a class="brand footer-brand" href="#overview">a↗ <span>RELEASE ATLAS</span></a><span>Made for deliberate progress.</span><a href="#overview">Back to top ↑</a></footer>
+  </main>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <noscript><p class="notice">JavaScript is disabled. Read the complete <a href="./docs/OPERATIONS.md">operations guide</a> and <a href="./docs/CLOUDFLARE.md">Cloudflare guide</a>.</p></noscript>
+</body>
+</html>
