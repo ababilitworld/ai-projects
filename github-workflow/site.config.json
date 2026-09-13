@@ -1,0 +1,11 @@
+{
+  "title": "AI Projects",
+  "projects": [
+    {"name":"Release Atlas","path":"github-workflow","entry":"index.html","description":"The GitHub and Cloudflare release handbook."},
+    {"name":"Food & Baking","path":"ait-food","entry":"v1/index.html","description":"Recipes, methods and baking references."},
+    {"name":"Personal Health","path":"ait-pha","entry":"v9/index.html","description":"Personal health planning tools."},
+    {"name":"PML","path":"ait-pml","entry":"index.html","description":"The PML application collection."},
+    {"name":"AIT","path":"ait","entry":"v6/index.html","description":"AIT project workspace."},
+    {"name":"Allahor Dol","path":"allahor-dol","entry":"v9/index.html","description":"The Allahor Dol static project."}
+  ]
+}
