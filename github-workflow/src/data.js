@@ -1,0 +1,45 @@
+export const repository = 'ababilitworld/ai-projects';
+export const stages = [
+  {id:'feature',label:'feature / …',caption:'01 · BUILD',title:'Give each change its own space.',description:'Start a feature/*, fix/* or docs/* branch from the latest development. Implement and test there, commit, push, then open a pull request into development.',destination:'PR → development',site:'Optional feature preview'},
+  {id:'development',label:'development',caption:'02 · INTEGRATE',title:'Bring reviewed changes together.',description:'Merge reviewed feature PRs here. The dev site rebuilds automatically. Test interactions between features before promoting the full development branch.',destination:'PR → production',site:'Dev site · automatic deployment'},
+  {id:'production',label:'production',caption:'03 · VALIDATE',title:'Freeze a candidate. Test the release.',description:'This is the release candidate, not the live site. Test its immutable Cloudflare preview and record the tested commit SHA. Avoid promoting more changes while final testing is in progress.',destination:'PR → main',site:'Commit-specific release preview'},
+  {id:'main',label:'main',caption:'04 · RELEASE',title:'Ship the code you have validated.',description:'Merge production into main with a merge commit. Cloudflare rebuilds the live site. Perform a live smoke test and create an annotated release tag after success.',destination:'Tag release + monitor',site:'Production site · live'}
+];
+export const playbooks = [
+ {id:'feature',label:'Develop a feature',steps:[
+  {title:'Start from an up-to-date development branch',body:'Run these commands in your local ai-projects clone. Use a clean working tree and replace the example feature name with your own.',command:'git fetch origin\ngit switch development\ngit pull --ff-only origin development\ngit switch -c feature/ait-mll-login'},
+  {title:'Build, test and commit a focused change',body:'Run tests for the app you changed. These commands also validate the workflow guide and static-site build. Stage only the intended files.',command:'node github-workflow/scripts/check.js\nnode --test github-workflow/tests/*.test.js\nnode github-workflow/scripts/build-site.js\ngit add ait-mll\ngit commit -m "feat(ait-mll): add login"\ngit push -u origin feature/ait-mll-login'},
+  {title:'Open the pull request into development',body:'On GitHub select base development and compare your feature branch. Describe the behavior, test evidence and any migration. The CLI example requires GitHub CLI authentication.',command:'gh pr create --base development --head feature/ait-mll-login --title "feat(ait-mll): add login" --body-file pr-description.md',link:'https://github.com/ababilitworld/ai-projects/compare/development...feature/github-workflow',linkLabel:'Open the workflow implementation comparison'},
+  {title:'Review, merge and verify the dev site',body:'Wait for Workflow validation and app-specific checks. Resolve review conversations, merge the PR, then verify the development deployment. The handbook checks do not replace application tests.'}
+ ]},
+ {id:'release',label:'Promote a release',steps:[
+  {title:'Open development → production',body:'Promote the complete tested development branch. Review the release scope, then use Create a merge commit. Do not squash promotions between long-lived branches.',command:'gh pr create --base production --head development --title "release: prepare candidate" --body-file release-notes.md',link:'https://github.com/ababilitworld/ai-projects/compare/production...development',linkLabel:'Prepare candidate PR'},
+  {title:'Test the production branch preview',body:'Find the successful production-branch preview in ai-projects-prod → Deployments. Use the commit-specific URL, not just the moving branch alias. Record its SHA, test outcomes, and migration/rollback notes in the release PR.'},
+  {title:'Open production → main',body:'Ensure the candidate head has not changed since testing. Review and merge with a merge commit after required checks pass. This triggers the permanent production deployment.',command:'gh pr create --base main --head production --title "release: publish tested candidate" --body-file release-notes.md',link:'https://github.com/ababilitworld/ai-projects/compare/main...production',linkLabel:'Prepare live release PR'},
+  {title:'Smoke-test and tag the successful release',body:'Check the deployed main commit, essential pages and integrations. Choose a new version number. A Git merge preserves the tested source; Cloudflare still performs a new build, so confirm that deployment too.',command:'git fetch origin\ngit switch main\ngit pull --ff-only origin main\ngit tag -a v0.1.0 -m "First validated release"\ngit push origin v0.1.0'}
+ ]},
+ {id:'cloudflare',label:'Connect Cloudflare',steps:[
+  {title:'Create the dev Pages project',body:'Workers & Pages → Create application → Continue to Pages → Connect to Git. Choose ababilitworld/ai-projects. Name the project ai-projects-dev, use development as its production branch, and set the build command below. Root directory: repository root. Output directory: .cloudflare-dist.',command:'node github-workflow/scripts/build-site.js'},
+  {title:'Create the prod Pages project',body:'Repeat with ai-projects-prod and main as the production branch. Use the same build command and output. Set NODE_VERSION=22 for both projects if the build image uses another Node version.'},
+  {title:'Set preview branch controls',body:'Dev project: include feature/*, fix/* and docs/*. Prod project: include production only. Keep automatic production-branch deployments enabled. Save settings. Pages treats development as the dev project’s production branch; that is expected.'},
+  {title:'Keep resources and domains separate',body:'Add custom domains only after selecting the intended domains. Use separate test and live databases, storage and secrets. Preview deployments use test resources. The existing PHP apps remain on cPanel; this static exporter deliberately excludes PHP, temporary browser profiles and archives.',link:'https://developers.cloudflare.com/pages/configuration/branch-build-controls/',linkLabel:'Official branch deployment controls'}
+ ]},
+ {id:'recovery',label:'Fix & recover',steps:[
+  {title:'Fix a failed release candidate',body:'Create a fix/* branch from development, correct the issue and open a PR into development. Promote it into production and repeat final testing. Freeze unrelated promotions while validating a candidate.'},
+  {title:'Handle an urgent live issue',body:'Create hotfix/* from main. Submit a PR into main with test evidence. Merge only after the urgent fix is validated.',command:'git fetch origin\ngit switch -c hotfix/critical-fix origin/main\n# Implement, test, commit and push\ngh pr create --base main --head hotfix/critical-fix --body-file hotfix-notes.md'},
+  {title:'Bring the live fix back to both branches',body:'After merging the hotfix, open main → production, then production → development synchronization PRs. Review conflicts carefully; use merge commits. Never reset or force-push shared branches.',command:'gh pr create --base production --head main --title "sync: bring live fix into candidate" --body-file sync-notes.md\n# After that PR is merged:\ngh pr create --base development --head production --title "sync: bring live fix into development" --body-file sync-notes.md'},
+  {title:'Rollback the site and reconcile Git',body:'If needed, restore a known-good production deployment in Cloudflare. Then create a revert PR from main so the next build does not restore the faulty code. A deployment rollback does not undo database changes; use a separately tested migration recovery procedure.'}
+ ]}
+];
+export const environments = [
+ {id:'dev',caption:'INTEGRATION ENVIRONMENT',title:'Room to experiment.',description:'Reviewed changes land here first. Validate features together before preparing a release.',project:'ai-projects-dev',branch:'development',preview:'feature/* · fix/* · docs/*',url:'https://ai-projects-dev.pages.dev'},
+ {id:'prod',caption:'LIVE ENVIRONMENT',title:'Ready for the world.',description:'Only the approved main branch becomes the permanent live release.',project:'ai-projects-prod',branch:'main',preview:'production',url:'https://ai-projects-prod.pages.dev'}
+];
+export const releaseChecks = [
+ {id:'scope',title:'Release scope reviewed',detail:'The candidate contains only the changes intended for release.'},
+ {id:'ci',title:'Required checks are green',detail:'Workflow validation and all relevant application checks passed.'},
+ {id:'preview',title:'Candidate preview tested',detail:'Record the immutable preview URL and tested commit SHA in the PR.'},
+ {id:'resources',title:'Configuration and migrations verified',detail:'Confirm environment bindings, secrets and migration compatibility.'},
+ {id:'recovery',title:'Recovery plan ready',detail:'Identify the last good deployment and database recovery procedure.'},
+ {id:'approval',title:'Release reviewed and approved',detail:'Resolve conversations and confirm the candidate has not changed.'}
+];
