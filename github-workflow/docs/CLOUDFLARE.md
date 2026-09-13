@@ -10,7 +10,7 @@ Two Git-connected Pages projects publish the same static build from different br
 | Build command | node github-workflow/scripts/build-site.js | node github-workflow/scripts/build-site.js |
 | Root directory | repository root | repository root |
 | Output directory | .cloudflare-dist | .cloudflare-dist |
-| Node | 22 | 22 |
+| Node | 22 (root .node-version) | 22 (root .node-version) |
 | Preview includes | feature/*, fix/*, docs/* | production |
 
 Cloudflare calls each project's permanent serving branch its production branch, including development in the dev project.
@@ -38,6 +38,8 @@ Default pages.dev domains work without DNS changes. Custom domains are not selec
 No application secrets are necessary for this static guide. Keep AI/API secrets in backend bindings and never embed them in browser bundles. Dev and preview use test resources; live uses production resources. Environment-specific Pages bindings must be configured separately when an app gains backend functionality.
 
 Existing pml and pha Workers and the cPanel deployment are independent and retained. These new projects do not replace their routing or credentials.
+
+The existing pha Worker's non-main preview build was observed failing with `Missing entry-point to Worker script or to assets directory` when running `npx wrangler versions upload` from `/ait-pha/v9/`. Its configuration is outside the Pages setup and was not modified. pml preview builds also reported failure; investigate its own logs before changing it. These are not required checks for the Pages workflow.
 
 ## Official references
 
