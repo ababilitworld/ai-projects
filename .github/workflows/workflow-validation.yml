@@ -27,5 +27,7 @@ jobs:
         run: node github-workflow/scripts/check.js
       - name: Test workflow state and publication boundaries
         run: node --test github-workflow/tests/*.test.js
+      - name: Test conversation roadmap and CSV imports
+        run: node --test ait-mtc/tests/conversation.test.cjs
       - name: Build Cloudflare static site
         run: node github-workflow/scripts/build-site.js
