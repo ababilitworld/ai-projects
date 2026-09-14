@@ -2,6 +2,19 @@
 'use strict';
 const escapeText=value=>String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const e=escapeText;
+// Shared by the active exchange and the full transcript so metadata stays consistent.
+class MessageView {
+  static hasTopic(node) { return node.g>0&&node.g<7; }
+  static header(flow,node,level=3) {
+    if(!this.hasTopic(node)) return `<header class="chat-heading global-heading"><h${level}>${e(flow.title(node))}</h${level}></header>`;
+    return `<header class="chat-heading"><h${level}>${e(flow.data[node.t].title)}</h${level}></header><div class="chat-subtopic">${e(flow.data[node.t].subtopics[node.s].title)}</div>`;
+  }
+  static bubbles(flow,node,active=false) {
+    const stage=flow.title(node),pattern=flow.stage(node).candidates[node.pattern].label,mood=window.CONVERSATION_MOODS[node.mood].label;
+    const context=this.hasTopic(node)?`${flow.data[node.t].title} › ${flow.data[node.t].subtopics[node.s].title}`:'';
+    return `<div class="chat-exchange ${active?'active-exchange':''}" ${active?'aria-label="Current exchange"':''}>${flow.lines(node).map(line=>`<article class="bubble message-bubble ${line.speaker==='Child'?'child':''}"><div class="message-meta"><div class="message-speaker">${e(line.speaker)}</div><div class="message-details">Stage: ${e(stage)}</div><div class="message-details">Pattern: ${e(pattern)} · Mood: ${e(mood)}</div>${context?`<div class="message-context">${e(context)}</div>`:''}</div><p class="message-text">${e(line.text)}</p></article>`).join('')}</div>`;
+  }
+}
 class RoadmapView {
   constructor(root,flow) { this.root=root; this.flow=flow; }
   render() {
@@ -35,10 +48,10 @@ class WorkspaceView {
       eyebrow='A CONVERSATION, WELL CONNECTED'; hint='You opened with a greeting, explored your chosen ideas and said goodbye. Review your path or print the conversation below.';
       content='<div class="complete-mark">✓</div><button class="primary" data-print>Print conversation</button>';
     } else {
-      eyebrow=n.g===0?'START WITH A HELLO':`${f.data[n.t].title} / ${f.data[n.t].subtopics[n.s].title}`;
+      eyebrow=n.g===0?'START WITH A HELLO':[7,8].includes(n.g)?'CLOSE YOUR CONVERSATION':`${f.data[n.t].title} / ${f.data[n.t].subtopics[n.s].title}`;
       hint=n.g===0?'Start warmly. Choose a way to say hello, then explore a topic.':'Choose how to say it, add a mood, and practice the exchange aloud.';
       const stage=f.stage(),moods=window.CONVERSATION_MOODS;
-      content=`${n.customLines?'<p class="edit-notice">Imported dialogue text. Selecting a different pattern or mood regenerates this step from your library.</p>':''}<div class="dialogue" aria-label="Active dialogue">${f.lines().map(l=>`<div class="bubble ${l.speaker==='Child'?'child':''}"><span>${e(l.speaker)}</span><p>${e(l.text)}</p></div>`).join('')}</div>
+      content=`${n.customLines?'<p class="edit-notice">Imported dialogue text. Selecting a different pattern or mood regenerates this step from your library.</p>':''}<section class="chat-thread active-chat" aria-label="Active dialogue">${MessageView.header(f,n)}${MessageView.bubbles(f,n,true)}</section>
         <div class="selection"><h3><span>01</span> Dialogue pattern <small>${e(stage.candidates[n.pattern].label)}</small></h3><div class="pattern-grid">${stage.candidates.map((c,i)=>`<button data-pattern="${i}" aria-pressed="${n.pattern===i}" class="${n.pattern===i?'selected':''}" title="${e(c.pattern)}">${e(c.label)}</button>`).join('')}</div></div>
         <div class="selection"><h3><span>02</span> Mood <small>${e(moods[n.mood].label)}</small></h3><div class="mood-grid">${moods.map((m,i)=>`<button data-mood="${i}" aria-pressed="${n.mood===i}" class="${n.mood===i?'selected':''}"><span>${m.icon}</span>${m.label}</button>`).join('')}</div></div>
         <div class="step-actions"><span class="muted small">Your pattern and mood stay with this step.</span><button class="primary" data-next>${n.g===0?'Choose a topic':n.g===8?'Finish conversation':'Continue'} <span>→</span></button></div>`;
@@ -50,7 +63,24 @@ class TranscriptView {
   constructor(root,flow) { this.root=root; this.flow=flow; }
   render() {
     const f=this.flow;
-    this.root.innerHTML=f.transcript().map(n=>`<article class="transcript-step"><h3>${e(f.title(n))}<small>${n.g>0&&n.g<7?e(f.data[n.t].title+' / '+f.data[n.t].subtopics[n.s].title):''} · ${e(window.CONVERSATION_MOODS[n.mood].label)}</small></h3>${f.lines(n).map(l=>`<p><b>${e(l.speaker)}</b> ${e(l.text)}</p>`).join('')}</article>`).join('');
+    let markup='',topic=null,subtopic=null,open=false;
+    for(const n of f.transcript()) {
+      if(!MessageView.hasTopic(n)) {
+        if(open){markup+='</section>';open=false;}
+        markup+=`<section class="chat-thread global-chat">${MessageView.header(f,n)}${MessageView.bubbles(f,n,n===f.current)}</section>`;
+        topic=null;subtopic=null;continue;
+      }
+      if(!open||topic!==n.t) {
+        if(open)markup+='</section><div class="chat-transition">New topic</div>';
+        markup+=`<section class="chat-thread"><header class="chat-heading"><h3>${e(f.data[n.t].title)}</h3></header>`;
+        open=true;topic=n.t;subtopic=null;
+      }
+      if(subtopic!==n.s){markup+=`<h4 class="chat-subtopic">${e(f.data[n.t].subtopics[n.s].title)}</h4>`;subtopic=n.s;}
+      markup+=MessageView.bubbles(f,n,n===f.current);
+      if(n.g===6){markup+='</section><div class="chat-transition">Changing topic</div>';open=false;topic=null;subtopic=null;}
+    }
+    if(open)markup+='</section>';
+    this.root.innerHTML=markup;
   }
 }
 class App {
