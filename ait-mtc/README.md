@@ -1,115 +1,68 @@
-# Real-Time Multi-Topic Conversation Pro V15
+# Conversation Terminal
 
-Restored hierarchy:
-Topic → Subtopic → Conversation Stage → Candidate Structure
+An interactive speaking workspace with a branching roadmap. The original V15 conversation library is preserved in `assets/js/data.js` (9 topics, 81 subtopics, 6,561 patterns / 13,122 dialogue lines). No AI service, account or backend is required.
 
-9 topics × 9 subtopics × 9 stages × 9 candidates = 6,561 selectable structure states.
+## Use the workspace
 
-Conversation stages:
-1. Greeting / Feeling
-2. Question
-3. Answer
-4. Follow-up
-5. Invitation
-6. Response
-7. Change Topic
-8. Ending
-9. Goodbye
+1. Open `index.html` through a static web server. Use **Workspace → Speaking → Dialog**.
+2. At **Greeting**, choose a dialogue pattern and mood. The dialogue is generated immediately from these selections. Continue to the topic list.
+3. Select a topic and then a subtopic. The context is selected before its dialogue patterns, so every pattern belongs to the right conversation step.
+4. Move through **Question → Answer → Follow-up → Invitation → Response**. Each step has independent pattern and mood selections.
+5. Choose **Another subtopic**, **Change topic**, or **Wrap up**. Changing topics includes a selectable transition dialogue before opening the topic list.
+6. At **Ending** and **Goodbye**, select the wording and mood, then finish. There is one greeting and one goodbye in the normal guided flow.
+7. The lower panel contains completed dialogue plus the currently selected speaking step. Future unvisited steps are not included.
 
-All 9 themes, dynamic dialogue replacement, active highlighting, and Print/Save PDF remain.
+Click an available roadmap node to revisit it. Editing a speaking step preserves the route. Choosing a different topic, subtopic or branch replaces the downstream route; the editor displays this effect before the selection. Keeping the same choice retains later steps. Future nodes remain unavailable until preceding steps are completed.
 
-## V6 Refinement
-- Exact hierarchy titles: Topic → Sub Topic → Conversation Stage
-- Live conversation shows only the currently active conversation slice
-- Active summary also reflects only the current selection
-- Highlighting is limited to active topic, sub topic, stage, candidate structure, and active dialogue lines
+**Settings → Theme** offers nine themes. Only the theme is persisted in browser storage. Conversation paths and imported libraries are session-only: export before refreshing or leaving. Start fresh asks before clearing the path. Print exports only the conversation transcript, without navigation or controls.
 
-## V7 Summary Behavior
-- Active Conversation still shows only the currently active stage.
-- Active Conversation Summary shows the complete selected Topic + Sub Topic conversation across all 9 Conversation Stages.
-- Each stage uses its currently selected Candidate Structure.
-- The currently active Conversation Stage label and its Parent/Child lines are highlighted.
+## CSV import and export
 
-## V8 Navigation Styling
-- Topic, Sub Topic, and Conversation Stage now share the same card-pill visual language.
-- Active Topic and Conversation Stage use the same soft-background + accent-border state as active Sub Topic.
-- Candidate Structures remain compact rounded pills because they are secondary choices.
+Open **Workspace → Import / export CSV**.
 
-## V9 Mood Layer
-Hierarchy is now:
-Topic → Sub Topic → Conversation Stage → Mood → Candidate Structure
+- **Export library CSV** exports the neutral library and any imported mood-specific overrides. The other moods are generated using the original app's phrasing rules, so those generated variants are not repeated in the library export.
+- **Export conversation CSV** exports the exact visible dialogue, ordered by speaking step, with its selected pattern and mood.
+- Choose a file to validate it and preview five rows. Nothing changes until **Apply import**.
+- Library **Merge** adds records and replaces matching topic/subtopic/step/pattern/mood groups. Library **Replace** rebuilds the whole library. Both start a fresh conversation. Each subtopic requires all nine steps and every pattern requires neutral lines; use Merge for partial updates.
+- Conversation **Replace** restores its speaking path. **Merge** appends it to the current transcript (including any repeated greetings/goodbyes). The library stays unchanged. Its referenced topics, subtopics and patterns must already exist; import the corresponding library first.
+- Imported conversations retain exact text. Selecting a new pattern or mood regenerates that step from the library. Imported paths contain speaking nodes, not the original topic-choice nodes. A partial path offers continuation; a completed path remains reviewable and printable.
 
-9 moods:
-1. Neutral
-2. Happy
-3. Excited
-4. Curious
-5. Friendly
-6. Polite
-7. Calm
-8. Surprised
-9. Confident
+Use an export as the editing template. UTF-8 CSV uses these exact headers in order:
 
-Mood navigation uses the same responsive card-pill visual language as Topic, Sub Topic, and Conversation Stage.
-The active mood modifies the active stage's spoken delivery and is reflected in the Active Conversation and active-stage portion of the Conversation Summary.
+```csv
+kind,sequence,topic,subtopic,step,pattern,mood,line_order,speaker,text
+```
 
-## V10 Connected Summary
-- Summary now renders all 9 Topics.
-- Under every Topic it renders all 9 Sub Topics.
-- Under every Sub Topic it renders all 9 Conversation Stages.
-- Each stage uses its selected Candidate Structure.
-- The currently active Topic/Sub Topic/Conversation Stage stays highlighted.
-- Topic-transition separators visually connect one Topic to the next.
+| Field | Meaning |
+| --- | --- |
+| kind | `library` or `conversation`; one kind per file |
+| sequence | Empty for library; consecutive speaking-step numbers from 1 for conversation |
+| topic / subtopic | Exact names; case-sensitive |
+| step | Greeting, Question, Answer, Follow-up, Invitation, Response, Change topic, Ending, Goodbye |
+| pattern | Pattern label, such as Simple or Warm |
+| mood | Neutral, Happy, Excited, Curious, Friendly, Polite, Calm, Surprised, Confident |
+| line_order | Consecutive line numbers from 1 within each dialogue |
+| speaker / text | Speaker label and dialogue text, including Unicode or multiline text |
 
-## V11 Conversation Summary Lifecycle
-The connected summary now follows a natural conversation lifecycle:
+Limits: 15 MB, 100,000 rows, 100 lines per dialogue and 10,000 conversation sequences. Missing fields, invalid labels, duplicate lines and malformed quoting are rejected. Failed imports leave active data unchanged. CSV quotes commas, quotes and newlines. Spreadsheet formula-like values receive a reversible apostrophe prefix. Imports run locally in the browser; nothing is uploaded to a server.
 
-Greeting / Feeling — shown once at the beginning.
-Connected Topics and Sub Topics — internal stages repeat as needed.
-Ending — shown once after all connected topics.
-Goodbye — shown once at the very end.
+## Components
 
-Greeting / Feeling, Ending, and Goodbye are no longer repeated under every Sub Topic in the summary.
+- `model.js`: independent conversation state and branch transitions.
+- `csv.js`: CSV codec, validation and library/conversation transformations.
+- `app.js`: RoadmapView, WorkspaceView, TranscriptView, CsvPanel and application wiring.
+- `data.js`: original library, separate from layout and application code.
+- `css.css`: responsive terminal shell, branch lanes, controls and print layout.
 
-## V12 UI Reorganization
-- Candidate Structure is now directly below Conversation Stage in the main navigation hierarchy.
-- Separate Active Path section was removed.
-- Active path is now shown inside the Active Conversation panel.
-- Added Previous Mood and Next Mood controls inside Active Conversation.
-- Active mood name/icon is shown between mood navigation controls.
-- Selected structure details remain in the stage details card.
+Rendering escapes imported text. Theme storage failures do not block the app. Buttons support keyboard navigation, active selections use `aria-pressed`, current nodes use `aria-current`, and step changes announce status. No package dependencies or build step are needed.
 
-## V13 Simplification
-- Removed Active Stage Details card.
-- Active Conversation is now the sole trainer card.
-- Candidate Structure remains directly below Conversation Stage in the main hierarchy.
-- Mood controls remain inside Active Conversation.
-- Connected Conversation Summary corrected:
-  - Greeting / Feeling once at the beginning.
-  - All connected Topics and Sub Topics with internal conversation stages.
-  - Ending once after all connected topics.
-  - Goodbye once at the end.
-  - Current active stage remains highlighted.
+## Validation
 
-## V14 Summary Scope
-Conversation Summary is now scoped to the selected Topic only.
+```sh
+node --test ait-mtc/tests/conversation.test.cjs
+node --check ait-mtc/assets/js/app.js
+node --check ait-mtc/assets/js/model.js
+node --check ait-mtc/assets/js/csv.js
+```
 
-It shows:
-- Greeting / Feeling once
-- Selected Topic
-- All 9 connected Sub Topics of that Topic
-- Relevant internal Conversation Stages for each Sub Topic
-- Sub Topic transition markers
-- Ending once
-- Goodbye once
-- Active Sub Topic and active Conversation Stage highlighting
-
-## V15 Candidate Structure Styling
-Candidate Structure now uses the same card-style navigation design as Sub Topic:
-- 9-column responsive horizontal grid
-- same minimum width and height
-- same 16px rounded corners
-- same padding and left alignment
-- same hover lift
-- same soft active background
-- same accent active border
+The tests cover branch completion, revisiting and truncation, full-library CSV round trips, Unicode/quoting, invalid inputs, mood overrides and exact conversation restore/append. Browser smoke testing covers menus, dialogue controls, responsive layout, CSV preview/apply and theme selection. The repository Pages manifest already includes `ait-mtc`; feature changes are reviewed through a development PR before release promotion.
