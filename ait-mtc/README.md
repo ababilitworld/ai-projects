@@ -14,6 +14,12 @@ An interactive speaking workspace with a branching roadmap. The original V15 con
 
 Click an available roadmap node to revisit it. Editing a speaking step preserves the route. Choosing a different topic, subtopic or branch replaces the downstream route; the editor displays this effect before the selection. Keeping the same choice retains later steps. Future nodes remain unavailable until preceding steps are completed.
 
+## Messenger conversation layout
+
+The active dialogue and full transcript share the same message component. Parent bubbles align left and Child bubbles align right. Each bubble shows small uppercase speaker, `STAGE`, `PATTERN` and `MOOD` metadata, followed by a small topic/subtopic breadcrumb when applicable, then the larger dialogue text. Metadata uses muted theme colors; the message remains the visual focus.
+
+Topic headers group consecutive exchanges, with subtopic dividers inside each topic. Changing topic inserts a transition divider without sorting or rearranging the conversation. Greeting, ending and goodbye are standalone groups with no topic breadcrumb. The current exchange is outlined; completed messages retain their own pattern and mood. Print styling preserves the grouped bubble layout. CSV fields and import/export behavior are unchanged.
+
 **Settings → Theme** offers nine themes. Only the theme is persisted in browser storage. Conversation paths and imported libraries are session-only: export before refreshing or leaving. Start fresh asks before clearing the path. Print exports only the conversation transcript, without navigation or controls.
 
 ## CSV import and export
@@ -50,7 +56,7 @@ Limits: 15 MB, 100,000 rows, 100 lines per dialogue and 10,000 conversation sequ
 
 - `model.js`: independent conversation state and branch transitions.
 - `csv.js`: CSV codec, validation and library/conversation transformations.
-- `app.js`: RoadmapView, WorkspaceView, TranscriptView, CsvPanel and application wiring.
+- `app.js`: MessageView shared bubble rendering; RoadmapView, WorkspaceView, TranscriptView, CsvPanel and application wiring.
 - `data.js`: original library, separate from layout and application code.
 - `css.css`: responsive terminal shell, branch lanes, controls and print layout.
 
