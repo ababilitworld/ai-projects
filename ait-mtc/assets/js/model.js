@@ -12,15 +12,16 @@
     {label:'Surprised',icon:'😮',lead:'With surprise, ',reply:'Oh, wow! '},
     {label:'Confident',icon:'💪',lead:'Confidently, ',reply:'Absolutely. '}
   ];
-  const TITLES = ['Greeting','Question','Answer','Follow-up','Invitation','Response','Change topic','Ending','Goodbye'];
+  const TITLES = {0:'Greeting',4:'Invitation',5:'Response',6:'Change topic',7:'Ending',8:'Goodbye'};
+  const STAGE_INDEX = {0:0,4:1,5:2,6:3,7:4,8:5};
   class ConversationFlow {
     constructor(data) { this.data=data; this.reset(); }
     reset() { this.sequence=0; this.nodes=[this.speech(0,0,0),this.node('topic',{t:null,s:null})]; this.cursor=0; }
     node(type,fields={}) { return {id:++this.sequence,type,confirmed:false,...fields}; }
-    speech(t,s,g) { return this.node('speech',{t,s,g,pattern:0,mood:0}); }
+    speech(t,s,g,qaIndex=null) { return this.node('speech',{t,s,g,qaIndex,pattern:0,mood:0}); }
     get current() { return this.nodes[this.cursor]; }
-    stage(node=this.current) { return this.data[node.t].subtopics[node.s].stages[node.g]; }
-    title(node) { return node.type==='speech'?TITLES[node.g]:({topic:'Choose a topic',subtopic:'Choose a subtopic',decision:'Where next?',complete:'Conversation complete'})[node.type]; }
+    stage(node=this.current) { const subtopic=this.data[node.t].subtopics[node.s];return node.g===1?subtopic.questionAnswers[node.qaIndex]:subtopic.stages[STAGE_INDEX[node.g]]; }
+    title(node) { return node.type==='speech'?(node.g===1?`Question & Answer ${node.qaIndex+1}`:TITLES[node.g]):({topic:'Choose a topic',subtopic:'Choose a subtopic',decision:'Where next?',complete:'Conversation complete'})[node.type]; }
     visit(id) { const i=this.nodes.findIndex(n=>n.id===id); if(i>=0 && (i<=this.cursor || this.nodes.slice(0,i).every(n=>n.confirmed))) this.cursor=i; }
     replaceAfter(nodes) { this.nodes.splice(this.cursor+1,this.nodes.length,...nodes); }
     next() {
@@ -38,7 +39,8 @@
       const n=this.current;
       if(n.type!=='subtopic'||!Number.isInteger(s)||!this.data[n.t].subtopics[s]) return;
       if(n.s!==s || !this.nodes[this.cursor+1]) this.replaceAfter([
-        ...[1,2,3,4,5].map(g=>this.speech(n.t,s,g)),this.node('decision',{t:n.t,s})
+        ...this.data[n.t].subtopics[s].questionAnswers.map((_,i)=>this.speech(n.t,s,1,i)),
+        this.speech(n.t,s,4),this.speech(n.t,s,5),this.node('decision',{t:n.t,s})
       ]);
       n.s=s; n.confirmed=true; this.cursor++;
     }
