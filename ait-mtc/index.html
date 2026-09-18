@@ -7,6 +7,7 @@
   <link rel="stylesheet" href="assets/css.css">
   <link rel="stylesheet" href="assets/css/themes/ocean.css" id="themeCss">
   <script defer src="assets/js/data.js"></script>
+  <script defer src="assets/js/library.js"></script>
   <script defer src="assets/js/model.js"></script>
   <script defer src="assets/js/csv.js"></script>
   <script defer src="assets/js/app.js"></script>
@@ -29,7 +30,7 @@
   </main>
   <footer class="shell">Greeting → explore topics & subtopics → continue or change direction → ending → goodbye.</footer>
   <div id="announcement" class="sr-only" role="status" aria-live="polite"></div>
-  <dialog id="csvDialog" aria-labelledby="csvTitle"><div class="section-title"><h2 id="csvTitle">Your conversation data</h2><button id="closeCsv" aria-label="Close CSV window">×</button></div><p class="muted">Export a backup, edit it in a spreadsheet, or bring it back here. Imports stay in this session; export before leaving.</p><div class="export-actions"><button id="exportLibrary">Export library CSV</button><button id="exportConversation">Export conversation CSV</button></div><hr><h3>Import CSV</h3><label class="file-label">Choose a CSV file <input id="csvFile" type="file" accept=".csv,text/csv"></label><p class="small muted">Up to 15 MB. Use an exported file as the template. Library imports can add patterns and mood-specific lines. Conversation imports restore the exported dialogue path.</p><div id="csvPreview" aria-live="polite"></div><div id="importControls" hidden><fieldset><legend>How should this import be applied?</legend><label><input type="radio" name="importMode" value="merge" checked> Merge with current data</label><label><input type="radio" name="importMode" value="replace"> Replace current data</label></fieldset><p id="importEffect" class="edit-notice"></p><button id="applyCsv" class="primary">Apply import</button></div><p id="csvStatus" role="status"></p></dialog>
+  <dialog id="csvDialog" aria-labelledby="csvTitle"><div class="section-title"><h2 id="csvTitle">Your conversation data</h2><button id="closeCsv" aria-label="Close CSV window">×</button></div><p class="muted">Export a backup, edit it in a spreadsheet, or bring it back here. Imports stay in this session; export before leaving.</p><div class="export-actions"><button id="exportLibrary">Export library CSV</button><button id="exportConversation">Export conversation CSV</button></div><hr><h3>Import CSV</h3><label class="file-label">Choose a CSV file <input id="csvFile" type="file" accept=".csv,text/csv"></label><p class="small muted">Up to 15 MB. Use an exported file as the template. Library imports can add paired Question & Answer rounds, patterns and mood-specific lines. Conversation imports restore the exported dialogue path.</p><div id="csvPreview" aria-live="polite"></div><div id="importControls" hidden><fieldset><legend>How should this import be applied?</legend><label><input type="radio" name="importMode" value="merge" checked> Merge with current data</label><label><input type="radio" name="importMode" value="replace"> Replace current data</label></fieldset><p id="importEffect" class="edit-notice"></p><button id="applyCsv" class="primary">Apply import</button></div><p id="csvStatus" role="status"></p></dialog>
   <noscript>This conversation trainer requires JavaScript. Enable it to choose a conversation path.</noscript>
 </body>
 </html>
