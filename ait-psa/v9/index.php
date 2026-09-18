@@ -5912,7 +5912,7 @@ body.ait-elite-is-calculating *{cursor:progress!important}
    <button class="btn soft" type="button" id="downloadDseCsv">Download CSV</button>
   </div>
   <div class="small" style="margin-top:8px">
-   PHP cURL downloads the DSE archive server-side, saves normalized CSV files, and returns records to this dashboard.
+   The market-data service downloads the DSE archive, normalizes OHLC records, and returns them to this dashboard.
   </div>
  </div>
  <div class="tabs"><button class="tab active" data-tab="files">Archive Files</button><button class="tab" data-tab="paste">Paste Data</button><button class="tab" data-tab="url">Archive URL</button></div>
@@ -6766,7 +6766,7 @@ document.querySelectorAll("[data-mother-tab]").forEach(b=>b.onclick=()=>this.mot
   try{
    this.showDownloadStatus(
     "Downloading DSE archive",
-    "PHP cURL is downloading and combining archive chunks. Please keep this page open.",
+    "The market-data service is downloading and combining archive chunks. Please keep this page open.",
     20
    );
 
@@ -6887,7 +6887,7 @@ document.querySelectorAll("[data-mother-tab]").forEach(b=>b.onclick=()=>this.mot
    );
 
    this.pending=parsed;
-   this.pendingSource=`DSE PHP cURL cache: ${payload.csvFile||"saved CSV"}`;
+   this.pendingSource=`DSE archive: ${payload.csvFile||"market-data service"}`;
    if(watchContext)this.downloadCache?.recordOhlc(watchContext,{start,end,mode:cacheMode,source:this.pendingSource,records:count,requestedCodes:activeCodes,matchedCodes:Object.keys(parsed),missingCodes:missing});
    this.commit(false,true);
 
