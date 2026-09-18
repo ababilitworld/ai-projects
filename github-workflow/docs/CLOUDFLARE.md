@@ -29,7 +29,9 @@ Cloudflare calls each project's permanent serving branch its production branch, 
 
 `site.config.json` explicitly selects static project folders. The exporter builds a new top-level project directory page without modifying the repository's existing index.html. It preserves each project path. It excludes PHP, archives, database files, dotfiles, node_modules, vendor directories, temporary/browser profiles, tests and scripts. Handbook docs are deliberately included. Assets above Pages' 25 MiB limit fail the build.
 
-The currently empty ait-mll folder is not deployed as an app. Add a working static entry and a manifest entry when it is implemented. The PHP-backed ait-psa and ecoreal apps remain on their existing server. Validate the behavior and external API dependencies of each static app separately; successful copying does not prove the app works.
+The currently empty ait-mll folder is not deployed as an app. Add a working static entry and a manifest entry when it is implemented. PSA v9 is published as static HTML and assets with a Pages Worker serving its four market-data endpoints; its PHP files and writable storage are not published. The ecoreal PHP app remains on its existing server. Validate the behavior and external API dependencies of each static app separately; successful copying does not prove the app works.
+
+PSA's Pages Worker fetches fixed DSE and AmarStock sources and normalizes archive, instant, fundamentals and news responses. Browser data remains in the app's existing local storage. The Pages version has no shared server-side market cache; remote source access and response parsing must be checked on a deployed preview before promotion.
 
 ## Domains and configuration
 
