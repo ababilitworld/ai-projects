@@ -42,6 +42,13 @@
       "path": "ait-mtc",
       "entry": "index.html",
       "description": "Interactive conversation practice with topics, stages, moods and themes."
+    },
+    {
+      "name": "PSA Market Intelligence",
+      "path": "ait-psa",
+      "entry": "v9/index.html",
+      "sourceEntry": "v9/index.php",
+      "description": "DSE scanners, market data and performance monitors."
     }
   ]
 }
