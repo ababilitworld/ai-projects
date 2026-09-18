@@ -6770,27 +6770,27 @@ document.querySelectorAll("[data-mother-tab]").forEach(b=>b.onclick=()=>this.mot
     20
    );
 
-   const r=await fetch(this.dseApiUrl(start,end,forceRefresh,activeCodes),{
-    headers:{Accept:"application/json"},
-    cache:"no-store"
-   });
-
-   this.showDownloadStatus(
-    "Reading server response",
-    "The download finished. Reading the parsed archive data…",
-    60
-   );
-
-   const rawText=await r.text();
-   let payload=null;
-   try{
-    payload=JSON.parse(rawText);
-   }catch(parseError){
-    throw new Error(`Server returned invalid JSON: ${rawText.slice(0,180)}`);
+   const dayMs=86400000;
+   const firstDay=Date.parse(`${start}T00:00:00Z`);
+   const lastDay=Date.parse(`${end}T00:00:00Z`);
+   const windows=[];
+   for(let day=firstDay;day<=lastDay;day+=56*dayMs){
+    windows.push([new Date(day).toISOString().slice(0,10),new Date(Math.min(lastDay,day+55*dayMs)).toISOString().slice(0,10)]);
    }
-
-   if(!r.ok||!payload?.success){
-    const serverMessage=String(payload?.message||`HTTP ${r.status}`);
+   const combined={};
+   let payload=null;
+   for(let i=0;i<windows.length;i++){
+    const [from,to]=windows[i];
+    this.showDownloadStatus("Downloading DSE archive",`Date range ${i+1} of ${windows.length}: ${from} to ${to}…`,20+Math.round(40*i/windows.length));
+    const r=await fetch(this.dseApiUrl(from,to,forceRefresh,activeCodes),{
+     headers:{Accept:"application/json"},cache:"no-store"
+    });
+    const rawText=await r.text();
+    let part=null;
+    try{part=JSON.parse(rawText)}catch(_){throw new Error(`Server returned invalid JSON: ${rawText.slice(0,180)}`)}
+    if(!r.ok||!part?.success){
+     const serverMessage=String(part?.message||`HTTP ${r.status}`);
+     if(windows.length>1)throw new Error(`DSE archive ${from} to ${to}: ${serverMessage}`);
     const noArchiveUpdate=allowNoUpdate&&/(no usable dse records|no usable records|no records were returned|no archive records|no data returned|no records found)/i.test(serverMessage);
     if(noArchiveUpdate){
      const seconds=Math.max(1,Math.round((Date.now()-startedAt)/1000));
@@ -6811,7 +6811,14 @@ document.querySelectorAll("[data-mother-tab]").forEach(b=>b.onclick=()=>this.mot
      return true;
     }
     throw new Error(serverMessage);
+    }
+    for(const [code,rows] of Object.entries(part.data||{})){
+     (combined[code]??=[]).push(...(Array.isArray(rows)?rows:[]));
+    }
+    payload=part;
    }
+   payload={...payload,data:combined,symbolCount:Object.keys(combined).length,recordCount:Object.values(combined).reduce((n,rows)=>n+rows.length,0)};
+   this.showDownloadStatus("Reading server response","The download finished. Reading the parsed archive data…",60);
 
    this.showDownloadStatus(
     "Matching watch-list codes",
@@ -6906,7 +6913,7 @@ document.querySelectorAll("[data-mother-tab]").forEach(b=>b.onclick=()=>this.mot
    console.error(e);
    const message=e?.message||String(e);
    this.failDownloadStatus(message);
-   this.toast(`DSE PHP download failed: ${message}`,true);
+   this.toast(`DSE download failed: ${message}`,true);
    return false
   }
  }
