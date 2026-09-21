@@ -17,11 +17,12 @@
     constructor(data){this.data=data;this.reset();}
     node(type,fields={}){return {id:++this.sequence,type,confirmed:false,...fields};}
     speech(part,context={}){return this.node('speech',{t:0,s:0,pattern:0,mood:0,place:'Home',...context,part});}
+    exchange(part,context={}){return this.node('structure',{t:0,s:0,pattern:null,preview:null,mood:0,place:'Home',...context,part});}
     reset(){this.sequence=0;this.nodes=[this.node('place',{place:'Home',mood:0})];this.cursor=0;}
     get current(){return this.nodes[this.cursor];}
     context(n=this.current){return {t:n.t??0,s:n.s??0,place:n.place||'Home',mood:n.mood??0};}
     stage(n=this.current){return n.importedStage||this.data[n.t??0]?.subtopics[n.s??0]?.stages.find(g=>g.slug===n.part);}
-    title(n){return n.type==='speech'?this.stage(n)?.title||n.part:({place:'Choose a place',mood:n.scope==='greeting'?'Choose greeting mood':'Place & subtopic mood',topic:'Choose a topic',subtopic:'Choose a subtopic',decision:'Continue or finish?',direction:'Choose your direction',complete:'Conversation complete'})[n.type];}
+    title(n){return n.type==='structure'?`Choose structure · ${this.stage(n)?.title||n.part}`:n.type==='speech'?this.stage(n)?.title||n.part:({place:'Choose a place',mood:n.scope==='greeting'?'Choose greeting mood':'Place & subtopic mood',topic:'Choose a topic',subtopic:'Choose a subtopic',decision:'Continue or finish?',direction:'Choose your direction',complete:'Conversation complete'})[n.type];}
     visit(id){const i=this.nodes.findIndex(n=>n.id===id);if(i>=0&&(i<=this.cursor||this.nodes.slice(0,i).every(n=>n.confirmed)))this.cursor=i;}
     replaceAfter(nodes){this.nodes.splice(this.cursor+1,this.nodes.length,...nodes);}
     advance(){this.current.confirmed=true;this.cursor++;}
@@ -36,8 +37,8 @@
       const n=this.current;if(n.type!=='mood'||!Number.isInteger(mood)||!MOODS[mood]||!this.validPlace(place))return;
       place=place.trim();const context={...this.context(),mood,place};
       if(n.mood!==mood||n.place!==place||!this.nodes[this.cursor+1]){
-        const next=n.scope==='greeting'?[this.speech('greeting',context),this.speech('proposal',context),this.node('topic',{...context,t:null,s:null})]:[
-          ...this.subtopicParts(n.t,n.s).map(part=>this.speech(part,context)),this.node('decision',context)
+        const next=n.scope==='greeting'?[this.exchange('greeting',context),this.exchange('proposal',context),this.node('topic',{...context,t:null,s:null})]:[
+          ...this.subtopicParts(n.t,n.s).map(part=>this.exchange(part,context)),this.node('decision',context)
         ];this.replaceAfter(next);
       }
       n.mood=mood;n.place=place;this.advance();
@@ -52,29 +53,62 @@
     branch(choice){
       const n=this.current;if(n.type!=='decision'||!['continue','finish'].includes(choice))return;
       if(n.choice!==choice||!this.nodes[this.cursor+1]){
-        const c=this.context();this.replaceAfter(choice==='continue'?[this.speech('continue',c),this.node('direction',c)]:[this.speech('finish-choice',c),this.speech('finishing',c),this.speech('goodbye',c),this.node('complete',c)]);
+        const c=this.context();this.replaceAfter(choice==='continue'?[this.exchange('continue',c),this.node('direction',c)]:[this.exchange('finish-choice',c),this.exchange('finishing',c),this.exchange('goodbye',c),this.node('complete',c)]);
       }n.choice=choice;this.advance();
     }
     chooseDirection(choice){
       const n=this.current;if(n.type!=='direction'||!['topic','subtopic'].includes(choice))return;
       if(n.choice!==choice||!this.nodes[this.cursor+1]){
-        const c=this.context();this.replaceAfter(choice==='topic'?[this.speech('change-topic',c),this.speech('proposal',c),this.node('topic',{...c,t:null,s:null})]:[this.speech('change-subtopic',c),this.node('subtopic',{...c,s:null})]);
+        const c=this.context();this.replaceAfter(choice==='topic'?[this.exchange('change-topic',c),this.exchange('proposal',c),this.node('topic',{...c,t:null,s:null})]:[this.exchange('change-subtopic',c),this.node('subtopic',{...c,s:null})]);
       }n.choice=choice;this.advance();
     }
     next(){if(this.current.type!=='speech')return;if(this.cursor===this.nodes.length-1)this.replaceAfter(this.continuation(this.current));this.advance();}
     continuation(n){
       const c=this.context(n),p=n.part,parts=this.subtopicParts(c.t,c.s),i=parts.indexOf(p);
-      if(i>=0)return [...parts.slice(i+1).map(part=>this.speech(part,c)),this.node('decision',c)];
+      if(i>=0)return [...parts.slice(i+1).map(part=>this.exchange(part,c)),this.node('decision',c)];
       if(p==='goodbye')return [this.node('complete',c)];
-      if(p==='finishing')return [this.speech('goodbye',c),this.node('complete',c)];
-      if(p==='finish-choice')return [this.speech('finishing',c),this.speech('goodbye',c),this.node('complete',c)];
+      if(p==='finishing')return [this.exchange('goodbye',c),this.node('complete',c)];
+      if(p==='finish-choice')return [this.exchange('finishing',c),this.exchange('goodbye',c),this.node('complete',c)];
       if(p==='continue')return [this.node('direction',c)];
       if(p==='change-subtopic')return [this.node('subtopic',{...c,s:null})];
       if(p==='proposal')return [this.node('topic',{...c,t:null,s:null})];
-      if(['greeting','change-topic'].includes(p))return [this.speech('proposal',c),this.node('topic',{...c,t:null,s:null})];
+      if(['greeting','change-topic'].includes(p))return [this.exchange('proposal',c),this.node('topic',{...c,t:null,s:null})];
       return [this.node('decision',c)];
     }
-    selectPattern(i){if(this.current.type==='speech'&&Number.isInteger(i)&&this.stage()?.candidates[i]){this.current.pattern=i;delete this.current.customLines;}}
+    previewStructure(i){
+      if(this.current.type==='structure'&&Number.isInteger(i)&&this.stage()?.candidates[i])this.current.preview=i;
+    }
+    useStructure(){
+      const n=this.current,i=n.preview;
+      if(n.type!=='structure'||!Number.isInteger(i)||!this.stage()?.candidates[i])return;
+      let speech=this.nodes[this.cursor+1];
+      if(speech?.type!=='speech'||speech.selectorId!==n.id){
+        speech=this.speech(n.part,{...this.context(),selectorId:n.id,pattern:i,...(n.importedStage?{importedStage:n.importedStage}:{})});
+        this.nodes.splice(this.cursor+1,0,speech);
+      }else if(speech.pattern!==i){
+        speech.pattern=i;delete speech.customLines;
+      }
+      n.pattern=i;this.advance();
+    }
+    editStructure(){
+      const n=this.current;if(n.type!=='speech')return;
+      const prior=this.nodes[this.cursor-1];
+      if(prior?.type==='structure'&&prior.id===n.selectorId){prior.preview=n.pattern;this.cursor--;return;}
+      // Imported transcripts have speaking nodes only. Create a selector on demand.
+      const source=this.data[n.t].subtopics[n.s].stages.find(g=>g.slug===n.part);
+      const stage=source?JSON.parse(JSON.stringify(source)):this.stage(n);
+      let pattern=stage.candidates.findIndex(c=>c.label===this.stage(n).candidates[n.pattern].label);
+      if(pattern<0){pattern=stage.candidates.length;stage.candidates.push(this.stage(n).candidates[n.pattern]);}
+      const selector=this.exchange(n.part,{...this.context(),pattern,preview:pattern,importedStage:stage});
+      n.importedStage=stage;n.pattern=pattern;
+      selector.confirmed=true;n.selectorId=selector.id;this.nodes.splice(this.cursor,0,selector);
+    }
+    selectPattern(i){
+      if(this.current.type==='speech'&&Number.isInteger(i)&&this.stage()?.candidates[i]){
+        this.current.pattern=i;delete this.current.customLines;
+        const selector=this.nodes.find(n=>n.id===this.current.selectorId);if(selector){selector.pattern=i;selector.preview=i;}
+      }
+    }
     suggestions(place=this.current.place){return (PLACES.find(p=>p.label===place)?.topics||this.data.slice(0,3).map(t=>t.title)).filter(title=>this.data.some(t=>t.title===title));}
     lines(n=this.current){
       if(n.customLines)return n.customLines.map(line=>({...line}));
