@@ -10846,9 +10846,8 @@ document.addEventListener("keydown",event=>{
 </section>
 
 <section class="ait-psa-terminal-modal" id="aitPsaSignalPriorityPerformanceModal" hidden role="dialog" aria-modal="true">
- <header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">AIT POTENTIAL SIGNAL SCANNER</span><h2>↗ Performance Monitor</h2><p>Select an automatic scanner performance monitor.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaSignalPriorityMenuModal" type="button">← AIT Potential Signal Scanner</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header>
+ <header class="ait-psa-terminal-modal__head"><div><span class="ait-psa-terminal-modal__eyebrow">AIT POTENTIAL SIGNAL SCANNER</span><h2>↗ Performance Monitor</h2><p>Open the comparison to calculate and rank all Elite and Elite Regime horizons.</p></div><div class="ait-psa-terminal-head-actions"><button class="ait-psa-terminal-back" data-ait-psa-open="aitPsaSignalPriorityMenuModal" type="button">← AIT Potential Signal Scanner</button><button class="ait-psa-terminal-close" data-ait-psa-close type="button">×</button></div></header>
  <div class="ait-psa-terminal-modal__body"><div class="ait-psa-terminal-command-grid ait-signal-priority-menu-grid">
-  <button class="ait-psa-terminal-command" data-ait-psa-open="aitElitePerformanceModal" type="button"><span>✹</span><b>AIT Elite</b><small>Automatic rolling Elite validation, stability, benchmark-relative performance and calibration-health monitoring.</small></button><button class="ait-psa-terminal-command" data-ait-psa-open="aitEliteRegimePerformanceModal" type="button"><span>◈</span><b>AIT Elite Regime</b><small>Compare regime-specific signal performance, hit rate, excess return and stability.</small></button>
  </div></div>
 </section>
 

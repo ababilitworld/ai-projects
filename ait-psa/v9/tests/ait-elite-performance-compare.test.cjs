@@ -62,3 +62,51 @@ test('2D, 3D, 6D and 9D monitors replay dated signals and measure matching forwa
     }
   }
 });
+
+test('Performance Monitor has one comparison entry and every click recalculates all horizons', async () => {
+  const dates = Array.from({length: 35}, (_, i) => new Date(Date.UTC(2026, 0, i + 1)).toISOString().slice(0, 10));
+  const calls = [];
+  const menu = {children: ['old-elite', 'old-regime'], replaceChildren(...children) { this.children = children; }};
+  let completed;
+  const window = {
+    AITScannerDataBridge: {
+      scannerCodes: () => ['A'],
+      appState: () => ({history: {A: dates.map((date, i) => ({date, close: 100 + i}))}}),
+      scannerHistorySignature: () => 'same-history', scannerUniverseSignature: () => 'A'
+    },
+    AitEliteSignalPriority: {calculate: days => {
+      calls.push(days);
+      return {rows: [{code: 'A', finalSignal: 'Buy', eliteScore: 80}]};
+    }},
+    AITEliteRegime: {adjust: () => ({regimeScore: 80}), decide: () => ({action: 'CONFIRMATION'})},
+    AITEliteBusy: {execute: (_, task) => (completed = task())}
+  };
+  const elements = {
+    aitPsaSignalPriorityPerformanceModal: {querySelector: () => menu},
+    aitPsaTerminalModalShell: {insertAdjacentHTML: () => {}}
+  };
+  const document = {
+    readyState: 'complete', getElementById: id => elements[id] || null,
+    createElement: () => ({dataset: {}, listeners: {}, addEventListener(event, handler) { this.listeners[event] = handler; }})
+  };
+  const storage = new Map();
+  const localStorage = {
+    getItem: key => storage.get(key) ?? null,
+    setItem: (key, value) => storage.set(key, value),
+    removeItem: key => storage.delete(key)
+  };
+  const source = fs.readFileSync(path.join(__dirname, '../assets/js/ait-elite-performance-compare.js'), 'utf8');
+  vm.runInNewContext(source, {window, document, localStorage, setTimeout: callback => callback(), console});
+  assert.equal(menu.children.length, 1);
+  const button = menu.children[0];
+  assert.equal(button.dataset.aitPsaOpen, 'aitEliteCompareModal');
+  for (let click = 1; click <= 2; click++) {
+    button.listeners.click();
+    const result = await completed;
+    await Promise.resolve();
+    assert.equal(calls.length, click * 24, 'opening again must replay even when history has not changed');
+    assert.deepEqual([...new Set(calls)].sort((a, b) => a - b), [2, 3, 6, 9]);
+    assert.equal(Object.keys(result.rows).length, 8);
+    assert.ok(Object.values(result.rows).every(row => row.n === 6));
+  }
+});
