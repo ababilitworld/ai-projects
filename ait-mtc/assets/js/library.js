@@ -19,17 +19,22 @@
     if(row.length!==11)throw Error(`Invalid authored dialogue: ${topic.title} / ${row[0]}`);
     const [title,...lines]=row;
     const stages=[...globalStages(),stage('introduction','Introduction',lines[0],lines[1]),stage('description-1','Description 1',lines[2],lines[3]),stage('description-2','Description 2',lines[4],lines[5]),stage('conclusion','Conclusion',lines[6],lines[7]),stage('invitation','Invitation',lines[8],lines[9])];
+    const scenario=root.CONVERSATION_SCENARIOS[t]?.[s];
+    if(!scenario)throw Error(`Missing practical scenario: ${topic.title} / ${title}`);
+    for(const g of stages)g.candidates=root.buildConversationStructures(g,scenario);
     for(const g of stages)for(const c of g.candidates){
       c.pattern=c.lines[0][1];c.response=c.lines[1][1];c.moods={};
       // Mood alters social wording where it fits. Factual exchanges retain their
       // meaning and use the delivery direction, rather than adverb prefixes.
       if(['greeting','introduction'].includes(g.slug))for(const [mood,opening]of Object.entries(openings)){
-        c.moods[mood]=c.lines.map(line=>[...line]);c.moods[mood][0][1]=opening+c.lines[0][1];
+        c.moods[mood]=c.lines.map(line=>[...line]);
+        const text=c.lines[0][1];
+        c.moods[mood][0][1]=g.slug==='greeting'?text.replace(/^(Hello(?: again)?!\s*)/,(_,hello)=>hello+opening):opening+text;
       }
       if(g.slug==='invitation')for(const mood of ['Happy','Excited','Friendly','Confident']){
         c.moods[mood]=c.lines.map(line=>[...line]);c.moods[mood][1][1]=c.lines[1][1].replace(/^Yes[,!.]?\s*/,mood==='Confident'?'Certainly. ':'Yes! ');
       }
-      if(g.slug==='greeting'){
+      if(g.slug==='greeting'&&c.structure==='direct'){
         const replies={Happy:'I feel happy today. It is good to see you!',Excited:'I am excited to talk with you!',Curious:'I am curious about what we will discuss.',Friendly:'I am doing well. It is nice to see you too.',Polite:'I am well, thank you for asking. How are you?',Calm:'I feel calm and ready for a quiet conversation.',Surprised:'Oh, hello! I did not expect a chat, but I would like one.',Confident:'I feel ready to share my ideas. How are you?'};
         for(const [mood,reply]of Object.entries(replies))c.moods[mood][1][1]=reply;
       }

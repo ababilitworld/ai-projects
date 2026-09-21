@@ -101,6 +101,16 @@
           }
         }
         if(required.some(slug=>!s.stages.some(g=>g.slug===slug)))throw Error(t.title+' / '+s.title+': provide all conversation stages, or merge a partial update.');
+        const builtIn=(root.CONVERSATION_DATA||data).find(x=>x.title===t.title)?.subtopics.find(x=>x.title===s.title);
+        for(const g of s.stages){
+          const defaults=builtIn?.stages.find(x=>x.slug===g.slug);
+          for(const structure of root.CONVERSATION_STRUCTURES||[]){
+            if(g.candidates.some(c=>c.label===structure.label))continue;
+            const fallback=defaults?.candidates.find(c=>c.label===structure.label);
+            if(!fallback)throw Error(`${t.title} / ${s.title}: provide all nine structures for each new conversation stage.`);
+            g.candidates.push(clone(fallback));
+          }
+        }
         const descriptions=s.stages.filter(g=>g.slug.startsWith('description-')).map(g=>+g.slug.split('-')[1]).sort((a,b)=>a-b);
         if(descriptions.some((n,i)=>n!==i+1))throw Error('Description rounds must be consecutive.');
         for(const g of s.stages)if(!g.candidates.length||g.candidates.some(c=>!c.lines.length))throw Error('Every pattern needs a Neutral version.');
