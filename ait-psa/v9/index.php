@@ -5289,17 +5289,19 @@ body.ait-elite-is-calculating *{cursor:progress!important}
      </div></div>
    <div class="v11-card-body">
     <section class="v11-potential-guideline v11-scanner-guideline"><div class="v11-potential-guideline-grid">
-     <div class="v11-potential-guide v11-potential-guide--formula"><strong>Technical Score</strong><span>Combines trend alignment, SMA structure, RSI condition, momentum and volume confirmation.</span></div>
+     <div class="v11-potential-guide v11-potential-guide--formula"><strong>Technical Score</strong><span>Combines price/SMA alignment, RSI condition and 10-session momentum.</span></div>
      <div class="v11-potential-guide v11-potential-guide--strongest"><strong>Strong Setup</strong><span>Prefer price above SMA20, SMA20 above SMA50, constructive RSI and positive momentum.</span></div>
      <div class="v11-potential-guide v11-potential-guide--watch"><strong>Confirmation</strong><span>Verify breakout level, trading liquidity and follow-through before taking an entry.</span></div>
      <div class="v11-potential-guide v11-potential-guide--avoid"><strong>Risk Filter</strong><span>A high score is weakened by thin volume, extended price or loss of nearby support.</span></div>
-    </div></section>
+    <div class="v11-potential-guide v11-potential-guide--formula"><strong>Technical Evidence</strong><span>Uses closing prices for SMA20, SMA50, RSI14 and 10-session momentum. Volume is a separate Smart Money check.</span></div>
+   <div class="v11-potential-guide v11-potential-guide--formula"><strong>Formation Logic</strong><span>Four conditions each contribute 18 points: close above SMA20, SMA20 above SMA50, RSI 45–70 and positive momentum. Bounded price, SMA, RSI and momentum adjustments refine the 0–100 score. Signal uses condition count: 3–4 Buy, 2 Watch, 0–1 Avoid. Rows rank by Technical Score.</span></div>
+  </div></section>
     <section class="v11-potential-guideline v11-technical-formation" aria-label="Technical score formation method">
      <div class="v11-potential-guideline-grid">
-      <div class="v11-potential-guide v11-potential-guide--formula"><strong>Technical Score Formation</strong><span>The score is formed from trend structure, momentum quality, RSI condition and volume confirmation.</span></div>
+      <div class="v11-potential-guide v11-potential-guide--formula"><strong>Technical Score Formation</strong><span>The score is formed from price/SMA structure, RSI condition and momentum; volume is a separate confirmation check.</span></div>
       <div class="v11-potential-guide"><strong>Trend Structure</strong><span>Close above SMA20 and SMA20 above SMA50 receive stronger trend credit.</span></div>
       <div class="v11-potential-guide"><strong>Momentum &amp; RSI</strong><span>Positive momentum and a constructive RSI zone strengthen the technical setup.</span></div>
-      <div class="v11-potential-guide"><strong>Volume Confirmation</strong><span>Healthy participation supports the move; weak volume reduces confidence in the score.</span></div>
+      <div class="v11-potential-guide"><strong>Volume Confirmation</strong><span>Check volume separately with Smart Money because Technical Score does not include it.</span></div>
      </div>
      <div class="v11-chip-row" style="margin-top:10px"><span class="v11-chip">Close above SMA20</span><span class="v11-chip">SMA20 above SMA50</span><span class="v11-chip">RSI 45–70</span><span class="v11-chip">Positive momentum</span></div>
      <div class="v11-note" style="margin-top:10px">These signals are mechanical summaries and should be confirmed with liquidity, support, resistance and risk controls.</div>
@@ -5348,7 +5350,9 @@ body.ait-elite-is-calculating *{cursor:progress!important}
      <div class="v11-potential-guide v11-potential-guide--strongest"><strong>Leader</strong><span>Ranks strongest peers inside the currently active watch list; it is not an independent buy signal.</span></div>
      <div class="v11-potential-guide v11-potential-guide--watch"><strong>Use Case</strong><span>Use Relative Rank to choose between otherwise similar Technical and Smart Money candidates.</span></div>
      <div class="v11-potential-guide v11-potential-guide--avoid"><strong>Important Limit</strong><span>A weak stock can rank well in a weak list, so always verify its absolute Primary Score.</span></div>
-    </div></section>
+    <div class="v11-potential-guide v11-potential-guide--formula"><strong>Relative Evidence</strong><span>Uses up to 20 closing prices for return and volatility, latest volume versus its 20-session average, and 10-session momentum across the active list.</span></div>
+   <div class="v11-potential-guide v11-potential-guide--formula"><strong>Formation Logic</strong><span>Normalize factors against active-list peers. Relative Score = 30% return + 25% momentum + 20% relative volume + 25% inverse volatility. Negative return and momentum cap the score at 44.9. Rank by score, then return; Leader and Outperform also require positive price evidence.</span></div>
+  </div></section>
     <div class="v11-scanner-table-region"><div class="v11-table-scrollbar" aria-label="Horizontal table scrollbar"><div></div></div><div class="v11-table-wrap v11-scanner-table-wrap"><table class="v11-table"><thead><tr><th>Rank</th><th>Code</th><th>Last close</th><th>20D return</th><th>Volatility</th><th>Relative volume</th><th>Momentum</th><th>Relative Score</th><th>Relative Position</th></tr></thead><tbody id="v11ComparisonRows"></tbody></table></div></div>
    </div>
   </article>
@@ -5408,7 +5412,9 @@ body.ait-elite-is-calculating *{cursor:progress!important}
      <div class="v11-potential-guide v11-potential-guide--strongest"><strong>Accumulation Clues</strong><span>Look for constructive closes, expanding demand and efficient upward result without excessive volatility.</span></div>
      <div class="v11-potential-guide v11-potential-guide--watch"><strong>Confirmation</strong><span>Confirm the VPA classification with support holding, improving relative volume and later price follow-through.</span></div>
      <div class="v11-potential-guide v11-potential-guide--avoid"><strong>Interpret Carefully</strong><span>VPA is a heuristic; one high-volume bar does not prove institutional accumulation.</span></div>
-    </div></section>
+    <div class="v11-potential-guide v11-potential-guide--formula"><strong>Smart Money Evidence</strong><span>Requires at least 10 OHLCV records. Compares the latest bar with up to 20 records for spread, volume and trend, plus the previous close for price movement.</span></div>
+   <div class="v11-potential-guide v11-potential-guide--formula"><strong>Formation Logic</strong><span>Start at 50. Add 12 for an uptrend, otherwise subtract 10. Add 14 for high volume with a strong close, subtract 8 for very high volume with little price movement, add 8 for a wide spread with a strong close, and subtract 10 for a weak close. Clamp to 0–100: 75+ Buy, 55–74 Watch, below 55 Avoid.</span></div>
+  </div></section>
     <div class="v11-scanner-table-region"><div class="v11-table-scrollbar" aria-label="Horizontal table scrollbar"><div></div></div><div class="v11-table-wrap v11-scanner-table-wrap"><table class="v11-table"><thead><tr><th>Code</th><th>Smart Money Score</th><th>Spread</th><th>Rel. volume</th><th>Trend</th><th>Effort/result</th><th>Classification</th></tr></thead><tbody id="v11VpaRows"></tbody></table></div></div>
    </div>
   </article>
@@ -5444,7 +5450,9 @@ body.ait-elite-is-calculating *{cursor:progress!important}
      <div class="v11-potential-guide v11-potential-guide--strongest"><strong>Purpose</strong><span>Use when you want all three analytical layers to contribute directly to one score.</span></div>
      <div class="v11-potential-guide v11-potential-guide--watch"><strong>Ranking</strong><span>Rows are ordered by Combined Score, then Smart Money and Technical confirmation.</span></div>
      <div class="v11-potential-guide v11-potential-guide--avoid"><strong>Safeguard</strong><span>Weak Technical and Smart Money evidence cannot become Strong Buy from relative ranking alone.</span></div>
-    </div></section>
+    <div class="v11-potential-guide v11-potential-guide--formula"><strong>Composite Evidence</strong><span>Uses the latest Technical, Smart Money and Relative Strength scores, each with its own underlying lookback.</span></div>
+   <div class="v11-potential-guide v11-potential-guide--formula"><strong>Formation Logic</strong><span>Combined Score = 40% Technical + 35% Smart Money + 25% Relative Strength. Strong Buy requires 75+ and both Technical and Smart Money at least 60; otherwise 62+ Buy, 48+ Watch, below 48 Avoid. Rank by Combined Score, then Smart Money and Technical.</span></div>
+  </div></section>
     <div class="v11-scanner-table-region"><div class="v11-table-scrollbar" aria-label="Horizontal table scrollbar"><div></div></div><div class="v11-table-wrap v11-scanner-table-wrap"><table class="v11-table v11-potential-table"><thead><tr><th>Rank</th><th>Trading Code</th><th>LTP</th><th>Technical</th><th>Smart Money</th><th>Relative</th><th>Combined Score</th><th>Strength</th><th>Signal</th></tr></thead><tbody id="v11CompositeRows"></tbody></table></div></div>
    </div>
   </article>
@@ -5480,7 +5488,9 @@ body.ait-elite-is-calculating *{cursor:progress!important}
      <div class="v11-potential-guide v11-potential-guide--watch"><strong>Buy / Watch · 48–74.99</strong><span>Buy begins at 62; 48–61.99 remains a developing Watch setup.</span></div>
      <div class="v11-potential-guide v11-potential-guide--avoid"><strong>Avoid · Below 48</strong><span>Relative Strength cannot upgrade a weak Primary Signal.</span></div>
      <div class="v11-potential-guide v11-potential-guide--formula"><strong>Elite Formula</strong><span>Primary Score = 50% Technical + 50% Smart Money. Relative Strength breaks ties within a 5-point Primary Score range.</span></div>
-    </div></section>
+    <div class="v11-potential-guide v11-potential-guide--formula"><strong>Elite Screening Evidence</strong><span>Uses the latest Technical and Smart Money scores for absolute setup strength; active-list Relative Strength orders close scores.</span></div>
+   <div class="v11-potential-guide v11-potential-guide--formula"><strong>Formation Logic</strong><span>Primary Score = 50% Technical + 50% Smart Money. Strong Buy requires 75+ with both components at least 60; otherwise 62+ Buy, 48+ Watch, below 48 Avoid. Relative Strength reorders groups less than 5 Primary points below their group leader without changing the signal.</span></div>
+  </div></section>
     <div class="v11-scanner-table-region"><div class="v11-table-scrollbar" aria-label="Horizontal table scrollbar"><div></div></div><div class="v11-table-wrap v11-scanner-table-wrap"><table class="v11-table v11-potential-table"><thead><tr><th>Rank</th><th>Trading Code</th><th>LTP</th><th>Technical</th><th>Smart Money</th><th>Primary Score</th><th>Relative Rank</th><th>Strength</th><th>Signal</th></tr></thead><tbody id="v11PotentialRows"></tbody></table></div></div>
    </div>
   </article>
@@ -5496,7 +5506,9 @@ body.ait-elite-is-calculating *{cursor:progress!important}
      <div class="v11-potential-guide v11-potential-guide--watch"><strong>Risk Awareness</strong><span>Bear regimes require stronger setup evidence and reduce aggressive entry confidence.</span></div>
      <div class="v11-potential-guide v11-potential-guide--formula"><strong>Action Guide</strong><span>BUY NOW = actionable now. CONFIRMATION = wait for price/volume/regime confirmation before entry. WATCH = monitor. AVOID = do not enter.</span></div>
      <div class="v11-potential-guide v11-potential-guide--avoid"><strong>Purpose</strong><span>This is a separate experimental/diagnostic scanner beside AIT Elite, not a replacement for the original v4.4 scanner.</span></div>
-    </div></section>
+    <div class="v11-potential-guide v11-potential-guide--formula"><strong>9D Regime Evidence</strong><span>Uses the 9D Elite setup plus current market breadth and return. Regime trend averages up to 20 trading dates across the active list.</span></div>
+   <div class="v11-potential-guide v11-potential-guide--formula"><strong>Formation Logic</strong><span>Start with the 9D Elite Score. Bull adds 4 for Strong Buy or 2 otherwise; Sideways adds 0 for Strong Buy or subtracts 1 otherwise; Bear subtracts 7 for Strong Buy, 5 for Buy or 2 otherwise. Clamp to 0–100. The underlying signal, adjusted score and regime fit determine the action. This workspace orders actions first, then Regime Score and Elite Score.</span></div>
+  </div></section>
     <div class="v105-metric-grid" style="margin-top:14px">
      <div class="v105-metric"><span>Market Regime</span><strong id="aitEliteRegimeLabel">—</strong><em>current classification</em></div>
      <div class="v105-metric"><span>Regime Confidence</span><strong id="aitEliteRegimeConfidence">—</strong><em>breadth + trend evidence</em></div>
@@ -5538,7 +5550,9 @@ body.ait-elite-is-calculating *{cursor:progress!important}
      <div class="v11-potential-guide v11-potential-guide--formula"><strong>Primary Formula</strong><span>Primary Score = 50% Technical + 50% Smart Money.</span></div>
      <div class="v11-potential-guide v11-potential-guide--watch"><strong>Within Each Signal</strong><span>Primary Score ranks first; Relative Strength breaks close ties within 5 points.</span></div>
      <div class="v11-potential-guide v11-potential-guide--avoid"><strong>Stable Order</strong><span>Relative Strength can never move a Buy above a Strong Buy or upgrade the signal.</span></div>
-    </div></section>
+    <div class="v11-potential-guide v11-potential-guide--formula"><strong>Latest Evidence</strong><span>Uses the latest Primary Score and signal from Technical and Smart Money, plus active-list Relative Strength.</span></div>
+   <div class="v11-potential-guide v11-potential-guide--formula"><strong>Formation Logic</strong><span>Primary Score = 50% Technical + 50% Smart Money. Assign Strong Buy at 75+ with both components at least 60, otherwise Buy at 62+, Watch at 48+, or Avoid. Group Strong Buy → Buy → Watch → Avoid; rank within each signal by Primary Score with Relative Strength ordering close scores.</span></div>
+  </div></section>
     <div class="v11-scanner-table-region"><div class="v11-table-scrollbar" aria-label="Horizontal table scrollbar"><div></div></div><div class="v11-table-wrap v11-scanner-table-wrap"><table class="v11-table v11-potential-table"><thead><tr><th>Overall Rank</th><th>Signal Rank</th><th>Trading Code</th><th>LTP</th><th>Technical</th><th>Smart Money</th><th>Primary Score</th><th>Relative Rank</th><th>Signal</th></tr></thead><tbody id="v11PriorityRows"></tbody></table></div></div>
    </div>
   </article>
@@ -10876,9 +10890,11 @@ document.addEventListener("keydown",event=>{
      </div></div>
   <div class="v11-card-body"><section class="v11-potential-guideline"><div class="v11-potential-guideline-grid">
    <div class="v11-potential-guide v11-potential-guide--strongest"><strong>First Priority</strong><span>Final signal order always remains Strong Buy → Buy → Watch → Avoid.</span></div>
-   <div class="v11-potential-guide v11-potential-guide--formula"><strong>Historical Engine</strong><span>Historical Score uses weighted 3-day, 6-day and 9-day Primary Score averages plus recent improvement consistency.</span></div>
+   <div class="v11-potential-guide v11-potential-guide--formula"><strong>Historical Engine</strong><span>Historical Score uses weighted 3-day, 6-day and 9-day Primary Score averages.</span></div>
    <div class="v11-potential-guide v11-potential-guide--watch"><strong>Decision Formula</strong><span>Decision Score = 55% Primary Score + 45% Historical Score.</span></div>
    <div class="v11-potential-guide v11-potential-guide--avoid"><strong>Internal History</strong><span>Daily scanner snapshots are stored and calculated silently; raw history is not shown.</span></div>
+  <div class="v11-potential-guide v11-potential-guide--formula"><strong>9D Evidence</strong><span>Replays Primary Score using only data available on each of the latest 9 trading dates. The underlying indicators retain their own lookbacks.</span></div>
+   <div class="v11-potential-guide v11-potential-guide--formula"><strong>Formation Logic</strong><span>Historical Score = 45% latest 3-date average + 35% latest 6-date average + 20% latest 9-date average. Decision Score = 55% current Primary + 45% Historical. Decision Score and Technical/Smart Money gates assign the signal; rank within each signal by Decision Score, then Historical Score.</span></div>
   </div></section>
   <div class="v11-scanner-table-region"><div class="v11-table-scrollbar" aria-label="Horizontal table scrollbar"><div></div></div><div class="v11-table-wrap v11-scanner-table-wrap"><table class="v11-table v11-potential-table"><thead><tr><th>Overall Rank</th><th>Signal Rank</th><th>Trading Code</th><th>LTP</th><th>Technical</th><th>Smart Money</th><th>Primary Score</th><th>Historical Score</th><th>Relative Rank</th><th>Signal</th></tr></thead><tbody id="aitHistoricalPriorityRows"><tr><td colspan="10">Run historical screen to calculate results.</td></tr></tbody></table></div></div>
   </div></article></section></div>
@@ -10914,6 +10930,8 @@ document.addEventListener("keydown",event=>{
    <div class="v11-potential-guide v11-potential-guide--formula"><strong>Advanced Score</strong><span>25% Primary + 20% Historical + 15% Momentum + 12% Stability + 13% Persistence + 15% Confirmation.</span></div>
    <div class="v11-potential-guide v11-potential-guide--watch"><strong>Trend Quality</strong><span>Momentum rewards improving scores; Stability penalizes erratic score changes.</span></div>
    <div class="v11-potential-guide v11-potential-guide--avoid"><strong>Confirmation</strong><span>Price trend, recent volume participation and signal persistence validate the final rank.</span></div>
+  <div class="v11-potential-guide v11-potential-guide--formula"><strong>9D Evidence</strong><span>Uses 9 dated Primary snapshots for score changes, stability and signal persistence, plus recent closing prices and volume for confirmation.</span></div>
+   <div class="v11-potential-guide v11-potential-guide--formula"><strong>Formation Logic</strong><span>Advanced Score = 25% Primary + 20% Historical + 15% Momentum + 12% Stability + 13% Persistence + 15% Confirmation. Strong Buy requires 76+ with Technical and Smart Money at least 60 and Confirmation at least 52; otherwise 63+ Buy, 49+ Watch, or Avoid. Group by signal, then rank by Advanced Score.</span></div>
   </div></section>
   <div class="v11-scanner-table-region"><div class="v11-table-scrollbar" aria-label="Horizontal table scrollbar"><div></div></div><div class="v11-table-wrap v11-scanner-table-wrap"><table class="v11-table v11-potential-table"><thead><tr><th>Overall Rank</th><th>Signal Rank</th><th>Trading Code</th><th>LTP</th><th>Technical</th><th>Smart Money</th><th>Primary Score</th><th>Historical Score</th><th>Momentum</th><th>Stability</th><th>Persistence</th><th>Confirmation</th><th>Advanced Score</th><th>Signal</th></tr></thead><tbody id="aitAdvancedPriorityRows"><tr><td colspan="14">Run advanced screen to calculate results.</td></tr></tbody></table></div></div>
   </div></article></section></div>
@@ -10948,6 +10966,8 @@ document.addEventListener("keydown",event=>{
    <div class="v11-potential-guide v11-potential-guide--formula"><strong>2. Setup Signal ≠ Action</strong><span><b>Strong Buy / Buy</b> describes setup strength only. It does not mean buy when the final decision says WAIT, HOLD, REDUCE, EXIT or AVOID.</span></div>
    <div class="v11-potential-guide v11-potential-guide--watch"><strong>3. When & Horizon</strong><span>Now = actionable entry. Wait Confirmation / Pullback = no entry yet. Short = 3–6D; Mid = 9–20D. Long term is not validated.</span></div>
    <div class="v11-potential-guide v11-potential-guide--avoid"><strong>4. Model Safety Gate</strong><span>Healthy = normal confidence. Caution = stricter confirmation. Degraded = avoid aggressive entries. Recalibration Required = new buys are blocked even when the setup says Strong Buy.</span></div><div class="v11-potential-guide v11-potential-guide--formula"><strong>5. Elite v4.4 Rank Calibration</strong><span>Strong Buy is the frozen per-date Advanced Rank top 8%, selected before final holdout testing. Entry, liquidity, volatility and timing remain separate action gates, so a Strong Buy setup can still correctly say WAIT.</span></div>
+  <div class="v11-potential-guide v11-potential-guide--formula"><strong>6. 9D Evidence</strong><span>Uses 9 dated Primary snapshots and the weighted 3/6/9-date Historical Score. Execution factors read up to 80 OHLCV records with shorter rolling windows; Technical and Smart Money retain their own lookbacks.</span></div>
+   <div class="v11-potential-guide v11-potential-guide--formula"><strong>7. Formation Logic</strong><span>Advanced combines Primary (25%), Historical (20%), Momentum (15%), Stability (12%), Persistence (13%) and Confirmation (15%). Elite Score blends weighted setup quality (62%) with timing and anti-chase adjustment (38%). Final setup signals use Advanced rank: top 8% Strong Buy, next 12% Buy, next 60% Watch, bottom 20% Avoid. Entry and model-health checks determine the action separately.</span></div>
   </div></section>
   <section class="ait-elite-summary-block" id="aitEliteDecisionSummary" style="margin-top:14px">
    <div class="ait-fundamental-strip">
@@ -10974,7 +10994,9 @@ document.addEventListener("keydown",event=>{
     <div class="v11-potential-guide v11-potential-guide--watch"><strong>Sideways · Selective</strong><span>Directional edge is less consistent. Prefer stronger Elite evidence and confirmation before aggressive entries.</span></div>
     <div class="v11-potential-guide v11-potential-guide--avoid"><strong>Bear · Defensive</strong><span>Long-side risk is higher. The Regime Score becomes more demanding and weak setups should remain Watch or Avoid.</span></div>
     <div class="v11-potential-guide v11-potential-guide--formula"><strong>Decision Rule</strong><span>Elite Score + Regime Compatibility → Regime Score → BUY NOW / CONFIRMATION / WATCH / AVOID. The Regime layer never overrides the underlying Elite evidence.</span></div>
-   </div></section>
+   <div class="v11-potential-guide v11-potential-guide--formula"><strong>9D Regime Evidence</strong><span>Uses the 9D Elite setup plus current market breadth and return. Regime trend averages up to 20 trading dates across the active list.</span></div>
+   <div class="v11-potential-guide v11-potential-guide--formula"><strong>Formation Logic</strong><span>Start with the 9D Elite Score. Bull adds 4 for Strong Buy or 2 otherwise; Sideways adds 0 for Strong Buy or subtracts 1 otherwise; Bear subtracts 7 for Strong Buy, 5 for Buy or 2 otherwise. Clamp to 0–100. The underlying signal, adjusted score and regime fit determine the action. This modal ranks by Regime Score, then Elite Score.</span></div>
+  </div></section>
    <div class="v105-metric-grid"><div class="v105-metric"><span>Market Regime</span><strong id="aitEliteRegimeModalLabel">—</strong></div><div class="v105-metric"><span>Confidence</span><strong id="aitEliteRegimeModalConfidence">—</strong></div><div class="v105-metric"><span>Market Return</span><strong id="aitEliteRegimeModalReturn">—</strong></div><div class="v105-metric"><span>Market Breadth</span><strong id="aitEliteRegimeModalBreadth">—</strong></div></div>
   <div class="v11-scanner-table-region" style="margin-top:14px"><div class="v11-table-scrollbar" aria-label="Horizontal table scrollbar"><div></div></div><div class="v11-table-wrap v11-scanner-table-wrap"><table class="v11-table v11-potential-table"><thead><tr><th>Priority</th><th>Trading Code</th><th>LTP</th><th>What to Do</th><th>When</th><th>Setup Signal</th><th>Regime</th><th>Regime Score</th><th>Why</th><th>Details</th></tr></thead><tbody id="aitEliteRegimeModalRows"><tr><td colspan="10">Click Run Scan to calculate the regime-aware shortlist.</td></tr></tbody></table></div></div></div>
  </article></section></div>

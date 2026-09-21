@@ -10,13 +10,16 @@
    item('strongest','1. Regime Detection','Bull, Sideways and Bear reflect current market breadth, return and recent trend across the active universe.'),
    item('formula','2. Regime Adjustment',`The ${days}D Elite score is the foundation. Market compatibility adjusts its Regime Score without upgrading a weak setup signal.`),
    item('watch','3. Read the Action','CONFIRMATION means wait for entry evidence; WATCH means monitor; AVOID means do not enter. A provisional BUY NOW is shown as CONFIRMATION while this horizon is unverified.'),
-   item('avoid','4. Separate Validation',`${days}D regime results use the ${days}-trading-day Elite calculation. The existing 9D performance monitor does not validate these results.`)
+   item('avoid','4. Separate Validation',`${days}D regime results use the ${days}-trading-day Elite calculation. The existing 9D performance monitor does not validate these results.`),
+   item('watch',`5. ${days}D Evidence`,`${days}D Elite supplies the setup score and signal. Market regime uses current active-list breadth and return plus up to 20 trading dates of market trend; its lookback is not reduced to ${days} dates.`),
+   item('formula','6. Formation Logic',`Start with the ${days}D Elite Score. Bull adds 4 for Strong Buy or 2 otherwise; Sideways adds 0 for Strong Buy or subtracts 1 otherwise; Bear subtracts 7 for Strong Buy, 5 for Buy or 2 otherwise. Clamp to 0–100 and rank by Regime Score. The setup signal, score and regime fit determine the action; provisional BUY NOW becomes CONFIRMATION for this unverified horizon.`)
   ]:[
    item('strongest','1. What should I do?',`Read What to Do first. It combines the ${days}D setup with entry readiness and existing-position checks.`),
    item('formula','2. Setup Signal ≠ Action','Strong Buy and Buy describe setup rank. Wait, Hold, Reduce, Exit or Avoid can still be the appropriate action.'),
-   item('watch',`3. ${days}D Evidence`,`Advanced strength, momentum, stability, persistence and price/volume confirmation use the most recent ${days} trading dates. Elite execution factors use the same ${days}-day window.`),
+   item('watch',`3. ${days}D Evidence`,`Replays Primary Score across the latest ${days} trading dates for historical strength, momentum, stability and persistence. Confirmation and Elite execution factors use that ${days}-date window; underlying Technical and Smart Money indicators retain their longer lookbacks.`),
    item('avoid','4. Entry & Risk','A good rank still needs liquidity, volatility, support and entry checks. An unverified model does not issue a Buy Now action.'),
-   item('formula','5. Calibration',`The setup rank uses the existing Elite percentile rule, but its 9D holdout result does not establish performance for ${days}D signals.`)
+   item('formula','5. Calibration',`The setup rank uses the existing Elite percentile rule, but its 9D holdout result does not establish performance for ${days}D signals.`),
+   item('formula','6. Formation Logic',`Historical strength is the mean of ${days} dated Primary Scores. Advanced = 25% Primary + 20% Historical + 15% Momentum + 12% Stability + 13% Persistence + 15% Confirmation. Elite Score blends weighted setup quality (62%) with timing and anti-chase adjustment (38%). Final signals use Advanced rank: top 8% Strong Buy, next 12% Buy, next 60% Watch, bottom 20% Avoid.`)
   ];
   return `<section class="v11-potential-guideline" aria-label="${days}D ${regime?'Elite Regime':'Elite'} guideline"><div class="v11-potential-guideline-head"><div><h4>${regime?'Elite Regime':'Elite'} ${days}D Guideline</h4><p>Use this guide to interpret the independent ${days}-trading-day scanner.</p></div></div><div class="v11-potential-guideline-grid">${cards.join('')}</div></section>`;
  };
