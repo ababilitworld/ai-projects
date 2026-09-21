@@ -6,11 +6,12 @@
   <title>Conversation Roadmap · Multi-Topic Conversations</title>
   <link rel="stylesheet" href="assets/css.css">
   <link rel="stylesheet" href="assets/css/themes/ocean.css" id="themeCss">
-  <script defer src="assets/js/data.js"></script>
+  <script defer src="assets/js/content.js"></script>
   <script defer src="assets/js/library.js"></script>
   <script defer src="assets/js/model.js"></script>
   <script defer src="assets/js/csv.js"></script>
   <script defer src="assets/js/app.js"></script>
+  <script defer src="assets/js/panels.js"></script>
 </head>
 <body>
   <a class="skip" href="#workspace">Skip to current step</a>
@@ -21,16 +22,16 @@
     <span class="breadcrumb">Workspace <span>/</span> Speaking <span>/</span> <b>Dialog</b></span>
   </nav>
   <main class="shell">
-    <section class="intro"><p class="eyebrow">SPOKEN ENGLISH / ONE STEP AT A TIME</p><h1>A good conversation <br>has room to <em>branch.</em></h1><p>Say hello. Explore an idea. Follow your curiosity. <br>Build your own path through topics, dialogue patterns and moods.</p><div class="legend"><span><i class="dot done"></i> Completed</span><span><i class="dot current"></i> You are here</span><span><i class="dot"></i> Coming next</span></div></section>
+    <section class="intro"><p class="eyebrow">SPOKEN ENGLISH / ONE STEP AT A TIME</p><h1>A good conversation <br>has room to <em>branch.</em></h1><p>Choose a place and mood. Say hello. Explore an idea. <br>Practise everyday conversations, one subtopic at a time.</p><div class="legend"><span><i class="dot done"></i> Completed</span><span><i class="dot current"></i> You are here</span><span><i class="dot"></i> Coming next</span></div></section>
     <div class="layout">
       <aside class="map-panel"><div class="section-title"><h2>Your conversation path</h2><span id="stepCount"></span></div><p class="muted small">Follow the line. Choose where it goes next.</p><nav id="roadmap" aria-label="Conversation roadmap"></nav></aside>
       <section id="workspace" class="workspace" tabindex="-1" aria-label="Current conversation step"></section>
     </div>
     <section class="transcript"><div class="section-title"><div><p class="eyebrow">YOUR WORDS, CONNECTED</p><h2>Conversation so far</h2></div><span class="muted small">Completed steps + your current dialogue</span></div><div id="summary"></div></section>
   </main>
-  <footer class="shell">Greeting → explore topics & subtopics → continue or change direction → ending → goodbye.</footer>
+  <footer class="shell">Place → mood → greeting → topic → subtopic → mood → introduction → description → conclusion → invitation → continue or finish → goodbye.</footer>
   <div id="announcement" class="sr-only" role="status" aria-live="polite"></div>
-  <dialog id="csvDialog" aria-labelledby="csvTitle"><div class="section-title"><h2 id="csvTitle">Your conversation data</h2><button id="closeCsv" aria-label="Close CSV window">×</button></div><p class="muted">Export a backup, edit it in a spreadsheet, or bring it back here. Imports stay in this session; export before leaving.</p><div class="export-actions"><button id="exportLibrary">Export library CSV</button><button id="exportConversation">Export conversation CSV</button></div><hr><h3>Import CSV</h3><label class="file-label">Choose a CSV file <input id="csvFile" type="file" accept=".csv,text/csv"></label><p class="small muted">Up to 15 MB. Use an exported file as the template. Library imports can add paired Question & Answer rounds, patterns and mood-specific lines. Conversation imports restore the exported dialogue path.</p><div id="csvPreview" aria-live="polite"></div><div id="importControls" hidden><fieldset><legend>How should this import be applied?</legend><label><input type="radio" name="importMode" value="merge" checked> Merge with current data</label><label><input type="radio" name="importMode" value="replace"> Replace current data</label></fieldset><p id="importEffect" class="edit-notice"></p><button id="applyCsv" class="primary">Apply import</button></div><p id="csvStatus" role="status"></p></dialog>
+  <dialog id="csvDialog" aria-labelledby="csvTitle"><div class="section-title"><h2 id="csvTitle">Your conversation data</h2><button id="closeCsv" aria-label="Close CSV window">×</button></div><p class="muted">Export a backup, edit it in a spreadsheet, or bring it back here. Imports stay in this session; export before leaving.</p><div class="export-actions"><button id="exportLibrary">Export library CSV</button><button id="exportConversation">Export conversation CSV</button></div><hr><h3>Import CSV</h3><label class="file-label">Choose a CSV file <input id="csvFile" type="file" accept=".csv,text/csv"></label><p class="small muted">Up to 15 MB. Use an exported file as the template. Library imports can add Description exchanges, patterns and mood-specific lines. Conversation imports preserve dialogue, mood and place. Older exports without a place use Home.</p><div id="csvPreview" aria-live="polite"></div><div id="importControls" hidden><fieldset><legend>How should this import be applied?</legend><label><input type="radio" name="importMode" value="merge" checked> Merge with current data</label><label><input type="radio" name="importMode" value="replace"> Replace current data</label></fieldset><p id="importEffect" class="edit-notice"></p><button id="applyCsv" class="primary">Apply import</button></div><p id="csvStatus" role="status"></p></dialog>
   <noscript>This conversation trainer requires JavaScript. Enable it to choose a conversation path.</noscript>
 </body>
 </html>
