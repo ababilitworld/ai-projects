@@ -1,75 +1,67 @@
 # Conversation Terminal
 
-An interactive speaking workspace with a branching roadmap. The original V15 conversation library is preserved in `assets/js/data.js` (9 topics, 81 subtopics, 6,561 patterns / 13,122 dialogue lines). `assets/js/library.js` groups the original Question, Answer and Follow-up exchanges into three paired Question & Answer rounds per subtopic. No AI service, account or backend is required.
+A static speaking workspace with 9 topics and 81 subtopics. Every subtopic now contains practical Parent/Child exchanges organized into **Introduction → Description → Conclusion → Invitation**. No backend, account or AI service is required.
 
-## Use the workspace
+## Conversation flow
 
-1. Open `index.html` through a static web server. Use **Workspace → Speaking → Dialog**.
-2. At **Greeting**, choose a dialogue pattern and mood. The dialogue is generated immediately from these selections. Continue to the topic list.
-3. Select a topic and then a subtopic. The context is selected before its dialogue patterns, so every pattern belongs to the right conversation step.
-4. Move through at least three **Question & Answer** rounds, then **Invitation → Response**. Each round has one pattern and mood selection for its linked question and reply. A library import can add more rounds.
-5. Choose **Another subtopic**, **Change topic**, or **Wrap up**. Changing topics includes a selectable transition dialogue before opening the topic list.
-6. At **Ending** and **Goodbye**, select the wording and mood, then finish. There is one greeting and one goodbye in the normal guided flow.
-7. The lower panel contains completed dialogue plus the currently selected speaking step. Future unvisited steps are not included.
+1. Choose where the speakers are: Home, School, Playground, Park, Shop, Restaurant, Travelling, or a custom place.
+2. Choose a mood before the greeting, then practise the greeting and topic proposal.
+3. Choose a topic (place-based suggestions are marked; all topics remain available), then a subtopic.
+4. Confirm or change the place and explicitly select the subtopic mood. **Keep previous mood** confirms the inherited mood.
+5. Practise Introduction, two Description exchanges, Conclusion and Invitation. Each exchange includes both speakers. The invitation stays within the current topic.
+6. Choose **Continue talking** or **Finish**, then practise the corresponding question and response.
+7. Continuing offers **New topic** (transition → proposal → topic selection) or **Another subtopic** (transition → subtopic selection in the current topic). Either route requires mood confirmation before the next subtopic.
+8. Finishing runs **Finishing → Goodbye → Conversation complete**. The normal guided route has one greeting, and no goodbye until the user finishes.
 
-Click an available roadmap node to revisit it. Editing a speaking step preserves the route. Choosing a different topic, subtopic or branch replaces the downstream route; the editor displays this effect before the selection. Keeping the same choice retains later steps. Future nodes remain unavailable until preceding steps are completed.
+Place means the speakers' setting, not a topic restriction. Mood provides delivery guidance throughout an exchange and natural wording changes in greetings, introductions and some invitations. It does not mechanically prefix every sentence or change factual answers. Context choices are saved on each speaking step, so a later change does not rewrite earlier dialogue.
 
-## Messenger conversation layout
+The roadmap unlocks steps in order. Revisiting and keeping the same choice preserves the route; changing a place, mood, topic, subtopic or branch replaces later steps. Pattern changes affect only their exchange. The transcript includes completed speech and the active speech, not unvisited future steps.
 
-The active dialogue and full transcript share the same message component. Parent bubbles align left and Child bubbles align right. Each bubble shows small uppercase speaker, `STAGE`, `PATTERN` and `MOOD` metadata, followed by a small topic/subtopic breadcrumb when applicable, then the larger dialogue text. Metadata uses muted theme colors; the message remains the visual focus.
+## Dataset and components
 
-Topic headers group consecutive exchanges, with subtopic dividers inside each topic. Changing topic inserts a transition divider without sorting or rearranging the conversation. Greeting, ending and goodbye are standalone groups with no topic breadcrumb. The current exchange is outlined; completed messages retain their own pattern and mood. Print styling preserves the grouped bubble layout. CSV columns are unchanged; step labels now name each paired Question & Answer round.
+- `assets/js/content.js`: authored practical scenarios, retaining the original 9 topic names and 81 subtopic names. Each row contains a title and five paired exchanges: Introduction, Description 1, Description 2, Conclusion and Invitation.
+- `library.js`: compiles scenarios into named stages, adds shared greeting/transition/closing exchanges and mood variants. Each built-in stage has an Everyday pattern; imports can add alternatives and Description rounds.
+- `model.js`: conversation state, context snapshots and branching rules.
+- `csv.js`: local CSV validation and import/export transformations.
+- `app.js`: roadmap, setup choices, paired messages and transcript rendering.
+- `panels.js`: CSV preview/apply/export panel and app startup.
+- `data.js`: unchanged original library archive; no longer loaded by the app.
 
-**Settings → Theme** offers nine themes. Only the theme is persisted in browser storage. Conversation paths and imported libraries are session-only: export before refreshing or leaving. Start fresh asks before clearing the path. Print exports only the conversation transcript, without navigation or controls.
+Nine themes, printing and CSV remain available through the menus. Only theme preference is persisted. **Conversations and imported libraries are session-only; export before refreshing or leaving.** Printing shows the transcript without navigation. Imported strings are escaped before rendering, controls support keyboard navigation, and step changes announce their title.
 
-## CSV import and export
+## CSV
 
-Open **Workspace → Import / export CSV**.
+Open **Workspace → Import / export CSV**. Export a template or backup, edit it, then choose a file to validate and preview. Applying a library import starts a fresh conversation. Merge adds or updates matching patterns/moods; Replace rebuilds the library. Every pattern must include Neutral lines. A new-format complete library needs all 13 built-in stages per subtopic, with at least two consecutive Description rounds. Use Merge for partial edits.
 
-- **Export library CSV** exports the neutral library and any imported mood-specific overrides. The other moods are generated using the original app's phrasing rules, so those generated variants are not repeated in the library export.
-- **Export conversation CSV** exports the exact visible dialogue, ordered by speaking step, with its selected pattern and mood.
-- Choose a file to validate it and preview five rows. Nothing changes until **Apply import**.
-- Library **Merge** adds records and replaces matching topic/subtopic/step/pattern/mood groups. Library **Replace** rebuilds the whole library. Both start a fresh conversation. Each subtopic requires at least three paired Question & Answer rounds plus Greeting, Invitation, Response, Change topic, Ending and Goodbye. Every pattern requires neutral lines; use Merge for partial updates.
-- Conversation **Replace** restores its speaking path. **Merge** appends it to the current transcript (including any repeated greetings/goodbyes). The library stays unchanged. Its referenced topics, subtopics and patterns must already exist; import the corresponding library first.
-- Imported conversations retain exact text. Selecting a new pattern or mood regenerates that step from the library. Imported paths contain speaking nodes, not the original topic-choice nodes. A partial path offers continuation; a completed path remains reviewable and printable.
+Conversation exports retain exact wording, pattern, mood and place. Replace restores speaking steps; Merge appends them, retaining any repeated greetings or goodbyes. Choice screens themselves are not serialized. A partial import resumes from its final speaking stage; a finished conversation remains complete. Unknown topics/subtopics require importing their library first; unknown pattern labels are preserved as imported exchanges. Choosing a library pattern replaces that step's imported wording.
 
-Use an export as the editing template. UTF-8 CSV uses these exact headers in order:
+Headers, in order:
 
 ```csv
-kind,sequence,topic,subtopic,step,pattern,mood,line_order,speaker,text
+kind,sequence,topic,subtopic,step,pattern,mood,line_order,speaker,text,place
 ```
 
-| Field | Meaning |
-| --- | --- |
-| kind | `library` or `conversation`; one kind per file |
-| sequence | Empty for library; consecutive speaking-step numbers from 1 for conversation |
-| topic / subtopic | Exact names; case-sensitive |
-| step | Greeting, Question & Answer 1, Question & Answer 2, Question & Answer 3 (and higher), Invitation, Response, Change topic, Ending, Goodbye. Legacy Question, Answer and Follow-up CSV rows map to rounds 1, 2 and 3 on import. |
-| pattern | Pattern label, such as Simple or Warm |
-| mood | Neutral, Happy, Excited, Curious, Friendly, Polite, Calm, Surprised, Confident |
-| line_order | Consecutive line numbers from 1 within each dialogue |
-| speaker / text | Speaker label and dialogue text, including Unicode or multiline text |
+- `kind`: library or conversation; one kind per file.
+- `sequence`: empty for library; consecutive speaking-step numbers from 1 for conversation.
+- `topic`, `subtopic`, `pattern`: case-sensitive labels.
+- `step`: Greeting, Topic proposal, Introduction, Description 1, Description 2 (up to 20), Conclusion, Invitation, Continue talking, Change topic, Another subtopic, Choose to finish, Finishing, Goodbye.
+- `mood`: Neutral, Happy, Excited, Curious, Friendly, Polite, Calm, Surprised, Confident.
+- `line_order`: consecutive numbers starting at 1 within each paired exchange.
+- `speaker`, `text`: speaker label and dialogue, including Unicode and multiline text. Each exchange needs at least two speakers.
+- `place`: setting, up to 80 characters; blank for library templates. An omitted/blank conversation place defaults to Home.
 
-Limits: 15 MB, 100,000 rows, 100 lines per dialogue and 10,000 conversation sequences. Missing fields, invalid labels, duplicate lines and malformed quoting are rejected. Failed imports leave active data unchanged. CSV quotes commas, quotes and newlines. Spreadsheet formula-like values receive a reversible apostrophe prefix. Imports run locally in the browser; nothing is uploaded to a server.
+Older ten-column exports are accepted. Question / Answer / Follow-up (or Question & Answer 1–3) map to Introduction / Description 1 / Description 2; Ending maps to Finishing. Legacy library Response patterns become alternative Invitation patterns prefixed with `Response:`. Missing structural stages in a legacy library are supplied from the built-in library, with its Ending reused as the subtopic Conclusion. Exact legacy conversation text remains unchanged, including standalone Response steps, after which the app offers continue/finish.
 
-## Components
-
-- `library.js`: converts the preserved source library to paired Question & Answer rounds.
-- `model.js`: independent conversation state and branch transitions.
-- `csv.js`: CSV codec, validation and library/conversation transformations.
-- `app.js`: MessageView shared bubble rendering; RoadmapView, WorkspaceView, TranscriptView, CsvPanel and application wiring.
-- `data.js`: original library, separate from layout and application code.
-- `css.css`: responsive terminal shell, branch lanes, controls and print layout.
-
-Rendering escapes imported text. Theme storage failures do not block the app. Buttons support keyboard navigation, active selections use `aria-pressed`, current nodes use `aria-current`, and step changes announce status. No package dependencies or build step are needed.
+Limits: 15 MB, 100,000 rows, 100 lines per exchange, 10,000 conversation sequences. Malformed quoting, duplicates, missing fields and invalid stage/mood labels are rejected before applying changes. CSV formula-like values receive a reversible apostrophe prefix. Imports run in the browser; nothing is uploaded.
 
 ## Validation
 
 ```sh
-node --test ait-mtc/tests/conversation.test.cjs
+node ait-mtc/tests/conversation.test.cjs
 node --check ait-mtc/assets/js/app.js
+node --check ait-mtc/assets/js/panels.js
 node --check ait-mtc/assets/js/model.js
 node --check ait-mtc/assets/js/csv.js
 ```
 
-The tests cover branch completion, revisiting and truncation, full-library CSV round trips, Unicode/quoting, invalid inputs, mood overrides and exact conversation restore/append. Browser smoke testing covers menus, dialogue controls, responsive layout, CSV preview/apply and theme selection. The repository Pages manifest already includes `ait-mtc`; feature changes are reviewed through a development PR before release promotion.
+The tests cover topic preservation, paired stages, setup gates, both continuation branches, finishing, route edits, context inheritance, CSV roundtrips, legacy migration, Unicode/formula escaping, partial continuation and atomic rejection. Browser testing covers the full conversation route and setup controls.
