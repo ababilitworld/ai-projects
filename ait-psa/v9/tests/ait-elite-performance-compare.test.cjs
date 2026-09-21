@@ -4,7 +4,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
 
-test('3D, 6D and 9D monitors replay dated signals and measure matching forward sessions', async () => {
+test('2D, 3D, 6D and 9D monitors replay dated signals and measure matching forward sessions', async () => {
   const dates = Array.from({length: 35}, (_, index) => new Date(Date.UTC(2026, 0, index + 1)).toISOString().slice(0, 10));
   const history = {
     A: dates.map((date, index) => ({date, close: 100 * 1.01 ** index})),
@@ -48,9 +48,9 @@ test('3D, 6D and 9D monitors replay dated signals and measure matching forward s
 
   const result = await window.AitEliteHorizonPerformance.run();
   assert.equal(result.period.dates, 6);
-  assert.equal(seen.length, 18);
+  assert.equal(seen.length, 24);
   assert.equal(window.__AIT_HISTORICAL_CUTOFF_DATE__, undefined);
-  for (const days of [3, 6, 9]) {
+  for (const days of [2, 3, 6, 9]) {
     const expected = (1.01 ** days - 1) * 100;
     for (const type of ['elite', 'regime']) {
       const stats = result.rows[`${type}-${days}`];

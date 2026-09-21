@@ -1,4 +1,4 @@
-// Independent 3D and 6D Elite scanners; the original calibrated scanners remain 9D.
+// Independent 2D, 3D and 6D Elite scanners; the original calibrated scanners remain 9D.
 (()=>{"use strict";
  const esc=value=>String(value??"").replace(/[&<>"']/g,char=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[char]));
  const byId=id=>document.getElementById(id);
@@ -39,7 +39,7 @@
   rename('[data-workspace="elite"] strong','AIT Elite 9D');rename('[data-workspace="elite-regime"] strong','AIT Elite Regime 9D');
   rename('[data-v11-workspace="elite-regime"] .v11-card-head h3','AIT Elite Regime 9D');
   const shell=byId('aitPsaTerminalModalShell');if(!shell)return;
-  for(const days of [3,6]){
+  for(const days of [2,3,6]){
    const eliteId=`aitElite${days}dModal`,regimeId=`aitEliteRegime${days}dModal`;
    button('aitOpenElitePriority',`AIT Elite ${days}D`,eliteId,`Independent ${days}-trading-day Elite signal.`,'✹');
    button('aitOpenEliteRegime',`AIT Elite Regime ${days}D`,regimeId,`${days}-day Elite signal adjusted for market regime.`,'◈');
