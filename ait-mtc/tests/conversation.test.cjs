@@ -1,92 +1,56 @@
-const test=require('node:test');
-const assert=require('node:assert/strict');
-const fs=require('node:fs');
-const path=require('node:path');
-const vm=require('node:vm');
-const {ConversationFlow}=require('../assets/js/model.js');
-const Csv=require('../assets/js/csv.js');
-const context={window:{}};
-vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../assets/js/data.js'),'utf8'),context);
-vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../assets/js/library.js'),'utf8'),context);
-const data=JSON.parse(JSON.stringify(context.window.CONVERSATION_DATA));
-const flow=()=>new ConversationFlow(data);
-function firstTopic(f){f.next();f.chooseTopic(0);f.chooseSubtopic(0);}
-function finishSubtopic(f){for(let i=0;i<f.data[f.current.t].subtopics[f.current.s].questionAnswers.length+2;i++)f.next();}
-test('branching has one greeting, keeps completed dialogue and closes with selected ending/goodbye',()=>{
-  const f=flow();f.selectPattern(1);f.selectMood(2);firstTopic(f);f.selectPattern(2);f.selectMood(1);finishSubtopic(f);
-  f.branch('subtopic');f.chooseSubtopic(1);finishSubtopic(f);f.branch('topic');assert.equal(f.current.g,6);f.next();f.chooseTopic(1);f.chooseSubtopic(2);finishSubtopic(f);f.branch('finish');assert.equal(f.current.g,7);f.next();assert.equal(f.current.g,8);f.selectPattern(4);f.next();
-  assert.equal(f.current.type,'complete');assert.equal(f.transcript().filter(n=>n.g===0).length,1);assert.equal(f.transcript().filter(n=>n.g===8).length,1);assert.equal(f.nodes[0].pattern,1);assert.equal(f.nodes[0].mood,2);assert.equal(f.transcript().at(-1).pattern,4);
+'use strict';
+const test=require('node:test'),assert=require('node:assert/strict'),vm=require('node:vm'),fs=require('node:fs'),path=require('node:path');
+require('../assets/js/content.js');require('../assets/js/library.js');
+const {ConversationFlow,MOODS}=require('../assets/js/model.js'),Csv=require('../assets/js/csv.js'),data=global.CONVERSATION_DATA;
+const fresh=()=>new ConversationFlow(data);
+function start(f=fresh()){f.choosePlace('Park');f.chooseMood(1);f.next();f.next();f.chooseTopic(0);f.chooseSubtopic(0);f.chooseMood(6);return f;}
+function speak(f){while(f.current.type==='speech')f.next();}
+const parsed=rows=>Csv.parse(Csv.stringify(rows)).records;
+test('all original topics and 81 subtopics have practical four-part paired dialogue',()=>{
+ const old={window:{}};vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../assets/js/data.js'),'utf8'),old);
+ assert.equal(data.length,9);assert.equal(data.flatMap(t=>t.subtopics).length,81);
+ assert.deepEqual(data.map(t=>[t.title,t.subtopics.map(s=>s.title)]),JSON.parse(JSON.stringify(old.window.CONVERSATION_DATA.map(t=>[t.title,t.subtopics.map(s=>s.title)]))));
+ const intros=new Set();for(const t of data)for(const s of t.subtopics){assert.deepEqual(fresh().subtopicParts(data.indexOf(t),t.subtopics.indexOf(s)),['introduction','description-1','description-2','conclusion','invitation']);for(const g of s.stages)for(const c of g.candidates)for(const lines of [c.lines,...Object.values(c.moods)]){assert.equal(lines.length,2);assert.notEqual(lines[0][0],lines[1][0]);assert(lines.every(l=>l[1].trim()));}intros.add(s.stages.find(g=>g.slug==='introduction').candidates[0].lines[0][1]);}assert(intros.size>75);
 });
-test('editing pattern or mood preserves the route; changing topic replaces only later steps',()=>{
-  const f=flow();firstTopic(f);f.next();const length=f.nodes.length,question=f.nodes[3];f.visit(question.id);f.selectMood(4);assert.equal(f.nodes.length,length);assert.equal(f.nodes[4].g,1);assert.equal(f.nodes[4].qaIndex,1);
-  f.visit(f.nodes[1].id);f.chooseTopic(2);assert.equal(f.nodes.length,3);assert.equal(f.nodes[0].confirmed,true);assert.equal(f.current.t,2);assert.equal(f.current.type,'subtopic');
+test('place and mood gate the greeting and every subtopic',()=>{
+ const f=fresh();assert.equal(f.transcript().length,0);f.next();assert.equal(f.current.type,'place');f.choosePlace('Library');assert.equal(f.current.scope,'greeting');f.chooseMood(3);assert.equal(f.current.part,'greeting');assert.equal(f.current.place,'Library');assert(!f.lines()[0].text.includes('{setting}'));f.next();assert.equal(f.current.part,'proposal');f.next();f.chooseTopic(2);f.chooseSubtopic(1);assert.equal(f.current.type,'mood');assert.equal(f.current.place,'Library');f.next();assert.equal(f.current.type,'mood');f.chooseMood(5,'School');assert.equal(f.current.part,'introduction');assert.equal(f.current.place,'School');assert.equal(f.current.mood,5);assert.equal(f.transcript()[0].place,'Library');
 });
-test('future nodes cannot be visited before earlier speaking steps are completed',()=>{
-  const f=flow();firstTopic(f);const current=f.current;f.visit(f.nodes.at(-1).id);assert.equal(f.current,current);f.selectMood(-1);f.selectPattern(999);assert.equal(f.current.pattern,0);assert.equal(f.current.mood,0);
+test('same-topic invitation leads to explicit continue, direction and fresh mood',()=>{
+ const f=start();speak(f);assert.equal(f.transcript().at(-1).part,'invitation');assert.equal(f.current.type,'decision');f.branch('continue');assert.equal(f.current.part,'continue');f.next();assert.equal(f.current.type,'direction');f.chooseDirection('subtopic');assert.equal(f.current.part,'change-subtopic');f.next();assert.equal(f.current.type,'subtopic');assert.equal(f.current.t,0);f.chooseSubtopic(1);assert.equal(f.current.scope,'subtopic');assert.equal(f.current.mood,6);f.chooseMood(6);assert.equal(f.current.part,'introduction');assert.equal(f.transcript().filter(n=>n.part==='greeting').length,1);
 });
-test('every subtopic has at least three linked Question & Answer rounds',()=>{
-  assert.ok(data.every(topic=>topic.subtopics.every(subtopic=>subtopic.questionAnswers.length>=3)));
-  const f=flow();firstTopic(f);
-  assert.equal(f.title(f.current),'Question & Answer 1');
-  const before=f.lines();f.selectPattern(1);const after=f.lines();
-  assert.notEqual(after[0].text,before[0].text);
-  assert.notEqual(after[1].text,before[1].text);
-  assert.deepEqual(after.map(line=>line.speaker),['Parent','Child']);
-  f.next();assert.equal(f.title(f.current),'Question & Answer 2');
-  f.next();assert.equal(f.title(f.current),'Question & Answer 3');
-  f.next();assert.equal(f.title(f.current),'Invitation');
+test('new-topic route repeats proposal and finish speaks its response, finishing, goodbye',()=>{
+ const f=start();speak(f);f.branch('continue');f.next();f.chooseDirection('topic');f.next();assert.equal(f.current.part,'proposal');f.next();f.chooseTopic(1);f.chooseSubtopic(1);f.chooseMood(4,'Restaurant');speak(f);f.branch('finish');assert.equal(f.current.part,'finish-choice');f.next();assert.equal(f.current.part,'finishing');f.next();assert.equal(f.current.part,'goodbye');f.next();assert.equal(f.current.type,'complete');assert.equal(f.transcript().filter(n=>n.part==='greeting').length,1);assert.equal(f.transcript().at(-1).place,'Restaurant');
 });
-test('a fourth Question & Answer round can be imported without splitting its reply',()=>{
-  const source=Csv.libraryRecords(data).filter(row=>row.topic===data[0].title&&row.subtopic===data[0].subtopics[0].title&&row.step==='Question & Answer 3'&&row.pattern==='What');
-  assert.equal(source.length,2);
-  const extra=source.map(row=>({...row,step:'Question & Answer 4'}));
-  const extended=Csv.importLibrary(data,Csv.parse(Csv.stringify(extra)).records,'merge');
-  assert.equal(extended[0].subtopics[0].questionAnswers.length,4);
-  const f=new ConversationFlow(extended);firstTopic(f);
-  f.next();f.next();f.next();
-  assert.equal(f.title(f.current),'Question & Answer 4');
-  assert.deepEqual(f.lines().map(line=>line.speaker),['Parent','Child']);
+test('roadmap preserves identical choices and truncates changed context without rewriting history',()=>{
+ const f=start();speak(f);f.branch('finish');speak(f);const nodes=JSON.stringify(f.nodes),mood=f.nodes.find(n=>n.scope==='subtopic');f.visit(mood.id);f.chooseMood(6);assert.equal(JSON.stringify(f.nodes),nodes);f.visit(mood.id);f.chooseMood(2,'Home');assert.equal(f.current.part,'introduction');assert(!f.nodes.some(n=>n.part==='goodbye'));assert.equal(f.transcript()[0].place,'Park');assert.equal(f.current.place,'Home');
 });
-test('full supplied library round trips with identical dialogue lines',()=>{
-  const rows=Csv.libraryRecords(data),parsed=Csv.parse(Csv.stringify(rows));
-  assert.equal(parsed.records.length,13122);
-  const restored=Csv.importLibrary(data,parsed.records,'replace');
-  assert.deepEqual(Csv.libraryRecords(restored),rows);
+test('invalid choices and locked roadmap nodes do not advance',()=>{
+ const f=fresh();for(const p of ['', ' '.repeat(3),'a'.repeat(81),'bad\nplace'])f.choosePlace(p);assert.equal(f.current.type,'place');f.chooseMood(2);assert.equal(f.current.type,'place');f.choosePlace('Home');f.chooseMood(99);assert.equal(f.current.type,'mood');f.chooseMood(0);f.visit(f.nodes.at(-1).id);assert.equal(f.current.part,'greeting');
 });
-test('CSV supports commas, quotes, multiline, Bengali and formula-safe reversible text',()=>{
-  const row=Csv.libraryRecords(data)[0];
-  for(const text of ['Hello, "friend"!\nকেমন আছ?','=SUM(A1:A2)',"'quoted",'@name','-1','\tvalue']){
-    const csv=Csv.stringify([{...row,text}]);assert.equal(Csv.parse(csv).records[0].text,text);
-    if(text.startsWith('='))assert.ok(csv.includes("'=SUM"));
-  }
+test('library CSV roundtrip preserves every stage, pattern and mood',()=>{
+ const rows=Csv.libraryRecords(data),restored=Csv.importLibrary(data,parsed(rows),'replace');assert.deepEqual(Csv.libraryRecords(restored),rows);
 });
-test('malformed, duplicate, missing and mixed rows are rejected',()=>{
-  const row=Csv.libraryRecords(data)[0];
-  assert.throws(()=>Csv.parse('bad,headers\n1,2'));
-  assert.throws(()=>Csv.parse(Csv.stringify([row,row])),/duplicate/);
-  assert.throws(()=>Csv.parse(Csv.stringify([{...row,line_order:2}])),/consecutive/);
-  assert.throws(()=>Csv.parse(Csv.stringify([{...row,mood:'Unknown'}])),/unknown/);
-  assert.throws(()=>Csv.parse(Csv.stringify([row,{...row,kind:'conversation',sequence:1}])),/one kind/);
-  const qa=Csv.libraryRecords(data).find(row=>row.step==='Question & Answer 1');
-  assert.throws(()=>Csv.parse(Csv.stringify([qa])),/both speakers/);
-  assert.throws(()=>Csv.parse('"unterminated'),/Unclosed/);
+test('conversation CSV preserves place, moods and exact text and resumes unfinished sections',()=>{
+ const f=start();f.next();const rows=parsed(Csv.conversationRecords(f)),g=fresh();Csv.importConversation(g,rows,'replace');assert.equal(g.current.part,'description-2');assert.equal(g.current.place,'Park');assert.equal(g.current.mood,6);assert.deepEqual(Csv.conversationRecords(g).slice(0,rows.length).map(r=>r.text),rows.map(r=>r.text));speak(g);g.branch('finish');speak(g);const h=fresh();Csv.importConversation(h,parsed(Csv.conversationRecords(g)),'replace');assert.equal(h.current.type,'complete');
 });
-test('legacy Question, Answer and Follow-up CSV labels map to paired rounds',()=>{
-  const qa=Csv.libraryRecords(data).filter(row=>row.topic===data[0].title&&row.subtopic===data[0].subtopics[0].title&&row.step==='Question & Answer 1'&&row.pattern==='Simple');
-  const legacy=qa.map(row=>({...row,step:'Question'}));
-  const merged=Csv.importLibrary(data,Csv.parse(Csv.stringify(legacy)).records,'merge');
-  assert.deepEqual(merged[0].subtopics[0].questionAnswers[0].candidates[0].lines,data[0].subtopics[0].questionAnswers[0].candidates[0].lines);
+test('legacy headers, stage names and unknown old pattern labels preserve dialogue',()=>{
+ const f=start(),rows=Csv.conversationRecords(f).slice(-2).map(r=>({...r,sequence:1,step:'Question & Answer 1',pattern:'Old pattern'}));let csv=Csv.stringify(rows).split('\r\n').filter(Boolean).map(line=>line.replace(/,"[^"]*"$/,'')).join('\r\n');const records=Csv.parse(csv).records;const g=fresh();Csv.importConversation(g,records,'replace');assert.equal(g.transcript()[0].place,'Home');assert.equal(g.current.part,'description-1');assert.deepEqual(g.lines(g.transcript()[0]).map(l=>l.text),rows.map(r=>r.text));
 });
-test('partial library merge supports exact mood overrides; incomplete replacement is atomic',()=>{
-  const original=JSON.stringify(data),rows=Csv.libraryRecords(data).slice(0,2).map(r=>({...r,mood:'Happy',text:'Custom '+r.speaker}));
-  const result=Csv.importLibrary(data,rows,'merge'),f=new ConversationFlow(result);f.selectMood(1);assert.equal(f.lines()[0].text,'Custom Parent');
-  assert.throws(()=>Csv.importLibrary(data,rows,'replace'),/at least three paired Question & Answer rounds/);assert.equal(JSON.stringify(data),original);
+test('legacy library stages migrate with structural defaults and response alternatives',()=>{
+ const map={'Introduction':'Question & Answer 1','Description 1':'Question & Answer 2','Description 2':'Question & Answer 3','Finishing':'Ending'};
+ const allowed=['Greeting','Introduction','Description 1','Description 2','Invitation','Change topic','Finishing','Goodbye'];let rows=Csv.libraryRecords(data).filter(r=>r.topic===data[0].title&&r.subtopic===data[0].subtopics[0].title&&allowed.includes(r.step)).map(r=>({...r,step:map[r.step]||r.step}));rows.push(...rows.filter(r=>r.step==='Invitation').map(r=>({...r,step:'Response'})));
+ const migrated=Csv.importLibrary(data,parsed(rows),'replace');assert.equal(migrated[0].subtopics[0].stages.length,13);assert(migrated[0].subtopics[0].stages.find(g=>g.slug==='invitation').candidates.some(c=>c.label==='Response: Everyday'));
 });
-test('selected conversation round trip preserves order, mood, text and supports append',()=>{
-  const f=flow();f.selectMood(2);firstTopic(f);f.selectPattern(2);f.selectMood(4);f.next();
-  const rows=Csv.conversationRecords(f),restored=flow();Csv.importConversation(restored,Csv.parse(Csv.stringify(rows)).records,'replace');
-  assert.deepEqual(Csv.conversationRecords(restored).slice(0,rows.length),rows);
-  assert.equal(restored.current.g,1);assert.equal(restored.current.qaIndex,2);
-  const before=restored.transcript().length;Csv.importConversation(restored,rows,'merge');assert.equal(restored.transcript().length,before+f.transcript().length+1);
-  const snapshot=JSON.stringify(restored.nodes);assert.throws(()=>Csv.importConversation(restored,rows.map(r=>({...r,topic:'Unknown'})),'replace'),/unknown/);assert.equal(JSON.stringify(restored.nodes),snapshot);
+test('CSV quoting, Unicode and formula text roundtrip without execution',()=>{
+ const rows=Csv.conversationRecords(start()).slice(-2).map((r,i)=>({...r,sequence:1,text:i?'বাংলা, "hello"\nsecond line':'=SUM(1,2)',place:'Reading room'}));assert.deepEqual(parsed(rows).map(r=>r.text),rows.map(r=>r.text));assert(Csv.stringify(rows).includes("'=SUM"));
+});
+test('malformed CSV and failed import leave the active conversation unchanged',()=>{
+ const f=start(),before=JSON.stringify(f),rows=parsed(Csv.conversationRecords(f));assert.throws(()=>Csv.parse('bad headers\na,b'));assert.throws(()=>Csv.parse(Csv.stringify([rows[0]])),/two speakers/);assert.throws(()=>Csv.parse(Csv.stringify([...rows,rows[0]])),/duplicate/);assert.throws(()=>Csv.importConversation(f,rows.map(r=>({...r,topic:'missing'})),'replace'),/Unknown/);assert.equal(JSON.stringify(f),before);assert.throws(()=>Csv.importLibrary(data,Csv.libraryRecords(data).filter(r=>r.step==='Introduction'),'replace'),/all conversation stages/);
+});
+test('merging conversation preserves earlier exchanges and context',()=>{const f=start(),rows=parsed(Csv.conversationRecords(f)).slice(-2).map(r=>({...r,sequence:'1',place:'Home'})),count=f.transcript().length;Csv.importConversation(f,rows,'merge');assert.equal(f.transcript().filter(n=>n.confirmed).length,count+1);assert.equal(f.transcript()[0].place,'Park');assert.equal(f.current.place,'Home');});
+test('full archived library migrates without losing any original pattern text',()=>{
+ const old={window:{}};vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../assets/js/data.js'),'utf8'),old);
+ const labels=['Greeting','Question & Answer 1','Question & Answer 2','Question & Answer 3','Invitation','Response','Change topic','Ending','Goodbye'];
+ const rows=old.window.CONVERSATION_DATA.flatMap(t=>t.subtopics.flatMap(s=>s.stages.flatMap((g,i)=>g.candidates.flatMap(c=>c.lines.map(([speaker,text],j)=>({kind:'library',sequence:'',topic:t.title,subtopic:s.title,step:labels[i],pattern:c.label,mood:'Neutral',line_order:j+1,speaker,text}))))));
+ const migrated=Csv.importLibrary(data,parsed(rows),'replace');const exported=Csv.libraryRecords(migrated);assert.equal(migrated.flatMap(t=>t.subtopics).length,81);const texts=new Set(exported.map(r=>r.text));assert(rows.every(r=>texts.has(r.text)));
 });
