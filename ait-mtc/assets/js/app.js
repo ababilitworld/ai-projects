@@ -21,6 +21,9 @@ class App {
    else if('subtopic'in d)f.chooseSubtopic(+d.subtopic);
    else if('branch'in d)f.branch(d.branch);
    else if('direction'in d)f.chooseDirection(d.direction);
+   else if('structure'in d){f.previewStructure(+d.structure);this.render();document.querySelector(`[data-structure="${+d.structure}"]`).focus({preventScroll:true});return;}
+   else if('useStructure'in d)f.useStructure();
+   else if('editStructure'in d)f.editStructure();
    else if('next'in d)f.next();
    else if('pattern'in d)f.selectPattern(+d.pattern);
    else return;
@@ -36,6 +39,14 @@ class App {
   }else if(n.type==='mood'){
    hint=n.scope==='greeting'?'Choose your mood before saying hello.':`${f.data[n.t].title} / ${f.data[n.t].subtopics[n.s].title}. Confirm the place and choose a mood to begin.`;
    body=`<label class="context-place">Place <input id="conversationPlace" list="places" maxlength="80" value="${e(n.place)}"><datalist id="places">${CONVERSATION_PLACES.map(p=>`<option value="${e(p.label)}">`).join('')}</datalist></label><div class="choices">${moods.map((m,i)=>this.choice('mood',i,`${m.icon} ${m.label}`,CONVERSATION_DIRECTIONS[m.label])).join('')}</div>${n.scope==='subtopic'?`<button data-mood="${n.mood}">Keep previous mood: ${e(moods[n.mood].label)}</button>`:''}`;
+  }else if(n.type==='structure'){
+   const stage=f.stage(),selected=n.preview;
+   hint='Preview both speakers, select a conversation structure, then use it for this exchange.';
+   body=`<p class="context-strip">${e(n.place)} · ${e(moods[n.mood].label)}${window.conversationHasTopic(n)?` · ${e(f.data[n.t].title)} / ${e(f.data[n.t].subtopics[n.s].title)}`:''}</p><p class="small muted">${e(CONVERSATION_DIRECTIONS[moods[n.mood].label])}</p><div class="structure-grid" role="group" aria-label="Conversation structures">${stage.candidates.map((c,i)=>{
+     const definition=window.CONVERSATION_STRUCTURES.find(s=>s.label===c.label);
+     const lines=f.lines({...n,pattern:i});
+     return `<button class="structure-card ${selected===i?'selected':''}" data-structure="${i}" aria-pressed="${selected===i}"><strong>${i+1}. ${e(c.label)}</strong><span class="structure-description">${e(definition?.description||'Imported conversation wording.')}</span><span class="structure-preview">${lines.map(l=>`<span><b>${e(l.speaker)}:</b> ${e(l.text)}</span>`).join('')}</span></button>`;
+   }).join('')}</div><div class="structure-confirm"><p id="structureSelection" role="status">${selected==null?'Select a structure above.':`Selected: ${e(stage.candidates[selected].label)}`}</p><button class="primary" data-use-structure ${selected==null?'disabled':''}>Use this structure →</button></div>`;
   }else if(n.type==='topic'){
    hint=`Suggestions for ${n.place}; every topic is available.`;body='<div class="choices">'+f.data.map((t,i)=>this.choice('topic',i,t.title,`${f.suggestions().includes(t.title)?'Suggested here · ':''}${t.subtopics.length} subtopics`)).join('')+'</div>';
   }else if(n.type==='subtopic'){
@@ -48,13 +59,13 @@ class App {
    hint='Review your conversation below, or print it.';body='<button class="primary" data-print>Print conversation</button>';
   }else{
    const stage=f.stage();hint=CONVERSATION_DIRECTIONS[moods[n.mood].label];
-   body=`${window.conversationHasTopic(n)?`<ol class="phase-track" aria-label="Subtopic structure">${['Introduction','Description','Conclusion','Invitation'].map(label=>`<li ${n.part.startsWith(label.toLowerCase())?'aria-current="step"':''}>${label}</li>`).join('')}</ol>`:''}${n.customLines?'<p class="edit-notice">Imported text is preserved. Choosing a pattern restores its library wording.</p>':''}${this.exchange(n)}${stage.candidates.length>1||n.customLines?`<div class="pattern-grid">${stage.candidates.map((c,i)=>`<button data-pattern="${i}" aria-pressed="${i===n.pattern}">${e(c.label)}</button>`).join('')}</div>`:''}<div class="step-actions"><span class="small muted">Practise both parts aloud.</span><button class="primary" data-next>Continue →</button></div>`;
+   body=`${window.conversationHasTopic(n)?`<ol class="phase-track" aria-label="Subtopic stages">${['Introduction','Description','Conclusion','Invitation'].map(label=>`<li ${n.part.startsWith(label.toLowerCase())?'aria-current="step"':''}>${label}</li>`).join('')}</ol>`:''}${n.customLines?'<p class="edit-notice">Imported dialogue is preserved, including its original wording.</p>':''}${this.exchange(n)}<div class="step-actions"><button data-edit-structure>Change conversation structure</button><span class="small muted">Practise both parts aloud.</span><button class="primary" data-next>Continue →</button></div>`;
   }
-  document.getElementById('workspace').innerHTML=`<div class="workspace-heading"><p class="eyebrow">YOUR CONVERSATION</p><h2>${e(f.title(n))}</h2><p class="muted">${e(hint)}</p></div>${n.confirmed?'<p class="edit-notice">Changing this choice replaces later steps.</p>':''}${body}<p id="choiceError" role="alert"></p>`;
+  document.getElementById('workspace').innerHTML=`<div class="workspace-heading"><p class="eyebrow">YOUR CONVERSATION</p><h2>${e(f.title(n))}</h2><p class="muted">${e(hint)}</p></div>${n.confirmed&&n.type!=='speech'?`<p class="edit-notice">${n.type==='structure'?'Changing the structure updates this exchange and keeps your conversation path.':'Changing this choice replaces later steps.'}</p>`:''}${body}<p id="choiceError" role="alert"></p>`;
   document.getElementById('roadmap').innerHTML='<ol class="timeline">'+f.nodes.map((x,i)=>`<li class="${x===n?'current':x.confirmed?'done':'pending'}"><button data-visit="${x.id}" ${i<=f.cursor||f.nodes.slice(0,i).every(y=>y.confirmed)?'':'disabled'} ${x===n?'aria-current="step"':''}><span class="node-dot">${x.confirmed?'✓':i+1}</span><span><strong>${e(f.title(x))}</strong>${window.conversationHasTopic(x)?`<small>${e(f.data[x.t].subtopics[x.s].title)}</small>`:''}</span></button></li>`).join('')+'</ol>';
   document.getElementById('stepCount').textContent=`${f.nodes.filter(x=>x.confirmed).length} completed`;
   document.getElementById('summary').innerHTML=f.transcript().map(x=>this.exchange(x)).join('')||'<p class="muted">Choose a place and greeting mood to begin.</p>';
   document.getElementById('announcement').textContent=f.title(n);
-  if(focus){const panel=document.getElementById('workspace');panel.focus({preventScroll:true});if(matchMedia('(max-width: 800px)').matches)panel.scrollIntoView({block:'start'});}
+  if(focus){const panel=document.getElementById('workspace');panel.focus({preventScroll:true});panel.scrollIntoView({block:'start'});}
  }
 }
