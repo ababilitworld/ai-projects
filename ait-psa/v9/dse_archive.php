@@ -1,11 +1,12 @@
 <?php
 declare(strict_types=1);
+require_once __DIR__ . '/dse_new_archive.php';
 
 header('X-Content-Type-Options: nosniff');
 header('Cache-Control: no-store, max-age=0');
 
-const DSE_URL = 'https://dsebd.org/day_end_archive.php';
-const DSE_LIVE_URL = 'https://dsebd.org/latest_share_price_scroll_by_ltp.php';
+const DSE_URL = 'https://old.dsebd.org/day_end_archive.php';
+const DSE_LIVE_URL = 'https://old.dsebd.org/latest_share_price_scroll_by_ltp.php';
 const AMARSTOCK_LIVE_URL = 'https://www.amarstock.com/latest-share-price';
 const MAX_RANGE_DAYS = 370;
 const CACHE_TTL = 21600; // 6 hours
@@ -282,6 +283,20 @@ function downloadHtml(string $url): string
             : ($caBundle !== null ? 'verified-custom-ca' : 'verified-system-ca'))
     );
 
+    return $result['body'];
+}
+
+function downloadDseJson(string $url): string
+{
+    if (!extension_loaded('curl')) throw new ApiError('PHP cURL extension is not enabled.', 500);
+    $result = executeCurl($url, true, configuredCaBundle());
+    if ($result['body'] === '' && in_array($result['errno'], [35, 51, 53, 54, 58, 59, 60, 64, 66, 77, 80, 82, 83, 90, 91], true)
+        && (isLocalDevelopment() || getenv('DSE_ALLOW_INSECURE_SSL') === '1')) {
+        $result = executeCurl($url, false, null);
+    }
+    if ($result['body'] === '' || $result['status'] !== 200) {
+        throw new ApiError('DSE JSON request failed: ' . ($result['error'] ?: 'HTTP ' . $result['status']), 502);
+    }
     return $result['body'];
 }
 
@@ -687,7 +702,6 @@ try {
     $codes = $scope->codes();
     $action = strtolower(getString('action'));
     if ($action === 'instant') {
-        $dseHtml = downloadHtml(DSE_LIVE_URL);
         $amarstockOpens = [];
         $amarstockError = null;
         try {
@@ -697,9 +711,17 @@ try {
             $amarstockError = $error->getMessage();
         }
 
-        $instant = parseInstantMarket($dseHtml, $codes, $amarstockOpens);
-        $recordCount = array_sum(array_map('count', $instant));
         $marketDate = (new DateTimeImmutable('now', new DateTimeZone('Asia/Dhaka')))->format('Y-m-d');
+        try {
+            $instant = DseNewArchive::parseInstant(
+                downloadDseJson(DseNewArchive::LIVE_URL), $codes, $amarstockOpens, $marketDate
+            );
+            $liveSourceUrl = DseNewArchive::LIVE_URL;
+        } catch (Throwable $newSiteError) {
+            $instant = parseInstantMarket(downloadHtml(DSE_LIVE_URL), $codes, $amarstockOpens);
+            $liveSourceUrl = DSE_LIVE_URL;
+        }
+        $recordCount = array_sum(array_map('count', $instant));
         $amarstockMatched = 0;
         foreach ($instant as $code => $records) {
             if (isset($amarstockOpens[$code])) {
@@ -710,7 +732,7 @@ try {
             'success' => true,
             'mode' => 'instant',
             'provisional' => true,
-            'sourceUrl' => DSE_LIVE_URL,
+            'sourceUrl' => $liveSourceUrl,
             'openSourceUrl' => AMARSTOCK_LIVE_URL,
             'sourcePolicy' => 'OpenP from AmarStock; High, Low, Close/LTP, Volume and other live fields from DSE.',
             'marketDate' => $marketDate,
@@ -748,16 +770,19 @@ try {
     }
 
     $dir = cacheDirectory();
-    $scopeHash = '-all';
-    $baseName = 'dse-v7-' . $startText . '-to-' . $endText . $scopeHash;
+    $scopeHash = $scope->cacheSuffix();
+    $baseName = 'dse-v9-new-' . $startText . '-to-' . $endText . $scopeHash;
     $csvPath = $dir . '/' . $baseName . '.csv';
     $jsonPath = $dir . '/' . $baseName . '.json';
-    $rawPath = $dir . '/' . $baseName . '.html';
+    $metaPath = $dir . '/' . $baseName . '.meta.json';
+    $sourceUrl = DseNewArchive::url($startText, $endText);
 
     $fresh = !$refresh && is_file($jsonPath) && (time() - filemtime($jsonPath) < CACHE_TTL);
 
     if ($fresh) {
         $decoded = json_decode((string) file_get_contents($jsonPath), true);
+        $metadata = is_file($metaPath) ? json_decode((string) file_get_contents($metaPath), true) : null;
+        $sourceUrl = is_array($metadata) ? (string) ($metadata['sourceUrl'] ?? $sourceUrl) : $sourceUrl;
         if (!is_array($decoded)) {
             $fresh = false;
         }
@@ -769,7 +794,20 @@ try {
         $merged = [];
         $chunkNumber = 0;
 
-        foreach (dateChunks($start, $end, 14) as [$chunkStart, $chunkEnd]) {
+        try {
+            $earliest = (new DateTimeImmutable('now', new DateTimeZone('Asia/Dhaka')))->sub(new DateInterval('P2Y'))->format('Y-m-d');
+            if ($startText < $earliest) throw new ApiError('Requested OHLC starts before the new DSE two-year archive.', 502);
+            $merged = DseNewArchive::fetch($startText, $endText, $codes, fn(string $url): string => downloadDseJson($url));
+            if (!$merged) throw new ApiError('New DSE archive returned no rows.', 502);
+            $sourceUrl = DseNewArchive::url($startText, $endText);
+            $chunkReport[] = ['source' => 'new DSE archive', 'symbols' => count($merged), 'success' => true];
+        } catch (Throwable $newSiteError) {
+            $merged = [];
+            $sourceUrl = archiveUrl($startText, $endText);
+            $chunkReport[] = ['source' => 'new DSE archive', 'success' => false, 'message' => $newSiteError->getMessage()];
+        }
+
+        if (!$merged) foreach (dateChunks($start, $end, 14) as [$chunkStart, $chunkEnd]) {
             $chunkNumber++;
             $chunkStartText = $chunkStart->format('Y-m-d');
             $chunkEndText = $chunkEnd->format('Y-m-d');
@@ -828,6 +866,7 @@ try {
             json_encode($decoded, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE),
             LOCK_EX
         );
+        file_put_contents($metaPath, json_encode(['sourceUrl' => $sourceUrl], JSON_UNESCAPED_SLASHES), LOCK_EX);
         writeCsv($csvPath, $decoded);
     }
 
@@ -846,7 +885,7 @@ try {
     }
 
     $responseCsvPath = $scope->isRestricted()
-        ? $dir . '/dse-v8-' . $startText . '-to-' . $endText . $scope->cacheSuffix() . '.csv'
+        ? $dir . '/dse-v9-new-' . $startText . '-to-' . $endText . $scope->cacheSuffix() . '.csv'
         : $csvPath;
 
     if ($format === 'csv') {
@@ -867,7 +906,7 @@ try {
 
     jsonResponse([
         'success' => true,
-        'sourceUrl' => archiveUrl($startText, $endText),
+        'sourceUrl' => $sourceUrl,
         'startDate' => $startText,
         'endDate' => $endText,
         'symbolCount' => count($responseData),
