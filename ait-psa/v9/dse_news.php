@@ -1,12 +1,13 @@
 <?php
 declare(strict_types=1);
+require_once __DIR__ . '/dse_new_news.php';
 
 /** Public DSE archive adapter. One symbol per request keeps retries bounded. */
 final class DseNewsProvider
 {
     public static function sourceUrl(string $code, string $start, string $end): string
     {
-        return 'https://www.dsebd.org/old_news.php?' . http_build_query([
+        return 'https://old.dsebd.org/old_news.php?' . http_build_query([
             'startDate' => $start, 'endDate' => $end, 'inst' => $code,
             'criteria' => '4', 'archive' => 'news',
         ], '', '&', PHP_QUERY_RFC3986);
@@ -73,6 +74,26 @@ final class DseNewsProvider
     {
         $dir = __DIR__ . '/storage/dse-news-cache';
         if (!is_dir($dir) && !mkdir($dir, 0775, true) && !is_dir($dir)) throw new RuntimeException('Cannot create news cache.');
+        $newFile = $dir . '/' . hash('sha256', "new|$code|$start|$end") . '.json';
+        if (!$force && is_file($newFile) && filemtime($newFile) > time() - 21600) {
+            $saved = json_decode((string) file_get_contents($newFile), true);
+            if (is_array($saved)) return $saved + ['cached' => true];
+        }
+        $newSiteError = null;
+        try {
+            $earliest = (new DateTimeImmutable('now', new DateTimeZone('Asia/Dhaka')))->sub(new DateInterval('P2Y'))->format('Y-m-d');
+            if ($start < $earliest) throw new RuntimeException('Requested news starts before the new DSE two-year archive.');
+            $rows = DseNewNews::fetch($code, $start, $end, fn(string $url): string => $this->requestNewSite($url));
+            $payload = ['code' => $code, 'rows' => $rows, 'start' => $start, 'end' => $end,
+                'sourceStart' => $start, 'sourceEnd' => $end, 'downloadedAt' => gmdate('c'),
+                'sourceUrl' => DseNewNews::url($code, $start, $end)];
+            if (file_put_contents($newFile, json_encode($payload, JSON_UNESCAPED_UNICODE | JSON_THROW_ON_ERROR), LOCK_EX) === false) {
+                throw new RuntimeException('Unable to save the new DSE news cache.');
+            }
+            return $payload + ['cached' => false];
+        } catch (Throwable $error) {
+            $newSiteError = $error;
+        }
         $file = $dir . '/' . hash('sha256', "$code|$start|$end") . '.json';
         if (!$force && is_file($file) && filemtime($file) > time() - 21600) {
             $saved = json_decode((string) file_get_contents($file), true);
@@ -98,7 +119,9 @@ final class DseNewsProvider
         }
         $html = curl_exec($handle); $status = curl_getinfo($handle, CURLINFO_RESPONSE_CODE); $error = curl_error($handle);
         curl_close($handle);
-        if (!is_string($html) || $status !== 200) throw new RuntimeException($error ?: "DSE returned HTTP $status. Retry later.");
+        if (!is_string($html) || $status !== 200) throw new RuntimeException(
+            'New DSE: ' . $newSiteError->getMessage() . ' | Old DSE: ' . ($error ?: "HTTP $status")
+        );
         $rows = $this->parse($html, $code, $start, $end);
         preg_match('/News from:\s*(\d{4}-\d{2}-\d{2})\s*To:\s*(\d{4}-\d{2}-\d{2})/i', strip_tags($html), $sourceRange);
         $payload = ['code' => $code, 'rows' => $rows, 'start' => $start, 'end' => $end,
@@ -108,6 +131,32 @@ final class DseNewsProvider
             throw new RuntimeException('Unable to save the DSE news cache.');
         }
         return $payload + ['cached' => false];
+    }
+
+    private function requestNewSite(string $url): string
+    {
+        $handle = curl_init($url);
+        curl_setopt_array($handle, [
+            CURLOPT_RETURNTRANSFER => true, CURLOPT_FOLLOWLOCATION => false,
+            CURLOPT_CONNECTTIMEOUT => 12, CURLOPT_TIMEOUT => 60,
+            CURLOPT_ENCODING => '', CURLOPT_PROTOCOLS => CURLPROTO_HTTPS,
+            CURLOPT_USERAGENT => 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/124 Safari/537.36',
+            CURLOPT_HTTPHEADER => ['Accept: application/json', 'Accept-Language: en-US,en;q=0.9'],
+        ]);
+        if (PHP_OS_FAMILY === 'Windows' && curl_version()['version_number'] >= 0x074700) {
+            curl_setopt($handle, CURLOPT_SSL_OPTIONS, defined('CURLSSLOPT_NATIVE_CA') ? CURLSSLOPT_NATIVE_CA : 16);
+        }
+        foreach ([getenv('DSE_CACERT_PATH'), __DIR__ . '/storage/cacert.pem', __DIR__ . '/cacert.pem',
+            ini_get('curl.cainfo'), ini_get('openssl.cafile'), 'C:/laragon/etc/ssl/cacert.pem',
+            '/etc/ssl/certs/ca-certificates.crt'] as $ca) {
+            if ($ca && is_file($ca)) {curl_setopt($handle, CURLOPT_CAINFO, $ca); break;}
+        }
+        $body = curl_exec($handle);
+        $status = curl_getinfo($handle, CURLINFO_RESPONSE_CODE);
+        $error = curl_error($handle);
+        curl_close($handle);
+        if (!is_string($body) || $status !== 200) throw new RuntimeException($error ?: "HTTP $status");
+        return $body;
     }
 }
 

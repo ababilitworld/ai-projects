@@ -7,13 +7,14 @@ header('Cache-Control: no-store, no-cache, must-revalidate');
 final class DseFundamentalProvider
 {
     private const DSE_URLS = [
-        'https://www.dsebd.org/displayCompany.php?name=',
+        'https://www.dse.com.bd/company/',
+        'https://old.dsebd.org/displayCompany.php?name=',
         'https://www.dse.com.bd/displayCompany.php?name=',
     ];
 
     /** @var list<string> */
     private const ALLOWED_HOSTS = [
-        'www.dsebd.org', 'dsebd.org', 'www.dse.com.bd', 'dse.com.bd',
+        'www.dse.com.bd', 'dse.com.bd', 'old.dsebd.org',
     ];
 
     /** @param list<mixed> $codes */
@@ -33,12 +34,7 @@ final class DseFundamentalProvider
 
         foreach (array_keys($normalized) as $code) {
             try {
-                $html = $this->downloadCompanyPage($code);
-                $record = $this->parse($code, $html);
-                if (!$this->hasUsefulData($record)) {
-                    throw new RuntimeException('DSE returned no supported fundamental fields.');
-                }
-                $data[$code] = $record;
+                $data[$code] = $this->downloadCompanyRecord($code);
             } catch (Throwable $exception) {
                 $failed[] = $code;
                 $errors[$code] = $exception->getMessage();
@@ -59,17 +55,22 @@ final class DseFundamentalProvider
         return preg_match('/^[A-Z0-9().-]{1,30}$/', $code) === 1 ? $code : '';
     }
 
-    private function downloadCompanyPage(string $code): string
+    private function downloadCompanyRecord(string $code): array
     {
         $messages = [];
         foreach (self::DSE_URLS as $baseUrl) {
             $url = $baseUrl . rawurlencode($code);
             try {
                 $html = $this->request($url);
-                if (stripos($html, $code) !== false || stripos($html, 'Company Name') !== false) {
-                    return $html;
+                if (stripos($html, $code) === false && stripos($html, 'Company Name') === false) {
+                    throw new RuntimeException('Unexpected company response.');
                 }
-                $messages[] = parse_url($url, PHP_URL_HOST) . ': unexpected company response';
+                $record = $this->parse($code, $html);
+                if (!$this->hasUsefulData($record)) {
+                    throw new RuntimeException('DSE returned no supported fundamental fields.');
+                }
+                $record['sourceUrl'] = $url;
+                return $record;
             } catch (Throwable $exception) {
                 $messages[] = parse_url($url, PHP_URL_HOST) . ': ' . $exception->getMessage();
             }
@@ -219,7 +220,17 @@ final class DseFundamentalProvider
         $companyName = $this->findText($fields, ['Company Name']);
         $category = $this->findCategory($fields);
         $business = $this->findBusinessSegment($fields);
-        $yearEnd = $this->findText($fields, ['Year End', 'Financial Year End', 'Financial Year Ended', 'Accounting Year End']);
+        $newSite = $xpath->query('//dt[normalize-space(.)="Year-end"]')->length > 0;
+        if ($newSite) {
+            $companyName = $this->cleanText($xpath->query('//h1')->item(0)?->textContent ?? '') ?: $companyName;
+            $categoryNode = $xpath->query('//h1/preceding-sibling::div[1]//span[@title]')->item(0);
+            if ($categoryNode !== null && preg_match('/^[A-Z]$/', trim($categoryNode->textContent))) {
+                $category = trim($categoryNode->textContent);
+            }
+            $sectorNode = $xpath->query('//h1/following-sibling::div[2]/span[1]')->item(0);
+            $business = $this->cleanText($sectorNode?->textContent ?? '') ?: $business;
+        }
+        $yearEnd = $this->findText($fields, ['Year End', 'Year-end', 'Financial Year End', 'Financial Year Ended', 'Accounting Year End']);
         $lastAgm = $this->extractLastAgmDate($xpath)
             ?? $this->findDate($fields, ['Last AGM Held on', 'Last AGM Held On', 'Last AGM Date', 'Last AGM']);
 
@@ -237,7 +248,7 @@ final class DseFundamentalProvider
                 'Year End' => $yearEnd,
                 'Last AGM' => $lastAgm,
             ],
-            'source' => 'DSE company profile',
+            'source' => $newSite ? 'DSE new company profile' : 'DSE company profile',
             'sourcePolicy' => 'DSE-only: Category, Business Segment, Year End, Last AGM',
             'downloadedAt' => gmdate(DATE_ATOM),
         ];
@@ -354,6 +365,13 @@ final class DseFundamentalProvider
     private function extractLabelValueFields(DOMXPath $xpath): array
     {
         $fields = [];
+        foreach ($xpath->query('//dt[following-sibling::dd[1]]') as $term) {
+            $label = $this->normalizeLabel($term->textContent);
+            $value = $this->cleanText($xpath->query('following-sibling::dd[1]', $term)->item(0)?->textContent ?? '');
+            if ($label !== '' && $value !== '' && !isset($fields[$label])) {
+                $fields[$label] = $value;
+            }
+        }
         $rows = $xpath->query('//tr');
         if ($rows === false) {
             return $fields;
