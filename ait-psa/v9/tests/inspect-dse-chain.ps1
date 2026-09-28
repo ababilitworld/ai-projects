@@ -1,8 +1,8 @@
 $ErrorActionPreference = 'Stop'
-$client = [System.Net.Sockets.TcpClient]::new('www.dsebd.org', 443)
+$client = [System.Net.Sockets.TcpClient]::new('old.dsebd.org', 443)
 $stream = [System.Net.Security.SslStream]::new($client.GetStream(), $false)
 try {
-    $stream.AuthenticateAsClient('www.dsebd.org')
+    $stream.AuthenticateAsClient('old.dsebd.org')
     $certificate = [System.Security.Cryptography.X509Certificates.X509Certificate2]::new($stream.RemoteCertificate)
     $chain = [System.Security.Cryptography.X509Certificates.X509Chain]::new()
     if (-not $chain.Build($certificate)) {throw 'DSE certificate did not validate using Windows trust.'}

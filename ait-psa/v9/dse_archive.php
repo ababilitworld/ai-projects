@@ -4,8 +4,8 @@ declare(strict_types=1);
 header('X-Content-Type-Options: nosniff');
 header('Cache-Control: no-store, max-age=0');
 
-const DSE_URL = 'https://dsebd.org/day_end_archive.php';
-const DSE_LIVE_URL = 'https://dsebd.org/latest_share_price_scroll_by_ltp.php';
+const DSE_URL = 'https://old.dsebd.org/day_end_archive.php';
+const DSE_LIVE_URL = 'https://old.dsebd.org/latest_share_price_scroll_by_ltp.php';
 const AMARSTOCK_LIVE_URL = 'https://www.amarstock.com/latest-share-price';
 const MAX_RANGE_DAYS = 370;
 const CACHE_TTL = 21600; // 6 hours

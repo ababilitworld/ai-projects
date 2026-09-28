@@ -7,13 +7,13 @@ header('Cache-Control: no-store, no-cache, must-revalidate');
 final class DseFundamentalProvider
 {
     private const DSE_URLS = [
-        'https://www.dsebd.org/displayCompany.php?name=',
+        'https://old.dsebd.org/displayCompany.php?name=',
         'https://www.dse.com.bd/displayCompany.php?name=',
     ];
 
     /** @var list<string> */
     private const ALLOWED_HOSTS = [
-        'www.dsebd.org', 'dsebd.org', 'www.dse.com.bd', 'dse.com.bd',
+        'old.dsebd.org', 'www.dsebd.org', 'dsebd.org', 'www.dse.com.bd', 'dse.com.bd',
     ];
 
     /** @param list<mixed> $codes */

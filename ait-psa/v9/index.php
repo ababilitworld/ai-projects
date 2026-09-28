@@ -5857,7 +5857,7 @@ body.ait-elite-is-calculating *{cursor:progress!important}
    <label>Public DSE-list source</label>
    <select class="select" style="width:100%" id="motherSourceSelect">
     <option value="https://staticv2.amarstock.com/latest-share-price">AmarStock Latest Share Price</option>
-    <option value="https://www.dsebd.org/latest_share_price_scroll_l.php">DSE Latest Share Price</option>
+    <option value="https://old.dsebd.org/latest_share_price_scroll_l.php">DSE Latest Share Price</option>
     <option value="custom">Custom URL</option>
    </select>
   </div>

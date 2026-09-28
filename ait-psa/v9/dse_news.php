@@ -6,7 +6,7 @@ final class DseNewsProvider
 {
     public static function sourceUrl(string $code, string $start, string $end): string
     {
-        return 'https://www.dsebd.org/old_news.php?' . http_build_query([
+        return 'https://old.dsebd.org/old_news.php?' . http_build_query([
             'startDate' => $start, 'endDate' => $end, 'inst' => $code,
             'criteria' => '4', 'archive' => 'news',
         ], '', '&', PHP_QUERY_RFC3986);
