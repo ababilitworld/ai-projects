@@ -607,6 +607,7 @@ header h1{font-size:1.55rem!important}
 .v105-list-item strong{font-size:.86rem}
 .v105-list-item p{font-size:.76rem;margin:2px 0 0}
 .v105-list-item time{font-size:.68rem;color:var(--v10-muted);white-space:nowrap}
+#v105DataHistoryList .v105-list-item time{white-space:normal;text-align:right;max-width:120px}
 .v105-empty{
  padding:18px;text-align:center;color:var(--v10-muted);border:1px dashed var(--v10-line);
  border-radius:14px;
@@ -5649,6 +5650,17 @@ body.ait-elite-is-calculating *{cursor:progress!important}
     </div>
    </div>
   </article>
+  <article class="v105-panel">
+   <div class="v105-panel-head">
+    <div><h3>Download &amp; import history</h3><small>Saved data operations, shown in your local time</small></div>
+    <span class="ait-psa-panel-meta">HISTORY</span>
+   </div>
+   <div class="v105-panel-body">
+    <div class="v105-list" id="v105DataHistoryList">
+     <div class="v105-empty">No saved downloads or imports yet.</div>
+    </div>
+   </div>
+  </article>
  </div>
 </section>
 
@@ -7483,6 +7495,7 @@ document.addEventListener("DOMContentLoaded",()=>{
  const els={
   queue:document.getElementById("v105QueueList"),
   activity:document.getElementById("v105ActivityList"),
+  dataHistory:document.getElementById("v105DataHistoryList"),
   notifications:document.getElementById("v105NotificationList"),
   command:document.getElementById("v105CommandPalette"),
   commandSearch:document.getElementById("v105CommandSearch"),
@@ -7555,6 +7568,36 @@ document.addEventListener("DOMContentLoaded",()=>{
   return `${Math.floor(hr/24)}d`;
  }
 
+ function localDateTime(iso){
+  const date=new Date(iso);
+  return Number.isNaN(date.getTime())?"Date unavailable":date.toLocaleString();
+ }
+
+ function renderDataHistory(){
+  if(!els.dataHistory)return;
+  const state=window.app?.s||{};
+  const entries=[];
+  const add=(title,time,detail="")=>{
+   if(time&&!Number.isNaN(new Date(time).getTime()))entries.push({title,time,detail});
+  };
+  add("Trading codes updated",state.lastMotherImport,state.motherSource||"");
+  add("OHLC archive saved",state.lastArchive,state.lastArchiveSource||"");
+  Object.values(state.watchListDownloads?.lists||{}).forEach(list=>{
+   const name=String(list.listName||"Watch list");
+   add("OHLC downloaded",list.ohlc?.lastDownloadedAt,name);
+   add("DSE fundamentals downloaded",list.fundamentals?.dse?.lastDownloadedAt,name);
+   add("AmarStock fundamentals downloaded",list.fundamentals?.amarstock?.lastDownloadedAt,name);
+  });
+  if(!entries.some(item=>item.title.includes("fundamentals")))add("Fundamentals downloaded",state.lastFundamentalDownload);
+  entries.sort((a,b)=>new Date(b.time)-new Date(a.time));
+  els.dataHistory.innerHTML=entries.length?entries.slice(0,8).map(item=>`
+   <div class="v105-list-item">
+    <span class="v105-status-dot success"></span>
+    <div><strong>${escapeHtml(item.title)}</strong><p>${escapeHtml(item.detail)}</p></div>
+    <time datetime="${escapeHtml(item.time)}">${escapeHtml(localDateTime(item.time))}</time>
+   </div>`).join(""):'<div class="v105-empty">No saved downloads or imports yet.</div>';
+ }
+
  function renderActivity(){
   if(!els.activity)return;
   if(!activities.length){
@@ -7565,7 +7608,7 @@ document.addEventListener("DOMContentLoaded",()=>{
    <div class="v105-list-item">
     <span class="v105-status-dot ${escapeHtml(item.type)}"></span>
     <div><strong>${escapeHtml(item.title)}</strong><p>${escapeHtml(item.text)}</p></div>
-    <time>${relativeTime(item.time)}</time>
+    <time datetime="${escapeHtml(item.time)}" title="${escapeHtml(relativeTime(item.time))}">${escapeHtml(localDateTime(item.time))}</time>
    </div>`).join("");
  }
 
@@ -7625,6 +7668,7 @@ document.addEventListener("DOMContentLoaded",()=>{
    Object.entries(values).forEach(([id,value])=>{
     const el=document.getElementById(id);if(el)el.textContent=value;
    });
+   renderDataHistory();
   }catch{}
  }
 
