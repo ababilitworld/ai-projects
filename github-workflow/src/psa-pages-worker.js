@@ -2,6 +2,7 @@
 const ROOT='/ait-psa/v9/';
 const DSE='https://dsebd.org/';
 const NEWS_DSE='https://www.dsebd.org/';
+const NEW_DSE='https://www.dse.com.bd/';
 const JSON_HEADERS={'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store','X-Content-Type-Options':'nosniff'};
 const API_PATHS=new Set(['dse_archive.php','dse_fundamentals.php','amarstock_fundamentals.php','dse_news.php']);
 const aliases={code:['tradingcode','tradecode','instrument','instrumentcode','symbol','code'],date:['date','tradedate','tradingdate'],open:['open','openp','openprice','openingprice'],high:['high','highp','highprice'],low:['low','lowp','lowprice'],close:['close','closep','closeprice','closingprice','ltp','lasttradedprice'],volume:['volume','totalvolume','totalvol','vol']};
@@ -39,5 +40,114 @@ function amarRecord(code,payload){const at=(name,min,max)=>limitedNumber(findRec
 async function fundamentals(request,type){const codes=inputCodes(await postBody(request)),data={},failed=[],errors={};for(const code of codes){try{let record;if(type==='dse'){let html;for(const base of ['https://www.dsebd.org/displayCompany.php?name=','https://www.dse.com.bd/displayCompany.php?name=']){try{html=await upstream(base+encodeURIComponent(code));break}catch{}}if(!html)throw new Error('DSE company profile unavailable.');record=dseRecord(code,html);if(![record.category,record.businessSegment,record.yearEnd,record.lastAgmDate].some(Boolean))throw new Error('DSE returned no supported fundamental fields.')}else{const source=`https://www.amarstock.com/data/11bfa580-3cc4a8b9e57d/${encodeURIComponent(code)}`,payload=JSON.parse(await upstream(source,'application/json'));record=amarRecord(code,payload);if(![record.peRatio,record.eps,record.priceNav,record.freeFloat,record.beta,record.dividendYield].some(x=>x!==null))throw new Error('AmarStock returned no supported fundamental values.')}data[code]=record}catch(error){failed.push(code);errors[code]=error.message}}return json({ok:true,data,failed,errors,source:type==='dse'?'DSE company profile':'AmarStock JSON fundamentals API'})}
 async function sha256(text){const bytes=new TextEncoder().encode(text),digest=await crypto.subtle.digest('SHA-256',bytes);return [...new Uint8Array(digest)].map(x=>x.toString(16).padStart(2,'0')).join('')}
 async function news(request){const body=await postBody(request),code=String(body.code??'').trim().toUpperCase();if(!validCode(code))throw new ApiError('A valid trading code is required.');const start=validDate(body.start||'1900-01-01'),end=validDate(body.end||dhakaDate());if(start>end||end>dhakaDate())throw new ApiError('Invalid news archive range.');const sourceUrl=`${NEWS_DSE}old_news.php?${new URLSearchParams({startDate:start,endDate:end,inst:code,criteria:'4',archive:'news'})}`,html=await upstream(sourceUrl),rows=[],records=tableRows(html);let current={};for(const cells of records){if(cells.length!==2)continue;const label=cells[0].toLowerCase().replace(/:$/,'').trim(),value=cells[1];if(label==='trading code'){current={code:value.toUpperCase()}}else if(label==='news title')current.title=value;else if(label==='news')current.body=value;else if(label==='post date'){const date=validDate(value.slice(0,10));if(current.code!==code||date<start||date>end||!current.title||!current.body)throw new ApiError('DSE returned an invalid news record.',502);current.date=date;current.id=await sha256([code,date,current.title,current.body].join('|'));current.sourceUrl=`${NEWS_DSE}old_news.php?${new URLSearchParams({startDate:date,endDate:date,inst:code,criteria:'4',archive:'news'})}`;rows.push(current);current={}}}if(Object.keys(current).length)throw new ApiError('DSE returned an incomplete news record.',502);const dedup=[...new Map(rows.map(row=>[row.id,row])).values()].sort((a,b)=>a.date.localeCompare(b.date)||a.id.localeCompare(b.id));return json({ok:true,code,rows:dedup,start,end,sourceStart:start,sourceEnd:end,downloadedAt:new Date().toISOString(),sourceUrl,cached:false})}
-export default {async fetch(request,env){const path=new URL(request.url).pathname;const endpoint=path.startsWith(ROOT)?path.slice(ROOT.length):'';if(!API_PATHS.has(endpoint))return env.ASSETS.fetch(request);try{if(endpoint==='dse_archive.php')return await archive(request);if(endpoint==='dse_news.php')return await news(request);return await fundamentals(request,endpoint==='dse_fundamentals.php'?'dse':'amarstock')}catch(error){return json({success:false,ok:false,message:error.message||'Market data request failed.'},error.status||502)}}};
+const newArchiveUrl=(from,to,code,page=1)=>`${NEW_DSE}api/live/data-archive/day-end?${new URLSearchParams({...{from,to},...(code?{inst:code}:{}),page:String(page)})}`;
+function parseNewArchivePage(payload,from,to,code){
+  if(!Array.isArray(payload?.rows)||!Number.isInteger(payload.total)||!Number.isInteger(payload.page)||!Number.isInteger(payload.pageSize)||payload.total<0||payload.page<1||payload.pageSize<1)throw new ApiError('Invalid DSE day-end archive response.',502);
+  const data={};
+  for(const item of payload.rows){
+    const symbol=String(item?.tradingCode??'').trim().toUpperCase(),date=String(item?.date??'');
+    if(!validCode(symbol)||(code&&symbol!==code)||!/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(date)||date<from||date>to)throw new ApiError('DSE day-end row is outside the requested symbol or date range.',502);
+    const values=['openp','high','low','closep','volume'].map(field=>Number(item[field]));
+    if(values.some(value=>!Number.isFinite(value)))throw new ApiError('DSE day-end row has missing prices or volume.',502);
+    const [open,high,low,close,volume]=values;
+    if(open<=0||close<=0||low<=0||high<Math.max(open,close)||low>Math.min(open,close)||volume<0)throw new ApiError('DSE day-end row has inconsistent prices or volume.',502);
+    (data[symbol]??=[]).push({date,open,high,low,close,volume});
+  }
+  return {data,total:payload.total,page:payload.page,pageSize:payload.pageSize};
+}
+async function newArchive(request){
+  if(request.method!=='GET')throw new ApiError('Use GET for archive data.');
+  const params=new URL(request.url).searchParams,codes=requestedCodes(params),action=String(params.get('action')||'').toLowerCase();
+  if(action==='instant')return newInstant(codes);
+  const start=validDate(params.get('startDate')),end=validDate(params.get('endDate')),format=String(params.get('format')||'json').toLowerCase();
+  if(start>end)throw new ApiError('startDate must be before or equal to endDate.');
+  if((Date.parse(end)-Date.parse(start))/86400000>370)throw new ApiError('Date range cannot exceed 370 days.');
+  if(!['json','csv'].includes(format))throw new ApiError('format must be json or csv.');
+  const began=Date.now(),data={},reports=[];
+  for(const code of codes.length?codes:[null]){
+    let page=1,last=1;
+    do{
+      if(page>1000)throw new ApiError('DSE day-end archive exceeded the page limit.',502);
+      const url=newArchiveUrl(start,end,code,page),parsed=parseNewArchivePage(JSON.parse(await upstream(url,'application/json')),start,end,code);
+      if(parsed.page!==page)throw new ApiError('DSE day-end archive page changed unexpectedly.',502);
+      for(const [symbol,rows] of Object.entries(parsed.data))(data[symbol]??=[]).push(...rows);
+      reports.push({chunk:reports.length+1,startDate:start,endDate:end,symbols:Object.keys(parsed.data).length,records:Object.values(parsed.data).reduce((sum,rows)=>sum+rows.length,0),success:true});
+      last=Math.ceil(parsed.total/parsed.pageSize);
+      if(page<last&&!Object.keys(parsed.data).length)throw new ApiError('DSE day-end archive ended early.',502);
+      page++;
+    }while(page<=last);
+  }
+  const responseData=finalData(data),symbols=Object.keys(responseData);
+  if(!symbols.length)throw new ApiError('No usable DSE records were returned.',502);
+  const recordCount=Object.values(responseData).reduce((sum,rows)=>sum+rows.length,0);
+  if(format==='csv')return new Response(toCsv(responseData),{headers:{'Content-Type':'text/csv; charset=utf-8','Content-Disposition':`attachment; filename="dse-v8-${start}-to-${end}${codes.length?'-watch':'-all'}.csv"`,'Cache-Control':'no-store'}});
+  return json({success:true,sourceUrl:newArchiveUrl(start,end,null),startDate:start,endDate:end,symbolCount:symbols.length,recordCount,csvFile:null,scope:codes.length?'watch-list':'all',requestedCodes:codes,cached:false,parseStats:null,chunks:reports,availableCodes:symbols,processingSeconds:(Date.now()-began)/1000,completedAt:new Date().toISOString(),data:responseData});
+}
+async function newInstant(codes){
+  const sourceUrl=`${NEW_DSE}api/live/prices`,payload=JSON.parse(await upstream(sourceUrl,'application/json'));
+  if(!Array.isArray(payload?.cols)||!Array.isArray(payload?.rows))throw new ApiError('Invalid DSE live-price response.',502);
+  const columns=Object.fromEntries(payload.cols.map((name,index)=>[name,index]));
+  if(['code','ltp','open','high','low','ycp','volume'].some(field=>columns[field]===undefined))throw new ApiError('DSE live prices are missing fields.',502);
+  const openSourceUrl='https://www.amarstock.com/latest-share-price';let opens={},warning=null;
+  try{opens=parseOpenPrices(await upstream(openSourceUrl),codes)}catch(error){warning=error.message}
+  const data={},filter=new Set(codes),marketDate=dhakaDate();
+  for(const row of payload.rows){
+    if(!Array.isArray(row))continue;
+    const code=String(row[columns.code]??'').trim().toUpperCase(),close=Number(row[columns.ltp]);
+    if(!validCode(code)||(filter.size&&!filter.has(code))||!Number.isFinite(close)||close<=0)continue;
+    const positive=value=>Number.isFinite(Number(value))&&Number(value)>0?Number(value):null;
+    const open=positive(opens[code])??positive(row[columns.open])??positive(row[columns.ycp])??close;
+    const high=Math.max(positive(row[columns.high])??open,open,close),low=Math.min(positive(row[columns.low])??open,open,close);
+    data[code]=[{date:marketDate,open,high,low,close,volume:Math.max(0,Number(row[columns.volume])||0),provisional:true,source:opens[code]>0?'Hybrid: AmarStock OpenP + DSE live market':'DSE live market',openSource:opens[code]>0?'AmarStock':'DSE/YCP fallback',marketSource:'DSE'}];
+  }
+  const symbols=Object.keys(data),matched=symbols.filter(code=>opens[code]>0).length;
+  if(!symbols.length)throw new ApiError('DSE live prices returned no usable rows.',502);
+  return json({success:true,mode:'instant',provisional:true,sourceUrl,openSourceUrl,sourcePolicy:'OpenP from AmarStock; other live fields from DSE.',marketDate,symbolCount:symbols.length,recordCount:symbols.length,scope:codes.length?'watch-list':'all',requestedCodes:codes,amarstockOpenMatched:matched,openFallbackCount:symbols.length-matched,amarstockWarning:warning,availableCodes:symbols,completedAt:new Date().toISOString(),data});
+}
+async function newFundamentals(request){
+  const codes=inputCodes(await postBody(request)),data={},failed=[],errors={};
+  for(const code of codes){
+    try{
+      const html=await upstream(`${NEW_DSE}company/${encodeURIComponent(code)}`),fields=profileFields(html);
+      const heading=plain(html.match(/<h1\b[^>]*>([\s\S]*?)<\/h1>/i)?.[1]||'');
+      const termFields={};for(const match of html.matchAll(/<dt\b[^>]*>([\s\S]*?)<\/dt>\s*<dd\b[^>]*>([\s\S]*?)<\/dd>/gi))termFields[plain(match[1]).toLowerCase()]=plain(match[2]);
+      const companyName=heading||firstField(fields,['Company Name']);
+      const category=firstField(fields,['Market Category','Category'])?.match(/\b([A-Z])\b/i)?.[1]?.toUpperCase()||null;
+      const businessSegment=firstField(fields,['Sector','Industry','Business Segment'])||null;
+      const yearEnd=termFields['year-end']||firstField(fields,['Year End','Year-end','Financial Year End'])||null;
+      const lastAgmText=termFields['last agm']||firstField(fields,['Last AGM','Last AGM Date'])||'';
+      const lastAgmDate=lastAgmText.match(/\b(?:\d{1,2}[-/.]\d{1,2}[-/.]\d{4}|\d{4}-\d{1,2}-\d{1,2}|\d{1,2}\s+[A-Z][a-z]+\s+\d{4})\b/)?.[0]||null;
+      if(![category,businessSegment,yearEnd,lastAgmDate].some(Boolean))throw new ApiError('DSE returned no supported fundamental fields.',502);
+      data[code]={code,companyName,category,businessSegment,yearEnd,lastAgmDate,allFundamentals:{'Company Name':companyName,Category:category,'Business Segment':businessSegment,'Year End':yearEnd,'Last AGM':lastAgmDate},source:'DSE new company profile',sourcePolicy:'DSE-only: Category, Business Segment, Year End, Last AGM',downloadedAt:new Date().toISOString()};
+    }catch(error){failed.push(code);errors[code]=error.message}
+  }
+  return json({ok:true,data,failed,errors,source:'DSE new company profile'});
+}
+const newNewsUrl=(code,from,to)=>`${NEW_DSE}api/live/news?${new URLSearchParams({from,to,code})}`;
+async function newNewsRows(code,from,to){
+  const payload=JSON.parse(await upstream(newNewsUrl(code,from,to),'application/json'));
+  if(!Array.isArray(payload?.rows)||typeof payload.truncated!=='boolean')throw new ApiError('Invalid DSE news response.',502);
+  if(payload.truncated){
+    if(from===to)throw new ApiError('DSE news is truncated for a single day.',502);
+    const middle=new Date(Math.floor((Date.parse(from)+Date.parse(to))/2)).toISOString().slice(0,10);
+    const next=new Date(Date.parse(middle)+86400000).toISOString().slice(0,10);
+    return [...await newNewsRows(code,from,middle),...await newNewsRows(code,next,to)];
+  }
+  const rows=[];
+  for(const item of payload.rows){
+    const date=String(item?.filedAt??''),title=String(item?.summary??'').trim(),body=String(item?.body??'').trim();
+    if(String(item?.code??'').toUpperCase()!==code||!/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(date)||date<from||date>to||!title||!body)throw new ApiError('DSE news response contains invalid records.',502);
+    rows.push({code,date,title,body,id:await sha256([code,date,title,body].join('|')),sourceUrl:newNewsUrl(code,date,date)});
+  }
+  return rows;
+}
+async function newNews(request){
+  const body=await postBody(request),code=String(body.code??'').trim().toUpperCase();
+  if(!validCode(code))throw new ApiError('A valid trading code is required.');
+  const start=validDate(body.start||'1900-01-01'),end=validDate(body.end||dhakaDate());
+  if(start>end||end>dhakaDate())throw new ApiError('Invalid news archive range.');
+  const rows=[...new Map((await newNewsRows(code,start,end)).map(row=>[row.id,row])).values()].sort((a,b)=>a.date.localeCompare(b.date)||a.id.localeCompare(b.id));
+  return json({ok:true,code,rows,start,end,sourceStart:start,sourceEnd:end,downloadedAt:new Date().toISOString(),sourceUrl:newNewsUrl(code,start,end),cached:false});
+}
+export default {async fetch(request,env){const path=new URL(request.url).pathname;const endpoint=path.startsWith(ROOT)?path.slice(ROOT.length):'';if(!API_PATHS.has(endpoint))return env.ASSETS.fetch(request);try{if(endpoint==='dse_archive.php'){try{return await newArchive(request)}catch{return await archive(request)}}if(endpoint==='dse_news.php'){try{return await newNews(request.clone())}catch{return await news(request)}}if(endpoint==='dse_fundamentals.php')return await newFundamentals(request);return await fundamentals(request,'amarstock')}catch(error){return json({success:false,ok:false,message:error.message||'Market data request failed.'},error.status||502)}}};
 export const testHooks={parseArchive,parseOpenPrices,parseInstant,dseRecord,amarRecord,tableRows};
