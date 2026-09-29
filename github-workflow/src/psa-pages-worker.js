@@ -112,8 +112,11 @@ async function newFundamentals(request){
       const heading=plain(html.match(/<h1\b[^>]*>([\s\S]*?)<\/h1>/i)?.[1]||'');
       const termFields={};for(const match of html.matchAll(/<dt\b[^>]*>([\s\S]*?)<\/dt>\s*<dd\b[^>]*>([\s\S]*?)<\/dd>/gi))termFields[plain(match[1]).toLowerCase()]=plain(match[2]);
       const companyName=heading||firstField(fields,['Company Name']);
-      const category=firstField(fields,['Market Category','Category'])?.match(/\b([A-Z])\b/i)?.[1]?.toUpperCase()||null;
-      const businessSegment=firstField(fields,['Sector','Industry','Business Segment'])||null;
+      const headingStart=html.search(/<h1\b/i),beforeHeading=headingStart>=0?html.slice(Math.max(0,headingStart-3000),headingStart):'';
+      const badge=[...beforeHeading.matchAll(/<span\b[^>]*title="[^"]*"[^>]*>\s*([A-Z])\s*<\/span>/gi)].at(-1)?.[1]||null;
+      const category=badge||firstField(fields,['Market Category','Category'])?.match(/\b([A-Z])\b/i)?.[1]?.toUpperCase()||null;
+      const sectorAfterHeading=html.match(/<\/h1>\s*<div\b[^>]*>[\s\S]*?<\/div>\s*<div\b[^>]*>\s*<span\b[^>]*>([\s\S]*?)<\/span>/i)?.[1];
+      const businessSegment=plain(sectorAfterHeading||'')||firstField(fields,['Sector','Industry','Business Segment'])||null;
       const yearEnd=termFields['year-end']||firstField(fields,['Year End','Year-end','Financial Year End'])||null;
       const lastAgmText=termFields['last agm']||firstField(fields,['Last AGM','Last AGM Date'])||'';
       const lastAgmDate=lastAgmText.match(/\b(?:\d{1,2}[-/.]\d{1,2}[-/.]\d{4}|\d{4}-\d{1,2}-\d{1,2}|\d{1,2}\s+[A-Z][a-z]+\s+\d{4})\b/)?.[0]||null;
