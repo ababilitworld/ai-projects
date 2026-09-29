@@ -5997,7 +5997,8 @@ body.ait-elite-is-calculating *{cursor:progress!important}
 
 <div class="modal" id="dataModal"><div class="dialog wide">
  <div class="modal-head"><div><h2>Downloaded DSE Data</h2><span class="small" id="dataSummary">No data loaded</span></div><button class="btn soft icon" data-close="dataModal">×</button></div>
- <div style="overflow:auto"><table style="width:100%;border-collapse:collapse" id="dataTable"><thead><tr><th>Code</th><th>Date</th><th>Open</th><th>High</th><th>Low</th><th>Close</th><th>Volume</th></tr></thead><tbody></tbody></table></div>
+ <div class="ait-fund-report-search"><span>⌕</span><input id="dataReportSearch" type="search" placeholder="Search trading code or OHLC values" aria-label="Search downloaded OHLC rows"><button class="btn soft" type="button" id="dataReportClear" data-ait-table-search-clear>Clear</button></div>
+ <div class="ait-fund-report-table-wrap"><table class="ait-fund-report-table" style="min-width:800px" id="dataTable"><thead><tr><th>Code</th><th>Date</th><th>Open</th><th>High</th><th>Low</th><th>Close</th><th>Volume</th></tr></thead><tbody id="dataTableBody"></tbody></table></div>
 </div></div>
 
 <div class="modal ait-psa-download-confirm-modal" id="downloadConfirmModal" role="dialog" aria-modal="true" aria-labelledby="downloadConfirmTitle">
@@ -7072,11 +7073,12 @@ document.querySelectorAll("[data-mother-tab]").forEach(b=>b.onclick=()=>this.mot
  }
  openDataPreview(){
   const a=this.active(),rows=[];
-  for(const code of a.codes){for(const r of (this.s.history[code]||[]).slice(-100))rows.push({code,...r})}
+  for(const code of a.codes){for(const r of (this.s.history[code]||[]))rows.push({code,...r})}
   rows.sort((x,y)=>y.date.localeCompare(x.date)||x.code.localeCompare(y.code));
-  this.dataSummary.textContent=`${rows.length} visible rows from ${a.codes.length} watch-list codes`;
+  this.dataSummary.textContent=`${rows.length.toLocaleString()} OHLC records from ${a.codes.length} watch-list codes`;
   const body=this.dataTable.querySelector("tbody");
-  body.innerHTML=rows.length?rows.slice(0,500).map(r=>`<tr><td>${this.esc(r.code)}</td><td>${r.date}</td><td>${Number(r.open).toFixed(2)}</td><td>${Number(r.high).toFixed(2)}</td><td>${Number(r.low).toFixed(2)}</td><td>${Number(r.close).toFixed(2)}</td><td>${Number(r.volume||0).toLocaleString()}</td></tr>`).join(""):`<tr><td colspan="7">No downloaded data for the active watch list.</td></tr>`;
+  body.innerHTML=rows.length?rows.map(r=>`<tr><td>${this.esc(r.code)}</td><td>${r.date}</td><td>${Number(r.open).toFixed(2)}</td><td>${Number(r.high).toFixed(2)}</td><td>${Number(r.low).toFixed(2)}</td><td>${Number(r.close).toFixed(2)}</td><td>${Number(r.volume||0).toLocaleString()}</td></tr>`).join(""):`<tr><td colspan="7">No downloaded data for the active watch list.</td></tr>`;
+  window.AITSortableFilterableTables?.getByBodyId("dataTableBody")?.apply();
   this.open("dataModal")
  }
  tab(name){document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x.dataset.tab===name));document.querySelectorAll(".tab-panel").forEach(x=>x.classList.toggle("active",x.dataset.panel===name))}

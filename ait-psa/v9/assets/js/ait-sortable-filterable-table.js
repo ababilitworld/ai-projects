@@ -308,12 +308,18 @@ class AitSortableFilterableTable {
     this.externalSearch = scannerCard?.querySelector('.v11-scanner-searchbar input') ?? null;
     if (this.tbody.id === 'aitFundamentalsReportBody') {
       this.externalSearch = document.getElementById('aitFundamentalsReportSearch');
+    } else if (this.tbody.id === 'dataTableBody') {
+      this.externalSearch = document.getElementById('dataReportSearch');
     }
     if (!this.externalSearch) return;
 
     this.externalSearch.addEventListener('input', () => this.scheduleApply());
     const searchContainer = this.externalSearch.closest('.v11-scanner-searchbar, .ait-fund-report-search');
-    searchContainer?.querySelector('button')?.addEventListener('click', () => this.scheduleApply());
+    const clearButton = searchContainer?.querySelector('button');
+    clearButton?.addEventListener('click', () => {
+      if (clearButton.hasAttribute('data-ait-table-search-clear')) this.externalSearch.value = '';
+      this.scheduleApply();
+    });
   }
 
   observeRows() {
