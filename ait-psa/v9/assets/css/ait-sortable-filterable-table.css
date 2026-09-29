@@ -232,6 +232,21 @@
   background: color-mix(in srgb, var(--v10-primary, var(--primary, #2563eb)) 11%, var(--v10-bg, var(--bg, #07111f))) !important;
 }
 
+.ait-data-table-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 10px 2px;
+  font-size: .8rem;
+}
+
+.ait-data-table-pagination > div {
+  display: flex;
+  gap: 8px;
+}
+
 @media (max-width: 760px) {
   .ait-data-table-toolbar {
     align-items: stretch;

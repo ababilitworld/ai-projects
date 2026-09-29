@@ -40,6 +40,13 @@ const row = (...values) => ({
   assert.match(indexSource, /<script type="module" src="assets\/js\/ait-sortable-filterable-table\.js"><\/script>/);
   assert.equal((indexSource.match(/class="v11-scanner-table-region/g) || []).length >= 1, true);
   assert.match(indexSource, /class="ait-fund-report-table"/);
+  assert.match(indexSource, /class="ait-fund-report-table"[^>]*id="dataTable"/);
+  assert.match(indexSource, /<tbody id="dataTableBody"><\/tbody>/);
+  assert.match(indexSource, /getByBodyId\("dataTableBody"\)\?\.apply\(\)/);
+  const ohlcPreview = indexSource.match(/openDataPreview\(\)\{[\s\S]*?\n tab\(name\)/)?.[0] || '';
+  assert.match(ohlcPreview, /this\.s\.history\[code\]\|\|\[\]/);
+  assert.doesNotMatch(ohlcPreview, /\.slice\(-100\)|\.slice\(0,500\)/);
+  assert.match(assetSource, /this\.tbody\.id === 'dataTableBody'/);
   assert.match(cssSource, /\.ait-data-table-toolbar/);
   assert.match(cssSource, /\.ait-data-table-filter-row/);
 
