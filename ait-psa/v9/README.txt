@@ -20,6 +20,10 @@ How it works
 ------------
 - index.php keeps watch lists and chart data in browser localStorage.
 - dse_archive.php downloads DSE day-end archive data with server-side cURL.
+- Current company profiles, day-end OHLC, live prices and news use dse.com.bd first.
+- The verified old.dsebd.org pages remain fallbacks; older history uses the old archive.
+- The new DSE data archive advertises two years of history. Source URLs are returned
+  with download responses, and source-specific caches keep old and new data separate.
 - The endpoint normalizes the DSE table into:
   TRADING_CODE, DATE, OPEN, HIGH, LOW, CLOSE, VOLUME
 - CSV, JSON and raw HTML cache files are stored in storage/dse-cache.
@@ -41,7 +45,7 @@ Security/operational notes
 - Date range is limited to 370 days.
 - Trading codes are sanitized.
 - Cache expires after 6 hours.
-- The endpoint only connects to the fixed DSE archive URL.
+- DSE download endpoints use fixed official DSE URLs; request input cannot select a host.
 - Do not open index.php as file://; serve it through PHP/Apache/Nginx.
 
 

@@ -79,3 +79,33 @@ test('instant and news downloads return browser-compatible records',async()=>{
     assert.equal(body.rows[0].id.length,64);
   }finally{globalThis.fetch=oldFetch}
 });
+
+test('new DSE endpoints supply scoped archive, live, fundamentals and news data',async()=>{
+  const oldFetch=globalThis.fetch,requested=[];
+  globalThis.fetch=async input=>{
+    const url=String(input);requested.push(url);
+    if(url.includes('/data-archive/day-end'))return new Response(JSON.stringify({rows:[{date:'2026-09-28',tradingCode:'GP',openp:242,high:243,low:242,closep:242.4,volume:41913}],total:1,page:1,pageSize:500}));
+    if(url.includes('/api/live/prices'))return new Response(JSON.stringify({cols:['code','ltp','open','high','low','ycp','volume'],rows:[['GP',242.4,242,243,242,241,41913]]}));
+    if(url.includes('amarstock'))return new Response('<table><tr><th>Trading Code</th><th>OpenP</th></tr><tr><td>GP</td><td>242.2</td></tr></table>');
+    if(url.includes('/company/'))return new Response('<div><span title="A — pays dividends">A</span></div><h1>Grameenphone Ltd.</h1><div><span>Scrip code · 27001</span></div><div><span>Telecom</span></div><dt>Year-end</dt><dd>December</dd><dt>Last AGM</dt><dd>20-04-2026</dd>');
+    if(url.includes('/api/live/news'))return new Response(JSON.stringify({rows:[{code:'GP',filedAt:'2026-09-28',summary:'Dividend',body:'Cash dividend paid.'}],truncated:false}));
+    throw Error(`Unexpected upstream ${url}`);
+  };
+  try{
+    const env={ASSETS:{fetch:()=>{throw Error('unexpected static fallback')}}};
+    const base='https://example.pages.dev/ait-psa/v9/';
+    const archiveResult=await worker.fetch(new Request(`${base}dse_archive.php?startDate=2026-09-28&endDate=2026-09-28&codes=GP`),env);
+    const archiveData=await archiveResult.json();
+    assert.equal(archiveResult.status,200);
+    assert.equal(archiveData.data.GP[0].close,242.4);
+    assert.ok(requested.some(url=>url.includes('inst=GP')));
+    const instant=await (await worker.fetch(new Request(`${base}dse_archive.php?action=instant&codes=GP`),env)).json();
+    assert.equal(instant.data.GP[0].open,242.2);
+    const fundamentals=await (await worker.fetch(new Request(`${base}dse_fundamentals.php`,{method:'POST',body:JSON.stringify({codes:['GP']})}),env)).json();
+    assert.equal(fundamentals.data.GP.yearEnd,'December');
+    assert.equal(fundamentals.data.GP.category,'A');
+    assert.equal(fundamentals.data.GP.businessSegment,'Telecom');
+    const news=await (await worker.fetch(new Request(`${base}dse_news.php`,{method:'POST',body:JSON.stringify({code:'GP',start:'2026-09-28',end:'2026-09-28'})}),env)).json();
+    assert.equal(news.rows[0].title,'Dividend');
+  }finally{globalThis.fetch=oldFetch}
+});

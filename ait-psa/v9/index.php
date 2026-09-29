@@ -607,6 +607,7 @@ header h1{font-size:1.55rem!important}
 .v105-list-item strong{font-size:.86rem}
 .v105-list-item p{font-size:.76rem;margin:2px 0 0}
 .v105-list-item time{font-size:.68rem;color:var(--v10-muted);white-space:nowrap}
+#v105DataHistoryList .v105-list-item time{white-space:normal;text-align:right;max-width:120px}
 .v105-empty{
  padding:18px;text-align:center;color:var(--v10-muted);border:1px dashed var(--v10-line);
  border-radius:14px;
@@ -5649,6 +5650,17 @@ body.ait-elite-is-calculating *{cursor:progress!important}
     </div>
    </div>
   </article>
+  <article class="v105-panel">
+   <div class="v105-panel-head">
+    <div><h3>Download &amp; import history</h3><small>Saved data operations, shown in your local time</small></div>
+    <span class="ait-psa-panel-meta">HISTORY</span>
+   </div>
+   <div class="v105-panel-body">
+    <div class="v105-list" id="v105DataHistoryList">
+     <div class="v105-empty">No saved downloads or imports yet.</div>
+    </div>
+   </div>
+  </article>
  </div>
 </section>
 
@@ -5857,7 +5869,7 @@ body.ait-elite-is-calculating *{cursor:progress!important}
    <label>Public DSE-list source</label>
    <select class="select" style="width:100%" id="motherSourceSelect">
     <option value="https://staticv2.amarstock.com/latest-share-price">AmarStock Latest Share Price</option>
-    <option value="https://www.dsebd.org/latest_share_price_scroll_l.php">DSE Latest Share Price</option>
+    <option value="https://old.dsebd.org/latest_share_price_scroll_l.php">DSE Latest Share Price</option>
     <option value="custom">Custom URL</option>
    </select>
   </div>
@@ -5985,7 +5997,8 @@ body.ait-elite-is-calculating *{cursor:progress!important}
 
 <div class="modal" id="dataModal"><div class="dialog wide">
  <div class="modal-head"><div><h2>Downloaded DSE Data</h2><span class="small" id="dataSummary">No data loaded</span></div><button class="btn soft icon" data-close="dataModal">×</button></div>
- <div style="overflow:auto"><table style="width:100%;border-collapse:collapse" id="dataTable"><thead><tr><th>Code</th><th>Date</th><th>Open</th><th>High</th><th>Low</th><th>Close</th><th>Volume</th></tr></thead><tbody></tbody></table></div>
+ <div class="ait-fund-report-search"><span>⌕</span><input id="dataReportSearch" type="search" placeholder="Search trading code or OHLC values" aria-label="Search downloaded OHLC rows"><button class="btn soft" type="button" id="dataReportClear" data-ait-table-search-clear>Clear</button></div>
+ <div class="ait-fund-report-table-wrap"><table class="ait-fund-report-table" style="min-width:800px" id="dataTable" data-ait-page-size="100"><thead><tr><th>Code</th><th>Date</th><th>Open</th><th>High</th><th>Low</th><th>Close</th><th>Volume</th></tr></thead><tbody id="dataTableBody"></tbody></table></div>
 </div></div>
 
 <div class="modal ait-psa-download-confirm-modal" id="downloadConfirmModal" role="dialog" aria-modal="true" aria-labelledby="downloadConfirmTitle">
@@ -7060,11 +7073,12 @@ document.querySelectorAll("[data-mother-tab]").forEach(b=>b.onclick=()=>this.mot
  }
  openDataPreview(){
   const a=this.active(),rows=[];
-  for(const code of a.codes){for(const r of (this.s.history[code]||[]).slice(-100))rows.push({code,...r})}
+  for(const code of a.codes){for(const r of (this.s.history[code]||[]))rows.push({code,...r})}
   rows.sort((x,y)=>y.date.localeCompare(x.date)||x.code.localeCompare(y.code));
-  this.dataSummary.textContent=`${rows.length} visible rows from ${a.codes.length} watch-list codes`;
+  this.dataSummary.textContent=`${rows.length.toLocaleString()} OHLC records from ${a.codes.length} watch-list codes`;
   const body=this.dataTable.querySelector("tbody");
-  body.innerHTML=rows.length?rows.slice(0,500).map(r=>`<tr><td>${this.esc(r.code)}</td><td>${r.date}</td><td>${Number(r.open).toFixed(2)}</td><td>${Number(r.high).toFixed(2)}</td><td>${Number(r.low).toFixed(2)}</td><td>${Number(r.close).toFixed(2)}</td><td>${Number(r.volume||0).toLocaleString()}</td></tr>`).join(""):`<tr><td colspan="7">No downloaded data for the active watch list.</td></tr>`;
+  body.innerHTML=rows.length?rows.map(r=>`<tr><td>${this.esc(r.code)}</td><td>${r.date}</td><td>${Number(r.open).toFixed(2)}</td><td>${Number(r.high).toFixed(2)}</td><td>${Number(r.low).toFixed(2)}</td><td>${Number(r.close).toFixed(2)}</td><td>${Number(r.volume||0).toLocaleString()}</td></tr>`).join(""):`<tr><td colspan="7">No downloaded data for the active watch list.</td></tr>`;
+  window.AITSortableFilterableTables?.getByBodyId("dataTableBody")?.apply();
   this.open("dataModal")
  }
  tab(name){document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x.dataset.tab===name));document.querySelectorAll(".tab-panel").forEach(x=>x.classList.toggle("active",x.dataset.panel===name))}
@@ -7483,6 +7497,7 @@ document.addEventListener("DOMContentLoaded",()=>{
  const els={
   queue:document.getElementById("v105QueueList"),
   activity:document.getElementById("v105ActivityList"),
+  dataHistory:document.getElementById("v105DataHistoryList"),
   notifications:document.getElementById("v105NotificationList"),
   command:document.getElementById("v105CommandPalette"),
   commandSearch:document.getElementById("v105CommandSearch"),
@@ -7555,6 +7570,36 @@ document.addEventListener("DOMContentLoaded",()=>{
   return `${Math.floor(hr/24)}d`;
  }
 
+ function localDateTime(iso){
+  const date=new Date(iso);
+  return Number.isNaN(date.getTime())?"Date unavailable":date.toLocaleString();
+ }
+
+ function renderDataHistory(){
+  if(!els.dataHistory)return;
+  const state=window.app?.s||{};
+  const entries=[];
+  const add=(title,time,detail="")=>{
+   if(time&&!Number.isNaN(new Date(time).getTime()))entries.push({title,time,detail});
+  };
+  add("Trading codes updated",state.lastMotherImport,state.motherSource||"");
+  add("OHLC archive saved",state.lastArchive,state.lastArchiveSource||"");
+  Object.values(state.watchListDownloads?.lists||{}).forEach(list=>{
+   const name=String(list.listName||"Watch list");
+   add("OHLC downloaded",list.ohlc?.lastDownloadedAt,name);
+   add("DSE fundamentals downloaded",list.fundamentals?.dse?.lastDownloadedAt,name);
+   add("AmarStock fundamentals downloaded",list.fundamentals?.amarstock?.lastDownloadedAt,name);
+  });
+  if(!entries.some(item=>item.title.includes("fundamentals")))add("Fundamentals downloaded",state.lastFundamentalDownload);
+  entries.sort((a,b)=>new Date(b.time)-new Date(a.time));
+  els.dataHistory.innerHTML=entries.length?entries.slice(0,8).map(item=>`
+   <div class="v105-list-item">
+    <span class="v105-status-dot success"></span>
+    <div><strong>${escapeHtml(item.title)}</strong><p>${escapeHtml(item.detail)}</p></div>
+    <time datetime="${escapeHtml(item.time)}">${escapeHtml(localDateTime(item.time))}</time>
+   </div>`).join(""):'<div class="v105-empty">No saved downloads or imports yet.</div>';
+ }
+
  function renderActivity(){
   if(!els.activity)return;
   if(!activities.length){
@@ -7565,7 +7610,7 @@ document.addEventListener("DOMContentLoaded",()=>{
    <div class="v105-list-item">
     <span class="v105-status-dot ${escapeHtml(item.type)}"></span>
     <div><strong>${escapeHtml(item.title)}</strong><p>${escapeHtml(item.text)}</p></div>
-    <time>${relativeTime(item.time)}</time>
+    <time datetime="${escapeHtml(item.time)}" title="${escapeHtml(relativeTime(item.time))}">${escapeHtml(localDateTime(item.time))}</time>
    </div>`).join("");
  }
 
@@ -7625,6 +7670,7 @@ document.addEventListener("DOMContentLoaded",()=>{
    Object.entries(values).forEach(([id,value])=>{
     const el=document.getElementById(id);if(el)el.textContent=value;
    });
+   renderDataHistory();
   }catch{}
  }
 
