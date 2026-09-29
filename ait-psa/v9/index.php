@@ -5869,7 +5869,7 @@ body.ait-elite-is-calculating *{cursor:progress!important}
    <label>Public DSE-list source</label>
    <select class="select" style="width:100%" id="motherSourceSelect">
     <option value="https://staticv2.amarstock.com/latest-share-price">AmarStock Latest Share Price</option>
-    <option value="https://www.dsebd.org/latest_share_price_scroll_l.php">DSE Latest Share Price</option>
+    <option value="https://old.dsebd.org/latest_share_price_scroll_l.php">DSE Latest Share Price</option>
     <option value="custom">Custom URL</option>
    </select>
   </div>
@@ -5998,7 +5998,7 @@ body.ait-elite-is-calculating *{cursor:progress!important}
 <div class="modal" id="dataModal"><div class="dialog wide">
  <div class="modal-head"><div><h2>Downloaded DSE Data</h2><span class="small" id="dataSummary">No data loaded</span></div><button class="btn soft icon" data-close="dataModal">×</button></div>
  <div class="ait-fund-report-search"><span>⌕</span><input id="dataReportSearch" type="search" placeholder="Search trading code or OHLC values" aria-label="Search downloaded OHLC rows"><button class="btn soft" type="button" id="dataReportClear" data-ait-table-search-clear>Clear</button></div>
- <div class="ait-fund-report-table-wrap"><table class="ait-fund-report-table" style="min-width:800px" id="dataTable"><thead><tr><th>Code</th><th>Date</th><th>Open</th><th>High</th><th>Low</th><th>Close</th><th>Volume</th></tr></thead><tbody id="dataTableBody"></tbody></table></div>
+ <div class="ait-fund-report-table-wrap"><table class="ait-fund-report-table" style="min-width:800px" id="dataTable" data-ait-page-size="100"><thead><tr><th>Code</th><th>Date</th><th>Open</th><th>High</th><th>Low</th><th>Close</th><th>Volume</th></tr></thead><tbody id="dataTableBody"></tbody></table></div>
 </div></div>
 
 <div class="modal ait-psa-download-confirm-modal" id="downloadConfirmModal" role="dialog" aria-modal="true" aria-labelledby="downloadConfirmTitle">

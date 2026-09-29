@@ -162,6 +162,8 @@ class AitSortableFilterableTable {
     this.originalOrderCounter = 0;
     this.applyScheduled = false;
     this.initialized = false;
+    this.pageSize = Number(table?.dataset?.aitPageSize) || 0;
+    this.currentPage = 1;
   }
 
   init() {
@@ -180,6 +182,7 @@ class AitSortableFilterableTable {
     this.buildSortableHeaders();
     this.buildFilterRow();
     this.buildToolbar();
+    this.buildPagination();
     this.bindExternalSearch();
     this.captureOriginalOrder();
     this.observeRows();
@@ -254,6 +257,7 @@ class AitSortableFilterableTable {
       input.title = 'Text contains; use >, >=, <, <=, =, != or 10..20 for numeric/date filters; use | for alternatives.';
       input.addEventListener('input', () => {
         input.classList.toggle('ait-data-table-filter--active', Boolean(input.value.trim()));
+        this.currentPage = 1;
         this.scheduleApply();
       });
       input.addEventListener('keydown', (event) => {
@@ -261,6 +265,7 @@ class AitSortableFilterableTable {
         event.stopPropagation();
         input.value = '';
         input.classList.remove('ait-data-table-filter--active');
+        this.currentPage = 1;
         this.scheduleApply();
       });
 
@@ -303,6 +308,19 @@ class AitSortableFilterableTable {
     else this.table.insertAdjacentElement('beforebegin', this.toolbar);
   }
 
+  buildPagination() {
+    if (!this.pageSize) return;
+    this.pagination = document.createElement('div');
+    this.pagination.className = 'ait-data-table-pagination';
+    this.pagination.innerHTML = '<span class="ait-data-table-pagination__status" aria-live="polite"></span><div><button type="button" class="ait-data-table-toolbar__button" data-page="previous">Previous</button><button type="button" class="ait-data-table-toolbar__button" data-page="next">Next</button></div>';
+    this.pageStatus = this.pagination.querySelector('.ait-data-table-pagination__status');
+    this.previousPageButton = this.pagination.querySelector('[data-page="previous"]');
+    this.nextPageButton = this.pagination.querySelector('[data-page="next"]');
+    this.previousPageButton.addEventListener('click', () => { this.currentPage -= 1; this.apply(); });
+    this.nextPageButton.addEventListener('click', () => { this.currentPage += 1; this.apply(); });
+    (this.table.closest('.ait-fund-report-table-wrap') ?? this.table).insertAdjacentElement('afterend', this.pagination);
+  }
+
   bindExternalSearch() {
     const scannerCard = this.table.closest('.v11-scanner-card');
     this.externalSearch = scannerCard?.querySelector('.v11-scanner-searchbar input') ?? null;
@@ -313,11 +331,12 @@ class AitSortableFilterableTable {
     }
     if (!this.externalSearch) return;
 
-    this.externalSearch.addEventListener('input', () => this.scheduleApply());
+    this.externalSearch.addEventListener('input', () => { this.currentPage = 1; this.scheduleApply(); });
     const searchContainer = this.externalSearch.closest('.v11-scanner-searchbar, .ait-fund-report-search');
     const clearButton = searchContainer?.querySelector('button');
     clearButton?.addEventListener('click', () => {
       if (clearButton.hasAttribute('data-ait-table-search-clear')) this.externalSearch.value = '';
+      this.currentPage = 1;
       this.scheduleApply();
     });
   }
@@ -348,6 +367,7 @@ class AitSortableFilterableTable {
     const existing = this.sortCriteria.find((criterion) => criterion.columnIndex === columnIndex);
     if (existing) existing.direction = existing.direction === 'asc' ? 'desc' : 'asc';
     else this.sortCriteria.push({ columnIndex, direction: 'asc' });
+    this.currentPage = 1;
 
     this.updateState();
     this.apply();
@@ -356,6 +376,7 @@ class AitSortableFilterableTable {
   clearSort() {
     if (!this.sortCriteria.length) return;
     this.sortCriteria = [];
+    this.currentPage = 1;
     this.updateState();
     this.apply();
   }
@@ -368,6 +389,7 @@ class AitSortableFilterableTable {
       input.classList.remove('ait-data-table-filter--active');
     });
     if (!changed) return;
+    this.currentPage = 1;
     this.updateState();
     this.apply();
   }
@@ -437,19 +459,26 @@ class AitSortableFilterableTable {
   apply() {
     const rows = this.dataRows();
     this.captureOriginalOrder(rows);
-    this.reorderRows(this.sortedRows(rows));
+    const sortedRows = this.sortedRows(rows);
+    this.reorderRows(sortedRows);
 
     const filters = this.activeFilters();
     const externalSearchTerm = this.externalSearchTerm();
-    let visible = 0;
+    const matchedRows = sortedRows.filter((row) => this.rowMatches(row, filters, externalSearchTerm));
+    const pageCount = this.pageSize ? Math.max(1, Math.ceil(matchedRows.length / this.pageSize)) : 1;
+    this.currentPage = Math.max(1, Math.min(this.currentPage, pageCount));
+    const start = this.pageSize ? (this.currentPage - 1) * this.pageSize : 0;
+    const end = this.pageSize ? Math.min(start + this.pageSize, matchedRows.length) : matchedRows.length;
+    const pageRows = new Set(matchedRows.slice(start, end));
+    sortedRows.forEach((row) => { row.hidden = !pageRows.has(row); });
 
-    rows.forEach((row) => {
-      const matches = this.rowMatches(row, filters, externalSearchTerm);
-      row.hidden = !matches;
-      if (matches) visible += 1;
-    });
-
-    this.updateState(visible, rows.length);
+    if (this.pageStatus) {
+      const range = matchedRows.length ? `${(start + 1).toLocaleString()}–${end.toLocaleString()}` : '0';
+      this.pageStatus.textContent = `Showing ${range} of ${matchedRows.length.toLocaleString()} matching records · ${rows.length.toLocaleString()} total · Page ${this.currentPage} of ${pageCount}`;
+      this.previousPageButton.disabled = this.currentPage === 1;
+      this.nextPageButton.disabled = this.currentPage === pageCount;
+    }
+    this.updateState(matchedRows.length, rows.length);
   }
 
   scheduleApply() {
