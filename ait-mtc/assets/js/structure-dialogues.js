@@ -141,12 +141,39 @@
     };
     return forms[part]||forms['description-2'];
   }
+  // Each built-in topical exchange remains a two-speaker pair. A Child question
+  // opens the next stage; that stage's Parent answers it before asking its own.
+  const followUps={
+    introduction:()=> 'What could we try first?',
+    'description-1':()=> 'What might get in the way of our plan?',
+    'description-2':c=>'What should we remember from that?'
+  };
+  const asParentContext=text=>text.replace(/\bmy\b/gi,'your').replace(/\bme\b/gi,'you').replace(/\bI am\b/gi,'you are').replace(/\bI\b/g,'you');
+  const bridgeAnswers={
+    'description-1':c=>`We could ${asParentContext(c.a)} first.`,
+    'description-2':c=>`One difficulty could be this: ${asParentContext(c.obstacle)}.`,
+    conclusion:c=>`We can remember this: ${c.takeaway}`
+  };
+  function linkTopicalTurns(part,lines,scenario){
+    if(!['introduction','description-1','description-2','conclusion','invitation'].includes(part))return lines;
+    const [first,second]=lines.map(([speaker,text])=>[speaker,text.trim()]);
+    const bridge=bridgeAnswers[part]?.(scenario);
+    const followUp=followUps[part]?.(scenario);
+    const answer=followUp&&second[1].endsWith('?')?`I would ask: “${second[1]}”`:second[1];
+    return [
+      [first[0],bridge?`${bridge} ${first[1]}`:first[1]],
+      [second[0],followUp?`${answer} ${followUp}`:answer]
+    ];
+  }
   root.buildConversationStructures=(stage,scenario)=>{
     const direct=stage.candidates[0].lines;
     const rest=shared[stage.slug]||topical(stage.slug,scenario);
-    return [direct,...rest.map(([q,a])=>[['Parent',q],['Child',a]])].map((lines,i)=>({
+    return [direct,...rest.map(([q,a])=>[['Parent',q],['Child',a]])].map((source,i)=>{
+      const lines=linkTopicalTurns(stage.slug,source,scenario);
+      return ({
       label:root.CONVERSATION_STRUCTURES[i].label,structure:root.CONVERSATION_STRUCTURES[i].id,lines,
       pattern:lines[0][1],response:lines[1][1],moods:{}
-    }));
+      });
+    });
   };
 })(typeof window!=='undefined'?window:globalThis);
