@@ -73,6 +73,30 @@ test('all 81 scenarios supply nine distinct named structures for every speaking 
  assert.equal(count,9477);
 });
 
+test('built-in topical turns answer before asking a related question and close without one',()=>{
+ const parentView=text=>text.replace(/\bmy\b/gi,'your').replace(/\bme\b/gi,'you').replace(/\bI am\b/gi,'you are').replace(/\bI\b/g,'you');
+ for(const [t,topic] of data.entries())for(const [s,subtopic] of topic.subtopics.entries()){
+   const scenario=global.CONVERSATION_SCENARIOS[t][s];
+   const stage=slug=>subtopic.stages.find(g=>g.slug===slug);
+   for(let i=0;i<global.CONVERSATION_STRUCTURES.length;i++){
+     const intro=stage('introduction').candidates[i].lines;
+     const detail=stage('description-1').candidates[i].lines;
+     const obstacle=stage('description-2').candidates[i].lines;
+     const conclusion=stage('conclusion').candidates[i].lines;
+     const invitation=stage('invitation').candidates[i].lines;
+     assert.match(intro[1][1],/What could we try first\?$/);
+     assert(detail[0][1].startsWith(`We could ${parentView(scenario.a)} first.`));
+     assert.match(detail[1][1],/What might get in the way of our plan\?$/);
+     assert(obstacle[0][1].startsWith(`One difficulty could be this: ${parentView(scenario.obstacle)}.`));
+     assert.match(obstacle[1][1],/What should we remember from that\?$/);
+     assert(conclusion[0][1].startsWith(`We can remember this: ${scenario.takeaway}`));
+     assert(!/[?]\s*$/.test(conclusion[1][1]));
+     assert(!/[?]\s*$/.test(invitation[1][1]));
+   }
+ }
+ assert.equal(data[0].subtopics[0].stages.find(g=>g.slug==='greeting').candidates[0].lines[1][1],'I am well, thank you. How are you?');
+});
+
 test('preview is separate from confirmation and cannot leak into the transcript',()=>{
  const f=fresh();f.choosePlace('Home');f.chooseMood(0);
  assert.equal(f.current.type,'structure');const id=f.current.id;

@@ -41,7 +41,7 @@ class App {
    body=`<label class="context-place">Place <input id="conversationPlace" list="places" maxlength="80" value="${e(n.place)}"><datalist id="places">${CONVERSATION_PLACES.map(p=>`<option value="${e(p.label)}">`).join('')}</datalist></label><div class="choices">${moods.map((m,i)=>this.choice('mood',i,`${m.icon} ${m.label}`,CONVERSATION_DIRECTIONS[m.label])).join('')}</div>${n.scope==='subtopic'?`<button data-mood="${n.mood}">Keep previous mood: ${e(moods[n.mood].label)}</button>`:''}`;
   }else if(n.type==='structure'){
    const stage=f.stage(),selected=n.preview;
-   hint='Preview both speakers, select a conversation structure, then use it for this exchange.';
+   hint=window.conversationHasTopic(n)?'Preview both speakers. Answer the current question first; a related question may carry the same situation into the next exchange.':'Preview both speakers, select a conversation structure, then use it for this exchange.';
    body=`<p class="context-strip">${e(n.place)} · ${e(moods[n.mood].label)}${window.conversationHasTopic(n)?` · ${e(f.data[n.t].title)} / ${e(f.data[n.t].subtopics[n.s].title)}`:''}</p><p class="small muted">${e(CONVERSATION_DIRECTIONS[moods[n.mood].label])}</p><div class="structure-grid" role="group" aria-label="Conversation structures">${stage.candidates.map((c,i)=>{
      const definition=window.CONVERSATION_STRUCTURES.find(s=>s.label===c.label);
      const lines=f.lines({...n,pattern:i});
